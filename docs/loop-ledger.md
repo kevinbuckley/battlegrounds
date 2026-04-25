@@ -6,4 +6,4 @@
 2026-04-25 | b4b4b4b | FIXED: Add tests for reborn keyword functionality
 2026-04-25 | e3187a9 | FIXED: Add test for divine shield keyword functionality
 2026-04-25 | 1ee891c | FIXED: Add tests for battlecry hook firing in playMinionToBoard
-2026-04-25 | 1e72a5c | FIXED: Add Murloc Warleader tier 2 minion with aura giving adjacent Murlocs +2 ATK
+2026-04-25 | 1e72a5c | FIXED: Add Murloc Warleader tier 2 minion with aura giving adjacent Murlocs +2 ATK2026-04-25 | 0104c18 | FIXED: Add Rockpool Hunter tier 1 murloc with battlecry giving a friendly murloc +1/+1
