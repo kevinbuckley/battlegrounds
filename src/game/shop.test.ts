@@ -1,4 +1,4 @@
-import { describe, expect, it, beforeEach } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
 import { defineMinion, instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
@@ -7,14 +7,14 @@ import {
   drawFromPool,
   freezeShop,
   playMinionToBoard,
-  reorderBoard,
   refreshShop,
+  reorderBoard,
   returnToPool,
   rollShopForPlayer,
   sellMinion,
   upgradeTier,
 } from "./shop";
-import { makeInitialState, beginRecruitTurn } from "./state";
+import { beginRecruitTurn, makeInitialState } from "./state";
 import type { GameState, MinionInstance } from "./types";
 
 // Register a test minion into the global MINIONS registry
@@ -40,6 +40,47 @@ const TEST_CARD_2 = defineMinion({
   baseKeywords: [],
   hooks: {},
 });
+
+// Test minion with a battlecry that is easy to observe
+const TEST_BATTLECRY_CARD = defineMinion({
+  id: "test_battlecry",
+  name: "Test Battlecry",
+  tier: 1,
+  tribes: [],
+  baseAtk: 1,
+  baseHp: 3,
+  baseKeywords: [],
+  hooks: {
+    onBattlecry: ({ state, playerId, self }) => {
+      return {
+        ...state,
+        players: state.players.map((p, i) =>
+          i !== playerId
+            ? p
+            : {
+                ...p,
+                hand: [
+                  ...p.hand,
+                  instantiate(
+                    defineMinion({
+                      id: "battlecry_coin",
+                      name: "Battlecry Coin",
+                      tier: 1,
+                      tribes: [],
+                      baseAtk: 0,
+                      baseHp: 0,
+                      baseKeywords: [],
+                      hooks: {},
+                    }),
+                  ),
+                ],
+              },
+        ),
+      };
+    },
+  },
+});
+MINIONS[TEST_BATTLECRY_CARD.id] = TEST_BATTLECRY_CARD;
 MINIONS[TEST_CARD_2.id] = TEST_CARD_2;
 
 const RNG = makeRng(42);
@@ -53,7 +94,7 @@ function makeTestState(overrides?: Partial<GameState["players"][number]>): GameS
     ...base,
     phase: { kind: "Recruit", turn: 1 },
     turn: 1,
-    pool: { test_murloc: 10, test_beast: 10 },
+    pool: { test_murloc: 10, test_beast: 10, test_battlecry: 10 },
     players: base.players.map((p, i) =>
       i === 0
         ? { ...p, gold: 10, tier: 1, shop: [shopMinion], hand: [], board: [], ...overrides }
@@ -184,6 +225,47 @@ describe("playMinionToBoard", () => {
     const board: MinionInstance[] = Array.from({ length: 7 }, () => instantiate(TEST_CARD));
     const state = makeTestState({ hand: [instantiate(TEST_CARD)], board });
     expect(() => playMinionToBoard(state, 0, 0, 0, RNG)).toThrow("Board is full");
+  });
+
+  it("fires onBattlecry hook when minion has one", () => {
+    const battlecryMinion = instantiate(TEST_BATTLECRY_CARD);
+    const state = makeTestState({ hand: [battlecryMinion], board: [] });
+    expect(state.players[0]!.hand.length).toBe(1);
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const afterPlayer = after.players[0]!;
+    // Minion moved from hand to board
+    expect(afterPlayer.hand.length).toBe(1);
+    expect(afterPlayer.hand[0]!.cardId).toBe("battlecry_coin");
+    expect(afterPlayer.board.length).toBe(1);
+    expect(afterPlayer.board[0]!.cardId).toBe("test_battlecry");
+  });
+
+  it("passes correct RecruitCtx to onBattlecry", () => {
+    let capturedCtx: { selfInstanceId?: string; playerId: number } | null = null;
+    const customCard = defineMinion({
+      id: "ctx_test",
+      name: "Ctx Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 2,
+      baseHp: 2,
+      baseKeywords: [],
+      hooks: {
+        onBattlecry: (ctx) => {
+          capturedCtx = {
+            selfInstanceId: ctx.self.instanceId,
+            playerId: ctx.playerId,
+          };
+          return ctx.state;
+        },
+      },
+    });
+    const inst = instantiate(customCard);
+    const state = makeTestState({ hand: [inst], board: [] });
+    playMinionToBoard(state, 0, 0, 0, RNG);
+    expect(capturedCtx).not.toBeNull();
+    expect(capturedCtx!.selfInstanceId).toBe(inst.instanceId);
+    expect(capturedCtx!.playerId).toBe(0);
   });
 });
 
