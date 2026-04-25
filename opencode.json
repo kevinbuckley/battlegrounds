@@ -20,5 +20,12 @@
       "command": ["python3", "scripts/mcp-tools/server.py"],
       "enabled": true
     }
+  },
+  "tools": {
+    "task": false,
+    "skill": false,
+    "todowrite": false,
+    "todoread": false,
+    "webfetch": false
   }
 }

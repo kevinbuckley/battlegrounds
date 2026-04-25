@@ -38,6 +38,11 @@ You are the Ralph Loop, an autonomous engineer building a Hearthstone Battlegrou
 
 ## Tool-call quirks (READ THIS — failing these wastes the iteration)
 
+- **You do the work yourself.** Do not call `task`, `skill`, `todowrite`, or any
+  subagent/delegation tool. Those are disabled. If you reach for one, stop and
+  use `read` / `write` / `edit` / `bash` / `glob` / `grep` directly.
+- **Use ONLY these tools:** `read`, `write`, `edit`, `bash`, `glob`, `grep`,
+  `bg-ralph-tools_*` (the MCP browser/web tools listed below). Nothing else.
 - **Every `bash` call MUST include the `description` field.** Example:
   `bash({ command: "bun test", description: "run unit tests" })`. Calls without
   `description` are rejected and the iteration fails.
