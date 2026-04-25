@@ -57,6 +57,7 @@ export function simulateCombat(
     const target = pickTarget(isLeft ? right : left, rng);
 
     // How many times does this attacker attack this turn?
+    // Windfury allows 2 attacks, but only if not already attacked this turn
     const attackCount = attacker.keywords.has("windfury") ? 2 : 1;
 
     for (let a = 0; a < attackCount && left.length > 0 && right.length > 0; a++) {
