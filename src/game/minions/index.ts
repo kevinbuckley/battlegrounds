@@ -10,6 +10,7 @@ import annoyoTron from "./tier2/annoy-o-tron";
 import glyphGuardian from "./tier2/glyph-guardian";
 import harvestGolem from "./tier2/harvest-golem";
 import prisoner from "./tier2/imprisoner";
+import kaboomBot from "./tier2/kaboom-bot";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
 import rebornMinion from "./tier2/reborn-minion";
@@ -20,6 +21,7 @@ import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
+  [kaboomBot.id]: kaboomBot,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
