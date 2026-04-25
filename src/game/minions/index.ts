@@ -8,6 +8,7 @@ import rockpoolHunter from "./tier1/rockpool-hunter";
 import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
 import glyphGuardian from "./tier2/glyph-guardian";
+import prisoner from "./tier2/imprisoner";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
 import rebornMinion from "./tier2/reborn-minion";
@@ -23,6 +24,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [wrathWeaver.id]: wrathWeaver,
   [rockpoolHunter.id]: rockpoolHunter,
   [WindfuryMinion.id]: WindfuryMinion,
+  [prisoner.id]: prisoner,
   [glyphGuardian.id]: glyphGuardian,
   [metaltoothLeaper.id]: metaltoothLeaper,
   [murlocWarleader.id]: murlocWarleader,
