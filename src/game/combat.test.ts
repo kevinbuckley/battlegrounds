@@ -219,5 +219,12 @@ describe("feature validation", () => {
     // This should not crash
     const r = simulateCombat([minion], [makeMinion(5, 1)], makeRng(0));
     expect(r).toBeDefined();
+
+    // Verify that reborn worked correctly
+    // The minion should be back with 1 HP and without the reborn keyword
+    expect(r.winner).toBe("left");
+    expect(r.survivorsLeft).toHaveLength(1);
+    expect(r.survivorsLeft[0]!.hp).toBe(1);
+    expect(r.survivorsLeft[0]!.keywords.has("reborn")).toBe(false);
   });
 });
