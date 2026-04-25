@@ -1,5 +1,4 @@
 import type { MinionCard, MinionCardId } from "../types";
-
 import allleyCat from "./tier1/alley-cat";
 import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
 import murlocTidecaller from "./tier1/murloc-tidecaller";
@@ -7,6 +6,7 @@ import murlocTidehunter from "./tier1/murloc-tidehunter";
 import rockpoolHunter from "./tier1/rockpool-hunter";
 import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
+import annoyoTron from "./tier2/annoy-o-tron";
 import glyphGuardian from "./tier2/glyph-guardian";
 import prisoner from "./tier2/imprisoner";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
@@ -16,7 +16,9 @@ import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
+
 export const MINIONS: Record<MinionCardId, MinionCard> = {
+  [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
   [murlocTidecaller.id]: murlocTidecaller,
