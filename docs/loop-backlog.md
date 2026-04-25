@@ -36,7 +36,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [S] Add `Murloc Warleader` (tier 2): adjacent murlocs +2 attack while alive
 - [ ] [S] Add `Rockpool Hunter` (tier 1) battlecry: give a friendly murloc +1/+1
 - [ ] [S] Add `Vulgar Homunculus` (tier 2): taunt, battlecry deals 2 to your hero
-- [ ] [S] Add `Imprisoner` (tier 2): taunt, deathrattle summons a 3/3 imp -> - [ ] [S] Add `Imprisoner` (tier 2): taunt, deathrattle summons a 3/3 imp
+- [ ] [S] Add `Imprisoner` (tier 2): taunt, deathrattle summons a 3/3 imp
 - [ ] [S] Add `Annoy-o-Tron` (tier 2): taunt + divine shield
 - [ ] [S] Add `Harvest Golem` (tier 2): deathrattle summons a 2/1
 - [ ] [S] Add `Kaboom Bot` (tier 2): deathrattle deals 4 damage to a random enemy
