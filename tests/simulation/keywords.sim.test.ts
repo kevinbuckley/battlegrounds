@@ -109,6 +109,21 @@ describe("poisonous", () => {
     );
     expect(dmgToPoisoner).toHaveLength(1);
   });
+
+  it("poisonous kills minions with 1 HP", () => {
+    const poisoner = make(1, 1, ["poisonous"]);
+    const target = make(1, 1);
+    const r = simulateCombat([poisoner], [target], makeRng(0));
+    expect(r.survivorsRight).toHaveLength(0);
+  });
+
+  it("multiple poisonous attackers work correctly", () => {
+    const poisoner1 = make(1, 1, ["poisonous"]);
+    const poisoner2 = make(1, 1, ["poisonous"]);
+    const target = make(2, 10);
+    const r = simulateCombat([poisoner1, poisoner2], [target], makeRng(0));
+    expect(r.survivorsRight).toHaveLength(0);
+  });
 });
 
 // ---------------------------------------------------------------------------
