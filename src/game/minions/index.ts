@@ -15,6 +15,7 @@ import murlocWarleader from "./tier2/murloc-warleader";
 import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
+import spawnOfNzoth from "./tier2/spawn-of-nzoth";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 
@@ -34,6 +35,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [rebornMinion.id]: rebornMinion,
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
+  [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
