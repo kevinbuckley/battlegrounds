@@ -8,6 +8,7 @@ import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
 import annoyoTron from "./tier2/annoy-o-tron";
 import glyphGuardian from "./tier2/glyph-guardian";
+import harvestGolem from "./tier2/harvest-golem";
 import prisoner from "./tier2/imprisoner";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
@@ -33,6 +34,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [rebornMinion.id]: rebornMinion,
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
+  [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
 };
