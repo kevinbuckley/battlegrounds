@@ -123,13 +123,22 @@ run_iteration() {
   if (cd "$REPO" && bun typecheck) >/dev/null 2>&1; then typecheck_ok=1; fi
   if (cd "$REPO" && bun test)      >/dev/null 2>&1; then tests_ok=1; fi
 
-  if [[ $typecheck_ok -eq 1 && $tests_ok -eq 1 && "$current" != "$snap" ]]; then
+  # Require the iteration's diff to touch real source — not just metadata.
+  local real_diff=0
+  if [[ "$current" != "$snap" ]]; then
+    if git -C "$REPO" diff --name-only "$snap" "$current" \
+        | grep -E '^(src/|app/|tests/|docs/game-rules/|docs/loop-ledger\.md)' >/dev/null; then
+      real_diff=1
+    fi
+  fi
+
+  if [[ $typecheck_ok -eq 1 && $tests_ok -eq 1 && $real_diff -eq 1 ]]; then
     local fixed_line
     fixed_line=$(grep -E '^FIXED:' "$iter_log" | tail -1 || echo 'FIXED: (no marker found)')
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $current | $fixed_line"
     log "  ✓ iteration succeeded — $fixed_line"
   else
-    log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
+    log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok real_diff=$real_diff new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
     git -C "$REPO" reset --hard "$snap" >/dev/null
     git -C "$REPO" clean -fd src/ app/ tests/ 2>/dev/null || true
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $snap | REVERTED: iteration $n failed"
