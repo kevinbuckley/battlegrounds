@@ -209,6 +209,15 @@ describe("feature validation", () => {
     // This should not crash
     const r = simulateCombat([minion], [makeMinion(5, 1)], makeRng(0));
     expect(r).toBeDefined();
+
+    // Verify that divine shield absorbs exactly one damage instance
+    // The shield should be removed immediately after absorbing the damage.
+    const damages = r.transcript.filter((e) => e.kind === "Damage");
+    expect(damages).toHaveLength(1);
+    expect(damages[0]!.amount).toBe(1); // Damage was 1 and shield absorbed it
+
+    const divineShields = r.transcript.filter((e) => e.kind === "DivineShield");
+    expect(divineShields).toHaveLength(1);
   });
 
   it("reborn keyword is properly handled", () => {
