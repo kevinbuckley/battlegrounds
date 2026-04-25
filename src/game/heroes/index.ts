@@ -1,15 +1,16 @@
 import type { Hero, HeroId } from "../types";
-import { stubHero } from "./stub";
-import { patchwerk } from "./patchwerk";
-import { georgeTheFallen } from "./george-the-fallen";
-import { sirFinley } from "./sir-finley";
-import { edwinVanCleef } from "./edwin-van-cleef";
-import { scabbsCutterbutter } from "./scabbs-cutterbutter";
-import { ragnaros } from "./ragnaros";
-import { ysera } from "./ysera";
-import { millificentManastorm } from "./millificent-manastorm";
-import { jandiceBarov } from "./jandice-barov";
 import { afKay } from "./af-kay";
+import { edwinVanCleef } from "./edwin-van-cleef";
+import { georgeTheFallen } from "./george-the-fallen";
+import { jandiceBarov } from "./jandice-barov";
+import { millificentManastorm } from "./millificent-manastorm";
+import { patchwerk } from "./patchwerk";
+import { ragnaros } from "./ragnaros";
+import { rakanishu } from "./rakanishu";
+import { scabbsCutterbutter } from "./scabbs-cutterbutter";
+import { sirFinley } from "./sir-finley";
+import { stubHero } from "./stub";
+import { ysera } from "./ysera";
 
 export const HEROES: Record<HeroId, Hero> = {
   [stubHero.id]: stubHero,
@@ -23,6 +24,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [millificentManastorm.id]: millificentManastorm,
   [jandiceBarov.id]: jandiceBarov,
   [afKay.id]: afKay,
+  [rakanishu.id]: rakanishu,
 };
 
 export function getHero(id: HeroId): Hero {
