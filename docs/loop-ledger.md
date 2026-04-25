@@ -5,4 +5,5 @@
 2026-04-25 | a5f0a5f | FIXED: Add tests for divine shield and reborn keywords
 2026-04-25 | b4b4b4b | FIXED: Add tests for reborn keyword functionality
 2026-04-25 | e3187a9 | FIXED: Add test for divine shield keyword functionality
-2026-04-25 | d951a3f | FIXED: Add tests for battlecry hook firing in playMinionToBoard
+2026-04-25 | 1ee891c | FIXED: Add tests for battlecry hook firing in playMinionToBoard
+2026-04-25 | 1e72a5c | FIXED: Add Murloc Warleader tier 2 minion with aura giving adjacent Murlocs +2 ATK
