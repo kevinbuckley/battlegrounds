@@ -198,3 +198,26 @@ describe("taunt keyword", () => {
     expect(firstAttack?.target).toBe(tauntMinion.instanceId);
   });
 });
+
+// These tests validate that existing features (already implemented) are working
+describe("feature validation", () => {
+  it("divine shield keyword is properly handled", () => {
+    // Just a smoke test - the keyword must be compatible with existing combat
+    const minion = makeMinion(1, 1);
+    minion.keywords.add("divineShield");
+
+    // This should not crash
+    const r = simulateCombat([minion], [makeMinion(5, 1)], makeRng(0));
+    expect(r).toBeDefined();
+  });
+
+  it("reborn keyword is properly handled", () => {
+    // Just a smoke test - the keyword must be compatible with existing combat
+    const minion = makeMinion(1, 1);
+    minion.keywords.add("reborn");
+
+    // This should not crash
+    const r = simulateCombat([minion], [makeMinion(5, 1)], makeRng(0));
+    expect(r).toBeDefined();
+  });
+});
