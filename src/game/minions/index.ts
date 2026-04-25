@@ -8,6 +8,7 @@ import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
 import glyphGuardian from "./tier2/glyph-guardian";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
+import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
 import unstableGhoul from "./tier2/unstable-ghoul";
@@ -20,6 +21,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [WindfuryMinion.id]: WindfuryMinion,
   [glyphGuardian.id]: glyphGuardian,
   [metaltoothLeaper.id]: metaltoothLeaper,
+  [rebornMinion.id]: rebornMinion,
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
   [unstableGhoul.id]: unstableGhoul,
