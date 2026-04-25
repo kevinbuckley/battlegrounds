@@ -1,0 +1,49 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(bun install)",
+      "Bash(bun add:*)",
+      "Bash(bun remove:*)",
+      "Bash(bun run:*)",
+      "Bash(bun test:*)",
+      "Bash(bun x:*)",
+      "Bash(bun typecheck)",
+      "Bash(bun lint)",
+      "Bash(bun lint:fix)",
+      "Bash(bun dev)",
+      "Bash(bun build)",
+      "Bash(bun format)",
+      "Bash(npx tsc:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git branch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git switch:*)",
+      "Bash(gh pr:*)",
+      "Bash(gh issue:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)"
+    ],
+    "deny": [
+      "Bash(git push --force:*)",
+      "Bash(git reset --hard:*)",
+      "Bash(rm -rf:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if ls src/game/minions/tier*/*.ts 2>/dev/null | grep -q .; then echo 'Reminder: if you added/removed a minion file, regenerate the registry with /add-minion (or manually update src/game/minions/index.ts).'; fi"
+          }
+        ]
+      }
+    ]
+  }
+}

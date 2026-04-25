@@ -1,0 +1,24 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3:32b": {
+          "name": "Qwen3 32B"
+        }
+      }
+    }
+  },
+  "mcp": {
+    "bg-ralph-tools": {
+      "type": "local",
+      "command": ["python3", "scripts/mcp-tools/server.py"],
+      "enabled": true
+    }
+  }
+}

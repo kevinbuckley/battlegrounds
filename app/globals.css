@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tavern-bronze: #8b5a2b;
+  --color-tavern-gold: #d4a74b;
+}
+
+html,
+body {
+  height: 100%;
+}

@@ -1,0 +1,265 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`vanilla combat snapshots 1v1: murloc_tidehunter (2/1) vs wrath_weaver (1/3) 1`] = `"right"`;
+
+exports[`vanilla combat snapshots 1v1: murloc_tidehunter (2/1) vs wrath_weaver (1/3) 2`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42) 1`] = `"right"`;
+
+exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42) 2`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "attacker": "x3",
+    "kind": "Attack",
+    "target": "x1",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "kind": "Death",
+    "source": "x3",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 1`] = `"draw"`;
+
+exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 2`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "attacker": "x2",
+    "kind": "Attack",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "kind": "Death",
+    "source": "x3",
+  },
+  {
+    "attacker": "x4",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x4",
+  },
+  {
+    "kind": "Death",
+    "source": "x4",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "draw",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99) 1`] = `"left"`;
+
+exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99) 2`] = `
+[
+  {
+    "atk": 4,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x1",
+  },
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 4,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x4",
+  },
+  {
+    "kind": "Death",
+    "source": "x4",
+  },
+  {
+    "kind": "End",
+    "winner": "left",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 1`] = `"left"`;
+
+exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 2`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 3,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "attacker": "x2",
+    "kind": "Attack",
+    "target": "x3",
+  },
+  {
+    "kind": "DivineShield",
+    "target": "x3",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "left",
+  },
+]
+`;
