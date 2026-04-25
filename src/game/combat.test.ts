@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
+import { simulateCombat } from "./combat";
 import { instantiate } from "./minions/define";
 import { getMinion } from "./minions/index";
-import { simulateCombat } from "./combat";
 import type { MinionInstance } from "./types";
 
 const RNG = makeRng(42);
@@ -176,5 +176,25 @@ describe("multi-minion combat", () => {
     const r = simulateCombat([tanky], [weak], makeRng(0));
     expect(r.winner).toBe("left");
     expect(r.survivorsLeft[0]!.hp).toBe(3); // took 2 damage from the 2/1
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Taunt keyword
+// ---------------------------------------------------------------------------
+
+describe("taunt keyword", () => {
+  it("should target taunt minions first", () => {
+    const tauntMinion = makeMinion(1, 1);
+    tauntMinion.keywords.add("taunt");
+
+    const normalMinion = makeMinion(1, 1);
+
+    const r = simulateCombat([normalMinion], [tauntMinion], makeRng(0));
+
+    // Check that the attack was directed towards the taunt minion
+    const firstAttack = r.transcript.find((e) => e.kind === "Attack");
+    expect(firstAttack).toBeDefined();
+    expect(firstAttack?.target).toBe(tauntMinion.instanceId);
   });
 });
