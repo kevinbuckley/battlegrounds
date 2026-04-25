@@ -14,6 +14,7 @@ import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
 import unstableGhoul from "./tier2/unstable-ghoul";
+import vulgarHomunculus from "./tier2/vulgar-homunculus";
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [allleyCat.id]: allleyCat,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
@@ -29,6 +30,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
   [unstableGhoul.id]: unstableGhoul,
+  [vulgarHomunculus.id]: vulgarHomunculus,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {
