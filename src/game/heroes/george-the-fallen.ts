@@ -19,7 +19,7 @@ export const georgeTheFallen: Hero = {
       ...p,
       board: p.board.map((m, i) =>
         i === boardIndex
-          ? { ...m, keywords: new Set([...m.keywords, "divine_shield" as const]) }
+          ? { ...m, keywords: new Set([...m.keywords, "divineShield" as const]) }
           : m,
       ),
     }));

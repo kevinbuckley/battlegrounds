@@ -1,10 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
-import { HEROES, getAllHeroIds } from "./heroes/index";
-import { makeInitialState, beginRecruitTurn } from "./state";
-import { step } from "./state";
+import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
+import { beginRecruitTurn, makeInitialState, step } from "./state";
 
 const RNG = makeRng(1);
 
@@ -42,8 +41,16 @@ describe("hero selection", () => {
   it("assigns HP and armor from the selected hero", () => {
     let state = makeInitialState(1);
     // Select heroes for all 8 players to trigger transition to Recruit
-    const heroIds = ["patchwerk", "george_the_fallen", "sir_finley", "edwin_van_cleef",
-      "scabbs_cutterbutter", "ragnaros", "ysera", "millificent_manastorm"];
+    const heroIds = [
+      "patchwerk",
+      "george_the_fallen",
+      "sir_finley",
+      "edwin_van_cleef",
+      "scabbs_cutterbutter",
+      "ragnaros",
+      "ysera",
+      "millificent_manastorm",
+    ];
 
     for (let i = 0; i < 8; i++) {
       state = step(state, { kind: "SelectHero", player: i, heroId: heroIds[i]! }, RNG);
@@ -60,8 +67,16 @@ describe("hero selection", () => {
 
   it("heroPowerUsed starts false each turn", () => {
     let state = makeInitialState(1);
-    const heroIds = ["stub_hero", "stub_hero", "stub_hero", "stub_hero",
-      "stub_hero", "stub_hero", "stub_hero", "stub_hero"];
+    const heroIds = [
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+      "stub_hero",
+    ];
     for (let i = 0; i < 8; i++) {
       state = step(state, { kind: "SelectHero", player: i, heroId: heroIds[i]! }, RNG);
     }
@@ -108,7 +123,7 @@ describe("George the Fallen hero power", () => {
 
     const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
     const buffed = after.players[0]!.board[0]!;
-    expect(buffed.keywords.has("divine_shield")).toBe(true);
+    expect(buffed.keywords.has("divineShield")).toBe(true);
     expect(after.players[0]!.gold).toBe(8); // 10 - 2
     expect(after.players[0]!.heroPowerUsed).toBe(true);
   });
@@ -142,8 +157,10 @@ describe("Edwin Van Cleef hero power", () => {
     const m1 = instantiate(MINIONS["wrath_weaver"]!);
     const m2 = instantiate(MINIONS["alley_cat"]!);
     let state = makeStateWithHero("edwin_van_cleef");
-    state = { ...state, players: state.players.map((p, i) =>
-      i === 0 ? { ...p, hand: [m1, m2] } : p) };
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, hand: [m1, m2] } : p)),
+    };
 
     const after = step(state, { kind: "HeroPower", player: 0, target: undefined }, RNG);
     const hand = after.players[0]!.hand;

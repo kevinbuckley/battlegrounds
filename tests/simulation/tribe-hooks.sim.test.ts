@@ -3,12 +3,12 @@
  * Each test verifies a specific hook interaction in an isolated combat.
  */
 import { describe, expect, it } from "vitest";
-import { makeRng } from "@/lib/rng";
+import { simulateCombat } from "@/game/combat";
 import { instantiate } from "@/game/minions/define";
 import { MINIONS } from "@/game/minions/index";
-import { simulateCombat } from "@/game/combat";
-import { makeInitialState } from "@/game/state";
 import { playMinionToBoard } from "@/game/shop";
+import { makeInitialState } from "@/game/state";
+import { makeRng } from "@/lib/rng";
 
 function m(id: string) {
   const card = MINIONS[id];
@@ -23,19 +23,17 @@ function m(id: string) {
 describe("scavenging_hyena", () => {
   it("gains +2/+1 when a friendly beast dies", () => {
     // cat is left[0] so it attacks and dies first, triggering hyena's buff.
-    const hyena = m("scavenging_hyena");   // 2/1
-    const cat = m("alley_cat");             // 1/1 Beast
-    const killer = m("wrath_weaver");       // 1/3 — will survive long enough
+    const hyena = m("scavenging_hyena"); // 2/1
+    const cat = m("alley_cat"); // 1/1 Beast
+    const killer = m("wrath_weaver"); // 1/3 — will survive long enough
 
     // 2 left vs 1 right → left attacks first; cat[0] attacks and dies
     const r = simulateCombat([cat, hyena], [killer], makeRng(0));
-    const statEvent = r.transcript.find(
-      (e) => e.kind === "Stat" && e.target === hyena.instanceId,
-    );
+    const statEvent = r.transcript.find((e) => e.kind === "Stat" && e.target === hyena.instanceId);
     expect(statEvent).toBeDefined();
     if (statEvent?.kind !== "Stat") return;
     expect(statEvent.atk).toBe(4); // 2 + 2
-    expect(statEvent.hp).toBe(2);  // 1 + 1
+    expect(statEvent.hp).toBe(2); // 1 + 1
   });
 
   it("does NOT trigger when a non-beast ally dies", () => {
@@ -49,10 +47,7 @@ describe("scavenging_hyena", () => {
     );
     // Neutral dying should NOT buff hyena
     const beastDeaths = r.transcript.filter(
-      (e) =>
-        e.kind === "Death" &&
-        r.survivorsLeft.every((s) => s.instanceId !== e.source) &&
-        true,
+      (e) => e.kind === "Death" && r.survivorsLeft.every((s) => s.instanceId !== e.source) && true,
     );
     void beastDeaths;
     expect(hyenaStatEvents).toHaveLength(0);
@@ -91,7 +86,7 @@ describe("murloc_tidecaller", () => {
 describe("glyph_guardian", () => {
   it("doubles its ATK each time it attacks", () => {
     const glyph = m("glyph_guardian"); // 2/4
-    const dummy = m("wrath_weaver");   // 1/3
+    const dummy = m("wrath_weaver"); // 1/3
 
     // 1v1 with 2v1 giving left first attack... let's just use 2v1
     const r = simulateCombat([glyph, m("alley_cat")], [dummy], makeRng(0));
@@ -113,7 +108,7 @@ describe("glyph_guardian", () => {
 describe("unstable_ghoul", () => {
   it("deals 1 damage to all minions when it dies", () => {
     const ghoul = m("unstable_ghoul"); // 1/3 taunt
-    const enemy = m("alley_cat");      // 1/1 — dies from the splash
+    const enemy = m("alley_cat"); // 1/1 — dies from the splash
 
     // Give left 2 minions so it attacks first; ghoul is killed, splash hits enemy
     const survivor = m("wrath_weaver"); // 1/3 — on right, takes 1 dmg from splash
@@ -128,7 +123,9 @@ describe("unstable_ghoul", () => {
       makeRng(0),
     );
     // When ghoul dies it damages all remaining minions for 1
-    const ghoulDeath = r.transcript.findIndex((e) => e.kind === "Death" && e.source === ghoul.instanceId);
+    const ghoulDeath = r.transcript.findIndex(
+      (e) => e.kind === "Death" && e.source === ghoul.instanceId,
+    );
     expect(ghoulDeath).toBeGreaterThan(-1);
     // After ghoul death, expect Damage events for all minions
     const afterDeath = r.transcript.slice(ghoulDeath + 1);
@@ -138,7 +135,7 @@ describe("unstable_ghoul", () => {
 
   it("deathrattle chain: minions killed by splash get their own deaths processed", () => {
     const ghoul = m("unstable_ghoul"); // 1/3 taunt
-    const fragile = m("alley_cat");    // 1/1 — dies from splash
+    const fragile = m("alley_cat"); // 1/1 — dies from splash
 
     const leftAttacker = m("murloc_tidehunter"); // 2/1
 
@@ -150,7 +147,9 @@ describe("unstable_ghoul", () => {
     );
     const deaths = r.transcript.filter((e) => e.kind === "Death");
     // ghoul AND fragile (killed by splash) should both have Death events
-    const fragileDeathCount = deaths.filter((e) => e.kind === "Death" && e.source === fragile.instanceId).length;
+    const fragileDeathCount = deaths.filter(
+      (e) => e.kind === "Death" && e.source === fragile.instanceId,
+    ).length;
     expect(fragileDeathCount).toBe(1);
   });
 });
@@ -175,7 +174,7 @@ describe("selfless_hero", () => {
     expect(statAfterHeroDeath).toBeDefined();
     // Check ally survived with divine shield
     const allyInSurvivors = r.survivorsLeft.find((m) => m.instanceId === ally.instanceId);
-    expect(allyInSurvivors?.keywords.has("divine_shield")).toBe(true);
+    expect(allyInSurvivors?.keywords.has("divineShield")).toBe(true);
   });
 });
 
@@ -206,8 +205,8 @@ describe("metaltooth_leaper battlecry", () => {
     const nonMechOnBoard = board.find((m) => m.instanceId === nonMech.instanceId)!;
     const leaperOnBoard = board.find((m) => m.instanceId === leaper.instanceId)!;
 
-    expect(mechOnBoard.atk).toBe(mech.atk + 2);     // buffed
-    expect(nonMechOnBoard.atk).toBe(nonMech.atk);    // not buffed
-    expect(leaperOnBoard.atk).toBe(leaper.atk);      // self not buffed
+    expect(mechOnBoard.atk).toBe(mech.atk + 2); // buffed
+    expect(nonMechOnBoard.atk).toBe(nonMech.atk); // not buffed
+    expect(leaperOnBoard.atk).toBe(leaper.atk); // self not buffed
   });
 });

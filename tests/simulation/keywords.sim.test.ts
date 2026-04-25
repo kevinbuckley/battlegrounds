@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { makeRng } from "@/lib/rng";
-import { defineMinion, instantiate } from "@/game/minions/define";
 import { simulateCombat } from "@/game/combat";
+import { defineMinion, instantiate } from "@/game/minions/define";
 import type { MinionInstance } from "@/game/types";
+import { makeRng } from "@/lib/rng";
 
 const RNG = makeRng(1);
 
@@ -59,7 +59,7 @@ describe("taunt", () => {
 describe("divine shield", () => {
   it("absorbs first instance of damage, minion survives", () => {
     // ds has 2 atk so the 1/1 attacker dies from the counterattack — no second hit possible
-    const ds = make(2, 1, ["divine_shield"]);
+    const ds = make(2, 1, ["divineShield"]);
     const attacker = make(1, 1);
     const r = simulateCombat([attacker], [ds], makeRng(0));
     const dsEvent = r.transcript.find((e) => e.kind === "DivineShield");
@@ -72,7 +72,7 @@ describe("divine shield", () => {
   });
 
   it("divine shield does not block second hit", () => {
-    const ds = make(1, 1, ["divine_shield"]);
+    const ds = make(1, 1, ["divineShield"]);
     const attacker = make(2, 10);
     const r = simulateCombat([attacker, attacker], [ds], makeRng(0));
     expect(r.survivorsRight).toHaveLength(0);
@@ -81,7 +81,7 @@ describe("divine shield", () => {
   it("poisonous does not kill through divine shield", () => {
     // ds has 2 atk → kills the 1/1 poisoner regardless of who attacks first
     const poisoner = make(1, 1, ["poisonous"]);
-    const ds = make(2, 1, ["divine_shield"]);
+    const ds = make(2, 1, ["divineShield"]);
     const r = simulateCombat([poisoner], [ds], makeRng(0));
     expect(r.survivorsRight).toHaveLength(1);
   });
@@ -227,7 +227,11 @@ describe("cleave", () => {
 describe("deathrattle hook (onDeath)", () => {
   it("fires when the minion dies", () => {
     let fired = false;
-    const dr = make(1, 1, [], { onDeath: () => { fired = true; } });
+    const dr = make(1, 1, [], {
+      onDeath: () => {
+        fired = true;
+      },
+    });
     const killer = make(2, 5);
     simulateCombat([killer], [dr], RNG);
     expect(fired).toBe(true);
@@ -246,7 +250,12 @@ describe("deathrattle hook (onDeath)", () => {
       hooks: {
         onDeath: (ctx) => {
           ctx.right.push({ ...token, instanceId: `token_${Date.now()}` });
-          ctx.emit({ kind: "Summon", card: token.cardId, side: "right", position: ctx.right.length - 1 });
+          ctx.emit({
+            kind: "Summon",
+            card: token.cardId,
+            side: "right",
+            position: ctx.right.length - 1,
+          });
         },
       },
     });
@@ -273,7 +282,11 @@ describe("start-of-combat hook (onStartOfCombat)", () => {
       baseAtk: 1,
       baseHp: 10,
       baseKeywords: [],
-      hooks: { onStartOfCombat: () => { fired.push("soc"); } },
+      hooks: {
+        onStartOfCombat: () => {
+          fired.push("soc");
+        },
+      },
     });
     const socInst = instantiate(soc);
     const enemy = make(1, 1);

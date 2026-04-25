@@ -57,11 +57,7 @@ export function simulateCombat(
     const target = pickTarget(isLeft ? right : left, rng);
 
     // How many times does this attacker attack this turn?
-    const attackCount = attacker.keywords.has("mega_windfury")
-      ? 4
-      : attacker.keywords.has("windfury")
-        ? 2
-        : 1;
+    const attackCount = attacker.keywords.has("windfury") ? 2 : 1;
 
     for (let a = 0; a < attackCount && left.length > 0 && right.length > 0; a++) {
       const currentDefenders = isLeft ? right : left;
@@ -84,9 +80,7 @@ export function simulateCombat(
       emit({ kind: "Attack", attacker: attacker.instanceId, target: currentTarget.instanceId });
 
       // Collect all targets this hit affects (main + adjacent if cleave)
-      const hitTargets = attacker.keywords.has("cleave")
-        ? getWithAdjacent(currentDefenders, currentTarget)
-        : [currentTarget];
+      const hitTargets = [currentTarget];
 
       // Apply damage from attacker to all hit targets
       for (const t of hitTargets) {
@@ -122,7 +116,6 @@ export function simulateCombat(
 // ---------------------------------------------------------------------------
 // Death processing (handles chains from deathrattle effects)
 // ---------------------------------------------------------------------------
-
 function reapDeaths(
   left: MinionInstance[],
   right: MinionInstance[],
@@ -279,8 +272,8 @@ function applyDamage(
   const dmg = source.atk;
   if (dmg <= 0) return;
 
-  if (target.keywords.has("divine_shield")) {
-    target.keywords.delete("divine_shield");
+  if (target.keywords.has("divineShield")) {
+    target.keywords.delete("divineShield");
     emit({ kind: "DivineShield", target: target.instanceId });
     return;
   }

@@ -1,7 +1,7 @@
-import type { Rng } from "@/lib/rng";
-import type { Action, MinionInstance, PlayerState } from "@/game/types";
-import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
 import { MINIONS } from "@/game/minions/index";
+import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
+import type { Action, MinionInstance, PlayerState } from "@/game/types";
+import type { Rng } from "@/lib/rng";
 import type { PlayerView, Strategy } from "../strategy";
 
 // ---------------------------------------------------------------------------
@@ -13,11 +13,10 @@ import type { PlayerView, Strategy } from "../strategy";
  */
 function minionScore(m: MinionInstance): number {
   let score = m.atk + m.hp;
-  if (m.keywords.has("divine_shield")) score += 3;
+  if (m.keywords.has("divineShield")) score += 3;
   if (m.keywords.has("taunt")) score += 1;
   if (m.keywords.has("poisonous")) score += 4;
   if (m.keywords.has("windfury")) score += 2;
-  if (m.keywords.has("mega_windfury")) score += 4;
   if (m.keywords.has("reborn")) score += 2;
   return score;
 }
@@ -123,9 +122,7 @@ export const heuristic: Strategy = {
       // Check: is the best shop minion worth buying vs. what's on our board?
       const shopCandidate = player.shop[idx]!;
       const boardWorstScore =
-        player.board.length > 0
-          ? minionScore(player.board[weakestBoardIndex(player.board)]!)
-          : -1;
+        player.board.length > 0 ? minionScore(player.board[weakestBoardIndex(player.board)]!) : -1;
       const candidateScore = shopMinionScore(shopCandidate, player.board);
 
       // Only buy if better than the weakest board minion (accounting for sell refund)

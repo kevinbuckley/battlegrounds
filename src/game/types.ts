@@ -15,15 +15,7 @@ export type Tribe =
 
 export type Tier = 1 | 2 | 3 | 4 | 5 | 6;
 
-export type Keyword =
-  | "taunt"
-  | "divine_shield"
-  | "poisonous"
-  | "venomous"
-  | "windfury"
-  | "mega_windfury"
-  | "reborn"
-  | "cleave";
+export type Keyword = "taunt" | "divineShield" | "windfury" | "poisonous" | "reborn" | "venomous";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;

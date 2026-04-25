@@ -14,8 +14,8 @@ export default defineMinion({
       const allies = ctx.selfSide === "left" ? ctx.left : ctx.right;
       if (allies.length === 0) return;
       const target = ctx.rng.pick(allies);
-      if (target.keywords.has("divine_shield")) return; // already has one
-      target.keywords.add("divine_shield");
+      if (target.keywords.has("divineShield")) return; // already has one
+      target.keywords.add("divineShield");
       ctx.emit({ kind: "Stat", target: target.instanceId, atk: target.atk, hp: target.hp });
     },
   },
