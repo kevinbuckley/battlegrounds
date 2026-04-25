@@ -29,6 +29,7 @@
     "skill": false,
     "todowrite": false,
     "todoread": false,
-    "webfetch": false
+    "webfetch": false,
+    "question": false
   }
 }
