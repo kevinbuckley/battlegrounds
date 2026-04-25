@@ -263,3 +263,33 @@ exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 2`] 
   },
 ]
 `;
+
+exports[`vanilla combat snapshots poisonous minion kills target on attack 1`] = `"right"`;
+
+exports[`vanilla combat snapshots poisonous minion kills target on attack 2`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;

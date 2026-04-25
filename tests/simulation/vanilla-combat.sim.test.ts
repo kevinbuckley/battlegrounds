@@ -1,9 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { makeRng } from "@/lib/rng";
+import { simulateCombat } from "@/game/combat";
 import { instantiate } from "@/game/minions/define";
 import { getMinion } from "@/game/minions/index";
-import { simulateCombat } from "@/game/combat";
 import type { CombatEvent } from "@/game/types";
+import { makeRng } from "@/lib/rng";
 
 function m(id: string) {
   return instantiate(getMinion(id));
@@ -22,14 +22,22 @@ function normalizeTranscript(transcript: CombatEvent[]): unknown[] {
   };
   return transcript.map((e) => {
     switch (e.kind) {
-      case "Attack":        return { ...e, attacker: norm(e.attacker), target: norm(e.target) };
-      case "Damage":        return { ...e, target: norm(e.target) };
-      case "DivineShield":  return { ...e, target: norm(e.target) };
-      case "Death":         return { ...e, source: norm(e.source) };
-      case "Stat":          return { ...e, target: norm(e.target) };
-      case "StartOfCombat": return { ...e, source: norm(e.source) };
-      case "Summon":        return e;
-      case "End":           return e;
+      case "Attack":
+        return { ...e, attacker: norm(e.attacker), target: norm(e.target) };
+      case "Damage":
+        return { ...e, target: norm(e.target) };
+      case "DivineShield":
+        return { ...e, target: norm(e.target) };
+      case "Death":
+        return { ...e, source: norm(e.source) };
+      case "Stat":
+        return { ...e, target: norm(e.target) };
+      case "StartOfCombat":
+        return { ...e, source: norm(e.source) };
+      case "Summon":
+        return e;
+      case "End":
+        return e;
     }
   });
 }
@@ -70,6 +78,15 @@ describe("vanilla combat snapshots", () => {
       [m("metaltooth_leaper")],
       makeRng(1),
     );
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("poisonous minion kills target on attack", () => {
+    // Test with tidehunter (2/1) attacking wrath_weaver (1/3) with poisonous
+    // Tidehunter attacks first (2 damage to 3 HP target, should survive)
+    // Wrath_weaver (1 damage to 1 hp target) would get killed by poisonous effect
+    const result = simulateCombat([m("murloc_tidehunter")], [m("wrath_weaver")], makeRng(1));
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
