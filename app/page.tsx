@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+const heroSelectRoute = "/hero-select" as any;
+
 export default function HomePage() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center gap-8 p-8">
@@ -8,7 +10,7 @@ export default function HomePage() {
         A solo clone of Hearthstone Battlegrounds. You vs. 7 AI opponents.
       </p>
       <Link
-        href="/game"
+        href={heroSelectRoute}
         className="rounded-lg bg-amber-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
       >
         Start game
