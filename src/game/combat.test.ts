@@ -3,7 +3,7 @@ import { makeRng } from "@/lib/rng";
 import { simulateCombat } from "./combat";
 import { instantiate } from "./minions/define";
 import { getMinion } from "./minions/index";
-import type { MinionInstance } from "./types";
+import type { Keyword, MinionInstance } from "./types";
 
 const RNG = makeRng(42);
 
@@ -189,13 +189,36 @@ describe("taunt keyword", () => {
     tauntMinion.keywords.add("taunt");
 
     const normalMinion = makeMinion(1, 1);
+    const tauntId = tauntMinion.instanceId;
 
     const r = simulateCombat([normalMinion], [tauntMinion], makeRng(0));
 
-    // Check that the attack was directed towards the taunt minion
     const firstAttack = r.transcript.find((e) => e.kind === "Attack");
     expect(firstAttack).toBeDefined();
-    expect(firstAttack?.target).toBe(tauntMinion.instanceId);
+    expect(firstAttack?.target).toBe(tauntId);
+  });
+
+  it("when defender has both taunt and non-taunt, attacker picks taunt", () => {
+    const taunted: MinionInstance = {
+      ...makeMinion(1, 1),
+      instanceId: `taunt_m`,
+      keywords: new Set<Keyword>(["taunt"]),
+    };
+    const nonTaunted: MinionInstance = {
+      ...makeMinion(1, 1),
+      instanceId: `nt_m`,
+      keywords: new Set<Keyword>([]),
+    };
+
+    const left = [makeMinion(2, 5), makeMinion(2, 5), makeMinion(2, 1)];
+    const right: MinionInstance[] = [taunted, nonTaunted];
+    const r = simulateCombat(left, right, makeRng(0));
+
+    const firstAttack = r.transcript.find((e) => e.kind === "Attack") as {
+      attacker: string;
+      target: string;
+    };
+    expect(firstAttack.target).toBe(taunted.instanceId);
   });
 });
 

@@ -28,3 +28,4 @@
  2026-04-26 | c636a93 | FIXED: Add hero tier stats validation tests for start HP and armor values
  2026-04-26 | c835954 | FIXED: Add state machine integration tests for hero selection, buy/sell, turn transitions, and tier upgrades
 2026-04-26 | ae0ced5 | FIXED: Add combat animation overlay — full-screen event log with tick-based transcript display, progress bar, and color-coded events
+2026-04-26 | 0d2c50a | FIXED: Add combat tests verifying taunt keyword forces attacker targeting priority over non-taunt minions
