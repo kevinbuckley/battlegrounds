@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
+import { HEROES } from "./heroes/index";
 import { defineMinion, instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import {
@@ -192,6 +193,61 @@ describe("sellMinion", () => {
   it("throws for invalid board index", () => {
     const state = makeTestState({ board: [] });
     expect(() => sellMinion(state, 0, 0)).toThrow("No minion at board index 0");
+  });
+
+  it("calls hero.onSell when the player's hero has one (Jandice Barov)", () => {
+    const boardMinion = instantiate(TEST_CARD);
+    const base = makeInitialState(42);
+    const state = {
+      ...base,
+      phase: { kind: "Recruit", turn: 1 },
+      turn: 1,
+      pool: { test_murloc: 10, test_beast: 10, test_battlecry: 10 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              gold: 10,
+              tier: 1,
+              shop: [],
+              hand: [],
+              board: [boardMinion],
+              heroId: "jandice_barov",
+            }
+          : p,
+      ),
+    } as GameState;
+    const beforeShop = state.players[0]!.shop.length;
+    const after = sellMinion(state, 0, 0);
+    // Jandice's onSell should have added a minion to the shop
+    expect(after.players[0]!.shop.length).toBeGreaterThan(beforeShop);
+  });
+
+  it("does not call onSell for non-Jandice heroes", () => {
+    const boardMinion = instantiate(TEST_CARD);
+    const base = makeInitialState(42);
+    const state = {
+      ...base,
+      phase: { kind: "Recruit", turn: 1 },
+      turn: 1,
+      pool: { test_murloc: 10, test_beast: 10, test_battlecry: 10 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              gold: 10,
+              tier: 1,
+              shop: [],
+              hand: [],
+              board: [boardMinion],
+              heroId: "patchwerk",
+            }
+          : p,
+      ),
+    } as GameState;
+    const beforeShop = state.players[0]!.shop.length;
+    const after = sellMinion(state, 0, 0);
+    expect(after.players[0]!.shop.length).toBe(beforeShop);
   });
 });
 

@@ -8,6 +8,7 @@ import {
   TIER_ODDS,
   TIER_UPGRADE_BASE,
 } from "./economy";
+import { HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import type {
@@ -179,7 +180,14 @@ export function sellMinion(state: GameState, playerId: PlayerId, boardIndex: num
     gold: p.gold + REFUND_SELL,
     board: p.board.filter((_, i) => i !== boardIndex),
   }));
-  return { ...newState, pool: newPool };
+
+  const hero = HEROES[player.heroId];
+  let result = newState;
+  if (hero?.onSell) {
+    result = hero.onSell(newState, playerId);
+  }
+
+  return { ...result, pool: newPool };
 }
 
 export function playMinionToBoard(

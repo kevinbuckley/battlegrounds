@@ -116,6 +116,10 @@ export interface Hero {
    * Returns the new game state. `target` is hero-specific (e.g. board index).
    */
   onHeroPower?: (state: GameState, playerId: PlayerId, target: unknown, rng: Rng) => GameState;
+  /**
+   * Called when the player sells a minion. Returns the new game state.
+   */
+  onSell?: (state: GameState, playerId: PlayerId) => GameState;
 }
 
 export type HeroPower =
