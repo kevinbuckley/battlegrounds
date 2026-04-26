@@ -19,6 +19,7 @@ import selflessHero from "./tier2/selfless-hero";
 import spawnOfNzoth from "./tier2/spawn-of-nzoth";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
+import gazelle from "./tier3/gazelle";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
@@ -41,6 +42,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
+  [gazelle.id]: gazelle,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {
