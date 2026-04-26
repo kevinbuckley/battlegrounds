@@ -3,7 +3,7 @@ import { goldenTouch, pickAnomaly } from "./anomalies";
 import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
-import { HEROES } from "./heroes/index";
+import { getAllHeroIds, HEROES } from "./heroes/index";
 import {
   buildPool,
   buyMinion,
@@ -22,6 +22,7 @@ import type {
   Action,
   AnomalyCard,
   GameState,
+  HeroId,
   ModifierId,
   PlayerState,
   Tier,
@@ -168,10 +169,32 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
     armor: hero.startArmor,
   }));
 
-  const allSelected = afterSelect.players.every((p) => p.heroId !== "");
-  if (!allSelected) return afterSelect;
+  // Auto-assign random heroes to AI players who don't have one yet.
+  let stateWithAI = afterSelect;
+  const availableHeroes = getAllHeroIds().filter(
+    (id: HeroId) => id !== action.heroId && id !== "stub_hero",
+  );
+  const shuffled = rng.shuffle(availableHeroes);
+  let aiIdx = 0;
+  for (let i = 1; i < stateWithAI.players.length; i++) {
+    const p = stateWithAI.players[i];
+    if (p && p.heroId === "") {
+      const aiHeroId = (shuffled[aiIdx++] ?? "stub_hero") as HeroId;
+      const aiHero = HEROES[aiHeroId];
+      if (!aiHero) throw new Error(`AI hero not found: ${aiHeroId}`);
+      stateWithAI = updatePlayer(stateWithAI, i, (player) => ({
+        ...player,
+        heroId: aiHeroId,
+        hp: aiHero.startHp,
+        armor: aiHero.startArmor,
+      }));
+    }
+  }
 
-  return beginRecruitTurn(afterSelect, rng);
+  const allSelected = stateWithAI.players.every((p) => p.heroId !== "");
+  if (!allSelected) return stateWithAI;
+
+  return beginRecruitTurn(stateWithAI, rng);
 }
 
 // ---------------------------------------------------------------------------

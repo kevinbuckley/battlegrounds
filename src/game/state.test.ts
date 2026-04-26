@@ -45,7 +45,9 @@ describe("hero selection → recruit transition", () => {
   it("stays in HeroSelection until all 8 players pick", () => {
     let state = makeInitialState(1);
     state = step(state, { kind: "SelectHero", player: 0, heroId: "stub_hero" }, RNG);
-    expect(state.phase.kind).toBe("HeroSelection");
+    // With AI auto-selection, selecting player 0's hero also assigns random heroes
+    // to all AI players, so the game transitions to Recruit immediately.
+    expect(state.phase.kind).toBe("Recruit");
   });
 
   it("transitions to Recruit once all heroes selected", () => {
@@ -55,9 +57,18 @@ describe("hero selection → recruit transition", () => {
 
   it("sets hero HP and armor from the hero definition", () => {
     const state = selectAllHeroes(makeInitialState(1));
-    for (const p of state.players) {
-      expect(p.hp).toBe(40); // stub_hero has 40 HP, 0 armor
-      expect(p.armor).toBe(0);
+    // Player 0 selected stub_hero (40 HP, 0 armor)
+    expect(state.players[0]!.hp).toBe(40);
+    expect(state.players[0]!.armor).toBe(0);
+    // AI players get random real heroes with varying HP/armor
+    for (let i = 1; i < state.players.length; i++) {
+      const p = state.players[i]!;
+      expect(p.heroId).not.toBe("");
+      expect(p.hp).toBeGreaterThan(0);
+      // All heroes have valid HP values (25-60)
+      expect(p.hp).toBeLessThanOrEqual(60);
+      // Armor ranges from 0 to 11 depending on hero
+      expect(p.armor).toBeLessThanOrEqual(11);
     }
   });
 

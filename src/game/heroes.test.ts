@@ -64,29 +64,20 @@ describe("hero tier stats", () => {
 describe("hero selection", () => {
   it("assigns HP and armor from the selected hero", () => {
     let state = makeInitialState(1);
-    // Select heroes for all 8 players to trigger transition to Recruit
-    const heroIds = [
-      "patchwerk",
-      "george_the_fallen",
-      "sir_finley",
-      "edwin_van_cleef",
-      "scabbs_cutterbutter",
-      "ragnaros",
-      "ysera",
-      "millificent_manastorm",
-    ];
-
-    for (let i = 0; i < 8; i++) {
-      state = step(state, { kind: "SelectHero", player: i, heroId: heroIds[i]! }, RNG);
-    }
+    // Select player 0's hero — AI players are auto-assigned random heroes.
+    state = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, RNG);
 
     // Player 0 picked Patchwerk (60 HP)
     expect(state.players[0]!.hp).toBe(60);
-    // Player 1 picked George (35 HP, 5 armor)
-    expect(state.players[1]!.hp).toBe(35);
-    expect(state.players[1]!.armor).toBe(5);
-    // Phase transitions to Recruit once all heroes selected
+    // Phase transitions to Recruit once player 0 selects (AI auto-assigned)
     expect(state.phase.kind).toBe("Recruit");
+    // AI players should have been assigned random heroes
+    for (let i = 1; i < 8; i++) {
+      const p = state.players[i]!;
+      expect(p.heroId).not.toBe("");
+      expect(p.heroId).not.toBe("stub_hero");
+      expect(p.hp).toBeGreaterThan(0);
+    }
   });
 
   it("heroPowerUsed starts false each turn", () => {

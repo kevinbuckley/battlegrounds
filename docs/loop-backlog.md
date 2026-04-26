@@ -53,7 +53,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M8 — UI (visible progress; great for daytime iterations)
 
-- [ ] [M] `/game` route renders a placeholder GameState with hero portrait + HP
+- [x] [M] `/game` route renders a placeholder GameState with hero portrait + HP
 - [ ] [M] Shop view: 3-slot row showing minion cards (name, attack, hp, tier badge)
 - [ ] [M] Buy a minion: click card → moves to hand, gold decremented
 - [x] [M] Board view: 7 slots, drag-to-reorder
@@ -61,6 +61,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [M] Combat animation: read transcript and animate attacks one tick at a time
 - [ ] [S] Play minion from hand to board during recruit phase — click to place on empty slot (DONE)
 - [x] [M] Wire combat phase into state machine — pair players, resolve fights, apply hero damage, handle eliminations
+- [ ] [M] Add hero power UI button during recruit phase — click to use hero power, decrements gold, calls onHeroPower
 
 ---
 
