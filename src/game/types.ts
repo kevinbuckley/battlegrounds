@@ -224,7 +224,16 @@ export type Action =
   | { kind: "FreezeShop"; player: PlayerId }
   | { kind: "UpgradeTier"; player: PlayerId }
   | { kind: "HeroPower"; player: PlayerId; target?: unknown }
-  | { kind: "EndTurn"; player: PlayerId };
+  | { kind: "EndTurn"; player: PlayerId }
+  | { kind: "DismissDiscover"; player: PlayerId }
+  | { kind: "PickDiscover"; player: PlayerId; index: number };
+
+export interface DiscoverOffer {
+  /** The instance of the minion being offered (from the discover pool). */
+  minion: MinionInstance;
+  /** A unique id to track this offer entry independently of the minion's instance. */
+  offerId: string;
+}
 
 // ---------------------------------------------------------------------------
 // Combat

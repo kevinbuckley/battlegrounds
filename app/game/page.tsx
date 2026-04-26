@@ -2,6 +2,7 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DiscoverOverlay } from "@/components/DiscoverOverlay";
 import { simulateCombat } from "@/game/combat";
 import { applyDamageToPlayer, calcDamage } from "@/game/damage";
 import { baseGoldForTurn, COST_BUY } from "@/game/economy";
@@ -185,6 +186,10 @@ export default function GamePage() {
   const tickRef = useRef(combatTick);
   tickRef.current = combatTick;
 
+  // Discover overlay state
+  const [discoverOffers, setDiscoverOffers] = useState<import("@/game/types").DiscoverOffer[]>([]);
+  const [discoverTitle, setDiscoverTitle] = useState<string | undefined>();
+
   useEffect(() => {
     const heroId = searchParams.get("hero");
     if (!heroId) {
@@ -312,6 +317,34 @@ export default function GamePage() {
 
   const boardMinions = gameState?.players[0]?.board ?? [];
   const handMinions = gameState?.players[0]?.hand ?? [];
+
+  const handleDiscoverPick = useCallback(
+    (index: number) => {
+      if (!gameState) return;
+      const offer = discoverOffers[index];
+      if (!offer) return;
+
+      // Add the discovered minion to the player's hand
+      const next = step(
+        gameState,
+        { kind: "PickDiscover", player: 0, index },
+        rngForTurn(gameState, "discover"),
+      );
+      setGameState(next);
+      setDiscoverOffers([]);
+      setDiscoverTitle(undefined);
+    },
+    [gameState, discoverOffers],
+  );
+
+  const handleDiscoverDismiss = useCallback(() => {
+    if (!gameState) return;
+    setGameState(
+      step(gameState, { kind: "DismissDiscover", player: 0 }, rngForTurn(gameState, "discover")),
+    );
+    setDiscoverOffers([]);
+    setDiscoverTitle(undefined);
+  }, [gameState]);
 
   return (
     <main className="flex min-h-screen flex-col items-center gap-4 p-8 relative">
@@ -703,6 +736,16 @@ export default function GamePage() {
           }
         `}
       </style>
+
+      {/* Discover overlay */}
+      {discoverOffers.length > 0 && (
+        <DiscoverOverlay
+          offers={discoverOffers}
+          title={discoverTitle ?? "Discover a minion"}
+          onPick={handleDiscoverPick}
+          onDismiss={handleDiscoverDismiss}
+        />
+      )}
     </main>
   );
 }
