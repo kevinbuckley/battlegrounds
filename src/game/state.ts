@@ -15,6 +15,7 @@ import {
 } from "./shop";
 import { SPELLS } from "./spells/index";
 import { pickTrinket, pickTrinketForPlayer, TRINKETS } from "./trinkets";
+import { checkAndProcessTriples } from "./triples";
 import type {
   Action,
   AnomalyCard,
@@ -84,7 +85,7 @@ function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rn
   }));
 }
 
-function playSpell(state: GameState, playerId: number, spellIndex: number): GameState {
+function playSpell(state: GameState, playerId: number, spellIndex: number, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
   const spellInstance = player.spells[spellIndex];
   if (!spellInstance) throw new Error(`No spell at index ${spellIndex}`);
@@ -108,7 +109,7 @@ function playSpell(state: GameState, playerId: number, spellIndex: number): Game
       } as unknown as import("./types").MinionInstance,
       playerId,
       state,
-      rng: makeRng(Date.now()),
+      rng,
     };
     return spellCard.effects.onPlay(ctx);
   }
@@ -182,7 +183,7 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
     case "BuySpell":
       return buySpell(state, action.player, action.shopIndex, rng);
     case "PlaySpell":
-      return playSpell(state, action.player, action.spellIndex);
+      return playSpell(state, action.player, action.spellIndex, rng);
     case "SellMinion":
       return sellMinion(state, action.player, action.boardIndex);
     case "PlayMinion":
@@ -210,7 +211,12 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
 
 function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   const nextTurn = state.turn + 1;
-  return beginRecruitTurn({ ...state, turn: nextTurn }, rng);
+  let result = { ...state, turn: nextTurn };
+
+  // Check for triples at end of turn (between rounds)
+  result = checkAndProcessTriples(result, playerId, rng);
+
+  return beginRecruitTurn(result, rng);
 }
 
 // ------->-->-->-->-->-->-->-->-->-->-->-->
