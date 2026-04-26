@@ -172,8 +172,8 @@ describe("triples: checkAndProcessTriples", () => {
     const discovered = checkAndProcessTriples(s, 0, rngForTurn(s, "triple"));
     const discoveredCount = discovered.players[0]?.hand.length ?? 0;
 
-    // triple: remove 3 copies (-3), golden +1, discovered +1 = +0 net
-    expect(discoveredCount).toBe(originalHandCount);
+    // triple: remove 3 copies (-3), golden +1, discovered +1 = -1 net
+    expect(discoveredCount).toBe(originalHandCount - 1);
   });
 
   it("triples across board and hand detect correctly", () => {

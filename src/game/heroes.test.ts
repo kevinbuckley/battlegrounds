@@ -4,6 +4,7 @@ import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import { beginRecruitTurn, makeInitialState, step } from "./state";
+import type { Hero } from "./types";
 
 const RNG = makeRng(1);
 
@@ -36,6 +37,29 @@ describe("HEROES registry", () => {
 // ---------------------------------------------------------------------------
 // Hero selection flow
 // ---------------------------------------------------------------------------
+
+describe("hero tier stats", () => {
+  // Known valid start HP values for BG heroes
+  const validHPs = new Set([25, 30, 35, 40, 50, 60]);
+  // Known valid start armor values (per spec: 0/3/5/7/9)
+  const validArmor = new Set([0, 3, 5, 7, 9]);
+
+  it("every hero's start HP is a recognized value", () => {
+    const heroes = Object.values(HEROES).filter((h): h is Hero => h !== undefined);
+    for (const hero of heroes) {
+      expect(validHPs.has(hero.startHp)).toBe(true);
+    }
+  });
+
+  it("every hero's start armor is a valid tier value", () => {
+    const nonStubHeroes = getAllHeroIds();
+    for (const id of nonStubHeroes) {
+      const hero = HEROES[id];
+      expect(hero).toBeDefined();
+      expect(validArmor.has(hero!.startArmor)).toBe(true);
+    }
+  });
+});
 
 describe("hero selection", () => {
   it("assigns HP and armor from the selected hero", () => {

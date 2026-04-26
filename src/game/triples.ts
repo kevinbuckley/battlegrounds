@@ -35,17 +35,10 @@ function findTripleGroups(
 }
 
 /**
- * Return the minion card definition for a given card id.
- */
-function getCardDef(cardId: MinionCardId): MinionInstance | null {
-  const card = MINIONS[cardId];
-  return card ? instantiate(card) : null;
-}
-
-/**
- * Remove all triple groups from a player's board + hand.
- * Replaces each group of 3 with a single golden (2x stats) of the same minion.
- * Returns a new state with the triples processed, or the original state if no triples.
+ * Check for triples across a player's board + hand. Replace every group of 3
+ * identical minions with a single golden minion (2× stats). Then discover
+ * a random minion from tier+1 and add it to hand.  Return the updated state,
+ * or the original if no triples were found.
  */
 export function checkAndProcessTriples(
   state: import("./types").GameState,
@@ -65,9 +58,6 @@ export function checkAndProcessTriples(
 
     const board = [...player.board];
     const hand = [...player.hand];
-
-    // Build sets of instanceIds to remove for O(1) lookup during filter
-    const toRemove = new Set(copies.map((c) => c.instanceId));
 
     // Determine where all 3 copies live originally (for golden placement)
     // and filter them out
@@ -90,103 +80,61 @@ export function checkAndProcessTriples(
     }
 
     // Make the 3rd copy golden (2x stats)
-    const baseCard = getCardDef(cardId);
+    const baseCard = MINIONS[cardId];
     if (!baseCard) continue;
 
     const golden: MinionInstance = {
       ...baseCard,
+      instanceId: copies[0]!.instanceId,
+      cardId,
       golden: true,
-      atk: baseCard.atk * 2,
-      hp: baseCard.hp * 2,
-      maxHp: baseCard.maxHp * 2,
+      atk: baseCard.baseAtk * 2,
+      hp: baseCard.baseHp * 2,
+      maxHp: baseCard.baseHp * 2,
+      keywords: new Set([...baseCard.baseKeywords]),
+      attachments: {},
     };
     const third = copies[2];
     if (!third) continue;
 
     golden.instanceId = third.instanceId;
 
-    // Re-place golden: find a position in the remaining array.
-    // If the original array is now too small, clamp to index 0 (front).
+    // Place golden at the first removed copy's original position
     let targetIdx = goldenTarget?.origIndex ?? 0;
     const targetArr = goldenTarget?.slot === "hand" ? hand : board;
     if (targetArr.length === 0 || targetIdx >= targetArr.length) {
       targetIdx = 0;
     }
     targetArr.splice(targetIdx, 0, golden);
-    const bIdx = board.findIndex((m) => m.instanceId === c.instanceId);
-    if (bIdx !== -1) {
-      board.splice(bIdx, 1);
-      boardOffset++;
-      removed.push({ slot: "board", index: bIdx });
-    }
+
+    result = updatePlayer(result, playerId, (p) => ({ ...p, board, hand }));
   }
 
-  // Make the 3rd copy golden (2x stats)
-  const baseCard = getCardDef(cardId);
-  if (!baseCard) continue;
+  // Discover phase: offer a random minion from tier+1 (only if below tier 6)
+  const playerState = getPlayer(result, playerId);
+  if (playerState.tier >= 6) return result;
 
-  const golden: MinionInstance = {
-    ...baseCard,
-    golden: true,
-    atk: baseCard.atk * 2,
-    hp: baseCard.hp * 2,
-    maxHp: baseCard.maxHp * 2,
-  };
-  const third = copies[2];
-  if (!third) continue;
+  const nextTier = (playerState.tier + 1) as Tier;
+  const eligibleIds = Object.keys(MINIONS).filter(
+    (id): id is MinionCardId => MINIONS[id as MinionCardId]?.tier === nextTier,
+  );
 
-  golden.instanceId = third.instanceId;
+  if (eligibleIds.length === 0) return result;
 
-  // Determine where the golden goes based on the removed locations
-  // The 3rd copy was at removed[2].index within its slot
-  const thirdRemoved = removed[2]!;
-  if (thirdRemoved.slot === "hand") {
-    hand.splice(thirdRemoved.index, 0, golden);
-  } else {
-    board.splice(thirdRemoved.index, 0, golden);
-  }
+  const shuffled = [...eligibleIds].sort(() => rng.next() - 0.5);
+  const picks = shuffled.slice(0, Math.min(3, eligibleIds.length));
 
-  result = updatePlayer(result, playerId, (p) => ({ ...p, board, hand }));
-}
+  if (picks.length === 0) return result;
 
-// Discover: offer 3 minions from tier+1, pick one randomly (no UI yet)
-const playerState = getPlayer(result, playerId);
+  const chosenIdx = Math.floor(rng.next() * picks.length);
+  const chosen = picks[chosenIdx];
 
-if (playerState.tier >= 6) {
-  return result;
-}
+  if (!chosen) return result;
 
-const nextTier = (playerState.tier + 1) as Tier;
-const eligibleIds = Object.keys(MINIONS).filter(
-  (id): id is MinionCardId => MINIONS[id as MinionCardId]?.tier === nextTier,
-);
+  const cardDef = MINIONS[chosen];
+  if (!cardDef) return result;
 
-if (eligibleIds.length === 0) {
-  return result;
-}
+  const discovered = instantiate(cardDef);
 
-// Pick 3 unique (or all if fewer than 3 available)
-const shuffled = [...eligibleIds].sort(() => rng.next() - 0.5);
-const picks = shuffled.slice(0, Math.min(3, eligibleIds.length));
-
-if (picks.length === 0) {
-  return result;
-}
-
-// Randomly pick one
-const chosenIdx = Math.floor(rng.next() * picks.length);
-const chosen = picks[chosenIdx];
-
-if (!chosen) {
-  return result;
-}
-
-const cardDef = MINIONS[chosen];
-if (!cardDef) {
-  return result;
-}
-
-const discovered = instantiate(cardDef);
-
-return updatePlayer(result, playerId, (p) => ({ ...p, hand: [...p.hand, discovered] }));
+  return updatePlayer(result, playerId, (p) => ({ ...p, hand: [...p.hand, discovered] }));
 }
