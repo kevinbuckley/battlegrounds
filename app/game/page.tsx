@@ -701,13 +701,52 @@ export default function GamePage() {
 
           {/* Actions */}
           {gameState.phase.kind === "Recruit" && (
-            <button
-              type="button"
-              onClick={handleEndTurn}
-              className="rounded-lg bg-amber-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
-            >
-              End Turn
-            </button>
+            <div className="flex gap-3">
+              {(() => {
+                const player = gameState.players[0];
+                const hero = player?.heroId ? HEROES[player.heroId] : undefined;
+                const hasActivePower = hero?.power.kind === "active";
+                const powerCost = hasActivePower
+                  ? (hero!.power as { kind: "active"; cost: number; usesPerTurn: number }).cost
+                  : 999;
+                const canUsePower =
+                  hasActivePower && player && player.gold >= powerCost && !player.heroPowerUsed;
+
+                if (hasActivePower) {
+                  return (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!gameState || !player) return;
+                        const next = step(
+                          gameState,
+                          { kind: "HeroPower", player: 0, target: 0 },
+                          rngForTurn(gameState, "heroPower"),
+                        );
+                        setGameState(next);
+                        setError(null);
+                      }}
+                      disabled={!canUsePower}
+                      className={`rounded-lg px-6 py-3 font-semibold transition ${
+                        canUsePower
+                          ? "bg-sky-500 text-slate-950 hover:bg-sky-400"
+                          : "cursor-not-allowed bg-slate-700 text-slate-500"
+                      }`}
+                    >
+                      {hero?.name.split(" ")[0]} Power ({powerCost}g)
+                    </button>
+                  );
+                }
+                return null;
+              })()}
+              <button
+                type="button"
+                onClick={handleEndTurn}
+                className="rounded-lg bg-amber-500 px-6 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
+              >
+                End Turn
+              </button>
+            </div>
           )}
         </div>
       )}
