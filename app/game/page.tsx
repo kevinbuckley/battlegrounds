@@ -179,6 +179,7 @@ export default function GamePage() {
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [placingMinionIdx, setPlacingMinionIdx] = useState<number | null>(null);
 
   // Combat animation state
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
@@ -245,6 +246,48 @@ export default function GamePage() {
     [gameState],
   );
 
+  const handleHandMinionClick = useCallback(
+    (handIndex: number) => {
+      if (!gameState || gameState.phase.kind !== "Recruit") return;
+      const player = gameState.players[0];
+      if (!player) return;
+      const minion = player.hand[handIndex];
+      if (!minion) return;
+      if (player.board.length >= 7) return;
+      const boardIndex = player.board.length;
+      const next = step(
+        gameState,
+        { kind: "PlayMinion", player: 0, handIndex, boardIndex },
+        rngForTurn(gameState, "playMinion"),
+      );
+      setGameState(next);
+      setPlacingMinionIdx(null);
+      setError(null);
+    },
+    [gameState],
+  );
+
+  const handlePlaceToEmptySlot = useCallback(
+    (boardIndex: number) => {
+      if (!gameState) return;
+      if (!placingMinionIdx && placingMinionIdx !== 0) return;
+      if (gameState.phase.kind !== "Recruit") return;
+      const player = gameState.players[0];
+      if (!player) return;
+      const minion = player.hand[placingMinionIdx];
+      if (!minion) return;
+      const next = step(
+        gameState,
+        { kind: "PlayMinion", player: 0, handIndex: placingMinionIdx, boardIndex },
+        rngForTurn(gameState, "playMinion"),
+      );
+      setGameState(next);
+      setPlacingMinionIdx(null);
+      setError(null);
+    },
+    [gameState, placingMinionIdx],
+  );
+
   const handleEndTurn = useCallback(() => {
     if (!gameState) return;
     const player = gameState.players[0];
@@ -275,13 +318,13 @@ export default function GamePage() {
     if (!displayingCombat || !combatResult) return;
 
     if (combatTick >= combatResult.transcript.length) {
-      // Animation complete — apply combat result + roll next recruit turn
       setDisplayingCombat(false);
       setCombatResult(null);
       if (!gameState) return;
 
       const postCombat = applyCombatResult(gameState, combatResult);
-      if (playerEliminated(postCombat, 0)) return;
+      const { players } = gameState;
+      if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
 
       const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
       const next = rollNextRecruitTurn(postCombat, turnRng);
@@ -291,10 +334,6 @@ export default function GamePage() {
       return () => clearTimeout(timer);
     }
   }, [displayingCombat, combatTick, combatResult, gameState]);
-
-  const playerEliminated = (state: GameState, playerId: number): boolean => {
-    return state.players.find((p) => p.id === playerId)?.eliminated ?? false;
-  };
 
   // Build card name lookup for event descriptions
   const nameMap = useRef<Map<string, string>>(new Map());
@@ -426,14 +465,19 @@ export default function GamePage() {
                 Hand ({handMinions.length}/10)
               </h2>
               <div className="flex gap-3">
-                {handMinions.map((minion) => {
+                {handMinions.map((minion, idx) => {
                   const card = MINIONS[minion.cardId];
                   if (!card) return null;
                   const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
+                  const isSelected = placingMinionIdx === idx;
+                  const canPlay = gameState?.phase.kind === "Recruit" && boardMinions.length < 7;
                   return (
-                    <div
+                    <button
+                      type="button"
                       key={minion.instanceId}
-                      className="flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-amber-500/50 bg-slate-800 px-4 py-3 opacity-90"
+                      onClick={() => canPlay && setPlacingMinionIdx(idx)}
+                      disabled={!canPlay}
+                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${isSelected ? "border-amber-400 bg-amber-400/10" : "border-amber-500/50"} bg-slate-800 px-4 py-3 transition ${canPlay ? "cursor-pointer hover:bg-slate-750 active:scale-95 opacity-90" : "cursor-not-allowed opacity-50"}`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -468,7 +512,7 @@ export default function GamePage() {
                           ))}
                         </div>
                       )}
-                    </div>
+                    </button>
                   );
                 })}
               </div>
@@ -564,15 +608,21 @@ export default function GamePage() {
                     </div>
                   );
                 } else {
+                  const isPlacing = placingMinionIdx !== null;
                   return (
-                    <div
-                      key={`empty-${idx}`}
-                      className={`flex min-w-[120px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-700 bg-slate-900/50 px-4 py-3 transition ${
-                        dragIndex !== null ? "border-amber-500/60 bg-amber-500/5" : ""
-                      }`}
+                    <button
+                      type="button"
+                      key={`empty-slot-${idx}`}
+                      onClick={() => isPlacing && handlePlaceToEmptySlot(idx)}
+                      disabled={!isPlacing}
+                      className={`flex min-w-[120px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed ${isPlacing ? "border-amber-400 bg-amber-400/10 cursor-pointer" : "border-slate-700 bg-slate-900/50 cursor-not-allowed"} px-4 py-3 transition`}
                     >
-                      <span className="text-2xl text-slate-700">+</span>
-                    </div>
+                      <span
+                        className={`text-2xl ${isPlacing ? "text-amber-400" : "text-slate-700"}`}
+                      >
+                        +
+                      </span>
+                    </button>
                   );
                 }
               })}

@@ -59,6 +59,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [M] Board view: 7 slots, drag-to-reorder
 - [ ] [M] HP/gold/tier HUD top bar
 - [ ] [M] Combat animation: read transcript and animate attacks one tick at a time
+- [ ] [S] Play minion from hand to board during recruit phase — click to place on empty slot (DONE)
 
 ---
 
