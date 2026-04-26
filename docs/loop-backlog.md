@@ -24,8 +24,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [S] Add `reborn` — first time a minion dies, return with 1 HP and lose reborn
 - [x] [S] Add `Venomous` — like poisonous but lost after one trigger
 - [ ] [M] Wire battlecry hook into `playMinionToBoard` so card battlecries fire
-- [ ] [M] Wire deathrattle hook into combat death resolution
-- [ ] [M] Wire start-of-combat hook to fire before first attack each combat
+- [x] [M] Wire deathrattle hook into combat death resolution
+- [x] [M] Wire start-of-combat hook to fire before first attack each combat
 - [ ] [S] Test: combat with taunt + non-taunt confirms taunt targeted first
 - [ ] [S] Test: divine shield absorbs exactly one damage instance
 - [ ] [S] Test: windfury double-attacks
