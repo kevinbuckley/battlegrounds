@@ -50,15 +50,14 @@ export function checkAndProcessTriples(
   if (groups.length === 0) return state;
 
   let result = state;
+  const board = [...player.board];
+  const hand = [...player.hand];
 
   for (const group of groups) {
     const cardId = group.cardId;
     const copies = group.copies;
 
-    const board = [...player.board];
-    const hand = [...player.hand];
-
-    // Determine where all 3 copies live originally (for golden placement)
+    // Determine where all 3 copies live (for golden placement)
     // and filter them out
     let goldenTarget: { slot: "board" | "hand"; origIndex: number } | null = null;
 
@@ -82,21 +81,21 @@ export function checkAndProcessTriples(
     const baseCard = MINIONS[cardId];
     if (!baseCard) continue;
 
+    const third = copies[2];
+    if (!third) continue;
+
     const golden: MinionInstance = {
-      ...baseCard,
-      instanceId: copies[0]!.instanceId,
+      instanceId: third.instanceId,
       cardId,
       golden: true,
       atk: baseCard.baseAtk * 2,
       hp: baseCard.baseHp * 2,
       maxHp: baseCard.baseHp * 2,
       keywords: new Set([...baseCard.baseKeywords]),
+      tribes: [...baseCard.tribes],
       attachments: {},
+      hooks: { ...baseCard.hooks },
     };
-    const third = copies[2];
-    if (!third) continue;
-
-    golden.instanceId = third.instanceId;
 
     // Place golden at the first removed copy's original position
     let targetIdx = goldenTarget?.origIndex ?? 0;
