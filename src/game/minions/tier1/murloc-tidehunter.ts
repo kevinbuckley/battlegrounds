@@ -1,5 +1,5 @@
 import type { MinionInstance, Tribe } from "../../types";
-import { defineMinion } from "../define";
+import { defineMinion, nextInstanceId } from "../define";
 
 export default defineMinion({
   id: "murloc_tidehunter",
@@ -17,7 +17,7 @@ export default defineMinion({
       if (availableSlots <= 0) return state;
 
       const whelp: MinionInstance = {
-        instanceId: `tidehunter_whelp_${playerId}_${Date.now()}_${rng.next()}`,
+        instanceId: `tidehunter_whelp_${playerId}_${nextInstanceId()}`,
         cardId: "murloc_tidehunter_whelp",
         atk: 1,
         hp: 1,

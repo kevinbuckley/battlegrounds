@@ -1,13 +1,9 @@
 import type { Rng } from "@/lib/rng";
+import { nextInstanceId } from "../minions/define";
 import type { GameState, MinionHooks, MinionInstance, SpellCard, Tier, Tribe } from "../types";
 import { getPlayer, updatePlayer } from "../utils";
 
 const EMPTY_HOOKS: MinionHooks = {};
-
-let _spellInstanceIdCounter = 0;
-function nextSpellInstanceId(): string {
-  return `spell_${Date.now()}_${_spellInstanceIdCounter++}`;
-}
 
 /** Deal 4 damage to a random enemy minion. */
 export const poisonDartShield: SpellCard = {
@@ -92,7 +88,7 @@ export const pancakeSpell: SpellCard = {
       let state = ctx.state;
       for (let i = 0; i < count; i++) {
         const whelm: MinionInstance = {
-          instanceId: nextSpellInstanceId(),
+          instanceId: nextInstanceId(),
           cardId: "dredgrot_whelp",
           atk: 1,
           hp: 1,

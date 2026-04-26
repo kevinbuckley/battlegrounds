@@ -4,13 +4,13 @@ export function defineMinion(card: MinionCard): MinionCard {
   return card;
 }
 
-let nextInstanceId = 0;
+let nextInstanceIdCounter = 0;
 export function instantiate(card: MinionCard, golden = false): MinionInstance {
   const atk = golden ? card.baseAtk * 2 : card.baseAtk;
   const hp = golden ? card.baseHp * 2 : card.baseHp;
-  nextInstanceId += 1;
+  nextInstanceIdCounter += 1;
   return {
-    instanceId: `m${nextInstanceId}`,
+    instanceId: `m${nextInstanceIdCounter}`,
     cardId: card.id,
     atk,
     hp,
@@ -21,6 +21,11 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
     attachments: {},
     hooks: card.hooks,
   };
+}
+
+export function nextInstanceId(): string {
+  nextInstanceIdCounter += 1;
+  return `m${nextInstanceIdCounter}`;
 }
 
 export type { MinionHooks };

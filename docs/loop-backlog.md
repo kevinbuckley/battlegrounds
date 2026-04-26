@@ -22,7 +22,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [S] Add `windfury` — minion with windfury attacks twice per attack opportunity
 - [ ] [S] Add `poisonous` — any damage to a minion from a poisonous attacker kills it
 - [ ] [S] Add `reborn` — first time a minion dies, return with 1 HP and lose reborn
-- [ ] [S] Add `venomous` — like poisonous but lost after one trigger
+- [x] [S] Add `Venomous` — like poisonous but lost after one trigger
 - [ ] [M] Wire battlecry hook into `playMinionToBoard` so card battlecries fire
 - [ ] [M] Wire deathrattle hook into combat death resolution
 - [ ] [M] Wire start-of-combat hook to fire before first attack each combat
