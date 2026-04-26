@@ -28,14 +28,12 @@ function useHeroPower(state: GameState, playerId: number, target: unknown, rng: 
   if (player.gold < cost) throw new Error(`Not enough gold for hero power (need ${cost})`);
   if (player.heroPowerUsed) throw new Error("Hero power already used this turn");
 
-  // Deduct cost and mark used
   let next = updatePlayer(state, playerId, (p) => ({
     ...p,
     gold: p.gold - cost,
     heroPowerUsed: true,
   }));
 
-  // Apply hero-specific effect
   if (hero.onHeroPower) {
     next = hero.onHeroPower(next, playerId, target, rng);
   }
@@ -92,7 +90,6 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
     armor: hero.startArmor,
   }));
 
-  // Transition to recruit once every player has a hero
   const allSelected = afterSelect.players.every((p) => p.heroId !== "");
   if (!allSelected) return afterSelect;
 
@@ -129,21 +126,12 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
 }
 
 function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
-  // In a solo game the human's EndTurn triggers the AI turns then combat.
-  // For M1 we just stub: mark the player as done and, once all non-eliminated
-  // players have ended, begin combat (which is also stubbed) then next recruit.
-  // A real implementation will drive AI actions here.
-
-  // For now: immediately transition to next recruit turn for the human player.
-  // This will be replaced by the full turn loop in M4+.
-  void playerId;
   const nextTurn = state.turn + 1;
-  const afterCombat = { ...state, turn: nextTurn };
-  return beginRecruitTurn(afterCombat, rng);
+  return beginRecruitTurn({ ...state, turn: nextTurn }, rng);
 }
 
 // ---------------------------------------------------------------------------
-// Combat phase (stub — filled in M4+)
+// Combat phase (stub for future multi-player expansion)
 // ---------------------------------------------------------------------------
 
 function stepCombat(state: GameState, _action: Action, _rng: Rng): GameState {
@@ -167,7 +155,6 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
   for (const player of state.players) {
     if (player.eliminated) continue;
 
-    // Apply upgrade discount (if didn't upgrade last turn and not at max)
     const discountedCost =
       !player.upgradedThisTurn && player.tier < 6
         ? Math.max(0, player.upgradeCost - 1)
@@ -181,7 +168,6 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
       heroPowerUsed: false,
     }));
 
-    // Roll shop (respects freeze)
     next = rollShopForPlayer(next, player.id, rng.fork(`shop:${player.id}:${turn}`));
   }
 
@@ -228,7 +214,6 @@ export function makeInitialState(seed: number): GameState {
   };
 }
 
-// Helper to derive a turn-scoped RNG from game seed (for replay)
 export function rngForTurn(state: GameState, label: string): Rng {
   return makeRng(state.seed).fork(`turn:${state.turn}:${label}`);
 }
