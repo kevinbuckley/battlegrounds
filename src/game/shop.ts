@@ -1,8 +1,15 @@
 import type { Rng } from "@/lib/rng";
-import { MINIONS } from "./minions/index";
+import {
+  COST_BUY,
+  COST_REFRESH,
+  POOL_COUNTS,
+  REFUND_SELL,
+  SHOP_SIZE_BY_TIER,
+  TIER_ODDS,
+  TIER_UPGRADE_BASE,
+} from "./economy";
 import { instantiate } from "./minions/define";
-import { COST_BUY, COST_REFRESH, POOL_COUNTS, REFUND_SELL, SHOP_SIZE_BY_TIER, TIER_ODDS, TIER_UPGRADE_BASE } from "./economy";
-import { getPlayer, updatePlayer } from "./utils";
+import { MINIONS } from "./minions/index";
 import type {
   GameState,
   MinionCard,
@@ -12,6 +19,7 @@ import type {
   Tier,
   Tribe,
 } from "./types";
+import { getPlayer, updatePlayer } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Pool management
@@ -105,11 +113,9 @@ export function returnToPool(
 // Per-player shop roll (called at turn start or after refresh)
 // ---------------------------------------------------------------------------
 
-export function rollShopForPlayer(
-  state: GameState,
-  playerId: PlayerId,
-  rng: Rng,
-): GameState {
+import { checkAndProcessTriples } from "./triples";
+
+export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
   if (player.shopFrozen) {
     // Frozen: keep shop, clear freeze for next turn
@@ -132,7 +138,12 @@ export function rollShopForPlayer(
 // Shop actions — each returns a new GameState or throws on invalid input
 // ---------------------------------------------------------------------------
 
-export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: number): GameState {
+export function buyMinion(
+  state: GameState,
+  playerId: PlayerId,
+  shopIndex: number,
+  rng: Rng | null = null,
+): GameState {
   const player = getPlayer(state, playerId);
 
   if (player.gold < COST_BUY)
@@ -142,12 +153,19 @@ export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: numbe
   const minion = player.shop[shopIndex];
   if (!minion) throw new Error(`No minion at shop index ${shopIndex}`);
 
-  return updatePlayer(state, playerId, (p) => ({
+  let result = updatePlayer(state, playerId, (p) => ({
     ...p,
     gold: p.gold - COST_BUY,
     hand: [...p.hand, minion],
     shop: p.shop.filter((_, i) => i !== shopIndex),
   }));
+
+  // Check for triples after adding to hand
+  if (rng) {
+    result = checkAndProcessTriples(result, playerId, rng);
+  }
+
+  return result;
 }
 
 export function sellMinion(state: GameState, playerId: PlayerId, boardIndex: number): GameState {
@@ -231,13 +249,11 @@ export function upgradeTier(state: GameState, playerId: PlayerId): GameState {
   const player = getPlayer(state, playerId);
   if (player.tier >= 6) throw new Error("Already at max tier");
   if (player.gold < player.upgradeCost)
-    throw new Error(
-      `Not enough gold to upgrade (have ${player.gold}, need ${player.upgradeCost})`,
-    );
+    throw new Error(`Not enough gold to upgrade (have ${player.gold}, need ${player.upgradeCost})`);
 
   const newTier = (player.tier + 1) as Tier;
   const nextUpgradeCost =
-    newTier < 6 ? (TIER_UPGRADE_BASE[((newTier + 1) as Exclude<Tier, 1>)] ?? 0) : 0;
+    newTier < 6 ? (TIER_UPGRADE_BASE[(newTier + 1) as Exclude<Tier, 1>] ?? 0) : 0;
 
   return updatePlayer(state, playerId, (p) => ({
     ...p,

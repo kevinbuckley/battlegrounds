@@ -1,19 +1,19 @@
 import { makeRng, type Rng } from "@/lib/rng";
+import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { HEROES } from "./heroes/index";
 import {
   buildPool,
   buyMinion,
   freezeShop,
   playMinionToBoard,
-  reorderBoard,
   refreshShop,
+  reorderBoard,
   rollShopForPlayer,
   sellMinion,
   upgradeTier,
 } from "./shop";
-import { getPlayer, updatePlayer } from "./utils";
-import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import type { Action, GameState, PlayerState, Tier, Tribe } from "./types";
+import { getPlayer, updatePlayer } from "./utils";
 
 // ---------------------------------------------------------------------------
 // Hero power
@@ -106,7 +106,7 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
 function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
   switch (action.kind) {
     case "BuyMinion":
-      return buyMinion(state, action.player, action.shopIndex);
+      return buyMinion(state, action.player, action.shopIndex, rng);
     case "SellMinion":
       return sellMinion(state, action.player, action.boardIndex);
     case "PlayMinion":
