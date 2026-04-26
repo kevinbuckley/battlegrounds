@@ -52,8 +52,15 @@ export default function GamePage() {
       {!gameState && !error && <p className="text-slate-400">Loading...</p>}
       {gameState && (
         <div className="flex flex-col items-center gap-6">
-          <div className="flex items-center gap-8">
-            <div className="flex flex-col items-center gap-1">
+          <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center">
+              <div className="mb-3 flex h-24 w-24 items-center justify-center rounded-full border-2 border-amber-500 bg-slate-800 text-3xl font-bold text-slate-100">
+                {(() => {
+                  const p = gameState.players[0] ?? gameState.players.at(-1);
+                  const hero = p?.heroId ? HEROES[p.heroId] : undefined;
+                  return hero ? hero.name.charAt(0) : "?";
+                })()}
+              </div>
               <span className="text-sm text-slate-400">Hero</span>
               <span className="text-lg font-semibold">
                 {(() => {
