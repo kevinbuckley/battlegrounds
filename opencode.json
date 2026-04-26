@@ -1,6 +1,18 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
+    "mlx": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "MLX (local, Apple Silicon native)",
+      "options": {
+        "baseURL": "http://localhost:8080/v1"
+      },
+      "models": {
+        "Qwen3.6-35B-A3B-4bit": {
+          "name": "Qwen3.6 35B A3B MLX 4-bit"
+        }
+      }
+    },
     "ollama": {
       "npm": "@ai-sdk/openai-compatible",
       "name": "Ollama (local)",
