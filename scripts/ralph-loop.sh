@@ -72,6 +72,9 @@ preflight() {
   python3 -c "import mcp, playwright" 2>/dev/null \
     || { log "FAIL: missing python deps (mcp, playwright)"; fail=1; }
 
+  # Sync with remote before starting
+  git -C "$REPO" pull --ff-only origin main >/dev/null 2>&1 || true
+
   if ! git -C "$REPO" diff --quiet || ! git -C "$REPO" diff --cached --quiet; then
     log "FAIL: repo has uncommitted changes — commit/stash first"
     fail=1
@@ -100,14 +103,18 @@ run_iteration() {
   prompt+=$'\n\n## Current ledger (do NOT redo these)\n\n'
   prompt+="$(tail -50 "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
 
+  # Sync with remote so the model sees the latest commits (handles upstream resets)
+  git -C "$REPO" pull --ff-only origin main >/dev/null 2>&1 || true
+
   cd "$REPO"
   local iter_log="$LOG_DIR/iter-$STAMP-$(printf '%03d' "$n").log"
 
   if [[ $DEBUG -eq 1 ]]; then
-    opencode run -m "$MODEL" --print-logs "$prompt" 2>&1 | tee "$iter_log" | tee -a "$LOG" || true
+    gtimeout "$ITER_TIMEOUT" opencode run -m "$MODEL" --print-logs "$prompt" 2>&1 | tee "$iter_log" | tee -a "$LOG" || true
   else
-    opencode run -m "$MODEL" "$prompt" > "$iter_log" 2>&1 || true
+    gtimeout "$ITER_TIMEOUT" opencode run -m "$MODEL" "$prompt" > "$iter_log" 2>&1 || true
   fi
+  log "  opencode exited (timeout=${ITER_TIMEOUT}s)"
 
   # Verify the iteration actually worked
   log "  verifying..."
@@ -140,7 +147,7 @@ run_iteration() {
   else
     log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok real_diff=$real_diff new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
     git -C "$REPO" reset --hard "$snap" >/dev/null
-    git -C "$REPO" clean -fd src/ app/ tests/ 2>/dev/null || true
+    git -C "$REPO" clean -fd src/ app/ tests/ docs/ 2>/dev/null || true
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $snap | REVERTED: iteration $n failed"
   fi
 }
