@@ -12,9 +12,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 11 gameplay heroes (excluding stub)", () => {
+  it("contains all 12 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(11);
+    expect(ids).toHaveLength(12);
   });
 
   it("every hero has a description", () => {

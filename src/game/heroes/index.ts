@@ -3,6 +3,7 @@ import { afKay } from "./af-kay";
 import { edwinVanCleef } from "./edwin-van-cleef";
 import { georgeTheFallen } from "./george-the-fallen";
 import { jandiceBarov } from "./jandice-barov";
+import { lichBazHial } from "./lich-bazhial";
 import { millificentManastorm } from "./millificent-manastorm";
 import { patchwerk } from "./patchwerk";
 import { ragnaros } from "./ragnaros";
@@ -24,6 +25,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [millificentManastorm.id]: millificentManastorm,
   [jandiceBarov.id]: jandiceBarov,
   [afKay.id]: afKay,
+  [lichBazHial.id]: lichBazHial,
   [rakanishu.id]: rakanishu,
 };
 

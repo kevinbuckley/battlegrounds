@@ -17,3 +17,4 @@
  2026-04-25 | df37363 | FIXED: Add hero select screen — 4 random heroes offered at lobby start with navigation to game page
  2026-04-25 | df37363 | FIXED: Add hero select screen — 4 random heroes offered at lobby start with navigation to game page
  2026-04-26 | 5859299 | FIXED: Fix Spawn of NZoth tribe from Murloc to Mech
+2026-04-26 | 060e02d | FIXED: Add Lich Baz'hial hero with active power to lose 3 HP and gain 2 gold
