@@ -25,4 +25,5 @@ mlx_lm.server \
   --port 8080 \
   --host 127.0.0.1 \
   --max-tokens 32768 \
+  --chat-template-args '{"enable_thinking":false}' \
   --log-level INFO
