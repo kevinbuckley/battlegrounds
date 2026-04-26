@@ -157,6 +157,18 @@ export type Phase =
   | { kind: "Combat"; turn: number }
   | { kind: "GameOver"; winner: PlayerId };
 
+export type ModifierId = "trinkets" | "spells" | "anomalies" | "quests" | "buddies";
+
+export type AnomalyId = string;
+
+export interface AnomalyCard {
+  id: AnomalyId;
+  name: string;
+  description: string;
+  /** Called once when the anomaly is selected at lobby start. Can mutate GameState in place. */
+  onSetup: (state: GameState, rng: Rng) => void;
+}
+
 export interface GameState {
   seed: number;
   phase: Phase;
@@ -165,6 +177,11 @@ export interface GameState {
   tribesInLobby: Tribe[];
   pool: Record<MinionCardId, number>;
   pairingsHistory: Array<[PlayerId, PlayerId]>;
+  /** Active lobby modifiers for this session. */
+  modifiers: ModifierId[];
+  modifierState: {
+    anomaly?: AnomalyId;
+  };
 }
 
 // ---------------------------------------------------------------------------

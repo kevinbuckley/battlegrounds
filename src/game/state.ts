@@ -1,4 +1,5 @@
 import { makeRng, type Rng } from "@/lib/rng";
+import { goldenTouch, pickAnomaly } from "./anomalies";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { HEROES } from "./heroes/index";
 import {
@@ -13,7 +14,7 @@ import {
   upgradeTier,
 } from "./shop";
 import { SPELLS } from "./spells/index";
-import type { Action, GameState, PlayerState, Tier, Tribe } from "./types";
+import type { Action, AnomalyCard, GameState, ModifierId, PlayerState, Tier, Tribe } from "./types";
 import { getPlayer, updatePlayer } from "./utils";
 
 // ---------------------------------------------------------------------------
@@ -271,6 +272,32 @@ export function makeInitialState(seed: number): GameState {
     spells: [],
   }));
 
+  // Roll for modifiers per 10-lobby-modifiers.md spec
+  const allModifiers: ModifierId[] = ["trinkets", "spells", "anomalies", "quests", "buddies"];
+  const activeModifiers: ModifierId[] = [];
+  for (const mod of allModifiers) {
+    if (rng.next() < 0.5) activeModifiers.push(mod as ModifierId);
+  }
+
+  let modifiersState: GameState["modifierState"] = {};
+
+  if (activeModifiers.includes("anomalies")) {
+    const anomaly = pickAnomaly(rng);
+    const game: GameState = {
+      seed,
+      phase: { kind: "HeroSelection" },
+      turn: 0,
+      players,
+      tribesInLobby,
+      pool,
+      pairingsHistory: [],
+      modifiers: activeModifiers,
+      modifierState: {},
+    };
+    anomaly.onSetup(game, rng);
+    modifiersState = { anomaly: anomaly.id };
+  }
+
   return {
     seed,
     phase: { kind: "HeroSelection" },
@@ -279,6 +306,8 @@ export function makeInitialState(seed: number): GameState {
     tribesInLobby,
     pool,
     pairingsHistory: [],
+    modifiers: activeModifiers,
+    modifierState: modifiersState,
   };
 }
 
