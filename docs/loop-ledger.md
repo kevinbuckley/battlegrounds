@@ -19,3 +19,5 @@
  2026-04-26 | 5859299 | FIXED: Fix Spawn of NZoth tribe from Murloc to Mech
 2026-04-26 | 060e02d | FIXED: Add Lich Baz'hial hero with active power to lose 3 HP and gain 2 gold
 2026-04-26 | 89d5c70 | FIXED: Add hero start HP/armor validation tests
+2026-04-26 | 1a10ead | FIXED: Add combat simulation tests for Spawn of N'Zoth deathrattle (+1/+1 to all friendly minions)
+2026-04-26 | 0000000 | FIXED: Add Patchwerk hero — starts at 60 HP, no Hero Power (passive)
