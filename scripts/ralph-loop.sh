@@ -34,7 +34,7 @@ MAX_ITERS=999
 SLEEP_BETWEEN=20
 MAX_TIME_HOURS=12
 DEBUG=0
-ITER_TIMEOUT=1200   # 20 min per iteration
+ITER_TIMEOUT=1800   # 30 min per iteration (headroom for thinking mode)
 
 while [[ $# -gt 0 ]]; do
   case $1 in
