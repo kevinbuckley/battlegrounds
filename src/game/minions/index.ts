@@ -20,6 +20,10 @@ import spawnOfNzoth from "./tier2/spawn-of-nzoth";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import gazelle from "./tier3/gazelle";
+import bloodsailCorsair from "./tier4/bloodsail-corsair";
+import broodkinZealot from "./tier4/broodkin-zealot";
+import crystalweaver from "./tier4/crystalweaver";
+import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
@@ -43,6 +47,10 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
   [gazelle.id]: gazelle,
+  [bloodsailCorsair.id]: bloodsailCorsair,
+  [broodkinZealot.id]: broodkinZealot,
+  [crystalweaver.id]: crystalweaver,
+  [nagaSecretGuardian.id]: nagaSecretGuardian,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {
