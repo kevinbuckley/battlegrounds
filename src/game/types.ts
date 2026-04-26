@@ -151,6 +151,8 @@ export interface PlayerState {
   spells: SpellInstance[];
   /** Active discover offers (triples, hero powers, etc). */
   discoverOffer: { offers: DiscoverOffer[]; title?: string } | null;
+  /** Trinket instances granted to this player by the trinket modifier. */
+  trinkets: TrinketInstance[];
 }
 
 export type Phase =
@@ -171,6 +173,27 @@ export interface AnomalyCard {
   onSetup: (state: GameState, rng: Rng) => void;
 }
 
+export type TrinketId = string;
+
+export interface TrinketCard {
+  id: TrinketId;
+  name: string;
+  description: string;
+  /** Cost in gold to purchase (0 = free between-round grant). */
+  cost: number;
+  /** Tiers at which this trinket can appear. */
+  tiers: Tier[];
+  /** Applied immediately when the trinket is given to the player. Returns new GameState. */
+  onApply: (state: GameState, playerId: PlayerId, rng: Rng) => GameState;
+}
+
+export interface TrinketInstance {
+  instanceId: string;
+  cardId: TrinketId;
+  /** Whether this trinket has been applied yet. */
+  applied: boolean;
+}
+
 export interface GameState {
   seed: number;
   phase: Phase;
@@ -183,6 +206,7 @@ export interface GameState {
   modifiers: ModifierId[];
   modifierState: {
     anomaly?: AnomalyId;
+    trinkets?: TrinketInstance[];
   };
 }
 

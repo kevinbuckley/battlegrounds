@@ -14,7 +14,18 @@ import {
   upgradeTier,
 } from "./shop";
 import { SPELLS } from "./spells/index";
-import type { Action, AnomalyCard, GameState, ModifierId, PlayerState, Tier, Tribe } from "./types";
+import { pickTrinket, pickTrinketForPlayer, TRINKETS } from "./trinkets";
+import type {
+  Action,
+  AnomalyCard,
+  GameState,
+  ModifierId,
+  PlayerState,
+  Tier,
+  Tribe,
+  TrinketCard,
+  TrinketInstance,
+} from "./types";
 import { getPlayer, updatePlayer } from "./utils";
 
 // ---------------------------------------------------------------------------
@@ -298,6 +309,7 @@ export function makeInitialState(seed: number): GameState {
     aiMemo: {},
     spells: [],
     discoverOffer: null,
+    trinkets: [],
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec
@@ -324,6 +336,41 @@ export function makeInitialState(seed: number): GameState {
     };
     anomaly.onSetup(game, rng);
     modifiersState = { anomaly: anomaly.id };
+  }
+
+  if (activeModifiers.includes("trinkets")) {
+    modifiersState = { ...modifiersState, trinkets: [] as TrinketInstance[] };
+    const trinketState: GameState = {
+      seed,
+      phase: { kind: "HeroSelection" },
+      turn: 0,
+      players,
+      tribesInLobby,
+      pool,
+      pairingsHistory: [],
+      modifiers: activeModifiers,
+      modifierState: { ...modifiersState },
+    };
+    for (const player of trinketState.players) {
+      const picked = pickTrinketForPlayer(trinketState, player.id, rng);
+      if (!picked) continue;
+      const instance: TrinketInstance = {
+        instanceId: `trinket_${player.id}`,
+        cardId: picked.id,
+        applied: false,
+      };
+      trinketState.players[player.id] = {
+        ...player,
+        trinkets: [
+          ...((player as PlayerState & { trinkets?: TrinketInstance[] }).trinkets ?? []),
+          instance,
+        ],
+      };
+      modifiersState = {
+        ...modifiersState,
+        trinkets: [...((modifiersState.trinkets as TrinketInstance[]) ?? []), instance],
+      };
+    }
   }
 
   return {

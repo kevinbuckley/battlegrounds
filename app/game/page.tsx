@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DiscoverOverlay } from "@/components/DiscoverOverlay";
+import { Leaderboard } from "@/components/Leaderboard";
 import { simulateCombat } from "@/game/combat";
 import { applyDamageToPlayer, calcDamage } from "@/game/damage";
 import { baseGoldForTurn, COST_BUY } from "@/game/economy";
@@ -743,6 +744,9 @@ export default function GamePage() {
           onDismiss={handleDiscoverDismiss}
         />
       )}
+
+      {/* Leaderboard */}
+      {gameState && <Leaderboard state={gameState} heroId={gameState.players[0]?.heroId ?? ""} />}
     </main>
   );
 }
