@@ -1,7 +1,7 @@
 import type { Rng } from "@/lib/rng";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
-import type { MinionCardId, MinionInstance, PlayerId, Tier } from "./types";
+import type { MinionCardId, MinionInstance, MinionInstanceId, PlayerId, Tier } from "./types";
 import { getPlayer, updatePlayer } from "./utils";
 
 /**
@@ -36,9 +36,8 @@ function findTripleGroups(
 
 /**
  * Check for triples across a player's board + hand. Replace every group of 3
- * identical minions with a single golden minion (2× stats). Then discover
- * a random minion from tier+1 and add it to hand.  Return the updated state,
- * or the original if no triples were found.
+ * identical minions with a single golden minion (2x stats). Set discoverOffer
+ * on the player so the UI can show the DiscoverOverlay.
  */
 export function checkAndProcessTriples(
   state: import("./types").GameState,
@@ -110,7 +109,7 @@ export function checkAndProcessTriples(
     result = updatePlayer(result, playerId, (p) => ({ ...p, board, hand }));
   }
 
-  // Discover phase: offer a random minion from tier+1 (only if below tier 6)
+  // Discover phase: offer 3 minions from tier+1 (only if below tier 6)
   const playerState = getPlayer(result, playerId);
   if (playerState.tier >= 6) return result;
 
@@ -126,15 +125,20 @@ export function checkAndProcessTriples(
 
   if (picks.length === 0) return result;
 
-  const chosenIdx = Math.floor(rng.next() * picks.length);
-  const chosen = picks[chosenIdx];
+  const offers: import("./types").DiscoverOffer[] = [];
+  for (const cardId of picks) {
+    const card = MINIONS[cardId];
+    if (!card) continue;
+    offers.push({
+      minion: instantiate(card),
+      offerId: `${cardId}_discover_${picks.indexOf(cardId)}`,
+    });
+  }
 
-  if (!chosen) return result;
+  if (offers.length === 0) return result;
 
-  const cardDef = MINIONS[chosen];
-  if (!cardDef) return result;
-
-  const discovered = instantiate(cardDef);
-
-  return updatePlayer(result, playerId, (p) => ({ ...p, hand: [...p.hand, discovered] }));
+  return updatePlayer(result, playerId, (p) => ({
+    ...p,
+    discoverOffer: { offers, title: "Triple! Discover a minion" },
+  }));
 }

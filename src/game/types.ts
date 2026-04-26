@@ -149,6 +149,8 @@ export interface PlayerState {
   placement: number | null;
   aiMemo: Record<string, unknown>;
   spells: SpellInstance[];
+  /** Active discover offers (triples, hero powers, etc). */
+  discoverOffer: { offers: DiscoverOffer[]; title?: string } | null;
 }
 
 export type Phase =

@@ -170,10 +170,15 @@ describe("triples: checkAndProcessTriples", () => {
     const originalHandCount = s.players[0]?.hand.length ?? 0;
 
     const discovered = checkAndProcessTriples(s, 0, rngForTurn(s, "triple"));
-    const discoveredCount = discovered.players[0]?.hand.length ?? 0;
+    const handAfter = discovered.players[0]?.hand.length ?? 0;
+    const offer = discovered.players[0]?.discoverOffer;
 
-    // triple: remove 3 copies (-3), golden +1, discovered +1 = -1 net
-    expect(discoveredCount).toBe(originalHandCount - 1);
+    // triple: remove 3 copies (-3), golden +1 = -2 net
+    expect(handAfter).toBe(originalHandCount - 2);
+    // Discover offer should have 3 options
+    expect(offer?.offers.length).toBe(3);
+    // Found minion should be in hand (the golden one)
+    expect(discovered.players[0]?.hand.find((m) => m.golden)).toBeTruthy();
   });
 
   it("triples across board and hand detect correctly", () => {

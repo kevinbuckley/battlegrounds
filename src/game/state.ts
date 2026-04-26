@@ -188,6 +188,10 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
       return useHeroPower(state, action.player, action.target, rng);
     case "EndTurn":
       return endTurn(state, action.player, rng);
+    case "PickDiscover":
+      return pickDiscover(state, action.player, action.index);
+    case "DismissDiscover":
+      return dismissDiscover(state, action.player);
     default:
       return state;
   }
@@ -196,6 +200,29 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
 function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   const nextTurn = state.turn + 1;
   return beginRecruitTurn({ ...state, turn: nextTurn }, rng);
+}
+
+// ------->-->-->-->-->-->-->-->-->-->-->-->
+// Discover handlers
+// ------->-->-->-->-->-->-->-->-->-->-->-->
+
+function pickDiscover(state: GameState, playerId: number, index: number): GameState {
+  const player = getPlayer(state, playerId);
+  const offer = player.discoverOffer?.offers[index];
+  if (!offer) return state;
+
+  return updatePlayer(state, playerId, (p) => ({
+    ...p,
+    hand: [...p.hand, offer.minion],
+    discoverOffer: null,
+  }));
+}
+
+function dismissDiscover(state: GameState, playerId: number): GameState {
+  const player = getPlayer(state, playerId);
+  if (!player.discoverOffer) return state;
+
+  return updatePlayer(state, playerId, (p) => ({ ...p, discoverOffer: null }));
 }
 
 // ---------------------------------------------------------------------------
@@ -270,6 +297,7 @@ export function makeInitialState(seed: number): GameState {
     placement: null,
     aiMemo: {},
     spells: [],
+    discoverOffer: null,
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec

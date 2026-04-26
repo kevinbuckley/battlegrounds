@@ -187,8 +187,7 @@ export default function GamePage() {
   tickRef.current = combatTick;
 
   // Discover overlay state
-  const [discoverOffers, setDiscoverOffers] = useState<import("@/game/types").DiscoverOffer[]>([]);
-  const [discoverTitle, setDiscoverTitle] = useState<string | undefined>();
+  // Derived from gameState — no separate useState needed
 
   useEffect(() => {
     const heroId = searchParams.get("hero");
@@ -320,30 +319,28 @@ export default function GamePage() {
 
   const handleDiscoverPick = useCallback(
     (index: number) => {
-      if (!gameState) return;
-      const offer = discoverOffers[index];
+      if (!gameState || !gameState.players[0]?.discoverOffer) return;
+      const offer = gameState.players[0].discoverOffer.offers[index];
       if (!offer) return;
 
-      // Add the discovered minion to the player's hand
       const next = step(
         gameState,
         { kind: "PickDiscover", player: 0, index },
         rngForTurn(gameState, "discover"),
       );
       setGameState(next);
-      setDiscoverOffers([]);
-      setDiscoverTitle(undefined);
     },
-    [gameState, discoverOffers],
+    [gameState],
   );
 
   const handleDiscoverDismiss = useCallback(() => {
     if (!gameState) return;
-    setGameState(
-      step(gameState, { kind: "DismissDiscover", player: 0 }, rngForTurn(gameState, "discover")),
+    const next = step(
+      gameState,
+      { kind: "DismissDiscover", player: 0 },
+      rngForTurn(gameState, "discover"),
     );
-    setDiscoverOffers([]);
-    setDiscoverTitle(undefined);
+    setGameState(next);
   }, [gameState]);
 
   return (
@@ -738,10 +735,10 @@ export default function GamePage() {
       </style>
 
       {/* Discover overlay */}
-      {discoverOffers.length > 0 && (
+      {gameState?.players[0]?.discoverOffer && (
         <DiscoverOverlay
-          offers={discoverOffers}
-          title={discoverTitle ?? "Discover a minion"}
+          offers={gameState.players[0].discoverOffer.offers}
+          title={gameState.players[0].discoverOffer.title ?? "Triple! Discover a minion"}
           onPick={handleDiscoverPick}
           onDismiss={handleDiscoverDismiss}
         />
