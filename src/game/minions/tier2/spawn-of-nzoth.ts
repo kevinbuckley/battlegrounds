@@ -4,7 +4,7 @@ export default defineMinion({
   id: "spawn_of_nzoth",
   name: "Spawn of N'Zoth",
   tier: 2,
-  tribes: ["Murloc"],
+  tribes: ["Mech"],
   baseAtk: 1,
   baseHp: 1,
   baseKeywords: [],
