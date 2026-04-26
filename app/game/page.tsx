@@ -323,46 +323,63 @@ export default function GamePage() {
       {!gameState && !error && <p className="text-slate-400">Loading...</p>}
       {gameState && (
         <div className="flex w-full max-w-2xl flex-col gap-6">
-          {/* HUD */}
-          <div className="flex items-center justify-between">
-            <div className="flex flex-col items-center gap-4">
+          {/* Top bar */}
+          <div className="flex items-center justify-between rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 shadow">
+            {/* Left section — hero portrait, name, HP */}
+            <div className="flex items-center gap-4">
               <div className="flex flex-col items-center">
-                <div className="mb-3 flex h-24 w-24 items-center justify-center rounded-full border-2 border-amber-500 bg-slate-800 text-3xl font-bold text-slate-100">
+                <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-amber-500 bg-slate-800 text-xl font-bold text-slate-100">
                   {(() => {
                     const p = gameState.players[0] ?? gameState.players.at(-1);
                     const hero = p?.heroId ? HEROES[p.heroId] : undefined;
                     return hero ? hero.name.charAt(0) : "?";
                   })()}
                 </div>
-                <span className="text-sm text-slate-400">Hero</span>
-                <span className="text-lg font-semibold">
+                <span className="mt-1 text-[11px] text-slate-500">
                   {(() => {
                     const p = gameState.players[0] ?? gameState.players.at(-1);
                     const hero = p?.heroId ? HEROES[p.heroId] : undefined;
-                    return p?.heroId && hero ? hero.name : (p?.heroId ?? "None");
+                    return p?.heroId && hero ? hero.name : "None";
                   })()}
                 </span>
               </div>
-              <div className="flex flex-col items-center gap-1">
-                <span className="text-sm text-slate-400">HP</span>
-                <span className="text-lg font-semibold text-emerald-400">
+              <div className="flex flex-col gap-0.5">
+                <span className="text-[11px] uppercase tracking-wider text-slate-500">Health</span>
+                <span className="text-2xl font-bold tracking-tight text-emerald-400">
                   {gameState.players[0]?.hp ?? 0}
+                </span>
+                <span className="flex items-center gap-1 text-sm font-medium text-slate-400">
+                  <span>{gameState.players[0]?.armor ?? 0}</span>
+                  <span className="text-[10px]">armor</span>
                 </span>
               </div>
             </div>
-            <div className="flex flex-col items-center gap-4">
+
+            {/* Center section — gold and tier */}
+            <div className="flex gap-8">
               <div className="flex flex-col items-center">
-                <span className="text-sm text-slate-400">Gold</span>
-                <span className="text-lg font-semibold text-amber-400">
+                <span className="text-[11px] uppercase tracking-wider text-slate-500">Gold</span>
+                <span className="text-2xl font-bold tracking-tight text-amber-400">
                   {gameState.players[0]?.gold ?? 0}
                 </span>
               </div>
               <div className="flex flex-col items-center">
-                <span className="text-sm text-slate-400">Tier</span>
-                <span className="text-lg font-semibold text-blue-400">
+                <span className="text-[11px] uppercase tracking-wider text-slate-500">Tier</span>
+                <span className="text-2xl font-bold tracking-tight text-blue-400">
                   {gameState.players[0]?.tier ?? 1}
                 </span>
               </div>
+            </div>
+
+            {/* Right section — turn counter + phase */}
+            <div className="flex flex-col items-end">
+              <span className="text-[11px] uppercase tracking-wider text-slate-500">Turn</span>
+              <span className="text-2xl font-bold tracking-tight text-purple-400">
+                {gameState.turn}
+              </span>
+              <span className="text-xs font-medium text-slate-500">
+                {gameState.phase.kind === "Recruit" ? "Recruit" : "Combat"}
+              </span>
             </div>
           </div>
 
