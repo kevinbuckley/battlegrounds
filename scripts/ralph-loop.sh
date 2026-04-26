@@ -20,7 +20,7 @@ set -euo pipefail
 
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PROMPT_FILE="$REPO/scripts/ralph-prompt.md"
-MODEL="mlx/Qwen3.6-35B-A3B-4bit"
+MODEL="mlx//Users/kbux/.cache/mlx/Qwen3.6-35B-A3B-4bit"
 APP_URL="http://localhost:3000"
 OLLAMA_URL="http://localhost:11434/api/tags"
 

@@ -8,7 +8,7 @@
         "baseURL": "http://localhost:8080/v1"
       },
       "models": {
-        "Qwen3.6-35B-A3B-4bit": {
+        "/Users/kbux/.cache/mlx/Qwen3.6-35B-A3B-4bit": {
           "name": "Qwen3.6 35B A3B MLX 4-bit"
         }
       }
