@@ -81,7 +81,9 @@ export function simulateCombat(
       emit({ kind: "Attack", attacker: attacker.instanceId, target: currentTarget.instanceId });
 
       // Collect all targets this hit affects (main + adjacent if cleave)
-      const hitTargets = [currentTarget];
+      const hitTargets = attacker.keywords.has("cleave")
+        ? getWithAdjacent(currentDefenders, currentTarget)
+        : [currentTarget];
 
       // Apply damage from attacker to all hit targets
       for (const t of hitTargets) {
