@@ -12,6 +12,7 @@ import {
   sellMinion,
   upgradeTier,
 } from "./shop";
+import { SPELLS } from "./spells/index";
 import type { Action, GameState, PlayerState, Tier, Tribe } from "./types";
 import { getPlayer, updatePlayer } from "./utils";
 
@@ -39,6 +40,68 @@ function useHeroPower(state: GameState, playerId: number, target: unknown, rng: 
   }
 
   return next;
+}
+
+// ------->-->-->-->-->-->-->-->-->-->-->-->
+// Spell helpers
+// ------->-->-->-->-->-->-->-->-->-->-->-->
+
+function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rng): GameState {
+  const player = getPlayer(state, playerId);
+  // Spells are in the shop slots after shop size
+  const shopItems = player.shop;
+  const shopSize = Math.floor(shopItems.length * 0.25); // 1/4 of slots are spells
+  const spellSlots = shopItems.slice(-shopSize);
+
+  if (shopIndex < 0 || shopIndex >= spellSlots.length) {
+    throw new Error(`No spell at shop index ${shopIndex}`);
+  }
+
+  const spellInstance = spellSlots[shopIndex]!;
+  const spellCard = SPELLS[spellInstance.cardId];
+  if (!spellCard) throw new Error(`Unknown spell: ${spellInstance.cardId}`);
+
+  if (player.gold < spellCard.cost) {
+    throw new Error(`Not enough gold to buy spell (need ${spellCard.cost})`);
+  }
+
+  return updatePlayer(state, playerId, (p) => ({
+    ...p,
+    gold: p.gold - spellCard.cost,
+    spells: [...p.spells, spellInstance] as import("./types").SpellInstance[],
+  }));
+}
+
+function playSpell(state: GameState, playerId: number, spellIndex: number): GameState {
+  const player = getPlayer(state, playerId);
+  const spellInstance = player.spells[spellIndex];
+  if (!spellInstance) throw new Error(`No spell at index ${spellIndex}`);
+
+  const spellCard = SPELLS[spellInstance.cardId];
+  if (!spellCard) throw new Error(`Unknown spell: ${spellInstance.cardId}`);
+
+  if (spellCard.effects.onPlay) {
+    const ctx = {
+      self: {
+        instanceId: spellInstance.instanceId,
+        cardId: spellInstance.cardId,
+        atk: 0,
+        hp: 0,
+        maxHp: 0,
+        keywords: new Set(),
+        tribes: [] as string[],
+        golden: false,
+        attachments: {},
+        hooks: {},
+      } as unknown as import("./types").MinionInstance,
+      playerId,
+      state,
+      rng: makeRng(Date.now()),
+    };
+    return spellCard.effects.onPlay(ctx);
+  }
+
+  return state;
 }
 
 const ALL_TRIBES: Tribe[] = [
@@ -104,6 +167,10 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
   switch (action.kind) {
     case "BuyMinion":
       return buyMinion(state, action.player, action.shopIndex, rng);
+    case "BuySpell":
+      return buySpell(state, action.player, action.shopIndex, rng);
+    case "PlaySpell":
+      return playSpell(state, action.player, action.spellIndex);
     case "SellMinion":
       return sellMinion(state, action.player, action.boardIndex);
     case "PlayMinion":
@@ -201,6 +268,7 @@ export function makeInitialState(seed: number): GameState {
     eliminated: false,
     placement: null,
     aiMemo: {},
+    spells: [],
   }));
 
   return {

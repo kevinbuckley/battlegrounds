@@ -148,6 +148,7 @@ export interface PlayerState {
   eliminated: boolean;
   placement: number | null;
   aiMemo: Record<string, unknown>;
+  spells: SpellInstance[];
 }
 
 export type Phase =
@@ -167,12 +168,38 @@ export interface GameState {
 }
 
 // ---------------------------------------------------------------------------
+// Spells
+// ---------------------------------------------------------------------------
+
+export type SpellId = string;
+
+export interface SpellEffects {
+  onPlay?: (ctx: RecruitCtx) => GameState;
+}
+
+export interface SpellCard {
+  id: SpellId;
+  name: string;
+  description: string;
+  cost: number;
+  tiers: Tier[];
+  effects: SpellEffects;
+}
+
+export interface SpellInstance {
+  instanceId: string;
+  cardId: SpellId;
+}
+
+// ---------------------------------------------------------------------------
 // Actions
 // ---------------------------------------------------------------------------
 
 export type Action =
   | { kind: "SelectHero"; player: PlayerId; heroId: HeroId }
   | { kind: "BuyMinion"; player: PlayerId; shopIndex: number }
+  | { kind: "BuySpell"; player: PlayerId; shopIndex: number }
+  | { kind: "PlaySpell"; player: PlayerId; spellIndex: number }
   | { kind: "SellMinion"; player: PlayerId; boardIndex: number }
   | { kind: "PlayMinion"; player: PlayerId; handIndex: number; boardIndex: number }
   | { kind: "ReorderBoard"; player: PlayerId; from: number; to: number }
