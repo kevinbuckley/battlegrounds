@@ -109,7 +109,7 @@ export interface Hero {
   /** One-line description shown in the hero-selection UI. */
   description: string;
   startHp: number; // 25–60; Patchwerk starts at 60
-  startArmor: 0 | 3 | 5 | 7 | 9;
+  startArmor: 0 | 3 | 5 | 7 | 9 | 11;
   power: HeroPower;
   /**
    * Called when the player uses the hero power (active powers only).
