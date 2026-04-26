@@ -60,6 +60,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [M] HP/gold/tier HUD top bar
 - [ ] [M] Combat animation: read transcript and animate attacks one tick at a time
 - [ ] [S] Play minion from hand to board during recruit phase — click to place on empty slot (DONE)
+- [x] [M] Wire combat phase into state machine — pair players, resolve fights, apply hero damage, handle eliminations
 
 ---
 

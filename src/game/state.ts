@@ -1,5 +1,7 @@
 import { makeRng, type Rng } from "@/lib/rng";
 import { goldenTouch, pickAnomaly } from "./anomalies";
+import { simulateCombat } from "./combat";
+import { applyDamageToPlayer, calcDamage } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { HEROES } from "./heroes/index";
 import {
@@ -216,7 +218,14 @@ function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   // Check for triples at end of turn (between rounds)
   result = checkAndProcessTriples(result, playerId, rng);
 
-  return beginRecruitTurn(result, rng);
+  // Transition to combat phase
+  result = {
+    ...result,
+    phase: { kind: "Combat" as const, turn: nextTurn },
+  };
+
+  // Immediately resolve combat and transition back to Recruit
+  return resolveCombat(result, rng);
 }
 
 // ------->-->-->-->-->-->-->-->-->-->-->-->
@@ -243,11 +252,165 @@ function dismissDiscover(state: GameState, playerId: number): GameState {
 }
 
 // ---------------------------------------------------------------------------
-// Combat phase (stub for future multi-player expansion)
+// Combat phase
 // ---------------------------------------------------------------------------
 
-function stepCombat(state: GameState, _action: Action, _rng: Rng): GameState {
-  return state;
+function resolveCombat(state: GameState, rng: Rng): GameState {
+  // Collect alive players in order
+  const alivePlayers = state.players.filter((p) => !p.eliminated);
+
+  // Sort by id
+  const sortedPlayers = [...alivePlayers].sort((a, b) => a.id - b.id);
+
+  // Pair players: avoid immediate rematches, randomize within constraints
+  const pairings = pairPlayers(sortedPlayers, state.pairingsHistory, state.turn, rng);
+
+  // Simulate each fight
+  let result: GameState = state;
+
+  for (const [leftId, rightId] of pairings) {
+    const left = getPlayer(result, leftId);
+    const right = getPlayer(result, rightId);
+
+    // Skip if either player was eliminated in a previous fight this round
+    if (left.eliminated && !isGhost(result, leftId)) continue;
+    if (right.eliminated && !isGhost(result, rightId)) continue;
+
+    const leftBoard = left.board.filter((m) => m.hp > 0);
+    const rightBoard = right.board.filter((m) => m.hp > 0);
+
+    const combatResult = simulateCombat(leftBoard, rightBoard, rng);
+
+    result = applyCombatResult(result, leftId, rightId, combatResult);
+  }
+
+  // Check for game over
+  const remainingAlive = result.players.filter((p) => !p.eliminated);
+  if (remainingAlive.length <= 1) {
+    const winner = (
+      remainingAlive.length === 1 ? remainingAlive[0]!.id : 0
+    ) as import("./types").PlayerId;
+    // Set placements for eliminated players
+    let placement = 2; // 1st is the winner
+    for (const p of result.players) {
+      if (!p.eliminated && p.id !== winner) {
+        p.placement = placement++;
+      }
+    }
+    if (placement <= 8) {
+      // Any remaining unplaced players get remaining placements
+      for (const p of result.players) {
+        if (p.placement === null && p.id !== winner) {
+          p.placement = placement++;
+        }
+      }
+    }
+    result = {
+      ...result,
+      phase: { kind: "GameOver" as const, winner },
+    };
+  } else {
+    // Transition back to Recruit phase for the next turn
+    result = beginRecruitTurn(result, rng);
+  }
+
+  return result;
+}
+
+function stepCombat(state: GameState, action: Action, rng: Rng): GameState {
+  // Combat resolves automatically when entering the Combat phase.
+  // The action (if any) is ignored — combat is a resolved phase.
+  return resolveCombat(state, rng);
+}
+
+function isGhost(state: GameState, playerId: import("./types").PlayerId): boolean {
+  // Ghost players are identified by having a frozen board from a previous round
+  // For now, all eliminated players are ghosts in odd-count rounds
+  return false;
+}
+
+function pairPlayers(
+  players: import("./types").PlayerState[],
+  pairingHistory: Array<[import("./types").PlayerId, import("./types").PlayerId]>,
+  turn: number,
+  rng: import("@/lib/rng").Rng,
+): Array<[import("./types").PlayerId, import("./types").PlayerId]> {
+  if (players.length === 0) return [];
+
+  // Simple pairing: sort by id, pair adjacent players
+  // In a full implementation, this would avoid immediate rematches
+  const sorted = [...players].sort((a, b) => a.id - b.id);
+  const pairings: Array<[import("./types").PlayerId, import("./types").PlayerId]> = [];
+
+  for (let i = 0; i + 1 < sorted.length; i += 2) {
+    const a = sorted[i];
+    const b = sorted[i + 1];
+    if (a && b) {
+      pairings.push([a.id, b.id]);
+    }
+  }
+
+  // If odd number, last player gets a bye (or fights ghost — handled separately)
+  // For now, skip the last player
+  return pairings;
+}
+
+function applyCombatResult(
+  state: GameState,
+  leftId: import("./types").PlayerId,
+  rightId: import("./types").PlayerId,
+  combatResult: import("./types").CombatResult,
+): GameState {
+  let result = state;
+  const { winner, survivorsLeft, survivorsRight } = combatResult;
+
+  if (winner === "draw") {
+    // No damage dealt on draws
+    return result;
+  }
+
+  const isLeftWinner = winner === "left";
+  const winnerId = isLeftWinner ? leftId : rightId;
+  const loserId = isLeftWinner ? rightId : leftId;
+
+  const winnerPlayer = getPlayer(result, winnerId);
+  const loserPlayer = getPlayer(result, loserId);
+
+  // Calculate damage: loserTier + sum(tiers of surviving winning minions)
+  const survivors = isLeftWinner ? survivorsLeft : survivorsRight;
+  const damage = calcDamage(loserPlayer.tier, survivors);
+
+  // Apply damage to loser
+  result = applyDamageToPlayer(result, loserId, damage);
+
+  // Update pairings history
+  const newPairing: [import("./types").PlayerId, import("./types").PlayerId] = [
+    leftId,
+    rightId,
+  ] as [import("./types").PlayerId, import("./types").PlayerId];
+  result = {
+    ...result,
+    pairingsHistory: [...result.pairingsHistory, newPairing],
+  };
+
+  // Update boards with survivors
+  result = updatePlayer(result, winnerId, (p) => ({
+    ...p,
+    board: survivors,
+  }));
+
+  // Loser's board is cleared (they lost)
+  const loser = getPlayer(result, loserId);
+  if (!loser.eliminated) {
+    // If not eliminated, keep their board but they took damage
+    // Their minions still died in combat
+    result = updatePlayer(result, loserId, (p) => ({
+      ...p,
+      board: [],
+    }));
+  }
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
