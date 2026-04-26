@@ -13,6 +13,7 @@ export default function GamePage() {
   const router = useRouter();
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
 
   useEffect(() => {
     const heroId = searchParams.get("hero");
@@ -189,13 +190,14 @@ export default function GamePage() {
           ) : null}
 
           {/* Board */}
-          {gameState.players[0]?.board.length ? (
-            <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
-              <h2 className="mb-3 text-xl font-semibold text-slate-100">
-                Board ({gameState.players[0].board.length}/7)
-              </h2>
-              <div className="flex gap-3">
-                {gameState.players[0].board.map((minion, i) => {
+          <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+            <h2 className="mb-3 text-xl font-semibold text-slate-100">
+              Board ({gameState.players[0]?.board.length ?? 0}/7)
+            </h2>
+            <div className="flex gap-3">
+              {[...Array(7)].map((_, targetIdx) => {
+                const minion = gameState.players[0]?.board[targetIdx];
+                if (minion) {
                   const card = MINIONS[minion.cardId];
                   if (!card) return null;
                   const tierColor =
@@ -210,10 +212,47 @@ export default function GamePage() {
                             : card.tier === 5
                               ? "bg-red-600"
                               : "bg-yellow-600";
+                  const isDragging = dragIndex === targetIdx;
                   return (
+                    // biome-ignore lint/a11y/noStaticElementInteractions: drag and drop board slot
                     <div
                       key={minion.instanceId}
-                      className="flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-blue-500/50 bg-slate-800 px-4 py-3"
+                      draggable
+                      onDragStart={() => setDragIndex(targetIdx)}
+                      onDragEnd={() => setDragIndex(null)}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (dragIndex !== null && dragIndex !== targetIdx && gameState) {
+                          const next = step(
+                            gameState,
+                            { kind: "ReorderBoard", player: 0, from: dragIndex, to: targetIdx },
+                            rngForTurn(gameState, "reorder"),
+                          );
+                          setGameState(next);
+                        }
+                        setDragIndex(null);
+                      }}
+                      onDragEnter={(e) => {
+                        e.preventDefault();
+                        if (dragIndex !== null) {
+                          const target = e.currentTarget as HTMLElement;
+                          target.style.borderColor = "rgba(251,191,36,0.8)";
+                        }
+                      }}
+                      onDragLeave={(e) => {
+                        if (dragIndex !== null) {
+                          const target = e.currentTarget as HTMLElement;
+                          target.style.borderColor = "rgba(59,130,246,0.5)";
+                        }
+                      }}
+                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-blue-500/50 bg-slate-800 px-4 py-3 transition ${
+                        isDragging ? "opacity-40" : "opacity-100"
+                      }`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -223,7 +262,7 @@ export default function GamePage() {
                         </span>
                         <span className="text-xs text-slate-400">{card.tribes.join("/")}</span>
                       </div>
-                      <span className="text-[11px] font-medium leading-tight text-slate-300">
+                      <span className="cursor-grab text-[11px] font-medium leading-tight text-slate-300">
                         {card.name}
                       </span>
                       <div className="flex gap-3 text-sm font-bold">
@@ -250,10 +289,54 @@ export default function GamePage() {
                       )}
                     </div>
                   );
-                })}
-              </div>
+                } else {
+                  return (
+                    <div
+                      key={`empty-${targetIdx}`}
+                      className={`flex min-w-[120px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-slate-700 bg-slate-900/50 px-4 py-3 transition ${
+                        dragIndex !== null ? "border-amber-500/60 bg-amber-500/5" : ""
+                      }`}
+                      onDragOver={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                      }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const handMinion = gameState?.players[0]?.hand[dragIndex ?? -1];
+                        if (dragIndex !== null && handMinion !== undefined && gameState) {
+                          const next = step(
+                            gameState,
+                            {
+                              kind: "PlayMinion",
+                              player: 0,
+                              handIndex: dragIndex,
+                              boardIndex: targetIdx,
+                            },
+                            rngForTurn(gameState, "playMinion"),
+                          );
+                          setGameState(next);
+                        }
+                        setDragIndex(null);
+                      }}
+                      onDragEnter={(e) => {
+                        if (dragIndex !== null) {
+                          const target = e.currentTarget as HTMLElement;
+                          target.classList.add("scale-105");
+                        }
+                      }}
+                      onDragLeave={(e) => {
+                        const target = e.currentTarget as HTMLElement;
+                        target.classList.remove("scale-105");
+                      }}
+                    >
+                      <span className="text-2xl text-slate-700">+</span>
+                    </div>
+                  );
+                }
+              })}
             </div>
-          ) : null}
+          </div>
 
           {/* Tavern / Shop */}
           <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">

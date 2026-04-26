@@ -56,7 +56,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [M] `/game` route renders a placeholder GameState with hero portrait + HP
 - [ ] [M] Shop view: 3-slot row showing minion cards (name, attack, hp, tier badge)
 - [ ] [M] Buy a minion: click card → moves to hand, gold decremented
-- [ ] [M] Board view: 7 slots, drag-to-reorder
+- [x] [M] Board view: 7 slots, drag-to-reorder
 - [ ] [M] HP/gold/tier HUD top bar
 - [ ] [M] Combat animation: read transcript and animate attacks one tick at a time
 
