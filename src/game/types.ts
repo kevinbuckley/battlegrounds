@@ -19,6 +19,7 @@ export type Keyword =
   | "taunt"
   | "divineShield"
   | "windfury"
+  | "megaWindfury"
   | "poisonous"
   | "reborn"
   | "venomous"
