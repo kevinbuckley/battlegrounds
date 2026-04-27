@@ -197,6 +197,12 @@ export default function GamePage() {
   const tickRef = useRef(combatTick);
   tickRef.current = combatTick;
 
+  // Hero damage recap state — shown briefly after combat ends, before recruit phase
+  const [damageRecap, setDamageRecap] = useState<{
+    damage: number;
+    opponentHeroId: string;
+  } | null>(null);
+
   // Triple merge animation state
   const [tripleAnimMinions, setTripleAnimMinions] = useState<Set<string>>(new Set());
   const [showingGolden, setShowingGolden] = useState(false);
@@ -358,15 +364,34 @@ export default function GamePage() {
       setDisplayingCombat(false);
       setCombatResult(null);
       setOpponentHeroId("");
-      if (!gameState) return;
 
-      const postCombat = applyCombatResult(gameState, combatResult);
-      const { players } = gameState;
-      if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
-
-      const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
-      const next = rollNextRecruitTurn(postCombat, turnRng);
-      setGameState(next);
+      // Calculate damage taken and show recap before returning to recruit
+      if (gameState) {
+        const player = gameState.players[0];
+        const opponent = gameState.players.find((p) => p.id !== 0 && !p.eliminated);
+        if (player && opponent && combatResult.winner === "right") {
+          const damage = calcDamage(player.tier, combatResult.survivorsRight);
+          setDamageRecap({ damage, opponentHeroId: opponent.heroId });
+          // Show recap for 2 seconds, then transition to recruit
+          setTimeout(() => {
+            setDamageRecap(null);
+            const postCombat = applyCombatResult(gameState, combatResult);
+            const { players } = gameState;
+            if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
+            const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
+            const next = rollNextRecruitTurn(postCombat, turnRng);
+            setGameState(next);
+          }, 2000);
+        } else {
+          // No damage recap needed (player won or draw), transition immediately
+          const postCombat = applyCombatResult(gameState, combatResult);
+          const { players } = gameState;
+          if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
+          const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
+          const next = rollNextRecruitTurn(postCombat, turnRng);
+          setGameState(next);
+        }
+      }
     } else {
       const timer = setTimeout(() => setCombatTick((t) => t + 1), 180);
       return () => clearTimeout(timer);
@@ -1056,6 +1081,23 @@ export default function GamePage() {
           }
         `}
       </style>
+
+      {/* Damage recap banner — shown briefly after combat ends */}
+      {damageRecap &&
+        (() => {
+          const hero = HEROES[damageRecap.opponentHeroId];
+          return (
+            <div className="fixed inset-x-0 top-24 z-40 flex justify-center pointer-events-none">
+              <div className="rounded-xl border border-red-500/50 bg-red-950/80 px-6 py-3 shadow-lg shadow-red-900/30">
+                <span className="text-sm text-red-300">
+                  You took <span className="font-bold text-red-400">{damageRecap.damage}</span>{" "}
+                  damage from{" "}
+                  <span className="font-bold text-red-400">{hero?.name ?? "unknown"}</span>
+                </span>
+              </div>
+            </div>
+          );
+        })()}
 
       {/* Discover overlay */}
       {gameState?.players[0]?.discoverOffer && (
