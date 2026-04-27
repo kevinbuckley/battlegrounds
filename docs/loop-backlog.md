@@ -101,6 +101,10 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Add `Gnoma Tinker` (tier 1): elemental, battlecry gain 1 gold
 
+### M5 — Tier 3 minions (in progress)
+
+- [ ] [S] Add `Markku` (tier 3): murloc, battlecry summon a random murloc from your board
+
 ---
 
 ## Done (mirror of `loop-ledger.md` for human readability)
