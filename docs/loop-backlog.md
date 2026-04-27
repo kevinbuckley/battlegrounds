@@ -44,7 +44,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M6 — Heroes (start with passives, no actives yet)
 
-- [ ] [M] Hero type + power interface in `src/game/types.ts` + `src/game/heroes/`
+- [x] [M] Hero type + power interface in `src/game/types.ts` + `src/game/heroes/`
 - [ ] [S] Add `Rakanishu` hero — placeholder no-power passive hero
 - [ ] [S] Add `Patchwerk` hero — start with 50 HP, no power
 - [x] [S] Add `Lich Baz'hial` hero — start with 40 HP, gain 2 gold by losing 3 HP (active)
