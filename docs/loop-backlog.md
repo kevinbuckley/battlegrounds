@@ -89,6 +89,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `Tavern Brawler` buff spell — give friendly minion +2/+1
 - [x] [S] Add `Brawl` buff spell — give friendly minion +1/+2
 - [x] [S] Wire Ysera hero passive into beginRecruitTurn — adds random Dragon from current tier to shop each turn
+- [x] [S] Add `collateralDamage` keyword — type, shop wiring, Bloodsail Pirate tier 1 minion, and tests
 
 ### M11 — Tier 6 minions (in progress)
 

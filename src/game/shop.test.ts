@@ -437,3 +437,128 @@ describe("upgrade discount clock", () => {
     expect(state.players[0]!.upgradedThisTurn).toBe(false);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Collateral damage keyword
+// ---------------------------------------------------------------------------
+
+describe("collateralDamage keyword", () => {
+  it("deals damage to player's own hero when played to board", () => {
+    const collateralCard = defineMinion({
+      id: "test_collateral",
+      name: "Test Collateral",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 1,
+      baseHp: 2,
+      baseKeywords: ["collateralDamage2"],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[collateralCard.id] = collateralCard;
+
+    const inst = instantiate(collateralCard);
+    const state = makeTestState({
+      hand: [inst],
+      board: [],
+      hp: 30,
+      armor: 0,
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    // 2 collateral damage dealt to player's hero
+    expect(after.players[0]!.hp).toBe(28);
+    expect(after.players[0]!.board).toHaveLength(1);
+    expect(after.players[0]!.board[0]!.cardId).toBe("test_collateral");
+  });
+
+  it("armor absorbs collateral damage before HP", () => {
+    const collateralCard = defineMinion({
+      id: "test_collateral_armor",
+      name: "Test Collateral Armor",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 1,
+      baseHp: 2,
+      baseKeywords: ["collateralDamage3"],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[collateralCard.id] = collateralCard;
+
+    const inst = instantiate(collateralCard);
+    const state = makeTestState({
+      hand: [inst],
+      board: [],
+      hp: 30,
+      armor: 5,
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    // 3 damage absorbed by 5 armor → armor goes to 2, HP stays 30
+    expect(after.players[0]!.armor).toBe(2);
+    expect(after.players[0]!.hp).toBe(30);
+  });
+
+  it("eliminates player when collateral damage exceeds HP", () => {
+    const collateralCard = defineMinion({
+      id: "test_collateral_kill",
+      name: "Test Collateral Kill",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 1,
+      baseHp: 2,
+      baseKeywords: ["collateralDamage10"],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[collateralCard.id] = collateralCard;
+
+    const inst = instantiate(collateralCard);
+    const state = makeTestState({
+      hand: [inst],
+      board: [],
+      hp: 5,
+      armor: 0,
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    expect(after.players[0]!.eliminated).toBe(true);
+    expect(after.players[0]!.hp).toBe(-5);
+  });
+
+  it("no collateral damage when keyword is not present", () => {
+    const normalCard = defineMinion({
+      id: "test_normal",
+      name: "Test Normal",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[normalCard.id] = normalCard;
+
+    const inst = instantiate(normalCard);
+    const state = makeTestState({
+      hand: [inst],
+      board: [],
+      hp: 30,
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    expect(after.players[0]!.hp).toBe(30);
+  });
+
+  it("bloodsail_pirate deals 1 collateral damage", () => {
+    const bp = MINIONS["bloodsail_pirate"];
+    expect(bp).toBeDefined();
+    const inst = instantiate(bp!);
+    const state = makeTestState({
+      hand: [inst],
+      board: [],
+      hp: 30,
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    expect(after.players[0]!.hp).toBe(29);
+    expect(after.players[0]!.board).toHaveLength(1);
+  });
+});

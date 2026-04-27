@@ -114,6 +114,7 @@ export function returnToPool(
 // Per-player shop roll (called at turn start or after refresh)
 // ---------------------------------------------------------------------------
 
+import { applyDamageToPlayer } from "./damage";
 import { checkAndProcessTriples } from "./triples";
 
 export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng): GameState {
@@ -210,6 +211,22 @@ export function playMinionToBoard(
 
   let afterPlay = updatePlayer(state, playerId, (p) => ({ ...p, hand: newHand, board: newBoard }));
 
+  // Handle collateralDamage: deal damage to the player's own hero
+  const card = MINIONS[minion.cardId];
+  if (card) {
+    const collateralMatch = card.baseKeywords.find(
+      (k: string): k is `collateralDamage${number}` =>
+        typeof k === "string" && k.startsWith("collateralDamage"),
+    );
+    if (collateralMatch) {
+      const amount = parseInt(collateralMatch.slice("collateralDamage".length), 10);
+      if (amount > 0) {
+        afterPlay = applyDamageToPlayer(afterPlay, playerId, amount);
+      }
+    }
+  }
+
+  // Fire battlecry after collateral damage
   const battlecry = minion.hooks?.onBattlecry;
   if (battlecry) {
     const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);

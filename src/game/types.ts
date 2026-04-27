@@ -25,7 +25,8 @@ export type Keyword =
   | "venomous"
   | "cleave"
   | "lifesteal"
-  | "rush";
+  | "rush"
+  | `collateralDamage${number}`;
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;
