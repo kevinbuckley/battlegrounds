@@ -7,6 +7,6 @@ export default defineMinion({
   tribes: ["Elemental"],
   baseAtk: 4,
   baseHp: 5,
-  baseKeywords: [],
+  baseKeywords: ["cleave"],
   hooks: {},
 });
