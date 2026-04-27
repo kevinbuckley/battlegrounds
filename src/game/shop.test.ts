@@ -839,3 +839,165 @@ describe("cobalt_scalebane onTurnEnd", () => {
     expect(after.players[0]!.board).toHaveLength(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Brann Bronzebeard — battlecries trigger twice
+// ---------------------------------------------------------------------------
+
+describe("Brann Bronzebeard", () => {
+  it("fires battlecry twice when Brann is on the board", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "brann_test_battlecry",
+      name: "Test Battlecry",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const brann = instantiate(
+      defineMinion({
+        id: "brann_bronzebeard",
+        name: "Brann Bronzebeard",
+        tier: 5,
+        tribes: ["Murloc"],
+        baseAtk: 1,
+        baseHp: 3,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const toPlay = instantiate(battlecryMinion);
+    const state = makeTestState({ board: [brann], hand: [toPlay] });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+
+    // Battlecry should have fired twice because Brann is on the board
+    expect(callCount).toBe(2);
+    // The minion should be on the board
+    expect(after.players[0]!.board).toHaveLength(2);
+    // The hand should have 2 coins from the battlecry firing twice
+    expect(after.players[0]!.hand).toHaveLength(2);
+  });
+
+  it("fires battlecry once when Brann is NOT on the board", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "no_brann_test",
+      name: "No Brann Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const normalMinion = instantiate(
+      defineMinion({
+        id: "normal_murloc",
+        name: "Normal Murloc",
+        tier: 2,
+        tribes: ["Murloc"],
+        baseAtk: 2,
+        baseHp: 1,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const toPlay = instantiate(battlecryMinion);
+    const state = makeTestState({ board: [normalMinion], hand: [toPlay] });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+
+    // Battlecry should have fired once (no Brann)
+    expect(callCount).toBe(1);
+    expect(after.players[0]!.board).toHaveLength(2);
+    expect(after.players[0]!.hand).toHaveLength(1);
+  });
+
+  it("Brann on opponent board does not affect own battlecries", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "opp_brann_test",
+      name: "Opp Brann Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const brann = instantiate(
+      defineMinion({
+        id: "brann_bronzebeard",
+        name: "Brann Bronzebeard",
+        tier: 5,
+        tribes: ["Murloc"],
+        baseAtk: 1,
+        baseHp: 3,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const toPlay = instantiate(battlecryMinion);
+    // Brann is on player 1's board, not player 0's
+    const state = makeTestState({
+      board: [],
+      hand: [toPlay],
+    });
+    // Manually put Brann on player 1's board
+    const stateWithOppBrann = {
+      ...state,
+      players: state.players.map((p, i) => (i === 1 ? { ...p, board: [brann] } : p)),
+    };
+    const after = playMinionToBoard(stateWithOppBrann, 0, 0, 0, RNG);
+
+    // Battlecry should have fired once (Brann is on opponent)
+    expect(callCount).toBe(1);
+  });
+});

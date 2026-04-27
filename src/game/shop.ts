@@ -282,9 +282,14 @@ export function playMinionToBoard(
 
   // Fire battlecry after collateral damage
   const battlecry = minion.hooks?.onBattlecry;
+  // Brann Bronzebeard on board causes battlecries to trigger twice
+  const hasBrann = player.board.some((m) => m.cardId === "brann_bronzebeard");
   if (battlecry) {
     const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
     afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
+    if (hasBrann) {
+      afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
+    }
   }
 
   // Fire onPlay: fires when a minion is played from hand to board

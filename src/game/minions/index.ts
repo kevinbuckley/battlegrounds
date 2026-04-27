@@ -50,6 +50,7 @@ import defenderOfArgus from "./tier4/defender-of-argus";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 import baronRivendare from "./tier5/baron-rivendare";
 import blingtron5000 from "./tier5/blingtron-5000";
+import brannBronzebeard from "./tier5/brann-bronzebeard";
 import junkbot from "./tier5/junkbot";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
@@ -107,6 +108,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [caveHydra.id]: caveHydra,
   [blingtron5000.id]: blingtron5000,
   [baronRivendare.id]: baronRivendare,
+  [brannBronzebeard.id]: brannBronzebeard,
   [junkbot.id]: junkbot,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [friggentNorthvalley.id]: friggentNorthvalley,

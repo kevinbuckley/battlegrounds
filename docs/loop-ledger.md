@@ -110,3 +110,4 @@
 2026-04-27 | 292c80c | FIXED: Add Cave Hydra tier 4 beast with cleave keyword, update minion registry
 
 2026-04-27 | c03ca4a | FIXED: Add Baron Rivendare tier 5 undead (deathrattles trigger twice on same side), fix Harvest Golem syntax error, wire baronRivendare flag into combat death resolution
+2026-04-27 | 634a0f6 | FIXED: Add Brann Bronzebeard tier 5 murloc — passive aura causes friendly battlecries to trigger twice when on board, with unit tests
