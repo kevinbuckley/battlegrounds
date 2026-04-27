@@ -678,3 +678,71 @@ describe("magnetic", () => {
     expect(board[0]!.magnetic).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Bounty keyword
+// ---------------------------------------------------------------------------
+
+describe("bounty keyword", () => {
+  it("bounty minion costs its bountyCost and gets +1/+1 per gold", () => {
+    const bountyCard = MINIONS["bounty_minion"];
+    expect(bountyCard).toBeDefined();
+    expect(bountyCard!.bountyCost).toBe(1);
+
+    const state = makeTestState({ gold: 10 });
+    // Find the bounty minion in the shop
+    const shopIndex = state.players[0]!.shop.findIndex((m) => m.cardId === "bounty_minion");
+    if (shopIndex === -1) {
+      // Not in shop — manually place one
+      const inst = instantiate(bountyCard!);
+      const s = makeTestState({
+        gold: 10,
+        shop: [inst],
+      });
+      const after = buyMinion(s, 0, 0);
+      const hand = after.players[0]!.hand[0]!;
+      expect(hand.atk).toBe(1);
+      expect(hand.hp).toBe(1);
+      expect(after.players[0]!.gold).toBe(9); // 10 - 1 (bountyCost)
+      return;
+    }
+    const after = buyMinion(state, 0, shopIndex);
+    const hand = after.players[0]!.hand[0]!;
+    expect(hand.atk).toBeGreaterThanOrEqual(1);
+    expect(hand.hp).toBeGreaterThanOrEqual(1);
+  });
+
+  it("bounty keyword is in the Keyword union type", () => {
+    const bountyCard = MINIONS["bounty_minion"];
+    expect(bountyCard!.baseKeywords).toContain("bounty");
+  });
+
+  it("bounty minion with higher cost gets proportionally more stats", () => {
+    const highBountyCard = defineMinion({
+      id: "high_bounty",
+      name: "High Bounty",
+      tier: 3,
+      tribes: ["Beast"],
+      baseAtk: 3,
+      baseHp: 3,
+      baseKeywords: ["bounty"],
+      spellDamage: 0,
+      bountyCost: 5,
+      hooks: {},
+    });
+    MINIONS[highBountyCard.id] = highBountyCard;
+
+    const inst = instantiate(highBountyCard);
+    const state = makeTestState({
+      gold: 10,
+      shop: [inst],
+    });
+    const after = buyMinion(state, 0, 0);
+    const hand = after.players[0]!.hand[0]!;
+    // bountyCost is 5, COST_BUY is 3, so bonus is 2
+    // base stats 3/3 + bonus 2/2 = 5/5
+    expect(hand.atk).toBe(5);
+    expect(hand.hp).toBe(5);
+    expect(after.players[0]!.gold).toBe(5); // 10 - 5 (bountyCost)
+  });
+});

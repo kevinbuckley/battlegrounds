@@ -29,7 +29,8 @@ export type Keyword =
   | "freeze"
   | `collateralDamage${number}`
   | "magnetic"
-  | "combo";
+  | "combo"
+  | "bounty";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;
@@ -46,6 +47,8 @@ export interface MinionCard {
   spellDamage: number;
   /** When true, this minion can be played on top of a friendly minion of the same tribe. */
   magnetic?: boolean;
+  /** When set, this minion has the bounty keyword and costs this much gold. */
+  bountyCost?: number;
   hooks: MinionHooks;
 }
 

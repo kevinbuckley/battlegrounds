@@ -148,17 +148,37 @@ export function buyMinion(
 ): GameState {
   const player = getPlayer(state, playerId);
 
-  if (player.gold < COST_BUY)
-    throw new Error(`Not enough gold to buy (have ${player.gold}, need ${COST_BUY})`);
   if (player.hand.length >= 10) throw new Error("Hand is full");
 
   const minion = player.shop[shopIndex];
   if (!minion) throw new Error(`No minion at shop index ${shopIndex}`);
 
+  const card = MINIONS[minion.cardId];
+  const bountyCost = card?.bountyCost;
+  const buyCost = bountyCost ?? COST_BUY;
+
+  if (player.gold < buyCost)
+    throw new Error(`Not enough gold to buy (have ${player.gold}, need ${buyCost})`);
+
+  // Apply bounty: if the minion has the bounty keyword, boost its stats
+  // by the difference between its bounty cost and the standard buy cost.
+  let boughtMinion = minion;
+  if (bountyCost && card?.baseKeywords.includes("bounty" as import("./types").Keyword)) {
+    const bonus = buyCost - COST_BUY;
+    if (bonus > 0) {
+      boughtMinion = {
+        ...minion,
+        atk: minion.atk + bonus,
+        hp: minion.hp + bonus,
+        maxHp: minion.maxHp + bonus,
+      };
+    }
+  }
+
   let result = updatePlayer(state, playerId, (p) => ({
     ...p,
-    gold: p.gold - COST_BUY,
-    hand: [...p.hand, minion],
+    gold: p.gold - buyCost,
+    hand: [...p.hand, boughtMinion],
     shop: p.shop.filter((_, i) => i !== shopIndex),
   }));
 
