@@ -206,6 +206,46 @@ export const brawl: SpellCard = {
   },
 };
 
+/** Deal 3 damage to all enemy minions, heal your hero for 3. */
+export const cauterizingFlame: SpellCard = {
+  id: "cauterizing_flame",
+  name: "Cauterizing Flame",
+  description: "Deal 3 damage to all enemy minions, heal your hero for 3.",
+  cost: 3,
+  tiers: [4, 5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      let state = ctx.state;
+      const player = getPlayer(state, ctx.playerId);
+
+      // Deal 3 damage to all enemy minions
+      for (const p of state.players) {
+        if (p.eliminated || p.id === ctx.playerId) continue;
+        const newBoard: MinionInstance[] = [];
+        for (const m of p.board) {
+          if (!m) continue;
+          const newHp = m.hp - 3;
+          if (newHp <= 0) {
+            // Minion dies — apply death logic via update
+            newBoard.push({ ...m, hp: 0 });
+          } else {
+            newBoard.push({ ...m, hp: newHp });
+          }
+        }
+        state = updatePlayer(state, p.id, (pl) => ({ ...pl, board: newBoard }));
+      }
+
+      // Heal your hero for 3
+      state = updatePlayer(state, ctx.playerId, (p) => ({
+        ...p,
+        hp: p.hp + 3,
+      }));
+
+      return state;
+    },
+  },
+};
+
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
   [mysteryShot.id]: mysteryShot,
@@ -213,6 +253,7 @@ export const SPELLS: Record<string, SpellCard> = {
   [pancakeSpell.id]: pancakeSpell,
   [tavernBrawler.id]: tavernBrawler,
   [brawl.id]: brawl,
+  [cauterizingFlame.id]: cauterizingFlame,
 };
 
 export function getSpell(id: string): SpellCard {

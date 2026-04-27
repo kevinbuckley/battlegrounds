@@ -73,8 +73,9 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M5 lobby modifiers
 
 - [x] [S] Add 2 more anomalies (currently only Golden Touch exists)
-- [ ] [S] Add Mystery Shot spell (tier 1-6, deal 2 damage to random enemy minion)
-- [ ] [L] Tavern spell framework + 3 starter spells
+- [x] [S] Add Mystery Shot spell (tier 1-6, deal 2 damage to random enemy minion)
+- [x] [L] Tavern spell framework + 3 starter spells
+- [ ] [S] Add Cauterizing Flame spell (tier 4-6, deal 3 damage to all enemy minions, heal hero for 3)
 - [ ] [L] Quest framework + 3 starter quests
 - [ ] [L] Buddy framework + 3 starter buddies
 - [ ] [L] Trinket framework + between-round pick screen

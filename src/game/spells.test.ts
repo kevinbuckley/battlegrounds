@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   brawl,
+  cauterizingFlame,
   duskrayBuff,
   getAllSpellIds,
   getSpell,
@@ -15,8 +16,8 @@ import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 6 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(6);
+  it("exports exactly 7 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(7);
   });
 
   it.each([
@@ -26,6 +27,7 @@ describe("spell registry", () => {
     pancakeSpell,
     tavernBrawler,
     brawl,
+    cauterizingFlame,
   ])("%s has valid fields", (spell) => {
     expect(spell.id).toBeDefined();
     expect(spell.name).toBeDefined();
@@ -123,5 +125,20 @@ describe("brawl", () => {
 
   it("costs 2 gold", () => {
     expect(brawl.cost).toBe(2);
+  });
+});
+
+describe("cauterizing flame", () => {
+  it("is available at tiers 4-6 only", () => {
+    expect(cauterizingFlame.tiers).toEqual([4, 5, 6]);
+  });
+
+  it("costs 3 gold", () => {
+    expect(cauterizingFlame.cost).toBe(3);
+  });
+
+  it("has a valid onPlay handler", () => {
+    expect(cauterizingFlame.effects.onPlay).toBeDefined();
+    expect(typeof cauterizingFlame.effects.onPlay).toBe("function");
   });
 });

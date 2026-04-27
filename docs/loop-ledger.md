@@ -91,3 +91,4 @@
 2026-04-27 | eaa8a05 | FIXED: Display equipped trinket name on the leaderboard for the current player
 2026-04-27 | aa07149 | FIXED: Add Gromsch tier 3 beast with deathrattle summoning a 3/3 Grunt
 2026-04-27 | b3ae317 | FIXED: Add Liquified and Armored Up anomalies — Rush for all shop minions and +1 HP for all shop minions respectively
+2026-04-27 | 30d1cfc | FIXED: Add Cauterizing Flame spell (tier 4-6, deal 3 damage to all enemy minions, heal hero for 3)
