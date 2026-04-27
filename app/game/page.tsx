@@ -198,6 +198,8 @@ export default function GamePage() {
   // Discover overlay state
   // Derived from gameState — no separate useState needed
 
+  const playerGold = () => gameState?.players[0]?.gold ?? 0;
+
   useEffect(() => {
     const heroId = searchParams.get("hero");
     if (!heroId) {
@@ -519,6 +521,28 @@ export default function GamePage() {
                           ))}
                         </div>
                       )}
+                      {gameState?.phase.kind === "Recruit" && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!gameState) return;
+                            const next = step(
+                              gameState,
+                              {
+                                kind: "SellMinion",
+                                player: 0,
+                                boardIndex: handMinions.indexOf(minion),
+                              },
+                              rngForTurn(gameState, "sell"),
+                            );
+                            setGameState(next);
+                            setError(null);
+                          }}
+                          className="mt-1 rounded bg-red-500/80 px-2 py-0.5 text-[10px] font-semibold text-white transition hover:bg-red-400"
+                        >
+                          Sell (+{playerGold()})g
+                        </button>
+                      )}
                     </button>
                   );
                 })}
@@ -626,6 +650,26 @@ export default function GamePage() {
                             </span>
                           ))}
                         </div>
+                      )}
+                      {gameState?.phase.kind === "Recruit" && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            if (!gameState) return;
+                            const player = gameState.players[0];
+                            if (!player) return;
+                            const next = step(
+                              gameState,
+                              { kind: "SellMinion", player: 0, boardIndex: idx },
+                              rngForTurn(gameState, "sell"),
+                            );
+                            setGameState(next);
+                            setError(null);
+                          }}
+                          className="mt-1 rounded bg-red-500/80 px-2 py-0.5 text-[10px] font-semibold text-white transition hover:bg-red-400"
+                        >
+                          Sell (+{playerGold()})g
+                        </button>
                       )}
                     </div>
                   );
