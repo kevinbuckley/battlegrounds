@@ -28,8 +28,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [M] Wire start-of-combat hook to fire before first attack each combat
 - [ ] [S] Test: combat with taunt + non-taunt confirms taunt targeted first
 - [ ] [S] Test: divine shield absorbs exactly one damage instance
-- [ ] [S] Test: windfury double-attacks
-- [ ] [S] Test: poisonous kills 10/10 with 1 damage
+- [x] [S] Test: windfury double-attacks
+- [x] [S] Test: poisonous kills 10/10 with 1 damage
 
 ### M5 — Tribe minions (one per iteration)
 

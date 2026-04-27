@@ -117,6 +117,16 @@ describe("poisonous", () => {
     expect(r.survivorsRight).toHaveLength(0);
   });
 
+  it("poisonous kills a 10/10 minion but the poisoner dies from counterattack", () => {
+    const poisoner = make(1, 1, ["poisonous"]);
+    const big = make(10, 10);
+    const r = simulateCombat([poisoner], [big], makeRng(0));
+    // Poisonous kills the 10/10, but the 10/10 counterattacks for 10 damage, killing the 1/1 poisoner too
+    expect(r.survivorsRight).toHaveLength(0);
+    expect(r.survivorsLeft).toHaveLength(0);
+    expect(r.winner).toBe("draw");
+  });
+
   it("multiple poisonous attackers work correctly", () => {
     const poisoner1 = make(1, 1, ["poisonous"]);
     const poisoner2 = make(1, 1, ["poisonous"]);

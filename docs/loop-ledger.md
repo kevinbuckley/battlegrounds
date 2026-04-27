@@ -51,3 +51,4 @@
 2026-04-26 | 1b2be5a | FIXED: Wire deathrattle hook (onDeath) into combat death resolution in reapDeaths
 2026-04-26 | 1b2be5a | FIXED: Wire start-of-combat hook (onStartOfCombat) to fire before first attack each combat
 2026-04-27 | c3b03f2 | FIXED: Add unit test confirming taunt + non-taunt combat targets taunt minion first
+2026-04-27 | d29e661 | FIXED: Add unit test confirming poisonous kills a 10/10 minion but poisoner dies from counterattack (draw)
