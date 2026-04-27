@@ -91,6 +91,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Wire Ysera hero passive into beginRecruitTurn — adds random Dragon from current tier to shop each turn
 - [x] [S] Add `collateralDamage` keyword — type, shop wiring, Bloodsail Pirate tier 1 minion, and tests
 - [x] [S] Add `freeze` keyword — frozen minions cannot attack but still take damage and counterattack, plus Frostbound Golem tier 3 minion
+- [x] [S] Add `magnetic` keyword — type, shop wiring, Grombi the Rotunda tier 2 murloc, and unit tests
 
 ### M11 — Tier 6 minions (in progress)
 

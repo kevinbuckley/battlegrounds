@@ -562,3 +562,119 @@ describe("collateralDamage keyword", () => {
     expect(after.players[0]!.board).toHaveLength(1);
   });
 });
+
+describe("magnetic", () => {
+  const magneticCard = defineMinion({
+    id: "magnetic_murloc",
+    name: "Magnetic Murloc",
+    tier: 1,
+    tribes: ["Murloc"],
+    baseAtk: 2,
+    baseHp: 2,
+    baseKeywords: ["magnetic"],
+    spellDamage: 0,
+    hooks: {},
+  });
+  MINIONS[magneticCard.id] = magneticCard;
+
+  const baseMurloc = defineMinion({
+    id: "base_murloc",
+    name: "Base Murloc",
+    tier: 1,
+    tribes: ["Murloc"],
+    baseAtk: 1,
+    baseHp: 3,
+    baseKeywords: [],
+    spellDamage: 0,
+    hooks: {},
+  });
+  MINIONS[baseMurloc.id] = baseMurloc;
+
+  function makeMagneticState(): GameState {
+    const baseInst = instantiate(baseMurloc);
+    const magneticInst = instantiate(magneticCard);
+    return makeTestState({
+      hand: [magneticInst],
+      board: [baseInst],
+    });
+  }
+
+  it("stacks magnetic minion on same-tribe minion", () => {
+    const state = makeMagneticState();
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board).toHaveLength(1);
+    const merged = board[0]!;
+    // Stats: max(2,1) + 2 = 4 attack, max(2,3) + 2 = 5 hp
+    expect(merged.atk).toBe(4);
+    expect(merged.hp).toBe(5);
+    expect(merged.maxHp).toBe(5);
+  });
+
+  it("removes magnetic keyword after stacking", () => {
+    const state = makeMagneticState();
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board[0]!.magnetic).toBe(false);
+  });
+
+  it("combines keywords from both minions", () => {
+    const tauntMurloc = defineMinion({
+      id: "taunt_murloc",
+      name: "Taunt Murloc",
+      tier: 1,
+      tribes: ["Murloc"],
+      baseAtk: 1,
+      baseHp: 2,
+      baseKeywords: ["taunt"],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[tauntMurloc.id] = tauntMurloc;
+
+    const tauntInst = instantiate(tauntMurloc);
+    const magneticInst = instantiate(magneticCard);
+    const state = makeTestState({
+      hand: [magneticInst],
+      board: [tauntInst],
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board[0]!.keywords.has("taunt")).toBe(true);
+  });
+
+  it("does not stack when no same-tribe minion on board", () => {
+    const beastCard = defineMinion({
+      id: "test_beast2",
+      name: "Test Beast 2",
+      tier: 2,
+      tribes: ["Beast"],
+      baseAtk: 3,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const beastInst = instantiate(beastCard);
+    const magneticInst = instantiate(magneticCard);
+    const state = makeTestState({
+      hand: [magneticInst],
+      board: [beastInst],
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board).toHaveLength(2);
+  });
+
+  it("does not stack when magnetic minion is the only one on board", () => {
+    const magneticInst = instantiate(magneticCard);
+    const state = makeTestState({
+      hand: [magneticInst],
+      board: [],
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board).toHaveLength(1);
+    expect(board[0]!.magnetic).toBe(true);
+  });
+});

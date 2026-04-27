@@ -79,4 +79,5 @@
 2026-04-27 | 02ad770 | FIXED: Add collateralDamage keyword — type, shop wiring, Bloodsail Pirate tier 1 minion, and tests
 2026-04-27 | 6abdd65 | FIXED: Add Markku tier 3 murloc with battlecry summoning a random murloc from player's board
 2026-04-27 | 1201989 | FIXED: Add freeze keyword — frozen minions cannot attack but still take damage and counterattack, plus Frostbound Golem tier 3 minion
-2026-04-27 | 792fb72 | FIXED: Add Bristleback Boys tier 1 beast with deathrattle summoning a 1/1 Bristleback Whelp
+ 2026-04-27 | 792fb72 | FIXED: Add Bristleback Boys tier 1 beast with deathrattle summoning a 1/1 Bristleback Whelp
+2026-04-27 | 2415098 | FIXED: Add magnetic keyword — type, shop wiring, Grombi the Rotunda tier 2 murloc, and unit tests

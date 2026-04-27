@@ -20,6 +20,7 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
     tribes: card.tribes,
     golden,
     spellDamage,
+    magnetic: card.magnetic ?? card.baseKeywords.includes("magnetic"),
     attachments: {},
     hooks: card.hooks,
   };

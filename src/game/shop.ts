@@ -211,8 +211,42 @@ export function playMinionToBoard(
 
   let afterPlay = updatePlayer(state, playerId, (p) => ({ ...p, hand: newHand, board: newBoard }));
 
-  // Handle collateralDamage: deal damage to the player's own hero
+  // Handle magnetic: stack on top of a friendly minion of the same tribe
   const card = MINIONS[minion.cardId];
+  const hasMagnetic = card && (card.magnetic || card.baseKeywords.includes("magnetic"));
+  if (hasMagnetic) {
+    const magneticBoardIndex = clamped;
+    const sameTribe = newBoard.findIndex(
+      (m) => m.tribes.some((t) => minion.tribes.includes(t)) && m.cardId !== minion.cardId,
+    );
+    if (sameTribe !== -1) {
+      const baseMinion = newBoard[sameTribe]!;
+      const combinedAtk = Math.max(minion.atk, baseMinion.atk) + minion.atk;
+      const combinedHp = Math.max(minion.hp, baseMinion.hp) + minion.hp;
+      const combinedKeywords = new Set<import("./types").Keyword>([
+        ...baseMinion.keywords,
+        ...minion.keywords,
+      ]);
+      const combinedSpellDamage =
+        Math.max(baseMinion.spellDamage, minion.spellDamage) +
+        Math.max(baseMinion.spellDamage, minion.spellDamage);
+      const combined: MinionInstance = {
+        ...baseMinion,
+        atk: combinedAtk,
+        hp: combinedHp,
+        maxHp: combinedHp,
+        keywords: combinedKeywords,
+        spellDamage: combinedSpellDamage,
+        magnetic: false,
+      };
+      newBoard[sameTribe] = combined;
+      // Remove the magnetic minion that was just added (it's consumed by the stack)
+      newBoard.splice(magneticBoardIndex, 1);
+      afterPlay = updatePlayer(afterPlay, playerId, (p) => ({ ...p, board: newBoard }));
+    }
+  }
+
+  // Handle collateralDamage: deal damage to the player's own hero
   if (card) {
     const collateralMatch = card.baseKeywords.find(
       (k: string): k is `collateralDamage${number}` =>

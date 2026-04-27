@@ -14,6 +14,7 @@ import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
 import annoyoTron from "./tier2/annoy-o-tron";
 import glyphGuardian from "./tier2/glyph-guardian";
+import grombiTheRotunda from "./tier2/grombi-the-rotunda";
 import harvestGolem from "./tier2/harvest-golem";
 import prisoner from "./tier2/imprisoner";
 import kaboomBot from "./tier2/kaboom-bot";
@@ -43,6 +44,7 @@ import zixorProjectHope from "./tier6/zixor-project-hope";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
+  [grombiTheRotunda.id]: grombiTheRotunda,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
   [bristlebackBoys.id]: bristlebackBoys,

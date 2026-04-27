@@ -16,6 +16,9 @@ TBD.
 - **Mega-Windfury** — attacks four times.
 - **Reborn** — when it dies for the first time, returns with 1 HP.
 - **Cleave** — hits adjacent minions too.
+- **Magnetic** — when played on the board, if there is a friendly minion
+  of the same tribe, stacks on top: combined stats (max of each stat +
+  the magnetic minion's stats), combined keywords, magnetic removed.
 
 ## Timing
 

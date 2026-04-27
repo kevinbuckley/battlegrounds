@@ -27,7 +27,8 @@ export type Keyword =
   | "lifesteal"
   | "rush"
   | "freeze"
-  | `collateralDamage${number}`;
+  | `collateralDamage${number}`
+  | "magnetic";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;
@@ -42,6 +43,8 @@ export interface MinionCard {
   baseKeywords: Keyword[];
   /** Bonus to spell damage provided by this minion. */
   spellDamage: number;
+  /** When true, this minion can be played on top of a friendly minion of the same tribe. */
+  magnetic?: boolean;
   hooks: MinionHooks;
 }
 
@@ -109,6 +112,7 @@ export interface MinionInstance {
   tribes: Tribe[];
   golden: boolean;
   spellDamage: number;
+  magnetic?: boolean;
   attachments: Record<string, unknown>;
   /** Hook functions copied from the card definition at instantiation time. */
   hooks: MinionHooks;
