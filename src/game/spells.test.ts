@@ -4,6 +4,7 @@ import {
   duskrayBuff,
   getAllSpellIds,
   getSpell,
+  mysteryShot,
   pancakeSpell,
   poisonDartShield,
   SPELLS,
@@ -14,12 +15,13 @@ import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 5 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(5);
+  it("exports exactly 6 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(6);
   });
 
   it.each([
     poisonDartShield,
+    mysteryShot,
     duskrayBuff,
     pancakeSpell,
     tavernBrawler,
@@ -44,6 +46,18 @@ describe("spell registry", () => {
 
   it("SPELLS object keys match getAllSpellIds", () => {
     expect(Object.keys(SPELLS).sort()).toEqual(getAllSpellIds().sort());
+  });
+});
+
+describe("mystery shot", () => {
+  it("is available at all tiers", () => {
+    for (let t = 1; t <= 6; t++) {
+      expect(mysteryShot.tiers).toContain(t as 1 | 2 | 3 | 4 | 5 | 6);
+    }
+  });
+
+  it("costs 2 gold", () => {
+    expect(mysteryShot.cost).toBe(2);
   });
 });
 

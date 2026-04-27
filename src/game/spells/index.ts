@@ -39,6 +39,40 @@ export const poisonDartShield: SpellCard = {
   },
 };
 
+/** Deal 2 damage to a random enemy minion. */
+export const mysteryShot: SpellCard = {
+  id: "mystery_shot",
+  name: "Mystery Shot",
+  description: "Deal 2 damage to a random enemy minion.",
+  cost: 2,
+  tiers: [1, 2, 3, 4, 5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      const enemies: { playerId: number; boardIndex: number }[] = [];
+      for (const p of ctx.state.players) {
+        if (p.eliminated) continue;
+        for (let i = 0; i < p.board.length; i++) {
+          if (p.board[i]) enemies.push({ playerId: p.id, boardIndex: i });
+        }
+      }
+      if (enemies.length === 0) return ctx.state;
+
+      const idx = ctx.rng.next() % enemies.length;
+      const target = enemies[idx]!;
+      const targetPlayer = getPlayer(ctx.state, target.playerId);
+      const targetMinion = targetPlayer.board[target.boardIndex];
+      if (!targetMinion) return ctx.state;
+
+      return updatePlayer(ctx.state, target.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[target.boardIndex]!;
+        newBoard[target.boardIndex] = { ...mi, hp: mi.hp - 2 };
+        return { ...p, board: newBoard };
+      });
+    },
+  },
+};
+
 /** Give a friendly minion +2/+2 and Taunt. */
 export const duskrayBuff: SpellCard = {
   id: "duskray_buff",
@@ -174,6 +208,7 @@ export const brawl: SpellCard = {
 
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
+  [mysteryShot.id]: mysteryShot,
   [duskrayBuff.id]: duskrayBuff,
   [pancakeSpell.id]: pancakeSpell,
   [tavernBrawler.id]: tavernBrawler,
