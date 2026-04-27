@@ -42,6 +42,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `Kaboom Bot` (tier 2): deathrattle deals 4 damage to a random enemy
 - [x] [S] Add `Spawn of N'Zoth` (tier 2): deathrattle gives all friendly minions +1/+1
 - [x] [S] Add `Flame Imp` (tier 1): battlecry deals 2 damage to your hero
+- [x] [S] Add `Venomous Crasher` (tier 1): murloc with poisonous keyword
 
 ### M6 — Heroes (start with passives, no actives yet)
 
