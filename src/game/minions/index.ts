@@ -30,6 +30,7 @@ import crystalweaver from "./tier4/crystalweaver";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
+import terestianManferris from "./tier6/terestian-manferris";
 import zixorProjectHope from "./tier6/zixor-project-hope";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
@@ -64,6 +65,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [nagaSecretGuardian.id]: nagaSecretGuardian,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [friggentNorthvalley.id]: friggentNorthvalley,
+  [terestianManferris.id]: terestianManferris,
   [zixorProjectHope.id]: zixorProjectHope,
 };
 
