@@ -9,6 +9,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 1,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onBattlecry: ({ state, playerId, rng }) => {
       const player = state.players[playerId];
@@ -26,7 +27,8 @@ export default defineMinion({
         tribes: ["Murloc"] as Tribe[],
         golden: false,
         attachments: {},
-        hooks: {},
+        spellDamage: 0,
+  hooks: {},
       };
 
       return {

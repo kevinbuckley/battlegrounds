@@ -9,6 +9,7 @@ export default defineMinion({
   baseAtk: 4,
   baseHp: 3,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onBattlecry: (ctx) => {
       const enemies: { playerId: number; boardIndex: number }[] = [];

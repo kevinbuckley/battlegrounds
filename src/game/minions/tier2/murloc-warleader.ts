@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 3,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Apply +2 ATK to all friendly Murlocs at start of combat
     onStartOfCombat: (ctx) => {

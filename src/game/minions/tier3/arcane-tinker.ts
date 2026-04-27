@@ -1,13 +1,13 @@
 import { defineMinion } from "../define";
 
 export default defineMinion({
-  id: "rush_minion",
-  name: "Rush Minion",
-  tier: 1,
-  tribes: [],
+  id: "arcane_tinker",
+  name: "Arcane Tinker",
+  tier: 3,
+  tribes: ["Mech"],
   baseAtk: 3,
   baseHp: 2,
-  baseKeywords: ["rush"],
-  spellDamage: 0,
+  baseKeywords: [],
+  spellDamage: 1,
   hooks: {},
 });

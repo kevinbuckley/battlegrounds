@@ -93,6 +93,7 @@ export function checkAndProcessTriples(
       maxHp: baseCard.baseHp * 2,
       keywords: new Set([...baseCard.baseKeywords]),
       tribes: [...baseCard.tribes],
+      spellDamage: baseCard.spellDamage * 2,
       attachments: {},
       hooks: { ...baseCard.hooks },
     };

@@ -8,5 +8,6 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 2,
   baseKeywords: ["reborn", "venomous"],
+  spellDamage: 0,
   hooks: {},
 });

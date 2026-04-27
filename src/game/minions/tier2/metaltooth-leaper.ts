@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 3,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Battlecry: Give all OTHER friendly Mechs +2 ATK
     onBattlecry: ({ state, playerId, self }) => {

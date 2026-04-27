@@ -60,6 +60,7 @@ function makeMinion(atk: number, hp: number): MinionInstance {
     keywords: new Set(),
     tribes: [],
     golden: false,
+    spellDamage: 0,
     attachments: {},
     hooks: {},
   };

@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 4,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Whenever this attacks, double its own ATK
     onAttack: (ctx) => {

@@ -80,7 +80,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M10 — Keywords (in progress)
 
-- [ ] [S] Add `rush` keyword — minion can attack on the turn it enters the board
+- [x] [S] Add `rush` keyword — minion can attack on the turn it enters the board
+- [ ] [S] Add `spellDamage` — board minions contribute static bonus to spell damage
 
 ---
 

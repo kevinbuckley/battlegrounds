@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 1,
   baseHp: 2,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onBattlecry: (ctx) => {
       // Find first friendly Murloc on the player's board

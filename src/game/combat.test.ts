@@ -20,6 +20,7 @@ function makeMinion(atk: number, hp: number): MinionInstance {
     baseAtk: atk,
     baseHp: hp,
     baseKeywords: [],
+    spellDamage: 0,
     hooks: {},
   });
 }

@@ -8,5 +8,6 @@ export const WindfuryMinion = defineMinion({
   baseAtk: 2,
   baseHp: 3,
   baseKeywords: ["windfury"],
+  spellDamage: 0,
   hooks: {},
 });

@@ -96,6 +96,7 @@ export const pancakeSpell: SpellCard = {
           keywords: new Set(["reborn" as const]),
           tribes: ["Beast", "Elemental"] as Tribe[],
           golden: false,
+          spellDamage: 0,
           attachments: {},
           hooks: EMPTY_HOOKS,
         };

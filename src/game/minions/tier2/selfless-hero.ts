@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 1,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Deathrattle: Give a random friendly minion Divine Shield
     onDeath: (ctx) => {

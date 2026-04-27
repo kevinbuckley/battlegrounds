@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 2,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Deathrattle: Summon a 2/1 Mech
     onDeath: (ctx) => {
@@ -19,7 +20,8 @@ export default defineMinion({
         baseAtk: 2,
         baseHp: 1,
         baseKeywords: [],
-        hooks: {},
+        spellDamage: 0,
+  hooks: {},
       });
       const spawned = instantiate(golem);
       const side = ctx.selfSide;

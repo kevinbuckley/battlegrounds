@@ -27,6 +27,7 @@ const TEST_CARD = defineMinion({
   baseAtk: 2,
   baseHp: 1,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {},
 });
 MINIONS[TEST_CARD.id] = TEST_CARD;
@@ -39,6 +40,7 @@ const TEST_CARD_2 = defineMinion({
   baseAtk: 3,
   baseHp: 2,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {},
 });
 
@@ -51,6 +53,7 @@ const TEST_BATTLECRY_CARD = defineMinion({
   baseAtk: 1,
   baseHp: 3,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onBattlecry: ({ state, playerId, self }) => {
       return {
@@ -71,6 +74,7 @@ const TEST_BATTLECRY_CARD = defineMinion({
                       baseAtk: 0,
                       baseHp: 0,
                       baseKeywords: [],
+                      spellDamage: 0,
                       hooks: {},
                     }),
                   ),
@@ -306,6 +310,7 @@ describe("playMinionToBoard", () => {
       baseAtk: 2,
       baseHp: 2,
       baseKeywords: [],
+      spellDamage: 0,
       hooks: {
         onBattlecry: (ctx) => {
           capturedCtx = {

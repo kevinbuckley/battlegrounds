@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 4,
   baseKeywords: ["taunt"],
+  spellDamage: 0,
   hooks: {
     onBattlecry: (ctx) => {
       const player = ctx.state.players.find((p) => p.id === ctx.playerId);

@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 4,
   baseKeywords: ["taunt"],
+  spellDamage: 0,
   hooks: {
     onDeath: (ctx) => {
       const imp = defineMinion({
@@ -18,7 +19,8 @@ export default defineMinion({
         baseAtk: 3,
         baseHp: 3,
         baseKeywords: [],
-        hooks: {},
+        spellDamage: 0,
+  hooks: {},
       });
       const spawned = instantiate(imp);
       const side = ctx.selfSide;

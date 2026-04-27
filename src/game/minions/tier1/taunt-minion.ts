@@ -8,5 +8,6 @@ export default defineMinion({
   baseAtk: 1,
   baseHp: 1,
   baseKeywords: ["taunt"],
+  spellDamage: 0,
   hooks: {},
 });

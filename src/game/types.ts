@@ -38,6 +38,8 @@ export interface MinionCard {
   baseAtk: number;
   baseHp: number;
   baseKeywords: Keyword[];
+  /** Bonus to spell damage provided by this minion. */
+  spellDamage: number;
   hooks: MinionHooks;
 }
 
@@ -51,6 +53,8 @@ export interface RecruitCtx {
   playerId: PlayerId;
   state: GameState;
   rng: Rng;
+  /** Total spell damage from all board minions. */
+  spellDamage: number;
 }
 
 // Combat-phase hooks mutate in place via mutable arrays + emit.
@@ -102,6 +106,7 @@ export interface MinionInstance {
   keywords: Set<Keyword>;
   tribes: Tribe[];
   golden: boolean;
+  spellDamage: number;
   attachments: Record<string, unknown>;
   /** Hook functions copied from the card definition at instantiation time. */
   hooks: MinionHooks;

@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 1,
   baseHp: 3,
   baseKeywords: ["taunt"],
+  spellDamage: 0,
   hooks: {
     // Deathrattle: Deal 1 damage to all minions
     onDeath: (ctx) => {

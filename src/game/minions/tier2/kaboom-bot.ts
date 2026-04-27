@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 2,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onDeath: (ctx) => {
       const side = ctx.selfSide;

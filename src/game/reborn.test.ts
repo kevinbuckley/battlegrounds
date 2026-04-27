@@ -16,6 +16,7 @@ function makeMinion(atk: number, hp: number, keywords: Keyword[] = []): MinionIn
     baseAtk: atk,
     baseHp: hp,
     baseKeywords: keywords,
+    spellDamage: 0,
     hooks: {},
   });
   for (const keyword of keywords) {

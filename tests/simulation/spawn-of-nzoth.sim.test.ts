@@ -23,6 +23,7 @@ function plain(atk: number, hp: number) {
       baseAtk: atk,
       baseHp: hp,
       baseKeywords: [],
+      spellDamage: 0,
       hooks: {} as never,
     }),
   );

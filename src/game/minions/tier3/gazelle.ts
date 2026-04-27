@@ -8,6 +8,7 @@ const FAWN_CARD = defineMinion({
   baseAtk: 1,
   baseHp: 1,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {},
 });
 
@@ -19,6 +20,7 @@ export default defineMinion({
   baseAtk: 1,
   baseHp: 2,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     onBattlecry: (ctx) => {
       const player = ctx.state.players.find((p) => p.id === ctx.playerId);

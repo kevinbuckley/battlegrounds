@@ -33,6 +33,15 @@ import type {
 import { getPlayer, updatePlayer } from "./utils";
 
 // ---------------------------------------------------------------------------
+// Spell damage helpers
+// ---------------------------------------------------------------------------
+
+/** Sum the spellDamage property of all minions on a player's board. */
+export function totalSpellDamage(player: PlayerState): number {
+  return player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+}
+
+// ---------------------------------------------------------------------------
 // Hero power
 // ---------------------------------------------------------------------------
 
@@ -107,12 +116,14 @@ function playSpell(state: GameState, playerId: number, spellIndex: number, rng: 
         keywords: new Set(),
         tribes: [] as string[],
         golden: false,
+        spellDamage: 0,
         attachments: {},
         hooks: {},
       } as unknown as import("./types").MinionInstance,
       playerId,
       state,
       rng,
+      spellDamage: totalSpellDamage(player),
     };
     return spellCard.effects.onPlay(ctx);
   }

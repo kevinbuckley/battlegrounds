@@ -212,7 +212,8 @@ export function playMinionToBoard(
 
   const battlecry = minion.hooks?.onBattlecry;
   if (battlecry) {
-    afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng });
+    const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+    afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
   }
 
   return afterPlay;

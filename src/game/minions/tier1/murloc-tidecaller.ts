@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 1,
   baseHp: 1,
   baseKeywords: [],
+  spellDamage: 0,
   hooks: {
     // Gains +1 ATK whenever any Murloc is summoned during combat (either side)
     onSummon: (ctx) => {

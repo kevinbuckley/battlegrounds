@@ -21,6 +21,7 @@ function make(
       baseAtk: atk,
       baseHp: hp,
       baseKeywords: keywords as never[],
+      spellDamage: 0,
       hooks: hooks as never,
     }),
   );
@@ -272,6 +273,7 @@ describe("deathrattle hook (onDeath)", () => {
       baseAtk: 1,
       baseHp: 1,
       baseKeywords: [],
+      spellDamage: 0,
       hooks: {
         onDeath: (ctx) => {
           ctx.right.push({ ...token, instanceId: `token_${Date.now()}` });
@@ -307,6 +309,7 @@ describe("start-of-combat hook (onStartOfCombat)", () => {
       baseAtk: 1,
       baseHp: 10,
       baseKeywords: [],
+      spellDamage: 0,
       hooks: {
         onStartOfCombat: () => {
           fired.push("soc");
@@ -331,6 +334,7 @@ describe("start-of-combat hook (onStartOfCombat)", () => {
       baseAtk: 1,
       baseHp: 5,
       baseKeywords: [],
+      spellDamage: 0,
       hooks: {
         onStartOfCombat: (ctx) => {
           const ally = ctx.left.find((m) => m.instanceId === buffTarget.instanceId);
