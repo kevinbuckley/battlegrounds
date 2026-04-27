@@ -49,7 +49,41 @@ export const doubleDown: AnomalyCard = {
   },
 };
 
-const ALL_ANOMALIES: AnomalyCard[] = [goldenTouch, heavyHitters, doubleDown];
+export const liquified: AnomalyCard = {
+  id: "liquified",
+  name: "Liquified",
+  description: "All shop minions spawn with Rush.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const newShop = player.shop.map((minion) => ({
+        ...minion,
+        keywords: new Set([...minion.keywords, "rush" as const]),
+      }));
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, shop: newShop };
+    }
+  },
+};
+
+export const armoredUp: AnomalyCard = {
+  id: "armored_up",
+  name: "Armored Up",
+  description: "All shop minions spawn with 1 additional Health.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const newShop = player.shop.map((minion) => ({
+        ...minion,
+        hp: minion.hp + 1,
+      }));
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, shop: newShop };
+    }
+  },
+};
+
+const ALL_ANOMALIES: AnomalyCard[] = [goldenTouch, heavyHitters, doubleDown, liquified, armoredUp];
 
 export function getAnomaly(id: string): AnomalyCard {
   const match = ALL_ANOMALIES.find((a) => a.id === id);

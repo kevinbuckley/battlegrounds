@@ -72,7 +72,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M5 lobby modifiers
 
-- [ ] [S] Add 2 more anomalies (currently only Golden Touch exists)
+- [x] [S] Add 2 more anomalies (currently only Golden Touch exists)
 - [ ] [S] Add Mystery Shot spell (tier 1-6, deal 2 damage to random enemy minion)
 - [ ] [L] Tavern spell framework + 3 starter spells
 - [ ] [L] Quest framework + 3 starter quests
