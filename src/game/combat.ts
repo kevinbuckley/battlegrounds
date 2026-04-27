@@ -100,11 +100,11 @@ export function simulateCombat(
 
       // Apply damage from attacker to all hit targets
       for (const t of hitTargets) {
-        applyDamage(attacker, t, emit);
+        applyDamage(attacker, t, emit, left, right, rng);
       }
 
       // Counterattack: primary target hits back (only once, regardless of cleave)
-      applyDamage(currentTarget, attacker, emit);
+      applyDamage(currentTarget, attacker, emit, left, right, rng);
 
       // Process deaths (including deathrattle chains)
       const result = reapDeaths(left, right, emit, rng);
@@ -250,7 +250,7 @@ function fireRushAttacks(
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
-    applyDamage(m, target, emit);
+    applyDamage(m, target, emit, left, right, rng);
     const result = reapDeaths(left, right, emit, rng);
     void result;
   }
@@ -314,6 +314,9 @@ function applyDamage(
   source: MinionInstance,
   target: MinionInstance,
   emit: (e: CombatEvent) => void,
+  left: MinionInstance[],
+  right: MinionInstance[],
+  rng: Rng,
 ): void {
   const dmg = source.atk;
   if (dmg <= 0) return;
@@ -321,6 +324,19 @@ function applyDamage(
   if (target.keywords.has("divineShield")) {
     target.keywords.delete("divineShield");
     emit({ kind: "DivineShield", target: target.instanceId });
+    const isOnLeft = left.includes(target);
+    const allies = isOnLeft ? left : right;
+    for (const ally of allies) {
+      const allySide: Side = isOnLeft ? "left" : "right";
+      ally.hooks?.onDivineShieldPop?.({
+        self: ally,
+        selfSide: allySide,
+        left,
+        right,
+        emit,
+        rng,
+      });
+    }
     return;
   }
 

@@ -104,6 +104,8 @@ export interface MinionHooks {
   onDeath?: (ctx: CombatCtx) => void;
   onAllyDeath?: (ctx: AllyDeathCombatCtx) => void;
   onSummon?: (ctx: SummonCombatCtx) => void;
+  /** Fires when a friendly divine shield is removed (popped) during combat. */
+  onDivineShieldPop?: (ctx: CombatCtx) => void;
 }
 
 // ---------------------------------------------------------------------------

@@ -456,3 +456,104 @@ describe("freeze", () => {
     expect(damageFromFrozen.length).toBeGreaterThan(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Divine shield pop hook (Bolvar, Fireblood)
+// ---------------------------------------------------------------------------
+
+describe("divine shield pop hook", () => {
+  it("Bolvar gains +2 ATK when a friendly divine shield pops", () => {
+    const bolvar = instantiate(getMinion("bolvar_fireblood"));
+    const shieldMinion = make(2, 1, ["divineShield"]);
+    const killer = make(3, 10);
+    const r = simulateCombat([killer], [bolvar, shieldMinion], makeRng(0));
+    const dsEvents = r.transcript.filter((e) => e.kind === "DivineShield");
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && (e as { atk?: number }).atk === 3,
+    );
+    expect(dsEvents.length).toBeGreaterThan(0);
+    expect(statEvents.length).toBeGreaterThan(0);
+  });
+
+  it("Bolvar gains +2 ATK when another friendly minion's shield pops", () => {
+    const bolvar = instantiate(getMinion("bolvar_fireblood"));
+    const shieldMinion = make(2, 1, ["divineShield"]);
+    const killer = defineMinion({
+      id: "killer_2_10",
+      name: "Killer",
+      tier: 1,
+      tribes: [],
+      baseAtk: 2,
+      baseHp: 10,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const r = simulateCombat([instantiate(killer)], [bolvar, shieldMinion], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && (e as { atk?: number }).atk === 3,
+    );
+    expect(statEvents.length).toBeGreaterThan(0);
+  });
+
+  it("Bolvar does not gain ATK when only enemy shields pop (no friendly shields)", () => {
+    // Bolvar has no divine shield, so only the enemy's shield pops.
+    // Bolvar should NOT buff because no friendly shield popped.
+    const bolvar = defineMinion({
+      id: "bolvar_no_ds",
+      name: "Bolvar (no DS)",
+      tier: 4,
+      tribes: ["Mech"],
+      baseAtk: 1,
+      baseHp: 4,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onDivineShieldPop: (ctx) => {
+          const poppedSide = ctx.left.includes(ctx.self) ? "left" : "right";
+          if (poppedSide !== ctx.selfSide) return;
+          const board = ctx.selfSide === "left" ? ctx.left : ctx.right;
+          for (const m of board) {
+            if (m.cardId === "bolvar_no_ds") {
+              m.atk += 2;
+              ctx.emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+            }
+          }
+        },
+      },
+    });
+    const enemyShield = make(2, 1, ["divineShield"]);
+    const r = simulateCombat([instantiate(bolvar)], [enemyShield], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && (e as { atk?: number }).atk === 3,
+    );
+    expect(statEvents).toHaveLength(0);
+  });
+
+  it("Bolvar buffs from his own shield popping", () => {
+    const bolvar = instantiate(getMinion("bolvar_fireblood"));
+    const killer = make(5, 10);
+    const r = simulateCombat([killer], [bolvar], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && (e as { atk?: number }).atk === 3,
+    );
+    expect(statEvents.length).toBeGreaterThan(0);
+  });
+
+  it("Bolvar stacks: multiple friendly shield pops give +4 ATK", () => {
+    const bolvar = instantiate(getMinion("bolvar_fireblood"));
+    const shield1 = make(1, 1, ["divineShield"]);
+    const shield2 = make(1, 1, ["divineShield"]);
+    // Right side attacks first (2 vs 1). Right[0] (shield1) attacks Bolvar,
+    // his shield pops → Bolvar +2 ATK. Then right[1] (shield2) attacks Bolvar,
+    // his shield already gone, takes 1 damage. Then Bolvar (3 ATK) attacks
+    // and kills shield1. Then Bolvar attacks shield2, its shield pops → Bolvar +2 more.
+    // Total: +4 ATK from two friendly shield pops.
+    const killer = make(1, 20);
+    const r = simulateCombat([killer], [bolvar, shield1, shield2], makeRng(0));
+    const statEvents = r.transcript.filter((e) => e.kind === "Stat");
+    const atkValues = statEvents.map((e) => (e as { atk?: number }).atk);
+    expect(atkValues).toContain(3);
+    expect(atkValues).toContain(5);
+  });
+});

@@ -105,3 +105,4 @@
 2026-04-27 | 30d1cfc | FIXED: Add Cauterizing Flame spell (tier 4-6, deal 3 damage to all enemy minions, heal hero for 3)
 2026-04-27 | 9e01f78 | FIXED: Add bounty keyword to Keyword type, wire into buyMinion in shop.ts, add Bounty Minion tier 1 beast with unit tests
 2026-04-27 | 4780604 | FIXED: Add Yogg-Saron hero — active power gives all friendly minions a random keyword for 2 gold, with unit tests
+2026-04-27 | 19e7b95 | FIXED: Add onDivineShieldPop hook to MinionHooks, wire into combat.ts applyDamage, add Bolvar Fireblood tier 4 mech (divine shield, +2 ATK whenever friendly divine shield pops), with unit tests
