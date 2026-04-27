@@ -112,6 +112,11 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Add `Markku` (tier 3): murloc, battlecry summon a random murloc from your board
 
+### M10 — Quest framework (in progress)
+
+- [x] [S] Add quest framework — types, 3 starter quests (Murloc Mania, Mech Mayhem, Demon Diplomacy), and state wiring
+- [ ] [S] Wire quest progress tracking into endTurn — increment progress for qualifying players, check completion, apply rewards
+
 ---
 
 ## Done (mirror of `loop-ledger.md` for human readability)

@@ -6,6 +6,7 @@ import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
+import { createQuestInstance, pickQuest, QUESTS } from "./quests";
 import {
   applyComboToBoard,
   buildPool,
@@ -648,6 +649,7 @@ export function makeInitialState(seed: number): GameState {
     spells: [],
     discoverOffer: null,
     trinkets: [],
+    quests: [],
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec
@@ -709,6 +711,31 @@ export function makeInitialState(seed: number): GameState {
         trinkets: [...((modifiersState.trinkets as TrinketInstance[]) ?? []), instance],
       };
     }
+  }
+
+  if (activeModifiers.includes("quests")) {
+    const questState: GameState = {
+      seed,
+      phase: { kind: "HeroSelection" },
+      turn: 0,
+      players,
+      tribesInLobby,
+      pool,
+      pairingsHistory: [],
+      modifiers: activeModifiers,
+      modifierState: { ...modifiersState },
+    };
+    const quest = pickQuest(rng);
+    const questInstance = createQuestInstance(quest.id, 0, rng);
+    const questPlayerState: PlayerState = {
+      ...questState.players[0]!,
+      quests: [questInstance],
+    };
+    questState.players[0] = questPlayerState;
+    modifiersState = {
+      ...modifiersState,
+      quests: { 0: questInstance },
+    };
   }
 
   return {

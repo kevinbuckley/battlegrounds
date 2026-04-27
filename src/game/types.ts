@@ -179,6 +179,8 @@ export interface PlayerState {
   discoverOffer: { offers: DiscoverOffer[]; title?: string } | null;
   /** Trinket instances granted to this player by the trinket modifier. */
   trinkets: TrinketInstance[];
+  /** Active quest for this player (if the quests modifier is active). */
+  quests: QuestInstance[];
 }
 
 export type Phase =
@@ -220,6 +222,31 @@ export interface TrinketInstance {
   applied: boolean;
 }
 
+export type QuestId = string;
+
+export interface QuestCard {
+  id: QuestId;
+  name: string;
+  description: string;
+  /** Returns the new game state after this quest's progress is updated. */
+  onProgress: (state: GameState, playerId: PlayerId, rng: Rng) => GameState;
+  /** Whether this quest is complete. Called after onProgress. */
+  isComplete: (state: GameState, playerId: PlayerId) => boolean;
+  /** Reward given when the quest is completed. */
+  onReward: (state: GameState, playerId: PlayerId, rng: Rng) => GameState;
+}
+
+export interface QuestInstance {
+  instanceId: string;
+  cardId: QuestId;
+  /** Current progress toward the quest goal. */
+  progress: number;
+  /** The target number of progress points needed to complete the quest. */
+  target: number;
+  /** Whether the quest has been completed and reward claimed. */
+  completed: boolean;
+}
+
 export interface GameState {
   seed: number;
   phase: Phase;
@@ -233,6 +260,7 @@ export interface GameState {
   modifierState: {
     anomaly?: AnomalyId;
     trinkets?: TrinketInstance[];
+    quests?: Record<PlayerId, QuestInstance>;
   };
 }
 

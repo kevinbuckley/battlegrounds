@@ -40,6 +40,7 @@ function makeGameState(): GameState {
         spells: [],
         discoverOffer: null,
         trinkets: [],
+        quests: [],
       },
     ],
     tribesInLobby: ["Murloc", "Beast", "Demon", "Mech", "Elemental"],
