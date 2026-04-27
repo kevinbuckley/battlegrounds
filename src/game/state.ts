@@ -1,5 +1,6 @@
 import { makeRng, type Rng } from "@/lib/rng";
 import { goldenTouch, pickAnomaly } from "./anomalies";
+import { activateBuddies, createBuddyInstance, pickBuddy, pickBuddyForPlayer } from "./buddies";
 import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
@@ -674,6 +675,9 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         }));
       }
     }
+
+    // Activate buddies that have reached their activation turn
+    next = activateBuddies(next, player.id, rng);
   }
 
   return next;
@@ -710,6 +714,7 @@ export function makeInitialState(seed: number): GameState {
     discoverOffer: null,
     trinkets: [],
     quests: [],
+    buddies: [],
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec
@@ -795,6 +800,31 @@ export function makeInitialState(seed: number): GameState {
     modifiersState = {
       ...modifiersState,
       quests: { 0: questInstance },
+    };
+  }
+
+  if (activeModifiers.includes("buddies")) {
+    const buddyState: GameState = {
+      seed,
+      phase: { kind: "HeroSelection" },
+      turn: 0,
+      players,
+      tribesInLobby,
+      pool,
+      pairingsHistory: [],
+      modifiers: activeModifiers,
+      modifierState: { ...modifiersState },
+    };
+    const buddy = pickBuddy(rng);
+    const buddyInstance = createBuddyInstance(buddy.id, 0, buddy.activationTurn, rng);
+    const buddyPlayerState: PlayerState = {
+      ...buddyState.players[0]!,
+      buddies: [buddyInstance],
+    };
+    buddyState.players[0] = buddyPlayerState;
+    modifiersState = {
+      ...modifiersState,
+      buddies: { 0: [buddyInstance] },
     };
   }
 

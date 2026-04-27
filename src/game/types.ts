@@ -181,6 +181,8 @@ export interface PlayerState {
   trinkets: TrinketInstance[];
   /** Active quest for this player (if the quests modifier is active). */
   quests: QuestInstance[];
+  /** Buddy instances for this player (if the buddies modifier is active). */
+  buddies: BuddyInstance[];
 }
 
 export type Phase =
@@ -247,6 +249,33 @@ export interface QuestInstance {
   completed: boolean;
 }
 
+// ---------------------------------------------------------------------------
+// Buddies
+// ---------------------------------------------------------------------------
+
+export type BuddyId = string;
+
+export interface BuddyCard {
+  id: BuddyId;
+  name: string;
+  description: string;
+  /** Hero this buddy belongs to (empty = all heroes). */
+  heroId: string;
+  /** Minion card to summon when the buddy is activated. */
+  minionCardId: string;
+  /** Number of turns before the buddy activates. */
+  activationTurn: number;
+}
+
+export interface BuddyInstance {
+  instanceId: string;
+  cardId: BuddyId;
+  /** Whether this buddy has been activated (minion added to hand). */
+  activated: boolean;
+  /** The turn at which this buddy activates. */
+  activationTurn: number;
+}
+
 export interface GameState {
   seed: number;
   phase: Phase;
@@ -261,6 +290,7 @@ export interface GameState {
     anomaly?: AnomalyId;
     trinkets?: TrinketInstance[];
     quests?: Record<PlayerId, QuestInstance>;
+    buddies?: Record<PlayerId, BuddyInstance[]>;
   };
 }
 
