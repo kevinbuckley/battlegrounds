@@ -44,6 +44,7 @@ import stonehillDefender from "./tier3/stonehill-defender";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import bolvarFireblood from "./tier4/bolvar-fireblood";
 import broodkinZealot from "./tier4/broodkin-zealot";
+import caveHydra from "./tier4/cave-hydra";
 import crystalweaver from "./tier4/crystalweaver";
 import defenderOfArgus from "./tier4/defender-of-argus";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
@@ -102,6 +103,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [crystalweaver.id]: crystalweaver,
   [defenderOfArgus.id]: defenderOfArgus,
   [nagaSecretGuardian.id]: nagaSecretGuardian,
+  [caveHydra.id]: caveHydra,
   [blingtron5000.id]: blingtron5000,
   [junkbot.id]: junkbot,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
