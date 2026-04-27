@@ -10,14 +10,15 @@ import {
   poisonDartShield,
   SPELLS,
   tavernBrawler,
+  tavernTipper,
 } from "@/game/spells";
 import { makeInitialState, rngForTurn, step } from "@/game/state";
 import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 8 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(8);
+  it("exports exactly 9 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(9);
   });
 
   it.each([
@@ -28,6 +29,7 @@ describe("spell registry", () => {
     tavernBrawler,
     brawl,
     cauterizingFlame,
+    tavernTipper,
   ])("%s has valid fields", (spell) => {
     expect(spell.id).toBeDefined();
     expect(spell.name).toBeDefined();
@@ -140,5 +142,15 @@ describe("cauterizing flame", () => {
   it("has a valid onPlay handler", () => {
     expect(cauterizingFlame.effects.onPlay).toBeDefined();
     expect(typeof cauterizingFlame.effects.onPlay).toBe("function");
+  });
+});
+
+describe("tavern tipper", () => {
+  it("is available at tiers 2-5 only", () => {
+    expect(tavernTipper.tiers).toEqual([2, 3, 4, 5]);
+  });
+
+  it("costs 2 gold", () => {
+    expect(tavernTipper.cost).toBe(2);
   });
 });

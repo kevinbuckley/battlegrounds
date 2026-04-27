@@ -277,6 +277,37 @@ export const bananaSpell: SpellCard = {
   },
 };
 
+/** Give a random friendly minion +2/+2. */
+export const tavernTipper: SpellCard = {
+  id: "tavern_tipper",
+  name: "Tavern Tipper",
+  description: "Give a random friendly minion +2/+2.",
+  cost: 2,
+  tiers: [2, 3, 4, 5],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+      if (player.board.length === 0) return ctx.state;
+
+      const boardIndex = ctx.rng.next() % player.board.length;
+      const minion = player.board[boardIndex];
+      if (!minion) return ctx.state;
+
+      return updatePlayer(ctx.state, ctx.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[boardIndex]!;
+        newBoard[boardIndex] = {
+          ...mi,
+          atk: mi.atk + 2,
+          hp: mi.hp + 2,
+          maxHp: mi.maxHp + 2,
+        };
+        return { ...p, board: newBoard };
+      });
+    },
+  },
+};
+
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
   [mysteryShot.id]: mysteryShot,
@@ -286,6 +317,7 @@ export const SPELLS: Record<string, SpellCard> = {
   [brawl.id]: brawl,
   [cauterizingFlame.id]: cauterizingFlame,
   [bananaSpell.id]: bananaSpell,
+  [tavernTipper.id]: tavernTipper,
 };
 
 export function getSpell(id: string): SpellCard {
