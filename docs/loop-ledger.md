@@ -116,3 +116,4 @@
 2026-04-27 | 634a0f6 | FIXED: Add Brann Bronzebeard tier 5 murloc — passive aura causes friendly battlecries to trigger twice when on board, with unit tests
 2026-04-27 | 22ed28f | FIXED: Add AI refresh logic — basic AI refreshes shop once when it has enough gold and no affordable minion is found
 2026-04-27 | 02f566f | FIXED: Update Leaderboard to show all 8 players ordered by HP with elimination badges and current player highlight
+2026-04-27 | f827bb0 | FIXED: Add victory screen overlay — shows winner's hero name, placement breakdown for all 8 players, and "Play Again" button that resets to hero selection

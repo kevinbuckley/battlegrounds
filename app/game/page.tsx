@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DiscoverOverlay } from "@/components/DiscoverOverlay";
+import { GameOverOverlay } from "@/components/GameOverOverlay";
 import { Leaderboard } from "@/components/Leaderboard";
 import { simulateCombat } from "@/game/combat";
 import { applyDamageToPlayer, calcDamage } from "@/game/damage";
@@ -1050,6 +1051,9 @@ export default function GamePage() {
 
       {/* Leaderboard */}
       {gameState && <Leaderboard state={gameState} heroId={gameState.players[0]?.heroId ?? ""} />}
+
+      {/* Game over overlay */}
+      {gameState?.phase.kind === "GameOver" && <GameOverOverlay state={gameState} />}
     </main>
   );
 }
