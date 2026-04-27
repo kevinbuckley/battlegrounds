@@ -928,7 +928,7 @@ export default function GamePage() {
                           : "cursor-not-allowed bg-slate-700 text-slate-500"
                       }`}
                     >
-                      Freeze Shop
+                      {player.shopFrozen ? "Unfreeze Shop" : "Freeze Shop"}
                     </button>
                   </>
                 );

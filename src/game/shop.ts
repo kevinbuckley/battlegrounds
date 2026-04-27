@@ -325,7 +325,8 @@ export function refreshShop(state: GameState, playerId: PlayerId, rng: Rng): Gam
 }
 
 export function freezeShop(state: GameState, playerId: PlayerId): GameState {
-  return updatePlayer(state, playerId, (p) => ({ ...p, shopFrozen: true }));
+  const player = getPlayer(state, playerId);
+  return updatePlayer(state, playerId, (p) => ({ ...p, shopFrozen: !p.shopFrozen }));
 }
 
 export function upgradeTier(state: GameState, playerId: PlayerId): GameState {
