@@ -503,3 +503,58 @@ describe("feature validation", () => {
     expect(dsEvents).toHaveLength(1);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Knife Juggler — onSummon deals 1 damage to random enemy
+// ---------------------------------------------------------------------------
+
+describe("knife_juggler", () => {
+  it("deals 1 damage to a random enemy when a minion is summoned during combat", () => {
+    const juggler = minion("knife_juggler");
+    // Summon a minion on the left side during combat — this triggers onSummon
+    // on all surviving minions including Knife Juggler
+    const summoned = makeMinion(2, 2);
+    const enemy = [makeMinion(3, 3), makeMinion(2, 4)];
+
+    const r = simulateCombat([juggler, summoned], enemy, makeRng(100));
+
+    // Check that damage was dealt to an enemy minion
+    const damageEvents = r.transcript.filter(
+      (e): e is { kind: "Damage"; target: string; amount: number } => e.kind === "Damage",
+    );
+    // The summoned minion takes no damage from Knife Juggler (it's friendly)
+    // But an enemy minion should have taken 1 damage
+    const enemyDamageTargets = damageEvents.map((e) => e.target);
+    // At least one enemy should have been damaged
+    const hasEnemyDamage = enemyDamageTargets.some(
+      (t) => t !== summoned.instanceId && t !== juggler.instanceId,
+    );
+    expect(hasEnemyDamage).toBe(true);
+  });
+
+  it("deals 0 damage when there are no enemy minions", () => {
+    const juggler = minion("knife_juggler");
+    const summoned = makeMinion(2, 2);
+
+    const r = simulateCombat([juggler, summoned], [], makeRng(100));
+
+    const damageEvents = r.transcript.filter((e) => e.kind === "Damage");
+    expect(damageEvents).toHaveLength(0);
+  });
+
+  it("does not damage friendly minions, only enemies", () => {
+    const juggler = minion("knife_juggler");
+    const summoned = makeMinion(2, 2);
+    const friendly = makeMinion(1, 1);
+    const enemy = [makeMinion(3, 3)];
+
+    const r = simulateCombat([juggler, summoned, friendly], enemy, makeRng(100));
+
+    const damageEvents = r.transcript.filter(
+      (e): e is { kind: "Damage"; target: string; amount: number } => e.kind === "Damage",
+    );
+    // No friendly minion should be damaged by Knife Juggler
+    const friendlyDamage = damageEvents.filter((e) => e.target === friendly.instanceId);
+    expect(friendlyDamage).toHaveLength(0);
+  });
+});

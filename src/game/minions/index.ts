@@ -22,6 +22,7 @@ import grombiTheRotunda from "./tier2/grombi-the-rotunda";
 import harvestGolem from "./tier2/harvest-golem";
 import prisoner from "./tier2/imprisoner";
 import kaboomBot from "./tier2/kaboom-bot";
+import knifeJuggler from "./tier2/knife-juggler";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
 import rebornMinion from "./tier2/reborn-minion";
@@ -49,6 +50,7 @@ import zixorProjectHope from "./tier6/zixor-project-hope";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
+  [knifeJuggler.id]: knifeJuggler,
   [grombiTheRotunda.id]: grombiTheRotunda,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
