@@ -1,6 +1,7 @@
 import type { MinionCard, MinionCardId } from "../types";
 import allleyCat from "./tier1/alley-cat";
 import bloodsailPirate from "./tier1/bloodsail-pirate";
+import bristlebackBoys from "./tier1/bristleback-boys";
 import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
 import flameImp from "./tier1/flame-imp";
 import gnomaTinker from "./tier1/gnoma-tinker";
@@ -44,6 +45,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
+  [bristlebackBoys.id]: bristlebackBoys,
   [bloodsailPirate.id]: bloodsailPirate,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
   [flameImp.id]: flameImp,

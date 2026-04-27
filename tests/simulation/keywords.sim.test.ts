@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { simulateCombat } from "@/game/combat";
 import { defineMinion, instantiate } from "@/game/minions/define";
+import { getMinion } from "@/game/minions/index";
 import type { MinionInstance } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
@@ -350,6 +351,48 @@ describe("start-of-combat hook (onStartOfCombat)", () => {
     const r = simulateCombat([socInst, buffTarget], [enemy], RNG);
     const statEvent = r.transcript.find((e) => e.kind === "Stat");
     expect(statEvent).toBeDefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bristleback Boys deathrattle
+// ---------------------------------------------------------------------------
+
+describe("bristleback_boys deathrattle", () => {
+  it("summons a 1/1 whelp when the minion dies", () => {
+    const bb = instantiate(getMinion("bristleback_boys"));
+    // 3/1 killer: kills BB (1 damage to 2 HP, BB survives), then BB counterattacks for 1 (kills killer)
+    // Then BB dies from the 3 damage, triggering deathrattle to summon 1/1 whelp
+    const killer = instantiate(getMinion("murloc_tidehunter")); // 2/1
+    const r = simulateCombat([killer], [bb], makeRng(1));
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    expect(summonEvents).toHaveLength(1);
+    expect(summonEvents[0]?.kind === "Summon" && summonEvents[0].card).toBe(
+      "bristleback_boys_whelp",
+    );
+  });
+
+  it("whelp survives and can win the board", () => {
+    const bb = instantiate(getMinion("bristleback_boys"));
+    // Killer (2/1) deals 2 damage to BB (1/2), killing it → deathrattle summons 1/1 whelp
+    // BB counterattacks for 1 damage, killing the killer too
+    const killer = defineMinion({
+      id: "strong_killer",
+      name: "Strong Killer",
+      tier: 1,
+      tribes: [],
+      baseAtk: 2,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const r = simulateCombat([instantiate(killer)], [bb], makeRng(1));
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    expect(summonEvents).toHaveLength(1);
+    expect(summonEvents[0]?.kind === "Summon" && summonEvents[0].card).toBe(
+      "bristleback_boys_whelp",
+    );
   });
 });
 
