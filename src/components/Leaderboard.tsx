@@ -22,14 +22,6 @@ function getTierColor(tier: number): string {
 export function Leaderboard({ state, heroId }: LeaderboardProps) {
   const players = state.players;
   const playerId = players.findIndex((p) => p.heroId === heroId);
-  const currentPlayer = (players[playerId] || {
-    tier: 1,
-    hp: 0,
-    armor: 0,
-    board: [] as const,
-    trinkets: [],
-  }) as (typeof players)[number];
-  const opponent = players.find((p) => p.id !== playerId && p.heroId !== "" && !p.eliminated);
 
   // Build ranking: eliminated first (by placement asc), then alive (by HP desc)
   const ranked = [...players].sort((a, b) => {
@@ -58,105 +50,74 @@ export function Leaderboard({ state, heroId }: LeaderboardProps) {
       <h2 className="mb-3 text-xl font-semibold text-slate-100">Standings</h2>
 
       <div className="flex flex-col gap-2">
-        {/* Current player highlight */}
-        <div className="flex items-center gap-3 rounded-lg border border-amber-500/50 bg-amber-500/5 px-3 py-2">
-          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-amber-500 text-sm font-bold text-slate-950">
-            {currentRank}
-          </span>
-          <div
-            className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${getTierColor(currentPlayer.tier)} text-sm font-bold text-white`}
-          >
-            {(() => {
-              const hero = HEROES[heroId];
-              return hero ? hero.name.charAt(0) : "?";
-            })()}
-          </div>
-          <span className="flex-1 text-sm text-slate-200">
-            {(() => {
-              const hero = HEROES[heroId];
-              return hero ? hero.name : "???";
-            })()}
-          </span>
-          <span className="text-sm font-mono text-emerald-400">{currentPlayer.hp} HP</span>
-          {currentPlayer.armor > 0 && (
-            <span className="text-xs font-mono text-sky-400">+{currentPlayer.armor} A</span>
-          )}
-          {currentPlayer.trinkets.length > 0 &&
-            (() => {
-              const trinket = TRINKETS[currentPlayer.trinkets[0]!.cardId];
-              return trinket ? (
-                <span className="text-xs font-medium text-amber-400" title={trinket.description}>
-                  {trinket.name}
-                </span>
-              ) : null;
-            })()}
-        </div>
+        {ranked.map((p) => {
+          const isCurrentPlayer = p.id === playerId;
+          const hero = HEROES[p.heroId];
+          const heroName = hero ? hero.name : p.heroId ? p.heroId : "???";
+          const rank = p.placement ?? (isCurrentPlayer ? currentRank : null);
 
-        {/* Opponent preview */}
-        {opponent && opponent.heroId && (
-          <div className="flex items-center gap-3 rounded-lg border border-slate-700 bg-slate-800/50 px-3 py-2">
-            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-700 text-sm font-bold text-slate-400">
-              {(() => {
-                let r = 0;
-                for (let i = 0; i < ranked.length; i++) {
-                  if (ranked[i]!.id === opponent.id) {
-                    r = i + 1;
-                    break;
-                  }
-                }
-                return r;
-              })()}
-            </span>
+          return (
             <div
-              className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${getTierColor(opponent.tier)} text-sm font-bold text-white`}
+              key={p.id}
+              className={`flex items-center gap-3 rounded-lg px-3 py-2 ${
+                isCurrentPlayer
+                  ? "border border-amber-500/50 bg-amber-500/5"
+                  : p.eliminated
+                    ? "border border-slate-800 bg-slate-900/50 opacity-40"
+                    : "border border-slate-700 bg-slate-800/50"
+              }`}
             >
-              {(() => {
-                const hero = HEROES[opponent.heroId];
-                return hero ? hero.name.charAt(0) : "?";
-              })()}
-            </div>
-            <span className="flex-1 text-sm text-slate-400">
-              {(() => {
-                const hero = HEROES[opponent.heroId];
-                return hero ? hero.name : "?";
-              })()}
-            </span>
-            <span className="text-sm font-mono text-emerald-400">{opponent.hp} HP</span>
-            {opponent.armor > 0 && (
-              <span className="text-xs font-mono text-sky-400">+{opponent.armor} A</span>
-            )}
-          </div>
-        )}
-
-        {/* Eliminated players shown as ghosts */}
-        {ranked
-          .filter((p) => p.id !== playerId)
-          .filter((p) => p.eliminated)
-          .map((p) => {
-            const rank = p.placement ?? "?";
-            return (
-              <div
-                key={p.id}
-                className="flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-900/50 px-3 py-2 opacity-40"
+              <span
+                className={`flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold ${
+                  isCurrentPlayer
+                    ? "bg-amber-500 text-slate-950"
+                    : p.eliminated
+                      ? "bg-slate-800 text-slate-600"
+                      : "bg-slate-700 text-slate-400"
+                }`}
               >
-                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-slate-600">
-                  {rank}
-                </span>
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-800 text-sm font-bold text-slate-600">
-                  {(() => {
-                    const hero = HEROES[p.heroId];
-                    return hero ? hero.name.charAt(0) : "?";
-                  })()}
-                </div>
-                <span className="flex-1 text-sm text-slate-600">
-                  {(() => {
-                    const hero = HEROES[p.heroId];
-                    return hero ? hero.name : "?";
-                  })()}
-                </span>
+                {rank ?? "?"}
+              </span>
+              <div
+                className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${getTierColor(p.tier)} text-sm font-bold text-white`}
+              >
+                {hero ? hero.name.charAt(0) : "?"}
               </div>
-            );
-          })}
+              <span
+                className={`flex-1 text-sm ${
+                  isCurrentPlayer
+                    ? "text-slate-200"
+                    : p.eliminated
+                      ? "text-slate-600"
+                      : "text-slate-400"
+                }`}
+              >
+                {heroName}
+              </span>
+              {!p.eliminated && (
+                <>
+                  <span className="text-sm font-mono text-emerald-400">{p.hp} HP</span>
+                  {p.armor > 0 && (
+                    <span className="text-xs font-mono text-sky-400">+{p.armor} A</span>
+                  )}
+                  {p.trinkets.length > 0 &&
+                    (() => {
+                      const trinket = TRINKETS[p.trinkets[0]!.cardId];
+                      return trinket ? (
+                        <span
+                          className="text-xs font-medium text-amber-400"
+                          title={trinket.description}
+                        >
+                          {trinket.name}
+                        </span>
+                      ) : null;
+                    })()}
+                </>
+              )}
+              {p.eliminated && <span className="text-xs font-medium text-red-500">Eliminated</span>}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
