@@ -17,17 +17,17 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M4 — Effects system (in progress)
 
-- [ ] [S] Add `taunt` keyword to `MinionCard` type and combat targeting (attackers must target taunts first)
-- [ ] [S] Add `divineShield` flag handling — first damage instance is absorbed, shield drops
-- [ ] [S] Add `windfury` — minion with windfury attacks twice per attack opportunity
-- [ ] [S] Add `poisonous` — any damage to a minion from a poisonous attacker kills it
-- [ ] [S] Add `reborn` — first time a minion dies, return with 1 HP and lose reborn
+- [x] [S] Add `taunt` keyword to `MinionCard` type and combat targeting (attackers must target taunts first)
+- [x] [S] Add `divineShield` flag handling — first damage instance is absorbed, shield drops
+- [x] [S] Add `windfury` — minion with windfury attacks twice per attack opportunity
+- [x] [S] Add `poisonous` — any damage to a minion from a poisonous attacker kills it
+- [x] [S] Add `reborn` — first time a minion dies, return with 1 HP and lose reborn
 - [x] [S] Add `Venomous` — like poisonous but lost after one trigger
-- [ ] [M] Wire battlecry hook into `playMinionToBoard` so card battlecries fire
+- [x] [M] Wire battlecry hook into `playMinionToBoard` so card battlecries fire
 - [x] [M] Wire deathrattle hook into combat death resolution
 - [x] [M] Wire start-of-combat hook to fire before first attack each combat
-- [ ] [S] Test: combat with taunt + non-taunt confirms taunt targeted first
-- [ ] [S] Test: divine shield absorbs exactly one damage instance
+- [x] [S] Test: combat with taunt + non-taunt confirms taunt targeted first
+- [x] [S] Test: divine shield absorbs exactly one damage instance
 - [x] [S] Test: windfury double-attacks
 - [x] [S] Test: poisonous kills 10/10 with 1 damage
 
@@ -56,14 +56,14 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M8 — UI (visible progress; great for daytime iterations)
 
 - [x] [M] `/game` route renders a placeholder GameState with hero portrait + HP
-- [ ] [M] Shop view: 3-slot row showing minion cards (name, attack, hp, tier badge)
-- [ ] [M] Buy a minion: click card → moves to hand, gold decremented
+- [x] [M] Shop view: 3-slot row showing minion cards (name, attack, hp, tier badge)
+- [x] [M] Buy a minion: click card → moves to hand, gold decremented
 - [x] [M] Board view: 7 slots, drag-to-reorder
-- [ ] [M] HP/gold/tier HUD top bar
-- [ ] [M] Combat animation: read transcript and animate attacks one tick at a time
-- [ ] [S] Play minion from hand to board during recruit phase — click to place on empty slot (DONE)
+- [x] [M] HP/gold/tier HUD top bar
+- [x] [M] Combat animation: read transcript and animate attacks one tick at a time
+- [x] [S] Play minion from hand to board during recruit phase — click to place on empty slot (DONE)
 - [x] [M] Wire combat phase into state machine — pair players, resolve fights, apply hero damage, handle eliminations
-- [ ] [M] Add hero power UI button during recruit phase — click to use hero power, decrements gold, calls onHeroPower
+- [x] [M] Add hero power UI button during recruit phase — click to use hero power, decrements gold, calls onHeroPower
 
 ---
 
@@ -87,6 +87,12 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Wire up hero power target selection for georgeTheFallen, scabbsCutterbutter, sirFinley — click board minion to select target before using power
 - [x] [S] Add `Tavern Brawler` buff spell — give friendly minion +2/+1
 - [x] [S] Add `Brawl` buff spell — give friendly minion +1/+2
+
+### M11 — Tier 6 minions (in progress)
+
+- [ ] [S] Add `Friggent Northvalley` (tier 6): beast, deathrattle summon a 2/3 Stalker
+- [ ] [S] Add `Zixor, Project Hope` (tier 6): elemental, battlecry summon a random minion from tier below
+- [ ] [S] Add `Terestian Manferris` (tier 6): mech, deathrattle give a friendly mech +3/+3
 
 ---
 

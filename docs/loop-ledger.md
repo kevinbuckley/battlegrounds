@@ -65,3 +65,4 @@
 2026-04-27 | b99ae32 | FIXED: Fix TypeScript exhaustive switch errors in game page event handlers
 2026-04-27 | 0be3c30 | FIXED: Add Mogor the Curse-Golem tier 5 mech with battlecry buffing friendly mechs +2/+2
 2026-04-27 | ebb8941 | FIXED: Add Flame Imp tier 1 demon with battlecry dealing 2 damage to your hero
+2026-04-27 | afb0ab7 | FIXED: Add Friggent Northvalley tier 6 beast with deathrattle summoning a 2/3 Stalker

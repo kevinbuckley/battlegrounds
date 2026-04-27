@@ -29,6 +29,7 @@ import broodkinZealot from "./tier4/broodkin-zealot";
 import crystalweaver from "./tier4/crystalweaver";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
+import friggentNorthvalley from "./tier6/friggent-northvalley";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
@@ -61,6 +62,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [crystalweaver.id]: crystalweaver,
   [nagaSecretGuardian.id]: nagaSecretGuardian,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
+  [friggentNorthvalley.id]: friggentNorthvalley,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {
