@@ -1,4 +1,4 @@
-import { buyMinion, playMinionToBoard } from "@/game/shop";
+import { buyMinion, playMinionToBoard, refreshShop } from "@/game/shop";
 import type { Action, MinionInstance } from "@/game/types";
 import type { Rng } from "@/lib/rng";
 import type { PlayerView, Strategy } from "../strategy";
@@ -49,6 +49,22 @@ export const basic: Strategy = {
         actions.push({ kind: "BuyMinion", player: me, shopIndex: idx });
       } catch {
         buying = false;
+      }
+    }
+
+    // --- Refresh shop if AI has extra gold and no affordable minion ---
+    {
+      const player = sim.players[me]!;
+      if (player.gold >= 3 && player.shop.length > 0) {
+        const idx = cheapestShopIndex(player.shop, player.gold);
+        if (idx === -1) {
+          try {
+            sim = refreshShop(sim, me, rng);
+            actions.push({ kind: "RefreshShop", player: me });
+          } catch {
+            // ignore refresh failure
+          }
+        }
       }
     }
 
