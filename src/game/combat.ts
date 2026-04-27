@@ -165,7 +165,7 @@ function reapDeaths(
       const deadCtx: CombatCtx = { self: dead, selfSide: deadSide, left: l, right: r, emit, rng };
       const baronOnSide = deadSide === "left" ? baronOnLeft : baronOnRight;
       dead.hooks?.onDeath?.(deadCtx);
-      if (baronOnSide) {
+      if (baronOnSide || dead.golden) {
         dead.hooks?.onDeath?.(deadCtx);
       }
 

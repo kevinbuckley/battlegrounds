@@ -1000,4 +1000,73 @@ describe("Brann Bronzebeard", () => {
     // Battlecry should have fired once (Brann is on opponent)
     expect(callCount).toBe(1);
   });
+
+  it("golden minion's battlecry fires twice when played to board", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "golden_battlecry_test",
+      name: "Golden Battlecry Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 2,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const toPlay = instantiate(battlecryMinion);
+    const goldenToPlay = { ...toPlay, golden: true };
+    const state = makeTestState({ board: [], hand: [goldenToPlay] });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+
+    // Battlecry should have fired twice (golden minion)
+    expect(callCount).toBe(2);
+    expect(after.players[0]!.board).toHaveLength(1);
+    expect(after.players[0]!.hand).toHaveLength(2);
+  });
+
+  it("golden minion's battlecry fires twice even without brann", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "golden_no_brann_test",
+      name: "Golden No Brann Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const toPlay = instantiate(battlecryMinion);
+    const goldenToPlay = { ...toPlay, golden: true };
+    const state = makeTestState({ board: [], hand: [goldenToPlay] });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+
+    expect(callCount).toBe(2);
+  });
 });

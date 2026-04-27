@@ -1,6 +1,7 @@
 2026-04-27 | d5f5e83 | FIXED: Add basic AI strategy — buys cheapest affordable minion from shop, plays all to board, with unit tests
 2026-04-27 | ef3bae2 | FIXED: Add Tavern Tipper spell (tier 2-5, costs 2 gold, gives a random friendly minion +2/+2), with unit tests
 2026-04-27 | aa8664f | FIXED: Add triple merge animation — golden minions pulse with amber glow on board, hand, and shop when triple triggers
+2026-04-27 | aca8eb3 | FIXED: Golden minion deathrattle/battlecry triggers twice in combat and shop, matching real Battlegrounds golden minion behavior
 2026-04-27 | 47342cc | FIXED: Add Junkbot tier 5 mech (onAllyDeath gains +2/+2 when friendly Mech dies), add deadSide to AllyDeathCombatCtx, update combat.ts call site, with unit tests
 2026-04-27 | 85159eb | FIXED: Add Selfless Hero tier 2 minion (deathrattle gives random friendly minion divine shield) and Metaltooth Leaper tier 2 mech (battlecry gives other friendly Mechs +2 ATK), with registry update
 2026-04-27 | c43160b | FIXED: Add Defender of Argus tier 4 mech with battlecry giving adjacent friendly minions +1/+1 and taunt, with registry update

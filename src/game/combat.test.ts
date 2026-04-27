@@ -664,3 +664,53 @@ describe("knife_juggler", () => {
     expect(mechSummons).toHaveLength(4);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Golden minion — deathrattle triggers twice
+// ---------------------------------------------------------------------------
+
+describe("golden minion — deathrattle doubles", () => {
+  function goldenMinion(id: string): MinionInstance {
+    const m = instantiate(getMinion(id));
+    return { ...m, golden: true, atk: m.atk * 2, hp: m.hp * 2, maxHp: m.maxHp * 2 };
+  }
+
+  it("golden harvest golem summons two 2/1 mechs (deathrattle twice)", () => {
+    const goldenGolem = goldenMinion("harvest_golem");
+    // Enemy needs to deal 4 damage to kill golden golem (4/4)
+    const enemy = makeMinion(4, 1);
+
+    const r = simulateCombat([goldenGolem], [enemy], makeRng(0));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const mechSummons = summonEvents.filter((e) => e.card === "small_mech");
+    // Deathrattle fires twice → 2 mechs summoned
+    expect(mechSummons).toHaveLength(2);
+  });
+
+  it("golden spawn of n'zoth buffs all friendly minions twice", () => {
+    const friendly1 = makeMinion(1, 100);
+    const friendly2 = makeMinion(2, 100);
+    const goldenSpawn = goldenMinion("spawn_of_nzoth");
+    // 5/100 enemy — deals 5 damage to golden spawn (kills it), takes 5 damage from golden (survives with 95 HP)
+    // Friendly minions with 100 HP survive the 5 damage
+    const enemy = makeMinion(5, 100);
+
+    const r = simulateCombat([friendly1, friendly2, goldenSpawn], [enemy], makeRng(0));
+
+    // Count total Stat events — each onDeath triggers +1/+1 to all friendly minions (2 friendly minions × 2 deathrattles = 4 stat events)
+    const statEvents = r.transcript.filter((e) => e.kind === "Stat");
+    expect(statEvents.length).toBeGreaterThanOrEqual(4);
+  });
+
+  it("non-golden harvest golem summons one 2/1 mech (normal deathrattle)", () => {
+    const golem = minion("harvest_golem");
+    const enemy = makeMinion(2, 1);
+
+    const r = simulateCombat([golem], [enemy], makeRng(0));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const mechSummons = summonEvents.filter((e) => e.card === "small_mech");
+    expect(mechSummons).toHaveLength(1);
+  });
+});

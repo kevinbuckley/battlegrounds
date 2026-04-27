@@ -284,10 +284,11 @@ export function playMinionToBoard(
   const battlecry = minion.hooks?.onBattlecry;
   // Brann Bronzebeard on board causes battlecries to trigger twice
   const hasBrann = player.board.some((m) => m.cardId === "brann_bronzebeard");
+  const isGolden = minion.golden;
   if (battlecry) {
     const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
     afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
-    if (hasBrann) {
+    if (hasBrann || isGolden) {
       afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
     }
   }
