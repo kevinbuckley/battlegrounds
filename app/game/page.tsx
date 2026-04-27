@@ -63,6 +63,8 @@ function describeEvent(evt: CombatEvent, nameMap: Map<string, string>): string {
     case "End": {
       return evt.winner === "draw" ? "Draw!" : `${evt.winner} wins`;
     }
+    default:
+      return "";
   }
 }
 
@@ -84,6 +86,8 @@ function eventTypeColor(evt: CombatEvent): string {
       return "text-blue-300";
     case "End":
       return "text-amber-400 text-lg font-bold";
+    default:
+      return "";
   }
 }
 
@@ -105,6 +109,8 @@ function eventTypeEmoji(evt: CombatEvent): string {
       return "\u{1F4CB}";
     case "End":
       return "\u{1F3C6}";
+    default:
+      return "";
   }
 }
 
