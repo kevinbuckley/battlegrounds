@@ -75,3 +75,4 @@
 2026-04-27 | 576dffc | FIXED: Verify triple detection feature complete — 12 passing tests, triples.ts implementation, discover flow wired into endTurn
 2026-04-27 | 851c0cb | FIXED: Wire Ysera hero passive into beginRecruitTurn — adds a random Dragon minion from the current tier to the shop at the start of each turn
 2026-04-27 | 7e03a66 | FIXED: Add upgrade tier, refresh shop, and freeze shop buttons to game page UI during recruit phase
+2026-04-27 | 656117a | FIXED: Add sell minion button to board and hand UI during recruit phase
