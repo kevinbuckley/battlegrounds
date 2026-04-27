@@ -6,7 +6,7 @@ import { DiscoverOverlay } from "@/components/DiscoverOverlay";
 import { Leaderboard } from "@/components/Leaderboard";
 import { simulateCombat } from "@/game/combat";
 import { applyDamageToPlayer, calcDamage } from "@/game/damage";
-import { baseGoldForTurn, COST_BUY } from "@/game/economy";
+import { baseGoldForTurn, COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "@/game/state";
@@ -794,6 +794,101 @@ export default function GamePage() {
               >
                 End Turn
               </button>
+            </div>
+          )}
+
+          {/* Shop actions */}
+          {gameState.phase.kind === "Recruit" && (
+            <div className="flex gap-3">
+              {(() => {
+                const player = gameState.players[0];
+                if (!player) return null;
+
+                const canUpgrade =
+                  player.tier < 6 && player.gold >= player.upgradeCost && !player.upgradedThisTurn;
+                const canRefresh = player.gold >= COST_REFRESH;
+                const canFreeze = player.gold >= COST_FREEZE;
+
+                return (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!gameState) return;
+                        try {
+                          const next = step(
+                            gameState,
+                            { kind: "UpgradeTier", player: 0 },
+                            rngForTurn(gameState, "upgrade"),
+                          );
+                          setGameState(next);
+                          setError(null);
+                        } catch {
+                          setError("Could not upgrade tier");
+                        }
+                      }}
+                      disabled={!canUpgrade}
+                      className={`rounded-lg px-4 py-3 font-semibold transition ${
+                        canUpgrade
+                          ? "bg-emerald-500 text-slate-950 hover:bg-emerald-400"
+                          : "cursor-not-allowed bg-slate-700 text-slate-500"
+                      }`}
+                    >
+                      Upgrade (T{player.tier + 1}) — {player.upgradeCost}g
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!gameState) return;
+                        try {
+                          const next = step(
+                            gameState,
+                            { kind: "RefreshShop", player: 0 },
+                            rngForTurn(gameState, "refresh"),
+                          );
+                          setGameState(next);
+                          setError(null);
+                        } catch {
+                          setError("Could not refresh shop");
+                        }
+                      }}
+                      disabled={!canRefresh}
+                      className={`rounded-lg px-4 py-3 font-semibold transition ${
+                        canRefresh
+                          ? "bg-blue-500 text-slate-950 hover:bg-blue-400"
+                          : "cursor-not-allowed bg-slate-700 text-slate-500"
+                      }`}
+                    >
+                      Refresh — {COST_REFRESH}g
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (!gameState) return;
+                        try {
+                          const next = step(
+                            gameState,
+                            { kind: "FreezeShop", player: 0 },
+                            rngForTurn(gameState, "freeze"),
+                          );
+                          setGameState(next);
+                          setError(null);
+                        } catch {
+                          setError("Could not freeze shop");
+                        }
+                      }}
+                      disabled={!canFreeze}
+                      className={`rounded-lg px-4 py-3 font-semibold transition ${
+                        canFreeze
+                          ? "bg-sky-500 text-slate-950 hover:bg-sky-400"
+                          : "cursor-not-allowed bg-slate-700 text-slate-500"
+                      }`}
+                    >
+                      Freeze Shop
+                    </button>
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>
