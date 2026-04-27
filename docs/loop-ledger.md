@@ -1,4 +1,5 @@
 2026-04-27 | 85d0699 | FIXED: Make freezeShop toggle — clicking again unfreezes the shop, with UI label updating to "Unfreeze Shop"
+2026-04-27 | 64cb979 | FIXED: Add onPlay hook to MinionHooks, wire into playMinionToBoard, add Deflect-o-Bot tier 2 mech (divine shield, +1 ATK whenever you play a Mech), with unit tests
 2026-04-27 | 3c06769 | FIXED: Update SHOP_SIZE_BY_TIER — tier 5 from 5→6, tier 6 from 6→7 to match real Battlegrounds, update the-curator comment
 2026-04-27 | f1e12c7 | FIXED: Add The Curator hero — passive ensures shop contains at least one minion of each tribe on player's board, with unit tests
 2026-04-27 | 6a931b2 | FIXED: Add King Mukla hero — passive grants a Banana spell (gives a friendly minion +1/+1) to hand at start of each recruit turn, with unit tests

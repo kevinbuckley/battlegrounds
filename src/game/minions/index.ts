@@ -16,6 +16,7 @@ import venomousCrasher from "./tier1/venomous-crasher";
 import { WindfuryMinion } from "./tier1/windfury-minion";
 import wrathWeaver from "./tier1/wrath-weaver";
 import annoyoTron from "./tier2/annoy-o-tron";
+import deflectoBot from "./tier2/deflect-o-bot";
 import glyphGuardian from "./tier2/glyph-guardian";
 import grombiTheRotunda from "./tier2/grombi-the-rotunda";
 import harvestGolem from "./tier2/harvest-golem";
@@ -68,6 +69,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [prisoner.id]: prisoner,
   [glyphGuardian.id]: glyphGuardian,
   [metaltoothLeaper.id]: metaltoothLeaper,
+  [deflectoBot.id]: deflectoBot,
   [murlocWarleader.id]: murlocWarleader,
   [rebornMinion.id]: rebornMinion,
   [scavengingHyena.id]: scavengingHyena,

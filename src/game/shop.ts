@@ -287,6 +287,13 @@ export function playMinionToBoard(
     afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
   }
 
+  // Fire onPlay: fires when a minion is played from hand to board
+  const onPlay = minion.hooks?.onPlay;
+  if (onPlay) {
+    const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+    afterPlay = onPlay({ self: minion, playerId, state: afterPlay, rng, spellDamage });
+  }
+
   // Apply combo: all friendly minions with combo gain +2/+2 when a card is played
   const afterCombo = applyComboToBoard(afterPlay, playerId);
 

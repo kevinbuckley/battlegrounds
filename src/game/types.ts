@@ -95,6 +95,8 @@ export interface MinionHooks {
   onBuy?: (ctx: RecruitCtx) => GameState;
   onTurnStart?: (ctx: RecruitCtx) => GameState;
   onTurnEnd?: (ctx: RecruitCtx) => GameState;
+  /** Fires when a minion is played from hand to board (recruit phase). */
+  onPlay?: (ctx: RecruitCtx) => GameState;
   onStartOfCombat?: (ctx: CombatCtx) => void;
   onAttack?: (ctx: AttackCombatCtx) => void;
   onDeath?: (ctx: CombatCtx) => void;
