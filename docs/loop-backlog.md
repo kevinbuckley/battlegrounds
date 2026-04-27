@@ -95,6 +95,10 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `Zixor, Project Hope` (tier 6): elemental, battlecry summon a random minion from tier below
 - [ ] [S] Add `Terestian Manferris` (tier 6): mech, deathrattle give a friendly mech +3/+3
 
+### M12 — Tier 1 minions (in progress)
+
+- [ ] [S] Add `Gnoma Tinker` (tier 1): elemental, battlecry gain 1 gold
+
 ---
 
 ## Done (mirror of `loop-ledger.md` for human readability)

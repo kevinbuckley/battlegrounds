@@ -70,3 +70,4 @@
 2026-04-27 | d999a61 | FIXED: Add Terestian Manferris tier 6 mech with deathrattle giving a friendly mech +3/+3
 2026-04-27 | 6833f68 | FIXED: Add Stonehill Defender tier 3 mech with Taunt + Divine Shield
 2026-04-27 | b7381f5 | FIXED: Add Venomous Crasher tier 1 murloc with poisonous keyword
+2026-04-27 | 9a2aa4f | FIXED: Add Gnoma Tinker tier 1 elemental with battlecry gaining 1 gold
