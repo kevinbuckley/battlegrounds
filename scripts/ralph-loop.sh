@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 # ralph-loop.sh — Overnight autonomous Battlegrounds builder
 #
-# Stack: OpenCode + Ollama (qwen3:32b) + MCP sidecar (web/browser tools)
+# Stack: OpenCode + MLX (mlx_lm) + MCP sidecar (web/browser tools)
 #
 # Each iteration:
 #   1. snapshots HEAD
@@ -22,7 +22,7 @@ REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PROMPT_FILE="$REPO/scripts/ralph-prompt.md"
 MODEL="mlx//Users/kbux/.cache/mlx/Qwen3.6-35B-A3B-4bit"
 APP_URL="http://localhost:3000"
-OLLAMA_URL="http://localhost:11434/api/tags"
+MLX_URL="http://localhost:8080/v1/models"
 
 LOG_DIR="$REPO/logs"
 mkdir -p "$LOG_DIR"
@@ -34,7 +34,8 @@ MAX_ITERS=999
 SLEEP_BETWEEN=20
 MAX_TIME_HOURS=12
 DEBUG=0
-ITER_TIMEOUT=1800   # 30 min per iteration (headroom for thinking mode)
+ITER_TIMEOUT=1800   # 30 min per iteration
+STUCK_THRESHOLD=5   # consecutive reverts before injecting a recovery task
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -57,11 +58,19 @@ log_fixed(){ echo "$*" | tee -a "$FIXED_LOG" >> "$LOG"; }
 preflight() {
   local fail=0
 
-  curl -s --max-time 3 "$OLLAMA_URL" >/dev/null 2>&1 \
-    || { log "FAIL: Ollama not responding at $OLLAMA_URL"; fail=1; }
+  # Check MLX server (not Ollama — we use mlx_lm now)
+  curl -s --max-time 3 "$MLX_URL" >/dev/null 2>&1 \
+    || { log "FAIL: MLX server not responding at $MLX_URL — run ./scripts/start-mlx-server.sh first"; fail=1; }
 
-  curl -s --max-time 3 "$APP_URL" >/dev/null 2>&1 \
-    || log "WARN: dev server not responding at $APP_URL — browser tests will fail"
+  # Start dev server if not running (needed for browser step)
+  if ! curl -s --max-time 3 "$APP_URL" >/dev/null 2>&1; then
+    log "INFO: dev server not running — starting it in background"
+    (cd "$REPO" && bun dev >> "$LOG_DIR/dev-server.log" 2>&1) &
+    sleep 5
+    curl -s --max-time 5 "$APP_URL" >/dev/null 2>&1 \
+      && log "INFO: dev server started OK" \
+      || log "WARN: dev server still not responding — browser tests will fail"
+  fi
 
   command -v opencode >/dev/null 2>&1 \
     || { log "FAIL: opencode not in PATH"; fail=1; }
@@ -85,6 +94,23 @@ preflight() {
 }
 
 # ---------------------------------------------------------------------------
+# Stuck recovery — inject a fresh task if we've been spinning on the same commit
+# ---------------------------------------------------------------------------
+inject_recovery_task() {
+  local snap="$1"
+  local count="$2"
+  log "  ⚠ STUCK: same commit failed $count times in a row — injecting recovery task"
+  local date_str
+  date_str=$(date -u +%Y-%m-%d)
+  # Prepend a fresh concrete task at the top of the Now section
+  local task="- [ ] [S] Game feel audit: open http://localhost:3000, play one turn, find and fix one broken or missing behaviour (stuck since $date_str, snap $snap)"
+  # Insert after the "## Now" heading
+  sed -i '' "s|## Now (highest priority.*)|## Now (highest priority, model should pick from here first)\n\n$task|" \
+    "$REPO/docs/loop-backlog.md" 2>/dev/null || true
+  log "  → Added recovery task to top of backlog"
+}
+
+# ---------------------------------------------------------------------------
 # Iteration
 # ---------------------------------------------------------------------------
 run_iteration() {
@@ -97,13 +123,13 @@ run_iteration() {
   snap=$(git -C "$REPO" rev-parse HEAD)
   log "  snapshot: $snap"
 
-  # Build the prompt: project prompt + current ledger context
+  # Build the prompt: project prompt + current ledger context (last 30 lines)
   local prompt
   prompt=$(cat "$PROMPT_FILE")
   prompt+=$'\n\n## Current ledger (do NOT redo these)\n\n'
-  prompt+="$(tail -50 "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
+  prompt+="$(tail -30 "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
 
-  # Sync with remote so the model sees the latest commits (handles upstream resets)
+  # Sync with remote so the model sees the latest commits
   git -C "$REPO" pull --ff-only origin main >/dev/null 2>&1 || true
 
   cd "$REPO"
@@ -144,16 +170,24 @@ run_iteration() {
     fixed_line=$(grep -oE 'FIXED: .+' "$iter_log" | tail -1 || echo 'FIXED: (no marker found)')
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $current | $fixed_line"
     log "  ✓ iteration succeeded — $fixed_line"
+    CONSECUTIVE_FAILS=0
   else
     log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok real_diff=$real_diff new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
     git -C "$REPO" reset --hard "$snap" >/dev/null
     git -C "$REPO" clean -fd src/ app/ tests/ docs/ 2>/dev/null || true
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $snap | REVERTED: iteration $n failed"
+    CONSECUTIVE_FAILS=$(( CONSECUTIVE_FAILS + 1 ))
+
+    # Circuit breaker: inject a recovery task if truly stuck
+    if [[ $CONSECUTIVE_FAILS -ge $STUCK_THRESHOLD ]]; then
+      inject_recovery_task "$snap" "$CONSECUTIVE_FAILS"
+      CONSECUTIVE_FAILS=0
+    fi
   fi
 }
 
 # ---------------------------------------------------------------------------
-# Main loop
+# Main loop — wrapped in caffeinate so the Mac never sleeps during the run
 # ---------------------------------------------------------------------------
 preflight
 
@@ -162,11 +196,18 @@ log "  model      = $MODEL"
 log "  max iters  = $MAX_ITERS"
 log "  max time   = ${MAX_TIME_HOURS}h"
 log "  sleep      = ${SLEEP_BETWEEN}s"
+log "  stuck threshold = $STUCK_THRESHOLD consecutive fails"
 log "  log        = $LOG"
 log "  fixed log  = $FIXED_LOG"
 
+# Keep display + system awake for the duration (works even if macOS setting lapsed)
+caffeinate -d -i -s &
+CAFFEINATE_PID=$!
+trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
+
 START_TS=$(date +%s)
 DEADLINE=$(( START_TS + MAX_TIME_HOURS * 3600 ))
+CONSECUTIVE_FAILS=0
 
 for ((i=1; i<=MAX_ITERS; i++)); do
   if [[ $(date +%s) -ge $DEADLINE ]]; then
