@@ -91,7 +91,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M11 — Tier 6 minions (in progress)
 
 - [ ] [S] Add `Friggent Northvalley` (tier 6): beast, deathrattle summon a 2/3 Stalker
-- [ ] [S] Add `Zixor, Project Hope` (tier 6): elemental, battlecry summon a random minion from tier below
+- [x] [S] Add `Zixor, Project Hope` (tier 6): elemental, battlecry summon a random minion from tier below
 - [ ] [S] Add `Terestian Manferris` (tier 6): mech, deathrattle give a friendly mech +3/+3
 
 ---
