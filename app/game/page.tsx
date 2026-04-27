@@ -180,6 +180,7 @@ export default function GamePage() {
   const [error, setError] = useState<string | null>(null);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [placingMinionIdx, setPlacingMinionIdx] = useState<number | null>(null);
+  const [heroPowerTargetIdx, setHeroPowerTargetIdx] = useState<number | null>(null);
 
   // Combat animation state
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
@@ -532,12 +533,27 @@ export default function GamePage() {
                   if (!card) return null;
                   const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
                   const isDragging = dragIndex === idx;
+                  const isHpTarget = heroPowerTargetIdx === idx;
+                  const playerForHp = gameState?.players[0];
+                  const currentHero = playerForHp?.heroId ? HEROES[playerForHp.heroId] : undefined;
+                  const needsHpTarget =
+                    currentHero?.power.kind === "active" &&
+                    (currentHero.id === "george_the_fallen" ||
+                      currentHero.id === "scabbs_cutterbutter" ||
+                      currentHero.id === "sir_finley") &&
+                    !playerForHp?.heroPowerUsed;
                   return (
                     <div
                       key={minion.instanceId}
                       draggable
                       onDragStart={() => setDragIndex(idx)}
                       onDragEnd={() => setDragIndex(null)}
+                      onClick={() => {
+                        if (needsHpTarget) {
+                          setHeroPowerTargetIdx(idx);
+                          setError(null);
+                        }
+                      }}
                       onDragOver={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
@@ -570,7 +586,7 @@ export default function GamePage() {
                       }}
                       className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-blue-500/50 bg-slate-800 px-4 py-3 transition ${
                         isDragging ? "opacity-40" : "opacity-100"
-                      }`}
+                      } ${isHpTarget ? "border-sky-400 bg-sky-400/10 ring-2 ring-sky-400/30" : ""}`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -713,28 +729,54 @@ export default function GamePage() {
                   hasActivePower && player && player.gold >= powerCost && !player.heroPowerUsed;
 
                 if (hasActivePower) {
+                  const needsTarget =
+                    hero?.id === "george_the_fallen" ||
+                    hero?.id === "scabbs_cutterbutter" ||
+                    hero?.id === "sir_finley";
+                  const isTargeted = needsTarget && heroPowerTargetIdx !== null;
+                  const powerEnabled = canUsePower && (!needsTarget || isTargeted);
+
                   return (
-                    <button
-                      type="button"
-                      onClick={() => {
-                        if (!gameState || !player) return;
-                        const next = step(
-                          gameState,
-                          { kind: "HeroPower", player: 0, target: 0 },
-                          rngForTurn(gameState, "heroPower"),
-                        );
-                        setGameState(next);
-                        setError(null);
-                      }}
-                      disabled={!canUsePower}
-                      className={`rounded-lg px-6 py-3 font-semibold transition ${
-                        canUsePower
-                          ? "bg-sky-500 text-slate-950 hover:bg-sky-400"
-                          : "cursor-not-allowed bg-slate-700 text-slate-500"
-                      }`}
-                    >
-                      {hero?.name.split(" ")[0]} Power ({powerCost}g)
-                    </button>
+                    <>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (!gameState || !player) return;
+                          const next = step(
+                            gameState,
+                            { kind: "HeroPower", player: 0, target: heroPowerTargetIdx },
+                            rngForTurn(gameState, "heroPower"),
+                          );
+                          setGameState(next);
+                          setHeroPowerTargetIdx(null);
+                          setError(null);
+                        }}
+                        disabled={!powerEnabled}
+                        className={`rounded-lg px-6 py-3 font-semibold transition ${
+                          powerEnabled
+                            ? "bg-sky-500 text-slate-950 hover:bg-sky-400"
+                            : "cursor-not-allowed bg-slate-700 text-slate-500"
+                        }`}
+                      >
+                        {hero?.name.split(" ")[0]} Power ({powerCost}g)
+                      </button>
+                      {needsTarget && (
+                        <span className="text-xs text-slate-400">
+                          {isTargeted
+                            ? `Target: board[${heroPowerTargetIdx}]`
+                            : "Click a board minion, then use power"}
+                        </span>
+                      )}
+                      {heroPowerTargetIdx !== null && (
+                        <button
+                          type="button"
+                          onClick={() => setHeroPowerTargetIdx(null)}
+                          className="rounded bg-slate-700 px-2 py-1 text-xs text-slate-400 hover:bg-slate-600"
+                        >
+                          Clear Target
+                        </button>
+                      )}
+                    </>
                   );
                 }
                 return null;
