@@ -11,6 +11,7 @@ import { rakanishu } from "./rakanishu";
 import { scabbsCutterbutter } from "./scabbs-cutterbutter";
 import { sirFinley } from "./sir-finley";
 import { stubHero } from "./stub";
+import { yoggSaron } from "./yogg-saron";
 import { ysera } from "./ysera";
 
 export const HEROES: Record<HeroId, Hero> = {
@@ -27,6 +28,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [afKay.id]: afKay,
   [lichBazHial.id]: lichBazHial,
   [rakanishu.id]: rakanishu,
+  [yoggSaron.id]: yoggSaron,
 };
 
 export function getHero(id: HeroId): Hero {

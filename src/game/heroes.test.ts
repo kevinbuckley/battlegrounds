@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 12 gameplay heroes (excluding stub)", () => {
+  it("contains all 13 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(12);
+    expect(ids).toHaveLength(13);
   });
 
   it("every hero has a description", () => {
@@ -210,5 +210,34 @@ describe("Scabbs Cutterbutter hero power", () => {
     const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
     expect(after.players[0]!.board[0]!.atk).toBe(origAtk + 1);
     expect(after.players[0]!.gold).toBe(9); // 10 - 1
+  });
+});
+
+describe("Yogg-Saron hero power", () => {
+  it("gives all friendly minions a random keyword for 2 gold", () => {
+    const m1 = instantiate(MINIONS["wrath_weaver"]!);
+    const m2 = instantiate(MINIONS["venomous_crasher"]!);
+    const state = makeStateWithHero("yogg_saron", [m1, m2]);
+
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    const board = after.players[0]!.board;
+    expect(board[0]!.keywords.size).toBeGreaterThan(m1.keywords.size);
+    expect(board[1]!.keywords.size).toBeGreaterThan(m2.keywords.size);
+    // Both minions should share the same randomly chosen keyword
+    const kw1 = board[0]!.keywords.values().next().value;
+    const kw2 = board[1]!.keywords.values().next().value;
+    // The new keyword should be the same for all minions
+    const newKw1 = [...board[0]!.keywords].find((k) => !m1.keywords.has(k));
+    const newKw2 = [...board[1]!.keywords].find((k) => !m2.keywords.has(k));
+    expect(newKw1).toBe(newKw2);
+    expect(after.players[0]!.gold).toBe(8); // 10 - 2
+    expect(after.players[0]!.heroPowerUsed).toBe(true);
+  });
+
+  it("does nothing when board is empty but still costs gold", () => {
+    const state = makeStateWithHero("yogg_saron");
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    expect(after.players[0]!.gold).toBe(8); // 10 - 2, gold still spent
+    expect(after.players[0]!.heroPowerUsed).toBe(true);
   });
 });
