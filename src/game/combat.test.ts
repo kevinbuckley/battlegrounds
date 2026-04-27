@@ -220,6 +220,46 @@ describe("taunt keyword", () => {
     };
     expect(firstAttack.target).toBe(taunted.instanceId);
   });
+
+  it("combat with taunt + non-taunt confirms taunt targeted first", () => {
+    const tauntMinion: MinionInstance = {
+      ...makeMinion(2, 3),
+      instanceId: "taunt_first",
+      keywords: new Set<Keyword>(["taunt"]),
+    };
+    const normalMinion: MinionInstance = {
+      ...makeMinion(2, 3),
+      instanceId: "normal_first",
+      keywords: new Set<Keyword>([]),
+    };
+    const attacker = makeMinion(2, 10);
+
+    // Left side: 1 attacker vs right side: 1 taunt + 1 normal
+    // Right side has fewer minions (2 vs 1), so right attacks first
+    // The right side's taunt minion should be targeted
+    const r = simulateCombat([attacker], [tauntMinion, normalMinion], makeRng(0));
+
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // All attacks from the left attacker should target the taunt minion first
+    const tauntAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.target === tauntMinion.instanceId,
+    );
+    const normalAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.target === normalMinion.instanceId,
+    );
+    // Taunt minion should be targeted before normal minion
+    if (tauntAttacks.length > 0 && normalAttacks.length > 0) {
+      const firstTauntIdx = attacks.findIndex(
+        (e) => e.kind === "Attack" && e.target === tauntMinion.instanceId,
+      );
+      const firstNormalIdx = attacks.findIndex(
+        (e) => e.kind === "Attack" && e.target === normalMinion.instanceId,
+      );
+      expect(firstTauntIdx).toBeLessThan(firstNormalIdx);
+    }
+    // If taunt minion dies, normal minion should be targeted next
+    expect(tauntAttacks.length).toBeGreaterThanOrEqual(1);
+  });
 });
 
 // These tests validate that existing features (already implemented) are working
