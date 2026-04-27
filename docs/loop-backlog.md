@@ -78,8 +78,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M9 — Triples & discovers
 
-- [ ] [M] Triple detection: 3 of same name → auto-merge into golden, discover 1 from next tier
-- [ ] [M] Generic discover overlay (used by triples, hero powers, spells)
+- [x] [M] Triple detection: 3 of same name → auto-merge into golden, discover 1 from next tier
+- [x] [M] Generic discover overlay (used by triples, hero powers, spells)
 
 ### M10 — Keywords (in progress)
 
