@@ -12,17 +12,45 @@ export const murlocMania: QuestCard = {
     if (player.eliminated) return state;
     if (player.heroId !== "rakanishu") return state;
 
-    // Check if this combat round was a win
+    const quest = player.quests[0];
+    if (!quest || quest.completed) return state;
+
+    // Check if the player won this combat round
     const isWinner = state.phase.kind === "Combat" || state.phase.kind === "GameOver";
     if (!isWinner) return state;
 
-    // Check if the player's side won (player 0 is always on the left in odd turns, right in even)
+    // Determine if player was on the winning side of their pairing
     const turn = state.turn;
     const isLeftSide = turn % 2 === 1;
     const isOnLeft = player.id === 0 || player.id % 2 === (isLeftSide ? 0 : 1);
 
-    // Simple heuristic: if the player's board has more total HP than their opponent's, count as win
-    // This is a simplification — in practice the combat result would be passed in
+    // Count total HP of player's board vs opponent's board
+    const myBoard = player.board.filter((m) => m.hp > 0);
+    const opponentId = isOnLeft
+      ? isLeftSide
+        ? ((player.id + 1) as PlayerId)
+        : ((player.id - 1) as PlayerId)
+      : isLeftSide
+        ? ((player.id - 1) as PlayerId)
+        : ((player.id + 1) as PlayerId);
+    const opponent = getPlayer(state, opponentId);
+    const oppBoard = opponent.board.filter((m) => m.hp > 0);
+
+    const myTotalHp = myBoard.reduce((sum, m) => sum + m.hp, 0);
+    const oppTotalHp = oppBoard.reduce((sum, m) => sum + m.hp, 0);
+
+    // Player wins if their total HP >= opponent's total HP (simplified)
+    if (myTotalHp >= oppTotalHp && myBoard.length > 0) {
+      const updatedQuest: QuestInstance = {
+        ...quest,
+        progress: quest.progress + 1,
+      };
+      return updatePlayer(state, playerId, (p) => ({
+        ...p,
+        quests: [updatedQuest],
+      }));
+    }
+
     return state;
   },
   isComplete: (state: GameState, playerId: PlayerId): boolean => {
@@ -35,11 +63,9 @@ export const murlocMania: QuestCard = {
     const player = getPlayer(state, playerId);
     return updatePlayer(state, playerId, (p) => ({
       ...p,
-      board: p.board.map((m) => ({
-        ...m,
-        hp: m.hp + 3,
-        maxHp: m.maxHp + 3,
-      })),
+      board: p.board.map((m) =>
+        m.tribes.includes("Murloc") ? { ...m, hp: m.hp + 3, maxHp: m.maxHp + 3 } : m,
+      ),
     }));
   },
 };
@@ -52,9 +78,47 @@ export const mechMayhem: QuestCard = {
   onProgress: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
     const player = getPlayer(state, playerId);
     if (player.eliminated) return state;
+
+    const quest = player.quests[0];
+    if (!quest || quest.completed) return state;
+
     // Check if player has a mech tribe on board
     const hasMech = player.board.some((m) => m.tribes.includes("Mech"));
     if (!hasMech) return state;
+
+    // Check if the player won this combat round
+    const isWinner = state.phase.kind === "Combat" || state.phase.kind === "GameOver";
+    if (!isWinner) return state;
+
+    const turn = state.turn;
+    const isLeftSide = turn % 2 === 1;
+    const isOnLeft = player.id === 0 || player.id % 2 === (isLeftSide ? 0 : 1);
+
+    const myBoard = player.board.filter((m) => m.hp > 0);
+    const opponentId = isOnLeft
+      ? isLeftSide
+        ? ((player.id + 1) as PlayerId)
+        : ((player.id - 1) as PlayerId)
+      : isLeftSide
+        ? ((player.id - 1) as PlayerId)
+        : ((player.id + 1) as PlayerId);
+    const opponent = getPlayer(state, opponentId);
+    const oppBoard = opponent.board.filter((m) => m.hp > 0);
+
+    const myTotalHp = myBoard.reduce((sum, m) => sum + m.hp, 0);
+    const oppTotalHp = oppBoard.reduce((sum, m) => sum + m.hp, 0);
+
+    if (myTotalHp >= oppTotalHp && myBoard.length > 0) {
+      const updatedQuest: QuestInstance = {
+        ...quest,
+        progress: quest.progress + 1,
+      };
+      return updatePlayer(state, playerId, (p) => ({
+        ...p,
+        quests: [updatedQuest],
+      }));
+    }
+
     return state;
   },
   isComplete: (state: GameState, playerId: PlayerId): boolean => {
@@ -82,8 +146,47 @@ export const demonDiplomacy: QuestCard = {
   onProgress: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
     const player = getPlayer(state, playerId);
     if (player.eliminated) return state;
+
+    const quest = player.quests[0];
+    if (!quest || quest.completed) return state;
+
+    // Check if player has a demon tribe on board
     const hasDemon = player.board.some((m) => m.tribes.includes("Demon"));
     if (!hasDemon) return state;
+
+    // Check if the player won this combat round
+    const isWinner = state.phase.kind === "Combat" || state.phase.kind === "GameOver";
+    if (!isWinner) return state;
+
+    const turn = state.turn;
+    const isLeftSide = turn % 2 === 1;
+    const isOnLeft = player.id === 0 || player.id % 2 === (isLeftSide ? 0 : 1);
+
+    const myBoard = player.board.filter((m) => m.hp > 0);
+    const opponentId = isOnLeft
+      ? isLeftSide
+        ? ((player.id + 1) as PlayerId)
+        : ((player.id - 1) as PlayerId)
+      : isLeftSide
+        ? ((player.id - 1) as PlayerId)
+        : ((player.id + 1) as PlayerId);
+    const opponent = getPlayer(state, opponentId);
+    const oppBoard = opponent.board.filter((m) => m.hp > 0);
+
+    const myTotalHp = myBoard.reduce((sum, m) => sum + m.hp, 0);
+    const oppTotalHp = oppBoard.reduce((sum, m) => sum + m.hp, 0);
+
+    if (myTotalHp >= oppTotalHp && myBoard.length > 0) {
+      const updatedQuest: QuestInstance = {
+        ...quest,
+        progress: quest.progress + 1,
+      };
+      return updatePlayer(state, playerId, (p) => ({
+        ...p,
+        quests: [updatedQuest],
+      }));
+    }
+
     return state;
   },
   isComplete: (state: GameState, playerId: PlayerId): boolean => {

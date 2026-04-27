@@ -115,7 +115,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M10 — Quest framework (in progress)
 
 - [x] [S] Add quest framework — types, 3 starter quests (Murloc Mania, Mech Mayhem, Demon Diplomacy), and state wiring
-- [ ] [S] Wire quest progress tracking into endTurn — increment progress for qualifying players, check completion, apply rewards
+- [x] [S] Wire quest progress tracking into endTurn — increment progress for qualifying players, check completion, apply rewards
 
 ---
 

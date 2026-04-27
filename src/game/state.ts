@@ -6,7 +6,7 @@ import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
-import { createQuestInstance, pickQuest, QUESTS } from "./quests";
+import { createQuestInstance, getQuest, pickQuest, QUESTS } from "./quests";
 import {
   applyComboToBoard,
   buildPool,
@@ -31,6 +31,7 @@ import type {
   MinionInstance,
   ModifierId,
   PlayerState,
+  QuestInstance,
   Tier,
   Tribe,
   TrinketCard,
@@ -429,6 +430,9 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
     result = applyRagnarosAfterCombat(result, leftId, rightId);
   }
 
+  // Process quest progress for all players after combat resolves
+  result = processQuests(result, rng);
+
   // Check for game over
   const remainingAlive = result.players.filter((p) => !p.eliminated);
   if (remainingAlive.length <= 1) {
@@ -457,6 +461,62 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
   } else {
     // Transition back to Recruit phase for the next turn
     result = beginRecruitTurn(result, rng);
+  }
+
+  return result;
+}
+
+function processQuests(state: GameState, rng: Rng): GameState {
+  let result = state;
+
+  for (const player of result.players) {
+    if (player.eliminated) continue;
+
+    const quest = player.quests[0];
+    if (!quest || quest.completed) continue;
+
+    // Skip if quests modifier is not active for this player
+    if (!result.modifiers.includes("quests")) continue;
+
+    const questCard = getQuest(quest.cardId);
+
+    // Call onProgress to increment quest progress
+    result = questCard.onProgress(result, player.id, rng);
+
+    // Re-read the updated quest
+    const updatedPlayer = getPlayer(result, player.id);
+    const updatedQuest = updatedPlayer.quests[0];
+    if (!updatedQuest) continue;
+
+    // Check if quest is now complete
+    if (questCard.isComplete(result, player.id)) {
+      // Apply the quest reward
+      result = questCard.onReward(result, player.id, rng);
+
+      // Mark quest as completed
+      const rewardPlayer = getPlayer(result, player.id);
+      const existingQuest = rewardPlayer.quests[0];
+      if (!existingQuest) continue;
+      const completedQuest: QuestInstance = {
+        instanceId: existingQuest.instanceId,
+        cardId: existingQuest.cardId,
+        progress: existingQuest.progress,
+        target: existingQuest.target,
+        completed: true,
+      };
+      result = updatePlayer(result, player.id, (p) => ({
+        ...p,
+        quests: [completedQuest],
+      }));
+
+      // Also update modifierState.quests
+      if (result.modifierState.quests) {
+        result.modifierState.quests = {
+          ...result.modifierState.quests,
+          [player.id]: completedQuest,
+        };
+      }
+    }
   }
 
   return result;
