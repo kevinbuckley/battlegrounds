@@ -11,6 +11,7 @@ import { rakanishu } from "./rakanishu";
 import { scabbsCutterbutter } from "./scabbs-cutterbutter";
 import { sirFinley } from "./sir-finley";
 import { stubHero } from "./stub";
+import { theCurator } from "./the-curator";
 import { yoggSaron } from "./yogg-saron";
 import { ysera } from "./ysera";
 
@@ -28,6 +29,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [afKay.id]: afKay,
   [lichBazHial.id]: lichBazHial,
   [rakanishu.id]: rakanishu,
+  [theCurator.id]: theCurator,
   [yoggSaron.id]: yoggSaron,
 };
 
@@ -36,6 +38,8 @@ export function getHero(id: HeroId): Hero {
   if (!hero) throw new Error(`Unknown hero: ${id}`);
   return hero;
 }
+
+export { theCurator };
 
 /** Returns all non-stub hero IDs (for hero selection pool). */
 export function getAllHeroIds(): HeroId[] {

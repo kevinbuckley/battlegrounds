@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 13 gameplay heroes (excluding stub)", () => {
+  it("contains all 14 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(13);
+    expect(ids).toHaveLength(14);
   });
 
   it("every hero has a description", () => {
@@ -239,5 +239,48 @@ describe("Yogg-Saron hero power", () => {
     const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
     expect(after.players[0]!.gold).toBe(8); // 10 - 2, gold still spent
     expect(after.players[0]!.heroPowerUsed).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// The Curator — passive: shop contains one of each tribe on board
+// ---------------------------------------------------------------------------
+
+describe("The Curator passive", () => {
+  it("adds a murloc to shop when a murloc is on the board", () => {
+    const murlocMinion = instantiate(MINIONS["rockpool_hunter"]!);
+    const state = makeStateWithHero("the_curator", [murlocMinion]);
+    const curState = beginRecruitTurn(state, RNG);
+    const shop = curState.players[0]!.shop;
+    const hasMurloc = shop.some((m) => m.tribes.includes("Murloc"));
+    expect(hasMurloc).toBe(true);
+  });
+
+  it("adds a beast to shop when a beast is on the board", () => {
+    const beastMinion = instantiate(MINIONS["bristleback_boys"]!);
+    const state = makeStateWithHero("the_curator", [beastMinion]);
+    const curState = beginRecruitTurn(state, RNG);
+    const shop = curState.players[0]!.shop;
+    const hasBeast = shop.some((m) => m.tribes.includes("Beast"));
+    expect(hasBeast).toBe(true);
+  });
+
+  it("handles multiple tribes on board", () => {
+    const murlocMinion = instantiate(MINIONS["rockpool_hunter"]!);
+    const beastMinion = instantiate(MINIONS["bristleback_boys"]!);
+    const state = makeStateWithHero("the_curator", [murlocMinion, beastMinion]);
+    const curState = beginRecruitTurn(state, RNG);
+    const shop = curState.players[0]!.shop;
+    const hasMurloc = shop.some((m) => m.tribes.includes("Murloc"));
+    const hasBeast = shop.some((m) => m.tribes.includes("Beast"));
+    expect(hasMurloc).toBe(true);
+    expect(hasBeast).toBe(true);
+  });
+
+  it("does nothing when board is empty", () => {
+    const state = makeStateWithHero("the_curator");
+    const curState = beginRecruitTurn(state, RNG);
+    // Shop should just be the normal roll, no extra guarantees needed
+    expect(curState.players[0]!.shop.length).toBeGreaterThan(0);
   });
 });

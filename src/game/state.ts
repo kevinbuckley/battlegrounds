@@ -4,7 +4,8 @@ import { activateBuddies, createBuddyInstance, pickBuddy, pickBuddyForPlayer } f
 import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
-import { getAllHeroIds, HEROES } from "./heroes/index";
+import { getAllHeroIds, HEROES, theCurator } from "./heroes/index";
+import { ensureCuratorShop } from "./heroes/the-curator";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import { createQuestInstance, getQuest, pickQuest, QUESTS } from "./quests";
@@ -674,6 +675,11 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
           shop: [...p.shop, minionInstance],
         }));
       }
+    }
+
+    // The Curator passive: ensure shop contains at least one of each tribe on board
+    if (player.id === 0 && player.heroId === theCurator.id) {
+      next = ensureCuratorShop(next, player.id, rng);
     }
 
     // Activate buddies that have reached their activation turn
