@@ -1,4 +1,5 @@
 import { HEROES } from "@/game/heroes/index";
+import { TRINKETS } from "@/game/trinkets";
 import type { GameState } from "@/game/types";
 
 interface LeaderboardProps {
@@ -21,7 +22,13 @@ function getTierColor(tier: number): string {
 export function Leaderboard({ state, heroId }: LeaderboardProps) {
   const players = state.players;
   const playerId = players.findIndex((p) => p.heroId === heroId);
-  const currentPlayer = players[playerId] || { tier: 1, hp: 0, armor: 0, board: [] as const };
+  const currentPlayer = (players[playerId] || {
+    tier: 1,
+    hp: 0,
+    armor: 0,
+    board: [] as const,
+    trinkets: [],
+  }) as (typeof players)[number];
   const opponent = players.find((p) => p.id !== playerId && p.heroId !== "" && !p.eliminated);
 
   // Build ranking: eliminated first (by placement asc), then alive (by HP desc)
@@ -74,6 +81,15 @@ export function Leaderboard({ state, heroId }: LeaderboardProps) {
           {currentPlayer.armor > 0 && (
             <span className="text-xs font-mono text-sky-400">+{currentPlayer.armor} A</span>
           )}
+          {currentPlayer.trinkets.length > 0 &&
+            (() => {
+              const trinket = TRINKETS[currentPlayer.trinkets[0]!.cardId];
+              return trinket ? (
+                <span className="text-xs font-medium text-amber-400" title={trinket.description}>
+                  {trinket.name}
+                </span>
+              ) : null;
+            })()}
         </div>
 
         {/* Opponent preview */}

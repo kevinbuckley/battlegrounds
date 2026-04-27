@@ -88,3 +88,4 @@
 2026-04-27 | d6d6bab | FIXED: Add quest framework — types, 3 starter quests (Murloc Mania, Mech Mayhem, Demon Diplomacy), and state wiring
 2026-04-27 | 1209b54 | FIXED: Wire quest progress tracking into endTurn/resolveCombat — increment progress for qualifying players, check completion, apply rewards
 2026-04-27 | 9c25d3f | FIXED: Add Buddy framework — types, 3 starter buddies (Ymber, RoLo, Goblin Minion), state wiring, and activation in beginRecruitTurn
+2026-04-27 | eaa8a05 | FIXED: Display equipped trinket name on the leaderboard for the current player

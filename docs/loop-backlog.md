@@ -103,6 +103,10 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `Zixor, Project Hope` (tier 6): elemental, battlecry summon a random minion from tier below
 - [ ] [S] Add `Terestian Manferris` (tier 6): mech, deathrattle give a friendly mech +3/+3
 
+### M5 — UI wiring (in progress)
+
+- [ ] [S] Display equipped trinket name on the leaderboard for the current player
+
 ### M12 — Tier 1 minions (in progress)
 
 - [x] [S] Add `Alley Cat` (tier 1): beast, battlecry summon a random minion from your hand
