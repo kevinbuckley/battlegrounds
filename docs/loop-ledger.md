@@ -55,3 +55,4 @@
 2026-04-27 | d261087 | FIXED: Add Cleave keyword to Wrath Weaver and Broodkin Zealot minions
 2026-04-27 | da38a03 | FIXED: Add unit tests for windfury keyword — double attacks, counterattack interactions, and winner determination minions
 2026-04-27 | 237ac5d | FIXED: Add hero type + power interface in src/game/types.ts + src/game/heroes/
+2026-04-27 | cd0f553 | FIXED: Add lifesteal keyword — type, combat emission, state healing, Queen of Pain minion, and tests
