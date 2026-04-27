@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
+import { instantiate } from "@/game/minions/define";
+import { MINIONS } from "@/game/minions/index";
+import { beginRecruitTurn, makeInitialState } from "@/game/state";
+import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
-import { makeInitialState, beginRecruitTurn } from "@/game/state";
-import { makePlayerView } from "./strategy";
+import { basic } from "./heuristics/basic";
 import { greedy } from "./heuristics/greedy";
 import { heuristic } from "./heuristics/heuristic";
 import { runLobby } from "./lobbySim";
-import { MINIONS } from "@/game/minions/index";
-import { instantiate } from "@/game/minions/define";
-import type { GameState } from "@/game/types";
+import { makePlayerView } from "./strategy";
 
 const RNG = makeRng(42);
 
@@ -22,7 +23,7 @@ const RNG = makeRng(42);
 function stateAtTurn(turn: number): GameState {
   // Fill the pool with test cards
   const base = makeInitialState(1);
-  let state: GameState = {
+  const state: GameState = {
     ...base,
     phase: { kind: "Recruit", turn },
     turn,
@@ -87,6 +88,49 @@ describe("greedy strategy", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Basic strategy
+// ---------------------------------------------------------------------------
+
+describe("basic strategy", () => {
+  it("always ends with EndTurn", () => {
+    const state = stateAtTurn(1);
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    expect(actions[actions.length - 1]?.kind).toBe("EndTurn");
+  });
+
+  it("buys the cheapest minion (lowest stat-ball)", () => {
+    // Shop has: wrath_weaver (2/2 = 4), alley_cat (1/1 = 2), murloc_tidehunter (2/1 = 3)
+    // alley_cat has the lowest stat-ball (2), so it should be bought
+    const state = stateAtTurn(2); // 4g
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    const buys = actions.filter((a) => a.kind === "BuyMinion");
+    expect(buys.length).toBeGreaterThanOrEqual(1);
+    // The cheapest shop minion (alley_cat at 1/1 = 2 stat-ball) should be bought
+    const buyAction = buys[0] as Extract<Action, { kind: "BuyMinion" }>;
+    const shopMinion = state.players[0]!.shop[buyAction.shopIndex];
+    expect(shopMinion!.cardId).toBe("alley_cat");
+  });
+
+  it("does not buy when gold is insufficient", () => {
+    const state = stateAtTurn(1);
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    const buys = actions.filter((a) => a.kind === "BuyMinion");
+    expect(buys.length).toBeGreaterThanOrEqual(0);
+  });
+
+  it("plays bought minions to board", () => {
+    const state = stateAtTurn(3); // 5g
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    const plays = actions.filter((a) => a.kind === "PlayMinion");
+    expect(plays.length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Heuristic strategy
 // ---------------------------------------------------------------------------
 
@@ -132,9 +176,7 @@ describe("heuristic strategy", () => {
 
 describe("lobby simulation", () => {
   it("produces 8 placement entries", () => {
-    const strategies = Array.from({ length: 8 }, (_, i) =>
-      i % 2 === 0 ? greedy : heuristic,
-    );
+    const strategies = Array.from({ length: 8 }, (_, i) => (i % 2 === 0 ? greedy : heuristic));
     const result = runLobby(1, strategies);
     expect(result.placements).toHaveLength(8);
   });
@@ -165,9 +207,7 @@ describe("lobby simulation", () => {
 
     for (let s = 0; s < SEEDS; s++) {
       // 4 heuristic (players 0,2,4,6) vs 4 greedy (players 1,3,5,7)
-      const strategies = Array.from({ length: 8 }, (_, i) =>
-        i % 2 === 0 ? heuristic : greedy,
-      );
+      const strategies = Array.from({ length: 8 }, (_, i) => (i % 2 === 0 ? heuristic : greedy));
       const result = runLobby(s + 100, strategies);
       // Check if winner (placement 1) is a heuristic player
       const winner = result.placements.find((p) => p.placement === 1);

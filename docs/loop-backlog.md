@@ -67,7 +67,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### AI opponents
 
-- [ ] [M] Basic AI turn: AI buys the cheapest affordable minion in shop each recruit phase
+- [x] [S] Basic AI turn: AI buys the cheapest affordable minion in shop each recruit phase
 - [ ] [M] Basic AI board play: AI plays all minions from hand to board at start of combat
 - [ ] [S] AI refresh: if AI has gold left and no affordable minion, refresh once
 
