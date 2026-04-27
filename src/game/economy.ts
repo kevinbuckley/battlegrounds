@@ -24,8 +24,8 @@ export const SHOP_SIZE_BY_TIER: Record<Tier, number> = {
   2: 4,
   3: 4,
   4: 5,
-  5: 5,
-  6: 6,
+  5: 6,
+  6: 7,
 };
 
 // Probability (0–100) that a single shop slot comes from each card tier,

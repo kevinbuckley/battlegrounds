@@ -42,7 +42,7 @@ export function ensureCuratorShop(
   if (boardTribes.size === 0) return state;
 
   const shop = [...player.shop];
-  const targetSize = 3 + Math.min(player.tier - 1, 3); // same as SHOP_SIZE_BY_TIER
+  const targetSize = 3 + Math.min(player.tier - 1, 4); // matches SHOP_SIZE_BY_TIER
   const maxShopSize = Math.min(targetSize, 7);
 
   // Check which tribes are already represented in the shop

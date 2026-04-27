@@ -1,4 +1,5 @@
 2026-04-27 | 85d0699 | FIXED: Make freezeShop toggle — clicking again unfreezes the shop, with UI label updating to "Unfreeze Shop"
+2026-04-27 | 3c06769 | FIXED: Update SHOP_SIZE_BY_TIER — tier 5 from 5→6, tier 6 from 6→7 to match real Battlegrounds, update the-curator comment
 2026-04-27 | f1e12c7 | FIXED: Add The Curator hero — passive ensures shop contains at least one minion of each tribe on player's board, with unit tests
 2026-04-25 | 2428296 | FIXED: Add Kaboom Bot tier 2 mech with deathrattle dealing 4 damage to a random enemy minion
  2026-04-25 | 48baffe | FIXED: Add Harvest Golem tier 2 mech with deathrattle summoning a 2/1 Mech
