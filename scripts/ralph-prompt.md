@@ -65,6 +65,8 @@ You are the Ralph Loop, an autonomous engineer building a Hearthstone Battlegrou
 
 10. **END**     — your very last output must be exactly this line (nothing after it):
     `FIXED: <one-line description matching what you built>`
+    This line is how the loop records success. If it is missing or buried in text,
+    the iteration is logged as "(no marker found)". Output NOTHING after it.
 
 ## Hard rules
 

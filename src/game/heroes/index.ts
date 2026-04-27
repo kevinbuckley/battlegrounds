@@ -3,6 +3,7 @@ import { afKay } from "./af-kay";
 import { edwinVanCleef } from "./edwin-van-cleef";
 import { georgeTheFallen } from "./george-the-fallen";
 import { jandiceBarov } from "./jandice-barov";
+import { kingMukla } from "./king-mukla";
 import { lichBazHial } from "./lich-bazhial";
 import { millificentManastorm } from "./millificent-manastorm";
 import { patchwerk } from "./patchwerk";
@@ -31,6 +32,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [rakanishu.id]: rakanishu,
   [theCurator.id]: theCurator,
   [yoggSaron.id]: yoggSaron,
+  [kingMukla.id]: kingMukla,
 };
 
 export function getHero(id: HeroId): Hero {

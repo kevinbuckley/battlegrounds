@@ -141,7 +141,7 @@ run_iteration() {
 
   if [[ $typecheck_ok -eq 1 && $tests_ok -eq 1 && $real_diff -eq 1 ]]; then
     local fixed_line
-    fixed_line=$(grep -E '^FIXED:' "$iter_log" | tail -1 || echo 'FIXED: (no marker found)')
+    fixed_line=$(grep -oE 'FIXED: .+' "$iter_log" | tail -1 || echo 'FIXED: (no marker found)')
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $current | $fixed_line"
     log "  ✓ iteration succeeded — $fixed_line"
   else

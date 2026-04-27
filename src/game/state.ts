@@ -5,6 +5,7 @@ import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES, theCurator } from "./heroes/index";
+import { grantBanana } from "./heroes/king-mukla";
 import { ensureCuratorShop } from "./heroes/the-curator";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
@@ -680,6 +681,11 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     // The Curator passive: ensure shop contains at least one of each tribe on board
     if (player.id === 0 && player.heroId === theCurator.id) {
       next = ensureCuratorShop(next, player.id, rng);
+    }
+
+    // King Mukla passive: grant a Banana each turn
+    if (player.id === 0 && player.heroId === "king_mukla") {
+      next = grantBanana(next, player.id);
     }
 
     // Activate buddies that have reached their activation turn

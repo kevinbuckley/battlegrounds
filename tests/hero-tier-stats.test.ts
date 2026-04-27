@@ -89,9 +89,9 @@ describe("hero tier stats", () => {
     expect(armorToTier(afKay!.startArmor)).toBe(2);
   });
 
-  it("all 14 non-stub heroes have valid HP/armor tier mappings", () => {
+  it("all 15 non-stub heroes have valid HP/armor tier mappings", () => {
     const nonStubIds = getAllHeroIds().filter((id) => id !== "stub_hero");
-    expect(nonStubIds).toHaveLength(14);
+    expect(nonStubIds).toHaveLength(15);
 
     for (const id of nonStubIds) {
       const hero = HEROES[id as HeroId];

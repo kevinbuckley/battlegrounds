@@ -16,8 +16,8 @@ import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 7 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(7);
+  it("exports exactly 8 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(8);
   });
 
   it.each([

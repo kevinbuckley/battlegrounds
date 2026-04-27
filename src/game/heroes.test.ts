@@ -3,7 +3,7 @@ import { makeRng } from "@/lib/rng";
 import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
-import { beginRecruitTurn, makeInitialState, step } from "./state";
+import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "./state";
 import type { Hero } from "./types";
 
 const RNG = makeRng(1);
@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 14 gameplay heroes (excluding stub)", () => {
+  it("contains all 15 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(14);
+    expect(ids).toHaveLength(15);
   });
 
   it("every hero has a description", () => {
@@ -282,5 +282,40 @@ describe("The Curator passive", () => {
     const curState = beginRecruitTurn(state, RNG);
     // Shop should just be the normal roll, no extra guarantees needed
     expect(curState.players[0]!.shop.length).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// King Mukla
+// ---------------------------------------------------------------------------
+
+describe("King Mukla", () => {
+  it("grants a Banana spell at start of first recruit turn", () => {
+    const state = makeInitialState(42);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "king_mukla" }, makeRng(42));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
+    }
+    expect(s.phase.kind).toBe("Recruit");
+    const player = s.players[0]!;
+    const bananas = player.spells.filter((sp) => sp.cardId === "banana");
+    expect(bananas).toHaveLength(1);
+  });
+
+  it("grants a new Banana each subsequent recruit turn", () => {
+    const state = makeInitialState(99);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "king_mukla" }, makeRng(99));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(99));
+    }
+    // After first recruit turn: 1 banana
+    expect(s.players[0]!.spells.filter((sp) => sp.cardId === "banana")).toHaveLength(1);
+
+    // End turn to trigger combat + next recruit turn
+    s = step(s, { kind: "EndTurn", player: 0 }, makeRng(99));
+    // After second recruit turn: 2 bananas
+    const player = s.players[0]!;
+    const bananas = player.spells.filter((sp) => sp.cardId === "banana");
+    expect(bananas).toHaveLength(2);
   });
 });
