@@ -746,3 +746,96 @@ describe("bounty keyword", () => {
     expect(after.players[0]!.gold).toBe(5); // 10 - 5 (bountyCost)
   });
 });
+
+// ---------------------------------------------------------------------------
+// Cobalt Scalebane — onTurnEnd hook
+// ---------------------------------------------------------------------------
+
+describe("cobalt_scalebane onTurnEnd", () => {
+  it("is registered in MINIONS", () => {
+    expect(MINIONS["cobalt_scalebane"]).toBeDefined();
+    expect(MINIONS["cobalt_scalebane"]!.tier).toBe(3);
+    expect(MINIONS["cobalt_scalebane"]!.tribes).toContain("Dragon");
+  });
+
+  it("onTurnEnd gives a random friendly minion +3 ATK", () => {
+    const cs = MINIONS["cobalt_scalebane"];
+    expect(cs).toBeDefined();
+    const inst = instantiate(cs!);
+    const otherMinion = defineMinion({
+      id: "test_dragon_ally",
+      name: "Test Dragon Ally",
+      tier: 3,
+      tribes: ["Dragon"],
+      baseAtk: 2,
+      baseHp: 3,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[otherMinion.id] = otherMinion;
+    const ally = instantiate(otherMinion);
+
+    const state = makeTestState({
+      board: [inst, ally],
+    });
+
+    // Simulate end of turn by calling onTurnEnd directly
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cs!.hooks.onTurnEnd!(ctx);
+    const board = after.players[0]!.board;
+
+    // The ally should have gained +3 ATK
+    const allyAfter = board.find((m) => m.instanceId === ally.instanceId);
+    expect(allyAfter).toBeDefined();
+    expect(allyAfter!.atk).toBe(5); // 2 + 3
+  });
+
+  it("onTurnEnd skips self when only minion on board", () => {
+    const cs = MINIONS["cobalt_scalebane"];
+    const inst = instantiate(cs!);
+
+    const state = makeTestState({
+      board: [inst],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cs!.hooks.onTurnEnd!(ctx);
+    // Self should not buff itself
+    const board = after.players[0]!.board;
+    const selfAfter = board.find((m) => m.instanceId === inst.instanceId);
+    expect(selfAfter!.atk).toBe(5); // base, unchanged
+  });
+
+  it("onTurnEnd does nothing when board is empty", () => {
+    const cs = MINIONS["cobalt_scalebane"];
+    const inst = instantiate(cs!);
+
+    const state = makeTestState({
+      board: [],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cs!.hooks.onTurnEnd!(ctx);
+    // Should not crash with empty board
+    expect(after.players[0]!.board).toHaveLength(0);
+  });
+});

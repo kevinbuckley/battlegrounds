@@ -259,6 +259,23 @@ function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   const nextTurn = state.turn + 1;
   let result = { ...state, turn: nextTurn };
 
+  // Fire onTurnEnd hooks for all minions on the player's board
+  const player = getPlayer(result, playerId);
+  if (!player.eliminated) {
+    for (const minion of player.board) {
+      if (minion.hooks?.onTurnEnd) {
+        const ctx: import("./types").RecruitCtx = {
+          self: minion,
+          playerId,
+          state: result,
+          rng,
+          spellDamage: totalSpellDamage(player),
+        };
+        result = minion.hooks.onTurnEnd(ctx);
+      }
+    }
+  }
+
   // Check for triples at end of turn (between rounds)
   result = checkAndProcessTriples(result, playerId, rng);
 
