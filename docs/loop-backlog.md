@@ -88,6 +88,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Wire up hero power target selection for georgeTheFallen, scabbsCutterbutter, sirFinley — click board minion to select target before using power
 - [x] [S] Add `Tavern Brawler` buff spell — give friendly minion +2/+1
 - [x] [S] Add `Brawl` buff spell — give friendly minion +1/+2
+- [x] [S] Wire Ysera hero passive into beginRecruitTurn — adds random Dragon from current tier to shop each turn
 
 ### M11 — Tier 6 minions (in progress)
 

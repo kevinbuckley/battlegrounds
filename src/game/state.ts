@@ -4,6 +4,8 @@ import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES } from "./heroes/index";
+import { instantiate } from "./minions/define";
+import { MINIONS } from "./minions/index";
 import {
   buildPool,
   buyMinion,
@@ -23,6 +25,7 @@ import type {
   AnomalyCard,
   GameState,
   HeroId,
+  MinionCard,
   MinionInstance,
   ModifierId,
   PlayerState,
@@ -592,6 +595,23 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     }));
 
     next = rollShopForPlayer(next, player.id, rng.fork(`shop:${player.id}:${turn}`));
+
+    // Ysera passive: add a random Dragon from the current tier to the shop
+    if (player.id === 0 && player.heroId === "ysera") {
+      const allMinionCards = Object.values(MINIONS) as MinionCard[];
+      const dragonMinions = allMinionCards.filter(
+        (m) => m.tribes.includes("Dragon") && m.tier === player.tier,
+      );
+      if (dragonMinions.length > 0) {
+        const idx = Math.floor(rng.next() % dragonMinions.length);
+        const chosen = dragonMinions[idx]!;
+        const minionInstance = instantiate(chosen);
+        next = updatePlayer(next, player.id, (p) => ({
+          ...p,
+          shop: [...p.shop, minionInstance],
+        }));
+      }
+    }
   }
 
   return next;

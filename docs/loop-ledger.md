@@ -73,3 +73,4 @@
 2026-04-27 | 9a2aa4f | FIXED: Add Gnoma Tinker tier 1 elemental with battlecry gaining 1 gold
 2026-04-27 | 49bba3d | FIXED: Add Blingtron 5000 tier 5 mech with battlecry summoning two 1/1 Robot Pups
 2026-04-27 | 576dffc | FIXED: Verify triple detection feature complete — 12 passing tests, triples.ts implementation, discover flow wired into endTurn
+2026-04-27 | 851c0cb | FIXED: Wire Ysera hero passive into beginRecruitTurn — adds a random Dragon minion from the current tier to the shop at the start of each turn

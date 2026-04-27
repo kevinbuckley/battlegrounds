@@ -412,3 +412,78 @@ describe("Ragnaros hero passive", () => {
     expect(result.players[0]!.heroId).toBe("stub_hero");
   });
 });
+
+describe("Ysera hero passive", () => {
+  it("adds a random Dragon to the shop at the start of each turn", () => {
+    const state = makeInitialState(42);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "ysera" }, makeRng(42));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
+    }
+    // First recruit turn — Ysera passive should add a dragon to shop
+    expect(s.phase.kind).toBe("Recruit");
+    const shopAfterFirst = s.players[0]!.shop;
+    const dragonsOnShop = shopAfterFirst.filter((m) => m.tribes.includes("Dragon"));
+    expect(dragonsOnShop.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("adds a dragon from the current tier", () => {
+    const state = makeInitialState(77);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "ysera" }, makeRng(77));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(77));
+    }
+    // Tier 1 — should add a tier 1 dragon
+    const tier1Dragons = Object.values(MINIONS).filter(
+      (m) => m.tribes.includes("Dragon") && m.tier === 1,
+    );
+    expect(tier1Dragons.length).toBeGreaterThan(0);
+    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    for (const dragon of shopDragons) {
+      const card = MINIONS[dragon.cardId];
+      expect(card!.tier).toBe(1);
+    }
+  });
+
+  it("adds a dragon from tier 2 when player is tier 2", () => {
+    const state = makeInitialState(99);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "ysera" }, makeRng(99));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(99));
+    }
+    // Manually set player to tier 1 with enough gold to upgrade
+    s = {
+      ...s,
+      players: s.players.map((p, i) =>
+        i === 0 ? { ...p, gold: 4, tier: 1, upgradeCost: 4, upgradedThisTurn: false } : p,
+      ),
+    };
+    // Upgrade to tier 2
+    s = step(s, { kind: "UpgradeTier", player: 0 }, makeRng(99));
+    // End turn to trigger new recruit turn with Ysera passive
+    s = step(s, { kind: "EndTurn", player: 0 }, makeRng(99));
+    // Should be back to recruit phase
+    expect(s.phase.kind).toBe("Recruit");
+    // Check that shop has dragons matching tier 2
+    const tier2Dragons = Object.values(MINIONS).filter(
+      (m) => m.tribes.includes("Dragon") && m.tier === 2,
+    );
+    expect(tier2Dragons.length).toBeGreaterThan(0);
+    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    for (const dragon of shopDragons) {
+      const card = MINIONS[dragon.cardId];
+      expect(card!.tier).toBe(2);
+    }
+  });
+
+  it("does not add dragons for non-Ysera heroes", () => {
+    const state = makeInitialState(42);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "stub_hero" }, makeRng(42));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
+    }
+    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    // Stub hero should NOT have extra dragons added
+    expect(shopDragons.length).toBe(0);
+  });
+});
