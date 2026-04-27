@@ -115,6 +115,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M5 — Tier 3 minions (in progress)
 
 - [ ] [S] Add `Markku` (tier 3): murloc, battlecry summon a random murloc from your board
+- [ ] [S] Add `Gromsch` (tier 3): beast, deathrattle summon a 3/3 Grunt
 
 ### M10 — Quest framework (in progress)
 
