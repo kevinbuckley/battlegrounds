@@ -23,6 +23,7 @@ import type {
   AnomalyCard,
   GameState,
   HeroId,
+  MinionInstance,
   ModifierId,
   PlayerState,
   Tier,
@@ -289,6 +290,108 @@ function dismissDiscover(state: GameState, playerId: number): GameState {
 // Combat phase
 // ---------------------------------------------------------------------------
 
+function findLowestAtkMinion(board: MinionInstance[]): MinionInstance | null {
+  if (board.length === 0) return null;
+  let lowest = board[0]!;
+  for (let i = 1; i < board.length; i++) {
+    const m = board[i]!;
+    if (m.atk < lowest.atk) {
+      lowest = m;
+    }
+  }
+  return lowest;
+}
+
+function applyRagnarosPassive(
+  state: GameState,
+  ragnarosId: import("./types").PlayerId,
+  opponentId: import("./types").PlayerId,
+  rng: Rng,
+): GameState {
+  const opponent = getPlayer(state, opponentId);
+  const aliveBoard = opponent.board.filter((m) => m.hp > 0);
+  if (aliveBoard.length === 0) return state;
+
+  // Find lowest-ATK enemy minion (ties broken by board position)
+  let lowest = aliveBoard[0]!;
+  for (let i = 1; i < aliveBoard.length; i++) {
+    const m = aliveBoard[i]!;
+    if (m.atk < lowest.atk) {
+      lowest = m;
+    }
+  }
+
+  const idx = opponent.board.indexOf(lowest);
+  if (idx === -1) return state;
+
+  return updatePlayer(state, opponentId, (p) => {
+    const newBoard = [...p.board];
+    const mi = newBoard[idx]!;
+    newBoard[idx] = { ...mi, hp: mi.hp - 8 };
+    return { ...p, board: newBoard };
+  });
+}
+
+function applyRagnarosAfterCombat(
+  state: GameState,
+  leftId: import("./types").PlayerId,
+  rightId: import("./types").PlayerId,
+): GameState {
+  let result = state;
+  const left = getPlayer(result, leftId);
+  const right = getPlayer(result, rightId);
+
+  // Ragnaros on left side: deal 8 damage to lowest-ATK enemy minion (right side)
+  if (left.heroId === "ragnaros") {
+    const enemyBoard = right.board.filter((m) => m.hp > 0);
+    if (enemyBoard.length > 0) {
+      const target = findLowestAtkMinion(enemyBoard);
+      if (target) {
+        const idx = right.board.indexOf(target);
+        if (idx !== -1) {
+          result = updatePlayer(result, rightId, (p) => {
+            const newBoard = [...p.board];
+            const mi = newBoard[idx]!;
+            newBoard[idx] = { ...mi, hp: mi.hp - 8 };
+            return { ...p, board: newBoard };
+          });
+        }
+      }
+    }
+  }
+
+  // Ragnaros on right side: deal 8 damage to lowest-ATK enemy minion (left side)
+  if (right.heroId === "ragnaros") {
+    const enemyBoard = left.board.filter((m) => m.hp > 0);
+    if (enemyBoard.length > 0) {
+      const target = findLowestAtkMinion(enemyBoard);
+      if (target) {
+        const idx = left.board.indexOf(target);
+        if (idx !== -1) {
+          result = updatePlayer(result, leftId, (p) => {
+            const newBoard = [...p.board];
+            const mi = newBoard[idx]!;
+            newBoard[idx] = { ...mi, hp: mi.hp - 8 };
+            return { ...p, board: newBoard };
+          });
+        }
+      }
+    }
+  }
+
+  // Filter out dead minions from both boards
+  result = updatePlayer(result, leftId, (p) => ({
+    ...p,
+    board: p.board.filter((m) => m.hp > 0),
+  }));
+  result = updatePlayer(result, rightId, (p) => ({
+    ...p,
+    board: p.board.filter((m) => m.hp > 0),
+  }));
+
+  return result;
+}
+
 function resolveCombat(state: GameState, rng: Rng): GameState {
   // Collect alive players in order
   const alivePlayers = state.players.filter((p) => !p.eliminated);
@@ -316,6 +419,9 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
     const combatResult = simulateCombat(leftBoard, rightBoard, rng);
 
     result = applyCombatResult(result, leftId, rightId, combatResult);
+
+    // Apply Ragnaros hero passive after combat result: deal 8 damage to lowest-ATK enemy minion
+    result = applyRagnarosAfterCombat(result, leftId, rightId);
   }
 
   // Check for game over

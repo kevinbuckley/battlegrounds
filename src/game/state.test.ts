@@ -323,3 +323,92 @@ describe("recruit phase — all action types dispatch without throwing", () => {
     expect(() => step(state, { kind: "UpgradeTier", player: 0 }, RNG)).toThrow("Not enough gold");
   });
 });
+
+describe("Ragnaros hero passive", () => {
+  function makeRagnarosState(
+    board0: MinionInstance[] = [],
+    board1: MinionInstance[] = [],
+    board2: MinionInstance[] = [],
+    board3: MinionInstance[] = [],
+    board4: MinionInstance[] = [],
+    board5: MinionInstance[] = [],
+    board6: MinionInstance[] = [],
+    board7: MinionInstance[] = [],
+  ): GameState {
+    const state = makeInitialState(42);
+    const boards = [board0, board1, board2, board3, board4, board5, board6, board7];
+    // Select Ragnaros for player 0, stub for others
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "ragnaros" }, makeRng(42));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
+    }
+    return {
+      ...s,
+      phase: { kind: "Recruit", turn: 5 },
+      turn: 5,
+      players: s.players.map((p, i) => ({
+        ...p,
+        board: boards[i]!,
+        shop: [],
+        hand: [],
+        tier: 3,
+      })),
+    };
+  }
+
+  it("deals 8 damage to lowest-ATK enemy minion at start of combat", () => {
+    const alley = instantiate(MINIONS["alley_cat"]!); // tier 1, 1/1
+    const state = makeRagnarosState([alley], [], [], [], [], [], [], []);
+    // Player 0 is Ragnaros, player 1 has an alley cat (1/1)
+    // Player 0 (Ragnaros) fights player 1
+    // Ragnaros passive: deal 8 damage to lowest-ATK enemy minion (player 1's alley cat)
+    // Alley cat has 1 HP, so it dies (1 - 8 = -7)
+    const result = step(state, { kind: "EndTurn", player: 0 }, makeRng(42));
+    const opponent = result.players[1]!;
+    expect(opponent.board.length).toBe(0); // alley cat should be dead
+  });
+
+  it("targets lowest-ATK minion when multiple enemies exist", () => {
+    const strong = instantiate(MINIONS["dragonspawn_lieutenant"]!); // tier 4, 4/6
+    const weak = instantiate(MINIONS["alley_cat"]!); // tier 1, 1/1
+    const state = makeRagnarosState([], [weak, strong], [], [], [], [], [], []);
+    // Player 0 is Ragnaros, player 1 has alley cat (1/1) and dragon (4/6)
+    // Ragnaros passive: deal 8 damage to lowest-ATK enemy (alley cat → -7 HP)
+    // Combat: player 0 has no minions, player 1 wins with dragon remaining
+    const result = step(state, { kind: "EndTurn", player: 0 }, makeRng(42));
+    const opponent = result.players[1]!;
+    // Alley cat (1/1) should be dead (1 - 8 = -7), filtered out
+    // Dragon (4/6) survives combat (player 1 wins, no enemy minions)
+    const dragonAlive = opponent.board.find((m) => m.cardId === "dragonspawn_lieutenant");
+    expect(dragonAlive).toBeDefined();
+    const alleyAlive = opponent.board.find((m) => m.cardId === "alley_cat");
+    expect(alleyAlive).toBeUndefined();
+  });
+
+  it("does nothing when enemy has no minions", () => {
+    const state = makeRagnarosState([], [], [], [], [], [], [], []);
+    const result = step(state, { kind: "EndTurn", player: 0 }, makeRng(42));
+    // No change expected since no enemies to target
+    expect(result.players[0]!.heroId).toBe("ragnaros");
+  });
+
+  it("does not fire for non-Ragnaros heroes", () => {
+    const state = selectAllHeroes(makeInitialState(42));
+    const alley = instantiate(MINIONS["alley_cat"]!);
+    const stateWithBoard: GameState = {
+      ...state,
+      phase: { kind: "Recruit", turn: 5 },
+      turn: 5,
+      players: state.players.map((p, i) => ({
+        ...p,
+        board: i === 0 ? [alley] : [],
+        shop: [],
+        hand: [],
+        tier: 3,
+      })),
+    };
+    const result = step(stateWithBoard, { kind: "EndTurn", player: 0 }, makeRng(42));
+    // Player 0 is stub_hero, not Ragnaros, so no 8 damage should be dealt
+    expect(result.players[0]!.heroId).toBe("stub_hero");
+  });
+});

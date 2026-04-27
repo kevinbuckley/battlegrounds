@@ -45,11 +45,12 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M6 — Heroes (start with passives, no actives yet)
 
 - [x] [M] Hero type + power interface in `src/game/types.ts` + `src/game/heroes/`
-- [ ] [S] Add `Rakanishu` hero — placeholder no-power passive hero
-- [ ] [S] Add `Patchwerk` hero — start with 50 HP, no power
+- [x] [S] Add `Rakanishu` hero — placeholder no-power passive hero
+- [x] [S] Add `Patchwerk` hero — start with 50 HP, no power
 - [x] [S] Add `Lich Baz'hial` hero — start with 40 HP, gain 2 gold by losing 3 HP (active)
 - [x] [S] Hero select screen: 4 random heroes offered at lobby start
 - [x] [S] Test: starting HP/armor matches hero tier (25/30/35/40 + 0/3/5/7/9 armor)
+- [x] [S] Wire Ragnaros passive — deal 8 damage to lowest-ATK enemy minion at start of combat
 
 ### M8 — UI (visible progress; great for daytime iterations)
 

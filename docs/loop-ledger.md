@@ -59,3 +59,4 @@
 2026-04-27 | b42265d | FIXED: Add rush keyword — type, combat emission, Rush Minion tier 1 card, registry update, and tests
 2026-04-27 | 1614d45 | FIXED: Add spellDamage property to MinionCard/MinionInstance types, wire into playSpell and playMinionToBoard, add Arcane Tinker tier 3 mech with spellDamage +1
 2026-04-27 | 15fe0c8 | FIXED: Wire up georgeTheFallen hero power UI with board minion target selection, visual feedback, and clear target button
+2026-04-27 | 3a74031 | FIXED: Wire Ragnaros passive — deal 8 damage to lowest-ATK enemy minion at start of combat, with unit tests
