@@ -26,6 +26,7 @@ export type Keyword =
   | "cleave"
   | "lifesteal"
   | "rush"
+  | "freeze"
   | `collateralDamage${number}`;
 
 export type MinionCardId = string;

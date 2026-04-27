@@ -56,6 +56,12 @@ export function simulateCombat(
 
     const attacker = (isLeft ? left : right)[ptr]!;
 
+    // Skip frozen minions — they cannot attack
+    if (attacker.keywords.has("freeze")) {
+      side = isLeft ? "right" : "left";
+      continue;
+    }
+
     // Pick primary target (taunt-aware)
     const target = pickTarget(isLeft ? right : left, rng);
 
@@ -238,6 +244,7 @@ function fireRushAttacks(
   for (const m of rushBoard) {
     if (!m.keywords.has("rush")) continue;
     if (defenders.length === 0) continue;
+    if (m.keywords.has("freeze")) continue;
     const target = pickTarget(defenders, rng);
     if (!target) continue;
 

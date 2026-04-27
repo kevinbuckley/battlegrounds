@@ -352,3 +352,64 @@ describe("start-of-combat hook (onStartOfCombat)", () => {
     expect(statEvent).toBeDefined();
   });
 });
+
+// ---------------------------------------------------------------------------
+// Freeze
+// ---------------------------------------------------------------------------
+
+describe("freeze", () => {
+  it("frozen minion cannot attack during normal combat cycle", () => {
+    const frozen = make(3, 10, ["freeze"]);
+    const attacker = make(2, 10);
+    const r = simulateCombat([attacker, frozen], [make(1, 10)], makeRng(0));
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    const frozenAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === frozen.instanceId,
+    );
+    expect(frozenAttacks).toHaveLength(0);
+  });
+
+  it("frozen minion is still targeted by enemies", () => {
+    const frozen = make(3, 10, ["freeze"]);
+    const attacker = make(5, 10);
+    const r = simulateCombat([frozen], [attacker], makeRng(0));
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // The frozen minion should never attack, but the enemy should attack it
+    const frozenAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === frozen.instanceId,
+    );
+    expect(frozenAttacks).toHaveLength(0);
+    // Enemy attacks the frozen minion
+    const enemyAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === attacker.instanceId,
+    );
+    expect(enemyAttacks.length).toBeGreaterThan(0);
+  });
+
+  it("frozen minion still takes damage normally", () => {
+    const frozen = make(3, 5, ["freeze"]);
+    const attacker = make(3, 10);
+    const r = simulateCombat([frozen], [attacker], makeRng(0));
+    const damageToFrozen = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === frozen.instanceId,
+    );
+    expect(damageToFrozen.length).toBeGreaterThan(0);
+  });
+
+  it("frozen minion still counterattacks when hit", () => {
+    const frozen = make(3, 10, ["freeze"]);
+    const attacker = make(2, 10);
+    const r = simulateCombat([frozen], [attacker], makeRng(0));
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // Frozen minion counterattacks (it still deals damage, just doesn't initiate)
+    const frozenAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === frozen.instanceId,
+    );
+    expect(frozenAttacks).toHaveLength(0);
+    // But the frozen minion's attack stat still deals damage via counterattack
+    const damageFromFrozen = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === attacker.instanceId,
+    );
+    expect(damageFromFrozen.length).toBeGreaterThan(0);
+  });
+});
