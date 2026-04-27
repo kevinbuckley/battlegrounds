@@ -31,6 +31,7 @@ import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import broodkinZealot from "./tier4/broodkin-zealot";
 import crystalweaver from "./tier4/crystalweaver";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
+import blingtron5000 from "./tier5/blingtron-5000";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
 import terestianManferris from "./tier6/terestian-manferris";
@@ -69,6 +70,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [broodkinZealot.id]: broodkinZealot,
   [crystalweaver.id]: crystalweaver,
   [nagaSecretGuardian.id]: nagaSecretGuardian,
+  [blingtron5000.id]: blingtron5000,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [terestianManferris.id]: terestianManferris,
