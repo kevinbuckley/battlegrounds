@@ -6,6 +6,7 @@ import { describe, expect, it } from "vitest";
 import { simulateCombat } from "@/game/combat";
 import { instantiate } from "@/game/minions/define";
 import { MINIONS } from "@/game/minions/index";
+import alleyCatCard from "@/game/minions/tier1/alley-cat";
 import { playMinionToBoard } from "@/game/shop";
 import { makeInitialState } from "@/game/state";
 import { makeRng } from "@/lib/rng";
@@ -208,5 +209,85 @@ describe("metaltooth_leaper battlecry", () => {
     expect(mechOnBoard.atk).toBe(mech.atk + 2); // buffed
     expect(nonMechOnBoard.atk).toBe(nonMech.atk); // not buffed
     expect(leaperOnBoard.atk).toBe(leaper.atk); // self not buffed
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Alley Cat battlecry
+// ---------------------------------------------------------------------------
+
+describe("alley_cat battlecry", () => {
+  it("summons a random minion from your hand on play", () => {
+    const rng = makeRng(0);
+    const alleyCat = instantiate(alleyCatCard);
+    const state = makeInitialState(42);
+    const handMinion = instantiate(MINIONS["murloc_tidehunter"]!);
+    const handMinion2 = instantiate(MINIONS["flame_imp"]!);
+
+    const withBoard = {
+      ...state,
+      phase: { kind: "Recruit" as const, turn: 1 },
+      players: state.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              hand: [alleyCat, handMinion, handMinion2],
+              board: [instantiate(MINIONS["taunt_minion"]!)],
+              gold: 10,
+              tier: 1 as const,
+            }
+          : p,
+      ),
+    };
+
+    const after = playMinionToBoard(withBoard, 0, 0, 1, rng);
+    const board = after.players[0]!.board;
+    const hand = after.players[0]!.hand;
+
+    // Alley Cat should be on the board
+    const catOnBoard = board.find((m) => m.cardId === "alley_cat");
+    expect(catOnBoard).toBeDefined();
+
+    // One minion from hand should have been moved to the board by battlecry
+    expect(hand).toHaveLength(1);
+
+    // The board should have 3 minions (1 original + alley cat + 1 from battlecry)
+    expect(board).toHaveLength(3);
+
+    // The minion that was moved from hand should be on the board
+    const movedMinion = board.find(
+      (m) => m.instanceId === handMinion.instanceId || m.instanceId === handMinion2.instanceId,
+    );
+    expect(movedMinion).toBeDefined();
+  });
+
+  it("does nothing when hand has no minions", () => {
+    const rng = makeRng(0);
+    const state = makeInitialState(42);
+    const alleyCat = instantiate(alleyCatCard);
+
+    const withBoard = {
+      ...state,
+      phase: { kind: "Recruit" as const, turn: 1 },
+      players: state.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              hand: [alleyCat],
+              board: [instantiate(MINIONS["taunt_minion"]!)],
+              gold: 10,
+              tier: 1 as const,
+            }
+          : p,
+      ),
+    };
+
+    const after = playMinionToBoard(withBoard, 0, 0, 1, rng);
+    const board = after.players[0]!.board;
+    const hand = after.players[0]!.hand;
+
+    // Alley Cat on board, hand unchanged (alley cat itself is not in hand)
+    expect(board).toHaveLength(2);
+    expect(hand).toHaveLength(0);
   });
 });

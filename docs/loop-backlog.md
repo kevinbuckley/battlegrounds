@@ -101,6 +101,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M12 — Tier 1 minions (in progress)
 
+- [x] [S] Add `Alley Cat` (tier 1): beast, battlecry summon a random minion from your hand
 - [ ] [S] Add `Gnoma Tinker` (tier 1): elemental, battlecry gain 1 gold
 
 ### M5 — Tier 3 minions (in progress)
