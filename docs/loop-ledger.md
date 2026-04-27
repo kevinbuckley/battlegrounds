@@ -1,3 +1,4 @@
+2026-04-27 | 47342cc | FIXED: Add Junkbot tier 5 mech (onAllyDeath gains +2/+2 when friendly Mech dies), add deadSide to AllyDeathCombatCtx, update combat.ts call site, with unit tests
 2026-04-27 | 85159eb | FIXED: Add Selfless Hero tier 2 minion (deathrattle gives random friendly minion divine shield) and Metaltooth Leaper tier 2 mech (battlecry gives other friendly Mechs +2 ATK), with registry update
 2026-04-27 | c43160b | FIXED: Add Defender of Argus tier 4 mech with battlecry giving adjacent friendly minions +1/+1 and taunt, with registry update
 2026-04-27 | 0318d5a | FIXED: Add Knife Juggler tier 2 minion with onSummon hook dealing 1 damage to random enemy minion, with unit tests

@@ -291,3 +291,83 @@ describe("alley_cat battlecry", () => {
     expect(hand).toHaveLength(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Junkbot
+// ---------------------------------------------------------------------------
+
+describe("junkbot", () => {
+  it("gains +2/+2 when a friendly mech dies in combat", () => {
+    const junkbot = m("junkbot"); // 1/4
+    // Use a weak mech that will die: Annoy-o-Tron is 1/1 with taunt+divineShield
+    // We need it to die, so use a strong killer. Broodkin Zealot is 3/4 with taunt+divineShield.
+    // Instead, use a 3/3 mech that dies to a 4/5 killer.
+    // Simplest: use harvest_golem (2/3 Mech) as the sacrificial mech
+    const sacrificialMech = instantiate(MINIONS["harvest_golem"]!); // 2/3 Mech
+    // Give it low HP so it dies quickly
+    sacrificialMech.hp = 1;
+    sacrificialMech.maxHp = 1;
+    // Use a strong killer: Broodkin Zealot is 3/4
+    const killer = instantiate(MINIONS["broodkin_zealot"]!); // 3/4
+
+    // left: [sacrificialMech (1/1), junkbot (1/4)], right: [killer (3/4)]
+    // sacrificialMech (1/1) attacks killer (3/4): deals 1 (3→3hp), killer counterattacks deals 3 (dies, 1-3=-2)
+    // sacrificialMech survives with -2 HP → dies → junkbot gains +2/+2
+    const r = simulateCombat([sacrificialMech, junkbot], [killer], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && e.target === junkbot.instanceId,
+    );
+    // Should have at least one stat event showing the buff
+    const buffEvent = statEvents.find((e) => e.kind === "Stat" && e.atk === 3);
+    expect(buffEvent).toBeDefined();
+    if (buffEvent?.kind === "Stat") {
+      expect(buffEvent.atk).toBe(3); // 1 + 2
+      expect(buffEvent.hp).toBe(6); // 4 + 2
+    }
+  });
+
+  it("does NOT gain +2/+2 when a non-mech ally dies", () => {
+    const junkbot = m("junkbot"); // 1/4
+    const beast = instantiate(MINIONS["bristleback_boys"]!); // 1/1
+    const killer = m("wrath_weaver"); // 1/3
+
+    const r = simulateCombat([beast, junkbot], [killer], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && e.target === junkbot.instanceId,
+    );
+    // Should have no stat events showing a buff (only initial stat if any)
+    const buffEvents = statEvents.filter((e) => e.kind === "Stat" && (e.atk > 1 || e.hp > 4));
+    expect(buffEvents).toHaveLength(0);
+  });
+
+  it("stacks: gains +4/+4 after two friendly mechs die", () => {
+    const junkbot = m("junkbot"); // 1/4
+    // Use 1/1 minions and change their tribe to Mech (no deathrattle)
+    const mech1 = instantiate(MINIONS["alley_cat"]!);
+    mech1.tribes = ["Mech"];
+    mech1.atk = 1;
+    mech1.hp = 1;
+    mech1.maxHp = 1;
+    const mech2 = instantiate(MINIONS["alley_cat"]!);
+    mech2.tribes = ["Mech"];
+    mech2.atk = 1;
+    mech2.hp = 1;
+    mech2.maxHp = 1;
+    // Two 1/1 killers so both mechs get to trade
+    const killer1 = instantiate(MINIONS["alley_cat"]!);
+    const killer2 = instantiate(MINIONS["alley_cat"]!);
+
+    // left: [mech1 (1/1), mech2 (1/1), junkbot (1/4)], right: [killer1 (1/1), killer2 (1/1)]
+    // Right goes first (2 vs 3 → left has more, left goes first)
+    // mech1 (1/1) attacks killer1 (1/1): both die (trade) → junkbot +2/+2 (3/6)
+    // mech2 (1/1) attacks killer2 (1/1): both die (trade) → junkbot +2/+2 (5/8)
+    // junkbot survives at 5/8
+    const r = simulateCombat([mech1, mech2, junkbot], [killer1, killer2], makeRng(0));
+    const finalJunkbot = r.survivorsLeft.find((m) => m.cardId === "junkbot");
+    expect(finalJunkbot).toBeDefined();
+    if (finalJunkbot) {
+      expect(finalJunkbot.atk).toBe(5); // 1 + 2 + 2
+      expect(finalJunkbot.hp).toBe(8); // 4 + 2 + 2
+    }
+  });
+});

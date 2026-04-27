@@ -83,6 +83,8 @@ export interface AttackCombatCtx extends CombatCtx {
 export interface AllyDeathCombatCtx extends CombatCtx {
   /** The minion that just died. */
   dead: MinionInstance;
+  /** Which side the dead minion was on. */
+  deadSide: Side;
 }
 
 export interface SummonCombatCtx extends CombatCtx {

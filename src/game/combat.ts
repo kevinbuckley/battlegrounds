@@ -186,6 +186,7 @@ function reapDeaths(
           emit,
           rng,
           dead,
+          deadSide,
         };
         ally.hooks?.onAllyDeath?.(ctx);
       }
