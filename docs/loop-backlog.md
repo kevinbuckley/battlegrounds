@@ -82,8 +82,10 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### M10 — Keywords (in progress)
 
 - [x] [S] Add `rush` keyword — minion can attack on the turn it enters the board
-- [ ] [S] Add `spellDamage` — board minions contribute static bonus to spell damage
-- [ ] [S] Wire up hero power target selection for georgeTheFallen, scabbsCutterbutter, sirFinley — click board minion to select target before using power
+- [x] [S] Add `spellDamage` — board minions contribute static bonus to spell damage
+- [x] [S] Wire up hero power target selection for georgeTheFallen, scabbsCutterbutter, sirFinley — click board minion to select target before using power
+- [x] [S] Add `Tavern Brawler` buff spell — give friendly minion +2/+1
+- [x] [S] Add `Brawl` buff spell — give friendly minion +1/+2
 
 ---
 

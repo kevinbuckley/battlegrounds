@@ -1,22 +1,30 @@
 import { describe, expect, it } from "vitest";
 import {
+  brawl,
   duskrayBuff,
   getAllSpellIds,
   getSpell,
   pancakeSpell,
   poisonDartShield,
   SPELLS,
+  tavernBrawler,
 } from "@/game/spells";
 import { makeInitialState, rngForTurn, step } from "@/game/state";
 import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 3 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(3);
+  it("exports exactly 5 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(5);
   });
 
-  it.each([poisonDartShield, duskrayBuff, pancakeSpell])("%s has valid fields", (spell) => {
+  it.each([
+    poisonDartShield,
+    duskrayBuff,
+    pancakeSpell,
+    tavernBrawler,
+    brawl,
+  ])("%s has valid fields", (spell) => {
     expect(spell.id).toBeDefined();
     expect(spell.name).toBeDefined();
     expect(spell.description.length).toBeGreaterThan(0);
@@ -81,5 +89,25 @@ describe("pancake", () => {
 
   it("costs 1 gold", () => {
     expect(pancakeSpell.cost).toBe(1);
+  });
+});
+
+describe("tavern brawler", () => {
+  it("is available at tiers 3-6 only", () => {
+    expect(tavernBrawler.tiers).toEqual([3, 4, 5, 6]);
+  });
+
+  it("costs 2 gold", () => {
+    expect(tavernBrawler.cost).toBe(2);
+  });
+});
+
+describe("brawl", () => {
+  it("is available at tiers 3-6 only", () => {
+    expect(brawl.tiers).toEqual([3, 4, 5, 6]);
+  });
+
+  it("costs 2 gold", () => {
+    expect(brawl.cost).toBe(2);
   });
 });

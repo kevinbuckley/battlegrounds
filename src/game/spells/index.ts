@@ -110,10 +110,74 @@ export const pancakeSpell: SpellCard = {
   },
 };
 
+/** Give a friendly minion +2/+1. */
+export const tavernBrawler: SpellCard = {
+  id: "tavern_brawler",
+  name: "Tavern Brawler",
+  description: "Give a friendly minion +2/+1.",
+  cost: 2,
+  tiers: [3, 4, 5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+      if (player.board.length === 0) return ctx.state;
+
+      const boardIndex = ctx.rng.next() % player.board.length;
+      const minion = player.board[boardIndex];
+      if (!minion) return ctx.state;
+
+      return updatePlayer(ctx.state, ctx.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[boardIndex]!;
+        newBoard[boardIndex] = {
+          ...mi,
+          atk: mi.atk + 2,
+          hp: mi.hp + 1,
+          maxHp: mi.maxHp + 1,
+        };
+        return { ...p, board: newBoard };
+      });
+    },
+  },
+};
+
+/** Give a friendly minion +1/+2. */
+export const brawl: SpellCard = {
+  id: "brawl",
+  name: "Brawl",
+  description: "Give a friendly minion +1/+2.",
+  cost: 2,
+  tiers: [3, 4, 5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+      if (player.board.length === 0) return ctx.state;
+
+      const boardIndex = ctx.rng.next() % player.board.length;
+      const minion = player.board[boardIndex];
+      if (!minion) return ctx.state;
+
+      return updatePlayer(ctx.state, ctx.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[boardIndex]!;
+        newBoard[boardIndex] = {
+          ...mi,
+          atk: mi.atk + 1,
+          hp: mi.hp + 2,
+          maxHp: mi.maxHp + 2,
+        };
+        return { ...p, board: newBoard };
+      });
+    },
+  },
+};
+
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
   [duskrayBuff.id]: duskrayBuff,
   [pancakeSpell.id]: pancakeSpell,
+  [tavernBrawler.id]: tavernBrawler,
+  [brawl.id]: brawl,
 };
 
 export function getSpell(id: string): SpellCard {
