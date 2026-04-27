@@ -15,96 +15,84 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ## Now (highest priority, model should pick from here first)
 
-### Game feel — Economy & turn flow
+### Game feel — End game & UI polish
 
-- [ ] [S] Wire `refresh` button: costs 1 gold, replaces shop minions with a new random set each click
-- [ ] [S] Wire `freeze` button: freezes shop minions so they persist to next turn (toggle on/off, free)
-- [ ] [S] Wire `upgrade tavern` button: deduct upgrade cost, increment player tier, update shop size
-- [ ] [S] Gold-per-turn ramp: player starts with 3 gold on turn 1 and gains +1 per turn up to 10
-- [ ] [S] Shop size scaling: tier 1→3 minions, tier 2→4, tier 3→4, tier 4→5, tier 5→6, tier 6→7
-- [ ] [S] End Turn button: clicking advances to combat phase then back to next recruit turn
-- [ ] [M] Wire sell minion: clicking sell removes minion from board/hand, refunds 1 gold
+- [ ] [S] Victory screen: when `gameState.phase.kind === "GameOver"` render a full-screen overlay showing the winner's hero name and a "Play Again" button that resets to hero selection
+- [ ] [S] Pairing display: show a "You're fighting: <opponent hero name>" banner during combat phase in the game UI
+- [ ] [S] Hero damage recap: after combat, show a toast/banner "You took X damage from <opponent>" before returning to recruit
 
-### Game feel — Combat polish
+### More spells
 
-- [ ] [S] Reborn in combat: when a reborn minion dies it returns to same side with 1 HP and reborn removed
-- [ ] [S] Divine shield in combat: first damage instance is absorbed, shield is removed, log the event
-- [ ] [S] Test: reborn minion returns at 1 HP after first death, does not return on second death
-- [ ] [S] Test: divine shield absorbs first hit, minion survives with full HP, second hit kills normally
-- [ ] [M] Board-size cap: enforce max 7 minions on board; prevent play/buy past the limit
+- [ ] [S] Add `Swat Team` spell (tier 3-6, cost 3): summon three 1/1 Recruits with rush on player's board
+- [ ] [S] Add `Tavern Brawl` spell (tier 2-4, cost 2): give a friendly minion +2/+1 — verify it doesn't duplicate the already-registered `tavernBrawler` spell
 
-### Heroes — New heroes
+### More anomalies
 
-- [ ] [S] Add `Yogg-Saron` hero — active power: give all friendly minions a random keyword for 2 gold
-- [ ] [S] Add `The Curator` hero — passive: shop always contains at least one of each tribe represented on your board
-- [ ] [S] Add `King Mukla` hero — passive: start each turn with 1 extra banana in hand (1/1 buff spell)
-- [ ] [S] Add `George the Fallen` hero — active: give a friendly minion divine shield for 2 gold
+- [ ] [S] Add `Tavern Discount` anomaly: all minions in shop cost 1 less gold (min 1) — wire into `rollShopForPlayer`
+- [ ] [S] Add `Big League` anomaly: all minions start combat with +1/+1 — wire into `simulateCombat` start
+- [ ] [S] Add `Extra Life` anomaly: each player gets one free revive the first time they reach 0 HP — wire into `applyDamageToPlayer`
 
-### Minions — Tier 2
+### More heroes
 
-- [ ] [S] Add `Selfless Hero` (tier 2): deathrattle gives a random friendly minion divine shield
-- [ ] [S] Add `Deflect-o-Bot` (tier 2): mech, divine shield, whenever you play a mech gain +1 ATK
-- [ ] [S] Add `Metaltooth Leaper` (tier 2): mech, battlecry give all friendly mechs +2 ATK
-- [ ] [S] Add `Knife Juggler` (tier 2): after a friendly minion is summoned, deal 1 damage to a random enemy
+- [ ] [S] Add `Sindragosa` hero — passive `onTurnEnd`: frozen minions in your shop each gain +1/+1
+- [ ] [S] Add `Jaraxxus` hero — passive `onTurnStart`: demons in your shop get +1/+1 at start of recruit turn
+- [ ] [S] Add `Trade Prince Gallywix` hero — active (2 gold): discover one minion from the opponent's last-seen board and add it to hand
 
-### Minions — Tier 3
+### Minions — Tier 6
 
-- [ ] [S] Add `Cobalt Scalebane` (tier 3): dragon, at end of turn give a random friendly minion +3 ATK
-- [ ] [S] Add `Soul Juggler` (tier 3): demon, after a friendly demon dies deal 3 damage to a random enemy
-- [ ] [S] Add `Infested Wolf` (tier 3): deathrattle summon two 1/1 Spider tokens
-
-### Minions — Tier 4
-
-- [ ] [S] Add `Defender of Argus` (tier 4): battlecry give adjacent minions +1/+1 and taunt
-- [ ] [S] Add `Bolvar, Fireblood` (tier 4): paladin, divine shield, whenever a friendly divine shield pops gain +2 ATK
-- [ ] [S] Add `Cave Hydra` (tier 4): beast, cleave (hits adjacent minions when attacking)
-
-### Minions — Tier 5
-
-- [ ] [S] Add `Junkbot` (tier 5): mech, whenever a friendly mech dies gain +2/+2
-- [ ] [S] Add `Baron Rivendare` (tier 5): deathrattles trigger twice
-- [ ] [S] Add `Brann Bronzebeard` (tier 5): battlecries trigger twice
+- [ ] [S] Add `Kalecgos, Arcane Aspect` (tier 6): dragon, after you cast a spell give all friendly minions +1/+1
+- [ ] [S] Add `Ghastcoiler` (tier 6): beast, deathrattle summon two random deathrattle minions
+- [ ] [S] Add `Mama Bear` (tier 6): beast, whenever a beast is summoned on your side give it +5/+5
+- [ ] [S] Add `Gentle Megasaur` (tier 6): beast, battlecry give all friendly murlocs a random keyword
 
 ### AI opponents
 
-- [x] [S] Basic AI turn: AI buys the cheapest affordable minion in shop each recruit phase
-- [ ] [M] Basic AI board play: AI plays all minions from hand to board at start of combat
-- [ ] [S] AI refresh: if AI has gold left and no affordable minion, refresh once
+- [ ] [M] Greedy AI: upgrade tavern tier when it can afford it and board is strong enough — implement as a new `greedy` strategy in `src/ai/heuristics/greedy.ts`
+- [ ] [S] AI tier preference: basic AI prefers buying minions that match its existing tribe (first tribe on board) over cheapest minion
 
 ---
 
 ## Soon
 
-### Game feel — Discover & triple polish
+### Game feel — Spells & discover polish
 
-- [ ] [S] Discover overlay: show 3 real minions from next tier up (not placeholders) when triple fires
-- [ ] [S] Animate the triple merge: board minion glows → disappears → golden version appears
-- [ ] [M] Golden minion: double the stats, golden border in UI, deathrattle/battlecry triggers twice
+- [ ] [S] Spell targeting UI: after clicking a spell in hand, highlight valid board targets and require a click to cast; currently spells fire immediately
+- [ ] [S] Discover shows real next-tier minions: verify that when a triple fires, the discover overlay offers 3 minions from tier+1 (not from the pool at large)
+- [ ] [S] Add `Bananas` spell to shop rolls — verify it appears in the shop (it exists as `bananaSpell` in registry but may not be offered in shop rolls)
 
-### Game feel — Leaderboard & end game
+### More minions — Tier 1
 
-- [ ] [S] Leaderboard: show all 8 players ordered by HP, update after each combat round
-- [ ] [S] Elimination: when a player reaches 0 HP, remove them from the lobby and show a "eliminated" badge
-- [ ] [S] Victory screen: when one player remains, show winner hero portrait + name full-screen
+- [ ] [S] Add `Wrath Weaver` (tier 1): at end of turn, deal 1 damage to your hero and give all friendly demons +2/+2
+- [ ] [S] Add `Scavenging Hyena` (tier 1): beast, whenever a friendly beast dies gain +2/+1
+- [ ] [S] Add `Murloc Tidecaller` (tier 1): murloc, whenever a murloc is summoned on either side gain +1 ATK
+- [ ] [S] Add `Murloc Tidehunter` (tier 1): murloc battlecry summon a 1/1 Murloc Scout
 
-### More spells
+### More minions — Tier 2
 
-- [ ] [S] Add `Bananas` spell (tier 1-3): give a friendly minion +1/+1
-- [ ] [S] Add `Tavern Tipper` spell (tier 2-5): give a random friendly minion +2/+2
-- [ ] [S] Add `Swat Team` spell (tier 3-6): summon three 1/1 Recruits with rush
+- [ ] [S] Add `Glyph Guardian` (tier 2): dragon, whenever this minion attacks, give it +2 ATK
+- [ ] [S] Add `Unstable Ghoul` (tier 2): undead, taunt, deathrattle deal 1 damage to all minions
 
-### More anomalies
+### More minions — Tier 3
 
-- [ ] [S] Add `Tavern Discount` anomaly: all minions cost 1 less gold (min 1)
-- [ ] [S] Add `Big League` anomaly: all minions start with +1/+1
-- [ ] [S] Add `Extra Life` anomaly: each player gets one free revive the first time they reach 0 HP
+- [ ] [S] Add `Arcane Tinker` (tier 3): elemental, battlecry add +1 spell damage to your hero power until end of turn
+- [ ] [S] Add `Coldlight Seer` (tier 3): murloc, battlecry give all friendly murlocs +2 HP
+- [ ] [S] Add `Screwjank Clunker` (tier 3): mech, battlecry give a friendly mech +2/+2
 
-### More heroes
+### More minions — Tier 4
 
-- [ ] [S] Add `Sindragosa` hero — passive: at end of turn, frozen minions in your shop gain +1/+1
-- [ ] [S] Add `Millificent Manastorm` hero — passive: mechs in your shop get +1 ATK
-- [ ] [S] Add `Trade Prince Gallywix` hero — active: discover a card from the opponent's last board for 2 gold
-- [ ] [S] Add `Jaraxxus` hero — passive: demons in your shop get +1/+1
+- [ ] [S] Add `Virmen Sensei` (tier 4): dragon, battlecry give a friendly dragon +2/+2
+- [ ] [S] Add `Security Rover` (tier 4): mech, whenever this minion takes damage summon a 2/3 Bot with divine shield
+- [ ] [S] Add `Annihilan Battlemaster` (tier 4): demon, gains +1 ATK for each damage your hero has taken
+
+### More minions — Tier 5
+
+- [ ] [S] Add `Murozond` (tier 5): dragon, battlecry add a copy of an enemy minion to your hand
+- [ ] [S] Add `Lightfang Enforcer` (tier 5): at end of turn, give a friendly minion of each tribe +2/+1
+
+### AI improvements
+
+- [ ] [S] AI opponent name display: show each AI's hero name on the leaderboard instead of "AI Player N"
+- [ ] [M] AI combat board placement: AI orders board minions by ATK descending before combat (attackers positioned optimally)
 
 ---
 
@@ -118,19 +106,35 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 All entries below are already committed and must not be redone.
 
-- [x] All M4 keywords: taunt, divineShield, windfury, poisonous, reborn, venomous — wired + tested
+- [x] All keywords: taunt, divineShield, windfury, megaWindfury, poisonous, reborn, venomous, cleave, lifesteal, rush, freeze, collateralDamage, magnetic, combo, bounty, spellDamage — wired + tested
 - [x] Wire battlecry hook into playMinionToBoard
-- [x] Wire deathrattle hook into combat death resolution
-- [x] Wire start-of-combat hook before first attack
-- [x] Murloc Warleader, Rockpool Hunter, Vulgar Homunculus, Imprisoner, Annoy-o-Tron, Harvest Golem, Kaboom Bot, Spawn of N'Zoth, Flame Imp, Venomous Crasher
-- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov — with hero select screen + HP/armor tests
-- [x] Full UI: game route, shop view, buy minion, board view, HUD, combat animation, sell button, upgrade/refresh/freeze buttons, hero power button, play from hand, leaderboard trinket display
-- [x] Combat state machine: pair players, resolve fights, apply damage, handle eliminations
+- [x] Wire deathrattle hook (onDeath) into combat death resolution
+- [x] Wire start-of-combat hook (onStartOfCombat) before first attack
+- [x] Wire onDivineShieldPop hook into combat applyDamage
+- [x] Gold-per-turn ramp: starts at 3 gold turn 1, +1/turn up to 10 (economy.ts `baseGoldForTurn`)
+- [x] Shop size scaling by tavern tier: 3/4/4/5/6/7 (economy.ts `SHOP_SIZE_BY_TIER`)
+- [x] Board size cap: max 7 minions enforced in shop.ts playMinionToBoard
+- [x] Reborn in combat: reborn minion returns at 1 HP with reborn removed (combat.ts)
+- [x] Divine shield in combat: first damage absorbed, shield removed, event logged (combat.ts)
+- [x] Reborn + divine shield unit tests
+- [x] Full UI: game route, shop view, buy minion, board view, HUD with armor, combat animation, sell button, upgrade/refresh/freeze buttons, hero power button, play from hand, leaderboard with elimination badges + trinket display
+- [x] End Turn button: advancing combat → back to recruit (EndTurn action in state machine)
+- [x] Combat state machine: pair players, resolve fights, apply damage, handle eliminations and GameOver
 - [x] Triple detection + discover overlay
-- [x] Keywords: rush, spellDamage, collateralDamage, freeze, magnetic, combo, cleave, megaWindfury, bounty
-- [x] Spells: Mystery Shot, Cauterizing Flame, Tavern Brawl
-- [x] Anomalies: Golden Touch, Heavy Hitters, Double Down, Liquified, Armored Up
-- [x] Quest framework (Murloc Mania, Mech Mayhem, Demon Diplomacy) + progress tracking
-- [x] Buddy framework (Ymber, RoLo, Goblin Minion) + activation
+- [x] Triple merge animation (golden minion pulse glow)
+- [x] Golden minion: deathrattle and battlecry trigger twice
+- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov, Yogg-Saron, The Curator, King Mukla, George the Fallen, Ragnaros, Sir Finley, Scabbs Cutterbutter, AF Kay, Edwin Van Cleef, Millificent Manastorm — with hero select screen + HP/armor tests
+- [x] Hero power UI with active targeting (George the Fallen board target selection)
+- [x] Leaderboard: 8 players ordered by HP, current player highlighted, elimination badges, trinket display
+- [x] Spells framework + Mystery Shot, Cauterizing Flame, Tavern Brawler, Brawl, Tavern Tipper, Bananas (bananaSpell)
+- [x] Anomalies framework + Golden Touch, Heavy Hitters, Double Down, Liquified, Armored Up
+- [x] Quest framework (Murloc Mania, Mech Mayhem, Demon Diplomacy) + progress tracking wired into endTurn
+- [x] Buddy framework (Ymber, RoLo, Goblin Minion) + activation in beginRecruitTurn
 - [x] Trinket framework + leaderboard display
-- [x] Minions: Gazelle, Gnoma Tinker, Blingtron 5000, Stonehill Defender, Terestian Manferris, Zixor, Friggent Northvalley, Alley Cat, Markku, Gromsch, Mogor the Curse-Golem, Bristleback Boys, Frostbound Golem, Grombi the Rotunda, Bloodsail Pirate, Combo Minion, Bounty Minion + 4 tier-4 minions
+- [x] Tier 1 minions: Alley Cat, Bloodsail Pirate, Bounty Minion, Bristleback Boys, Combo Minion, Dragonspawn Lieutenant, Flame Imp, Gnoma Tinker, Murloc Tidecaller, Murloc Tidehunter, Rockpool Hunter, Rush Minion, Taunt Minion, Venomous Crasher, Windfury Minion, Wrath Weaver
+- [x] Tier 2 minions: Annoy-o-Tron, Deflect-o-Bot, Glyph Guardian, Grombi the Rotunda, Harvest Golem, Imprisoner, Kaboom Bot, Knife Juggler, Metaltooth Leaper, Murloc Warleader, Reborn Minion, Scavenging Hyena, Selfless Hero, Spawn of N'Zoth, Unstable Ghoul, Vulgar Homunculus
+- [x] Tier 3 minions: Arcane Tinker, Cobalt Scalebane, Frostbound Golem, Gazelle, Gromsch, Infested Wolf, Markku, Queen of Pain, Soul Juggler, Stonehill Defender
+- [x] Tier 4 minions: Bloodsail Corsair, Bolvar Fireblood, Broodkin Zealot, Cave Hydra, Crystalweaver, Defender of Argus, Naga Secret Guardian
+- [x] Tier 5 minions: Baron Rivendare, Blingtron 5000, Brann Bronzebeard, Junkbot, Mogor the Curse-Golem
+- [x] Tier 6 minions: Friggent Northvalley, Terestian Manferris, Zixor Project Hope
+- [x] AI: basic strategy (buy cheapest affordable, refresh if no affordable, play all to board, EndTurn)

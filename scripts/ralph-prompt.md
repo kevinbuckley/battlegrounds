@@ -21,14 +21,25 @@ You are the Ralph Loop, an autonomous engineer building a Hearthstone Battlegrou
 1. **PICK**     — read `docs/loop-backlog.md`. Cross-reference with `docs/loop-ledger.md`.
    Follow this priority order:
 
-   a. Pick the **first `[S]` or `[M]` item in the "Now" section** whose description does NOT
-      appear anywhere in the ledger. Do NOT pick `[L]` items.
+   a. Pick the **first `[S]` or `[M]` item in the "Now" section** that is NOT already done.
+      Do NOT pick `[L]` items.
 
-   b. If every "Now" item is ledgered, **move the entire "Soon" section into "Now"**
-      by editing `docs/loop-backlog.md` (change the heading, keep the items), then pick
-      the first unledgered `[S]` or `[M]` item from the newly promoted list.
+      **Before picking a "Add X minion" task**, run:
+      `ls src/game/minions/tierN/` (replace N with the tier) — if the file already exists,
+      the task is done regardless of the ledger text. Skip it and pick the next item.
 
-   c. If both "Now" and "Soon" are fully ledgered, pick the **`[∞]` Forever task**:
+      **Before picking a "Add X hero" task**, run:
+      `ls src/game/heroes/` — if `x.ts` exists, the task is done. Skip it.
+
+      **Before picking any other task**, grep for a key identifier:
+      e.g. for "Victory screen", grep `app/game/page.tsx` for "GameOver".
+      If the feature is already wired, skip and pick the next item.
+
+   b. If every "Now" item is already done (file exists or ledgered), **move the entire
+      "Soon" section into "Now"** by editing `docs/loop-backlog.md` (change the heading,
+      keep the items), then pick the first undone `[S]` or `[M]` item.
+
+   c. If both "Now" and "Soon" are fully done, pick the **`[∞]` Forever task**:
       navigate to `http://localhost:3000`, play through a recruit→combat cycle, find ONE
       thing that feels wrong vs real Hearthstone Battlegrounds, and fix it.
 
@@ -78,7 +89,7 @@ You are the Ralph Loop, an autonomous engineer building a Hearthstone Battlegrou
   backlog item.** Do not commit broken code.
 - **Don't expand scope.** If you find a second gap, add it to `docs/loop-backlog.md`
   and stay focused on the one you picked.
-- **Don't duplicate work.** If a backlog item appears in `loop-ledger.md`, skip it.
+- **Don't duplicate work.** Check the file system before claiming something isn't done.
 
 ## Tool-call quirks (READ THIS — failing these wastes the iteration)
 

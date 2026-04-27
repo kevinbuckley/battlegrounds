@@ -123,11 +123,20 @@ run_iteration() {
   snap=$(git -C "$REPO" rev-parse HEAD)
   log "  snapshot: $snap"
 
-  # Build the prompt: project prompt + current ledger context (last 30 lines)
+  # Build the prompt: project prompt + full ledger + current file inventory
   local prompt
   prompt=$(cat "$PROMPT_FILE")
-  prompt+=$'\n\n## Current ledger (do NOT redo these)\n\n'
-  prompt+="$(tail -30 "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
+
+  # Full ledger — model needs ALL entries to avoid redoing old work
+  prompt+=$'\n\n## Current ledger (every line is DONE — do NOT redo any of these)\n\n'
+  prompt+="$(cat "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
+
+  # Minion + hero file inventory so model can check existence without a bash call
+  prompt+=$'\n\n## Already-implemented files (skip any backlog item whose file is listed here)\n\n'
+  prompt+="### Minions on disk\n"
+  prompt+="$(find "$REPO/src/game/minions" -name '*.ts' ! -name 'index.ts' ! -name 'define.ts' | sed "s|$REPO/||" | sort)"
+  prompt+=$'\n\n### Heroes on disk\n'
+  prompt+="$(find "$REPO/src/game/heroes" -name '*.ts' ! -name 'index.ts' ! -name 'stub.ts' | sed "s|$REPO/||" | sort)"
 
   # Sync with remote so the model sees the latest commits
   git -C "$REPO" pull --ff-only origin main >/dev/null 2>&1 || true
