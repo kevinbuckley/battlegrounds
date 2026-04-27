@@ -23,7 +23,8 @@ export type Keyword =
   | "poisonous"
   | "reborn"
   | "venomous"
-  | "cleave";
+  | "cleave"
+  | "lifesteal";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;
@@ -284,6 +285,7 @@ export type CombatEvent =
   | { kind: "Attack"; attacker: MinionInstanceId; target: MinionInstanceId }
   | { kind: "Damage"; target: MinionInstanceId; amount: number }
   | { kind: "DivineShield"; target: MinionInstanceId }
+  | { kind: "Lifesteal"; target: MinionInstanceId; amount: number }
   | { kind: "Death"; source: MinionInstanceId }
   | { kind: "Summon"; card: MinionCardId; side: Side; position: number }
   | { kind: "Stat"; target: MinionInstanceId; atk: number; hp: number }

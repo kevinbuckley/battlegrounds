@@ -381,4 +381,41 @@ describe("feature validation", () => {
     expect(r.survivorsLeft[0]!.hp).toBe(1);
     expect(r.survivorsLeft[0]!.keywords.has("reborn")).toBe(false);
   });
+
+  it("lifesteal keyword emits Lifesteal events in transcript", () => {
+    const lifestealMinion = makeMinion(3, 3);
+    lifestealMinion.keywords.add("lifesteal");
+
+    const r = simulateCombat([lifestealMinion], [makeMinion(1, 1)], makeRng(0));
+    expect(r.winner).toBe("left");
+
+    const lifestealEvents = r.transcript.filter((e) => e.kind === "Lifesteal");
+    expect(lifestealEvents).toHaveLength(1);
+    expect(lifestealEvents[0]!.amount).toBe(3);
+  });
+
+  it("lifesteal does not heal when dealing 0 damage (divine shield blocks)", () => {
+    // Use a 1/1 lifesteal minion vs 1/1 shielded minion.
+    // The lifesteal minion attacks first: shield absorbs (no lifesteal).
+    // The shielded minion counterattacks: lifesteal minion takes 1 damage (hp 0, dies).
+    // No further attacks occur since lifesteal minion is dead.
+    // So no lifesteal events should be emitted.
+    const lifestealMinion = makeMinion(1, 1);
+    lifestealMinion.keywords.add("lifesteal");
+
+    const shieldedMinion = makeMinion(1, 1);
+    shieldedMinion.keywords.add("divineShield");
+
+    const r = simulateCombat([lifestealMinion], [shieldedMinion], makeRng(0));
+
+    // The shield absorbs the first hit, no lifesteal fires.
+    // The shielded minion counterattacks, killing the lifesteal minion.
+    // No further attacks from the lifesteal minion occur.
+    const lifestealEvents = r.transcript.filter((e) => e.kind === "Lifesteal");
+    expect(lifestealEvents).toHaveLength(0);
+
+    // Verify the divine shield was absorbed (DivineShield event in transcript)
+    const dsEvents = r.transcript.filter((e) => e.kind === "DivineShield");
+    expect(dsEvents).toHaveLength(1);
+  });
 });

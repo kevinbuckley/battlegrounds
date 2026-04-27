@@ -294,6 +294,9 @@ function applyDamage(
   if (source.keywords.has("venomous")) {
     source.keywords.delete("venomous");
   }
+  if (source.keywords.has("lifesteal") && dmg > 0) {
+    emit({ kind: "Lifesteal", target: source.instanceId, amount: dmg });
+  }
 }
 
 function cloneMinion(m: MinionInstance): MinionInstance {

@@ -1,15 +1,12 @@
 import { MINIONS } from "./minions/index";
-import { updatePlayer } from "./utils";
 import type { GameState, MinionInstance, PlayerId } from "./types";
+import { updatePlayer } from "./utils";
 
 /**
  * Calculate how much damage the WINNER deals to the LOSER.
  * Formula: loserTier + sum(tiers of winning survivors).
  */
-export function calcDamage(
-  loserTier: number,
-  winnerSurvivors: MinionInstance[],
-): number {
+export function calcDamage(loserTier: number, winnerSurvivors: MinionInstance[]): number {
   const survivorTierSum = winnerSurvivors.reduce((sum, m) => {
     return sum + (MINIONS[m.cardId]?.tier ?? 1);
   }, 0);
@@ -34,6 +31,17 @@ export function applyDamageToPlayer(
       armor: p.armor - armorAbsorb,
       hp: newHp,
       eliminated: newHp <= 0,
+    };
+  });
+}
+
+/** Heal a player's hero by `amount`. Does not exceed max HP (no armor gain). */
+export function healHero(state: GameState, playerId: PlayerId, amount: number): GameState {
+  return updatePlayer(state, playerId, (p) => {
+    const newHp = Math.min(p.hp + amount, 60); // max HP cap is 60 (Patchwerk)
+    return {
+      ...p,
+      hp: newHp,
     };
   });
 }

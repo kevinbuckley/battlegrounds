@@ -20,6 +20,7 @@ import spawnOfNzoth from "./tier2/spawn-of-nzoth";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import gazelle from "./tier3/gazelle";
+import queenOfPain from "./tier3/queen-of-pain";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import broodkinZealot from "./tier4/broodkin-zealot";
 import crystalweaver from "./tier4/crystalweaver";
@@ -47,6 +48,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
   [gazelle.id]: gazelle,
+  [queenOfPain.id]: queenOfPain,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [broodkinZealot.id]: broodkinZealot,
   [crystalweaver.id]: crystalweaver,

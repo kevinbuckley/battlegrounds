@@ -1,7 +1,7 @@
 import { makeRng, type Rng } from "@/lib/rng";
 import { goldenTouch, pickAnomaly } from "./anomalies";
 import { simulateCombat } from "./combat";
-import { applyDamageToPlayer, calcDamage } from "./damage";
+import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
 import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES } from "./heroes/index";
 import {
@@ -421,6 +421,14 @@ function applyCombatResult(
     ...p,
     board: survivors,
   }));
+
+  // Apply lifesteal healing to the winner's hero
+  const lifestealTotal = combatResult.transcript
+    .filter((e) => e.kind === "Lifesteal")
+    .reduce((sum, e) => sum + (e as { kind: "Lifesteal"; amount: number }).amount, 0);
+  if (lifestealTotal > 0) {
+    result = healHero(result, winnerId, lifestealTotal);
+  }
 
   // Loser's board is cleared (they lost)
   const loser = getPlayer(result, loserId);
