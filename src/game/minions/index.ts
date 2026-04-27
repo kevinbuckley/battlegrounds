@@ -1,6 +1,7 @@
 import type { MinionCard, MinionCardId } from "../types";
 import allleyCat from "./tier1/alley-cat";
 import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
+import flameImp from "./tier1/flame-imp";
 import murlocTidecaller from "./tier1/murloc-tidecaller";
 import murlocTidehunter from "./tier1/murloc-tidehunter";
 import rockpoolHunter from "./tier1/rockpool-hunter";
@@ -34,6 +35,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
+  [flameImp.id]: flameImp,
   [murlocTidecaller.id]: murlocTidecaller,
   [murlocTidehunter.id]: murlocTidehunter,
   [wrathWeaver.id]: wrathWeaver,
