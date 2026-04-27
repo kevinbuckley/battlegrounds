@@ -27,6 +27,7 @@ import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import broodkinZealot from "./tier4/broodkin-zealot";
 import crystalweaver from "./tier4/crystalweaver";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
+import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
@@ -57,6 +58,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [broodkinZealot.id]: broodkinZealot,
   [crystalweaver.id]: crystalweaver,
   [nagaSecretGuardian.id]: nagaSecretGuardian,
+  [mogorTheCurseGolem.id]: mogorTheCurseGolem,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {

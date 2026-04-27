@@ -63,3 +63,4 @@
 2026-04-27 | 82ffaec | FIXED: Add Tavern Brawler and Brawl buff spells — give friendly minion +2/+1 and +1/+2 respectively
 2026-04-27 | b99ae32 | FIXED: Wire battlecry hook into playMinionToBoard so card battlecries fire
 2026-04-27 | b99ae32 | FIXED: Fix TypeScript exhaustive switch errors in game page event handlers
+2026-04-27 | 0be3c30 | FIXED: Add Mogor the Curse-Golem tier 5 mech with battlecry buffing friendly mechs +2/+2
