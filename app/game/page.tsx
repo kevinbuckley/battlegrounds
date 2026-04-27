@@ -193,6 +193,7 @@ export default function GamePage() {
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
   const [combatTick, setCombatTick] = useState(-1);
   const [displayingCombat, setDisplayingCombat] = useState(false);
+  const [opponentHeroId, setOpponentHeroId] = useState<string>("");
   const tickRef = useRef(combatTick);
   tickRef.current = combatTick;
 
@@ -342,6 +343,7 @@ export default function GamePage() {
       if (result.winner !== "draw") {
         setCombatResult(result);
         setCombatTick(-1);
+        setOpponentHeroId(opponent.heroId);
         setDisplayingCombat(true);
         return;
       }
@@ -355,6 +357,7 @@ export default function GamePage() {
     if (combatTick >= combatResult.transcript.length) {
       setDisplayingCombat(false);
       setCombatResult(null);
+      setOpponentHeroId("");
       if (!gameState) return;
 
       const postCombat = applyCombatResult(gameState, combatResult);
@@ -991,6 +994,21 @@ export default function GamePage() {
             <h2 className="mb-2 text-center text-2xl font-bold text-amber-400">
               {eventTypeEmoji({ kind: "End", winner: "left" })} Combat Round
             </h2>
+
+            {/* Pairing banner */}
+            {opponentHeroId &&
+              (() => {
+                const hero = HEROES[opponentHeroId];
+                if (!hero) return null;
+                return (
+                  <div className="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center">
+                    <span className="text-sm text-amber-300">
+                      You&apos;re fighting:{" "}
+                      <span className="font-bold text-amber-400">{hero.name}</span>
+                    </span>
+                  </div>
+                );
+              })()}
 
             {/* Event log */}
             <div className="flex-1 overflow-y-auto pb-4">
