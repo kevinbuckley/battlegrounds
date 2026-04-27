@@ -68,3 +68,4 @@
 2026-04-27 | afb0ab7 | FIXED: Add Friggent Northvalley tier 6 beast with deathrattle summoning a 2/3 Stalker
 2026-04-27 | 50add16 | FIXED: Add Zixor, Project Hope tier 6 elemental with battlecry summoning a random tier 5 minion
 2026-04-27 | d999a61 | FIXED: Add Terestian Manferris tier 6 mech with deathrattle giving a friendly mech +3/+3
+2026-04-27 | 6833f68 | FIXED: Add Stonehill Defender tier 3 mech with Taunt + Divine Shield

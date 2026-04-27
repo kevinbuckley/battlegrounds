@@ -24,6 +24,7 @@ import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import arcaneTinker from "./tier3/arcane-tinker";
 import gazelle from "./tier3/gazelle";
 import queenOfPain from "./tier3/queen-of-pain";
+import stonehillDefender from "./tier3/stonehill-defender";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import broodkinZealot from "./tier4/broodkin-zealot";
 import crystalweaver from "./tier4/crystalweaver";
@@ -59,6 +60,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [gazelle.id]: gazelle,
   [arcaneTinker.id]: arcaneTinker,
   [queenOfPain.id]: queenOfPain,
+  [stonehillDefender.id]: stonehillDefender,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [broodkinZealot.id]: broodkinZealot,
   [crystalweaver.id]: crystalweaver,
