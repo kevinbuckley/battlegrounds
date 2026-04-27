@@ -1,4 +1,5 @@
 2026-04-27 | 0318d5a | FIXED: Add Knife Juggler tier 2 minion with onSummon hook dealing 1 damage to random enemy minion, with unit tests
+2026-04-27 | 98421bc | FIXED: Add Soul Juggler tier 3 demon (onAllyDeath deals 3 damage to random enemy when friendly demon dies) and Infested Wolf tier 3 beast (deathrattle summons two 1/1 Spiders), with unit tests
 2026-04-27 | 85d0699 | FIXED: Make freezeShop toggle — clicking again unfreezes the shop, with UI label updating to "Unfreeze Shop"
 2026-04-27 | 64cb979 | FIXED: Add onPlay hook to MinionHooks, wire into playMinionToBoard, add Deflect-o-Bot tier 2 mech (divine shield, +1 ATK whenever you play a Mech), with unit tests
 2026-04-27 | f8a21df | FIXED: Add Cobalt Scalebane tier 3 dragon with onTurnEnd hook giving random friendly minion +3 ATK, wire onTurnEnd into endTurn, with unit tests

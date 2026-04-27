@@ -36,8 +36,10 @@ import cobaltScalebane from "./tier3/cobalt-scalebane";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
 import gromsch from "./tier3/gromsch";
+import infestedWolf from "./tier3/infested-wolf";
 import markku from "./tier3/markku";
 import queenOfPain from "./tier3/queen-of-pain";
+import soulJuggler from "./tier3/soul-juggler";
 import stonehillDefender from "./tier3/stonehill-defender";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import broodkinZealot from "./tier4/broodkin-zealot";
@@ -87,7 +89,9 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [markku.id]: markku,
   [arcaneTinker.id]: arcaneTinker,
   [cobaltScalebane.id]: cobaltScalebane,
+  [infestedWolf.id]: infestedWolf,
   [queenOfPain.id]: queenOfPain,
+  [soulJuggler.id]: soulJuggler,
   [stonehillDefender.id]: stonehillDefender,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [broodkinZealot.id]: broodkinZealot,

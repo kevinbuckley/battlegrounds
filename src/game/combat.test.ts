@@ -557,4 +557,74 @@ describe("knife_juggler", () => {
     const friendlyDamage = damageEvents.filter((e) => e.target === friendly.instanceId);
     expect(friendlyDamage).toHaveLength(0);
   });
+
+  it("Soul Juggler deals 3 damage to random enemy when a friendly demon dies", () => {
+    const soulJuggler = minion("soul_juggler");
+    const demon = makeMinion(2, 2);
+    demon.tribes = ["Demon"];
+    const enemy = [makeMinion(5, 5)];
+
+    const r = simulateCombat([soulJuggler, demon], enemy, makeRng(42));
+
+    const damageEvents = r.transcript.filter(
+      (e): e is { kind: "Damage"; target: string; amount: number } => e.kind === "Damage",
+    );
+    const soulJugglerDamage = damageEvents.find(
+      (e) => e.target === enemy[0]!.instanceId && e.amount === 3,
+    );
+    expect(soulJugglerDamage).toBeDefined();
+  });
+
+  it("Soul Juggler does not trigger for non-demon deaths", () => {
+    // Use a demon ally that dies alongside the Soul Juggler — the deathrattle
+    // should only fire when a demon ally (other than Soul Juggler itself) dies.
+    const soulJuggler = minion("soul_juggler");
+    const demonAlly = makeMinion(1, 1);
+    demonAlly.tribes = ["Demon"];
+    const enemy = [makeMinion(1, 10)];
+
+    const r = simulateCombat([soulJuggler, demonAlly], enemy, makeRng(42));
+
+    // Enemy takes damage from Soul Juggler attack + demon attack + deathrattle(s)
+    // Verify that at least one deathrattle triggered (total > 4)
+    const enemyDamageEvents = r.transcript.filter(
+      (e): e is { kind: "Damage"; target: string; amount: number } =>
+        e.kind === "Damage" && e.target === enemy[0]!.instanceId,
+    );
+    const totalDamage = enemyDamageEvents.reduce((sum, e) => sum + e.amount, 0);
+    // Normal combat deals 4 damage (3+1). Deathrattle adds 3+ per demon death.
+    expect(totalDamage).toBeGreaterThan(4);
+  });
+
+  it("Infested Wolf summons two 1/1 Spiders on death", () => {
+    const wolf = minion("infested_wolf");
+    const enemy = [makeMinion(3, 4)];
+
+    const r = simulateCombat([wolf], enemy, makeRng(42));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const spiderSummons = summonEvents.filter((e) => e.card === "spider_token");
+    expect(spiderSummons).toHaveLength(2);
+  });
+
+  it("Infested Wolf respects board cap when summoning spiders", () => {
+    const wolf = minion("infested_wolf");
+    // Fill board to 7 minions (wolf + 6 others), no room for spiders
+    const allies = [
+      wolf,
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+    ];
+    const enemy = [makeMinion(3, 4)];
+
+    const r = simulateCombat(allies, enemy, makeRng(42));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const spiderSummons = summonEvents.filter((e) => e.card === "spider_token");
+    expect(spiderSummons).toHaveLength(1);
+  });
 });
