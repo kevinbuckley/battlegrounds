@@ -31,6 +31,9 @@ export function simulateCombat(
   let right = rightBoard.map(cloneMinion);
 
   // Determine starting attacker
+  const baronOnLeft = left.some((m) => m.baronRivendare);
+  const baronOnRight = right.some((m) => m.baronRivendare);
+
   const startSide: Side =
     left.length > right.length
       ? "left"
@@ -44,7 +47,7 @@ export function simulateCombat(
   fireStartOfCombat(left, right, startSide, emit, rng);
 
   // Fire rush attacks before the normal attack cycle
-  fireRushAttacks(left, right, startSide, emit, rng);
+  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight);
 
   let side: Side = startSide;
   let leftPtr = 0;
@@ -107,7 +110,7 @@ export function simulateCombat(
       applyDamage(currentTarget, attacker, emit, left, right, rng);
 
       // Process deaths (including deathrattle chains)
-      const result = reapDeaths(left, right, emit, rng);
+      const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
       left = result.left;
       right = result.right;
     }
@@ -137,11 +140,15 @@ function reapDeaths(
   right: MinionInstance[],
   emit: (e: CombatEvent) => void,
   rng: Rng,
+  baronOnLeft: boolean,
+  baronOnRight: boolean,
 ): { left: MinionInstance[]; right: MinionInstance[] } {
   let l = left;
   let r = right;
 
   // Keep processing deaths until no new ones appear (handles deathrattle chains)
+  // Baron Rivendare causes deathrattles to trigger twice for all deathrattles
+  // on the same side where he exists.
   for (;;) {
     const deadLeft = l.filter((m) => m.hp <= 0);
     const deadRight = r.filter((m) => m.hp <= 0);
@@ -156,7 +163,11 @@ function reapDeaths(
 
       // Deathrattle
       const deadCtx: CombatCtx = { self: dead, selfSide: deadSide, left: l, right: r, emit, rng };
+      const baronOnSide = deadSide === "left" ? baronOnLeft : baronOnRight;
       dead.hooks?.onDeath?.(deadCtx);
+      if (baronOnSide) {
+        dead.hooks?.onDeath?.(deadCtx);
+      }
 
       // Reborn
       if (dead.keywords.has("reborn") && !dead.attachments.rebornUsed) {
@@ -237,6 +248,8 @@ function fireRushAttacks(
   startSide: Side,
   emit: (e: CombatEvent) => void,
   rng: Rng,
+  baronOnLeft: boolean,
+  baronOnRight: boolean,
 ): void {
   // Process the starting side's rush minions first (they attack before normal cycle)
   const rushBoard = startSide === "left" ? left : right;
@@ -251,7 +264,7 @@ function fireRushAttacks(
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng);
-    const result = reapDeaths(left, right, emit, rng);
+    const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
     void result;
   }
 }

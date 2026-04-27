@@ -49,6 +49,8 @@ export interface MinionCard {
   magnetic?: boolean;
   /** When set, this minion has the bounty keyword and costs this much gold. */
   bountyCost?: number;
+  /** When true, deathrattles on this minion trigger twice. */
+  baronRivendare?: boolean;
   hooks: MinionHooks;
 }
 
@@ -123,6 +125,7 @@ export interface MinionInstance {
   golden: boolean;
   spellDamage: number;
   magnetic?: boolean;
+  baronRivendare?: boolean;
   attachments: Record<string, unknown>;
   /** Hook functions copied from the card definition at instantiation time. */
   hooks: MinionHooks;

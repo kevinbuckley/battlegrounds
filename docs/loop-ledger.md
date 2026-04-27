@@ -108,3 +108,5 @@
 2026-04-27 | 4780604 | FIXED: Add Yogg-Saron hero — active power gives all friendly minions a random keyword for 2 gold, with unit tests
 2026-04-27 | 19e7b95 | FIXED: Add onDivineShieldPop hook to MinionHooks, wire into combat.ts applyDamage, add Bolvar Fireblood tier 4 mech (divine shield, +2 ATK whenever friendly divine shield pops), with unit tests
 2026-04-27 | 292c80c | FIXED: Add Cave Hydra tier 4 beast with cleave keyword, update minion registry
+
+2026-04-27 | c03ca4a | FIXED: Add Baron Rivendare tier 5 undead (deathrattles trigger twice on same side), fix Harvest Golem syntax error, wire baronRivendare flag into combat death resolution

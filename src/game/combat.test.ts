@@ -627,4 +627,40 @@ describe("knife_juggler", () => {
     const spiderSummons = summonEvents.filter((e) => e.card === "spider_token");
     expect(spiderSummons).toHaveLength(1);
   });
+
+  it("Baron Rivendare causes deathrattles to trigger twice", () => {
+    const baron = minion("baron_rivendare");
+    const deathrattleMinion = minion("harvest_golem");
+    // Enemy 2/10: Baron deals 3 (7 HP), counterattacks Baron (1 dmg → 2 HP).
+    // Harvest Golem deals 2 (5 HP), counterattacks Harvest Golem (1 dmg → 1 HP).
+    // Baron deals 2 (3 HP), counterattacks Baron (1 dmg → 1 HP).
+    // Harvest Golem deals 1 (2 HP), counterattacks Harvest Golem (1 dmg → 0 HP, dies!).
+    const enemy = [makeMinion(2, 10)];
+
+    const r = simulateCombat([baron, deathrattleMinion], enemy, makeRng(0));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const mechSummons = summonEvents.filter((e) => e.card === "small_mech");
+    // Without Baron: 1 summon. With Baron: 2 summons.
+    expect(mechSummons).toHaveLength(2);
+  });
+
+  it("Baron Rivendare only doubles deathrattles on the same side", () => {
+    const baron = minion("baron_rivendare");
+    const deathrattleMinion = minion("harvest_golem");
+    // Enemy has a harvest golem too — its deathrattle should NOT be doubled
+    const enemyBaron = minion("baron_rivendare");
+    const enemyDeathrattle = minion("harvest_golem");
+
+    const r = simulateCombat(
+      [baron, deathrattleMinion],
+      [enemyBaron, enemyDeathrattle],
+      makeRng(0),
+    );
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const mechSummons = summonEvents.filter((e) => e.card === "small_mech");
+    // Both sides have baron, so each deathrattle triggers twice: 2 + 2 = 4
+    expect(mechSummons).toHaveLength(4);
+  });
 });

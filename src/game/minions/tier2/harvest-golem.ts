@@ -21,7 +21,7 @@ export default defineMinion({
         baseHp: 1,
         baseKeywords: [],
         spellDamage: 0,
-  hooks: {},
+        hooks: {},
       });
       const spawned = instantiate(golem);
       const side = ctx.selfSide;

@@ -21,6 +21,7 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
     golden,
     spellDamage,
     magnetic: card.magnetic ?? card.baseKeywords.includes("magnetic"),
+    baronRivendare: card.baronRivendare ?? false,
     attachments: {},
     hooks: card.hooks,
   };
