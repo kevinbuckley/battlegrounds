@@ -82,3 +82,4 @@
  2026-04-27 | 792fb72 | FIXED: Add Bristleback Boys tier 1 beast with deathrattle summoning a 1/1 Bristleback Whelp
 2026-04-27 | 2415098 | FIXED: Add magnetic keyword — type, shop wiring, Grombi the Rotunda tier 2 murloc, and unit tests
 2026-04-27 | 0981afd | FIXED: Wire Alley Cat tier 1 battlecry — summons a random minion from your hand on play, add taunt_minion to registry
+2026-04-27 | 4be57e2 | FIXED: Add 2 more anomalies (Heavy Hitters, Double Down) to anomalies registry

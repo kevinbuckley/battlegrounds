@@ -72,8 +72,10 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### M5 lobby modifiers
 
+- [ ] [S] Add 2 more anomalies (currently only Golden Touch exists)
 - [ ] [L] Tavern spell framework + 3 starter spells
-- [ ] [L] Anomaly framework + 3 starter anomalies
+- [ ] [L] Quest framework + 3 starter quests
+- [ ] [L] Buddy framework + 3 starter buddies
 - [ ] [L] Trinket framework + between-round pick screen
 
 ### M9 — Triples & discovers
