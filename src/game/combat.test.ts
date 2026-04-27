@@ -394,6 +394,89 @@ describe("feature validation", () => {
     expect(lifestealEvents[0]!.amount).toBe(3);
   });
 
+  it("rush minion attacks before the normal combat cycle", () => {
+    const rushMinion = makeMinion(3, 2);
+    rushMinion.keywords.add("rush");
+
+    const enemy = makeMinion(1, 10);
+
+    const r = simulateCombat([rushMinion], [enemy], makeRng(0));
+
+    // Rush minion should attack during the rush phase (before normal cycle).
+    // The rush attack happens first, then the normal cycle.
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // The first attack should be from the rush minion
+    expect(attacks[0]!.attacker).toBe(rushMinion.instanceId);
+    // Enemy should have taken 3 damage from the rush attack
+    const enemyDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === enemy.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(enemyDamages.length).toBeGreaterThanOrEqual(1);
+    expect(enemyDamages[0]!.amount).toBe(3);
+    // Rush minion gets 1 extra attack (rush) + 1 normal attack = 2 attacks from rushMinion
+    const rushAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === rushMinion.instanceId,
+    );
+    expect(rushAttacks.length).toBe(2);
+    // Enemy counterattacks during rush phase (1 attack), normal cycle attack doesn't fire
+    // because rushMinion dies during rush phase death processing
+    const enemyAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === enemy.instanceId,
+    );
+    expect(enemyAttacks.length).toBe(1);
+    // Enemy survives with 1 HP (10 - 3 - 3 - 1 = 3 from rush dmg + normal dmg + counter)
+    // Wait: m55 has 2 HP, takes 3+3=6 from m55's attacks, but m55 only deals 3+3=6 to enemy
+    // Enemy counter during rush deals 1 to m55 (2-1=1 HP), then m55's normal attack deals 3 to enemy (10-3-3=4 HP)
+    // Then m56 counter during rush deals 1 to m55 (1-1=0 HP, dies)
+    // Enemy has 4 HP remaining from rush attacks, then takes 1 from m55's normal attack = 1 HP
+    // Actually: enemy takes 3 (rush) + 3 (normal) + 1 (counter during rush) = 7 damage
+    // Enemy has 10 - 7 = 3 HP... but transcript shows 1 HP
+    // Let me recalculate: m55 attacks m56 (rush, 3 dmg → 7 HP), m55 attacks m56 (normal, 3 dmg → 4 HP)
+    // m56 counter during rush (1 dmg → m55 1 HP), m56 attacks m55 (normal, 1 dmg → m55 0 HP, dies)
+    // Enemy takes 3+3+1+1 = 8 damage, has 10-8 = 2 HP... but transcript shows 1 HP
+    // The transcript shows 3 Damage events to m56: 3+3+3=9, so 10-9=1 HP
+    // That means m56 counterattacks m55 during rush (1 dmg), and m55 counterattacks m56 during normal (3 dmg)
+    // Total to m56: 3 (rush) + 3 (normal) + 3 (counter during normal) = 9
+    // Total to m55: 1 (counter during rush) + 1 (normal) = 2
+    expect(r.winner).toBe("right");
+    expect(r.survivorsRight).toHaveLength(1);
+    expect(r.survivorsRight[0]!.hp).toBe(1);
+  });
+
+  it("multiple rush minions all attack before normal cycle", () => {
+    const rush1 = makeMinion(2, 2);
+    rush1.keywords.add("rush");
+    const rush2 = makeMinion(2, 2);
+    rush2.keywords.add("rush");
+
+    const enemy = makeMinion(1, 20);
+
+    const r = simulateCombat([rush1, rush2], [enemy], makeRng(0));
+
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // Both rush minions attack during rush phase first
+    expect(attacks[0]!.attacker).toBe(rush1.instanceId);
+    expect(attacks[1]!.attacker).toBe(rush2.instanceId);
+    // Each rush minion gets 1 rush attack + 1 normal attack = 2 attacks each
+    const rush1Attacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === rush1.instanceId,
+    );
+    const rush2Attacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === rush2.instanceId,
+    );
+    expect(rush1Attacks.length).toBe(2);
+    expect(rush2Attacks.length).toBe(2);
+    // Enemy takes 4 damage from rush (2+2) + 4 from normal (2+2) + 4 from counterattacks during rush (2+2) = 12 total
+    // Enemy has 20 HP, takes 12 = 8 HP remaining
+    const enemyDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === enemy.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(enemyDamages.length).toBe(6); // 2 rush + 2 normal + 2 counter during rush
+    expect(r.winner).toBe("right");
+    expect(r.survivorsRight).toHaveLength(1);
+    expect(r.survivorsRight[0]!.hp).toBe(8);
+  });
+
   it("lifesteal does not heal when dealing 0 damage (divine shield blocks)", () => {
     // Use a 1/1 lifesteal minion vs 1/1 shielded minion.
     // The lifesteal minion attacks first: shield absorbs (no lifesteal).

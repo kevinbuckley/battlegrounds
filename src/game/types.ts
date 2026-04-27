@@ -24,7 +24,8 @@ export type Keyword =
   | "reborn"
   | "venomous"
   | "cleave"
-  | "lifesteal";
+  | "lifesteal"
+  | "rush";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;

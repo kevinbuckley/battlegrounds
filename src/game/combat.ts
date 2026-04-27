@@ -43,6 +43,9 @@ export function simulateCombat(
   // Fire start-of-combat hooks (interleaved, attacker side first)
   fireStartOfCombat(left, right, startSide, emit, rng);
 
+  // Fire rush attacks before the normal attack cycle
+  fireRushAttacks(left, right, startSide, emit, rng);
+
   let side: Side = startSide;
   let leftPtr = 0;
   let rightPtr = 0;
@@ -214,6 +217,34 @@ function fireStartOfCombat(
       emit({ kind: "StartOfCombat", source: m.instanceId });
       hook({ self: m, selfSide: bSide, left, right, emit, rng });
     }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Rush: allow minions with Rush to attack before the normal cycle
+// ---------------------------------------------------------------------------
+
+function fireRushAttacks(
+  left: MinionInstance[],
+  right: MinionInstance[],
+  startSide: Side,
+  emit: (e: CombatEvent) => void,
+  rng: Rng,
+): void {
+  // Process the starting side's rush minions first (they attack before normal cycle)
+  const rushBoard = startSide === "left" ? left : right;
+  const defenders = startSide === "left" ? right : left;
+
+  for (const m of rushBoard) {
+    if (!m.keywords.has("rush")) continue;
+    if (defenders.length === 0) continue;
+    const target = pickTarget(defenders, rng);
+    if (!target) continue;
+
+    emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
+    applyDamage(m, target, emit);
+    const result = reapDeaths(left, right, emit, rng);
+    void result;
   }
 }
 
