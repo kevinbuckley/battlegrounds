@@ -195,8 +195,33 @@ export default function GamePage() {
   const tickRef = useRef(combatTick);
   tickRef.current = combatTick;
 
+  // Triple merge animation state
+  const [tripleAnimMinions, setTripleAnimMinions] = useState<Set<string>>(new Set());
+  const [showingGolden, setShowingGolden] = useState(false);
+
   // Discover overlay state
   // Derived from gameState — no separate useState needed
+
+  // Detect triple merges and trigger animation
+  const prevGoldenCount = useRef(0);
+  useEffect(() => {
+    if (!gameState) return;
+    const p = gameState.players[0];
+    if (!p) return;
+    const currentGoldenCount =
+      p.board.filter((m) => m.golden).length + p.hand.filter((m) => m.golden).length;
+    if (currentGoldenCount > prevGoldenCount.current) {
+      // A golden minion was just created — trigger animation
+      const goldenMinions = [...p.board.filter((m) => m.golden), ...p.hand.filter((m) => m.golden)];
+      setTripleAnimMinions(new Set(goldenMinions.map((m) => m.instanceId)));
+      setShowingGolden(true);
+      setTimeout(() => {
+        setTripleAnimMinions(new Set());
+        setTimeout(() => setShowingGolden(false), 600);
+      }, 800);
+    }
+    prevGoldenCount.current = currentGoldenCount;
+  }, [gameState]);
 
   const playerGold = () => gameState?.players[0]?.gold ?? 0;
 
@@ -486,7 +511,7 @@ export default function GamePage() {
                       key={minion.instanceId}
                       onClick={() => canPlay && setPlacingMinionIdx(idx)}
                       disabled={!canPlay}
-                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${isSelected ? "border-amber-400 bg-amber-400/10" : "border-amber-500/50"} bg-slate-800 px-4 py-3 transition ${canPlay ? "cursor-pointer hover:bg-slate-750 active:scale-95 opacity-90" : "cursor-not-allowed opacity-50"}`}
+                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${isSelected ? "border-amber-400 bg-amber-400/10" : "border-amber-500/50"} bg-slate-800 px-4 py-3 transition ${canPlay ? "cursor-pointer hover:bg-slate-750 active:scale-95 opacity-90" : "cursor-not-allowed opacity-50"} ${showingGolden ? "animate-pulse" : ""}`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -616,7 +641,9 @@ export default function GamePage() {
                       }}
                       className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-blue-500/50 bg-slate-800 px-4 py-3 transition ${
                         isDragging ? "opacity-40" : "opacity-100"
-                      } ${isHpTarget ? "border-sky-400 bg-sky-400/10 ring-2 ring-sky-400/30" : ""}`}
+                      } ${isHpTarget ? "border-sky-400 bg-sky-400/10 ring-2 ring-sky-400/30" : ""} ${
+                        showingGolden ? "animate-pulse" : ""
+                      }`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -717,7 +744,7 @@ export default function GamePage() {
                       canBuy && !handFull
                         ? "cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95"
                         : "cursor-not-allowed opacity-50"
-                    }`}
+                    } ${minion.golden ? "border-amber-400 ring-2 ring-amber-400/30" : ""}`}
                   >
                     <div className="flex items-center gap-2">
                       <span
