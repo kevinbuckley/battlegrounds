@@ -84,3 +84,4 @@
 2026-04-27 | 0981afd | FIXED: Wire Alley Cat tier 1 battlecry — summons a random minion from your hand on play, add taunt_minion to registry
 2026-04-27 | 4be57e2 | FIXED: Add 2 more anomalies (Heavy Hitters, Double Down) to anomalies registry
 2026-04-27 | b7af594 | FIXED: Add Mystery Shot spell — tier 1-6, deals 2 damage to random enemy minion, with unit tests
+2026-04-27 | d3b6a95 | FIXED: Add combo keyword — type, shop wiring, Combo Minion tier 1 minion, and unit tests

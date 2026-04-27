@@ -7,6 +7,7 @@ import { getAllHeroIds, HEROES } from "./heroes/index";
 import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import {
+  applyComboToBoard,
   buildPool,
   buyMinion,
   freezeShop,
@@ -129,10 +130,10 @@ function playSpell(state: GameState, playerId: number, spellIndex: number, rng: 
       rng,
       spellDamage: totalSpellDamage(player),
     };
-    return spellCard.effects.onPlay(ctx);
+    return applyComboToBoard(spellCard.effects.onPlay(ctx), playerId);
   }
 
-  return state;
+  return applyComboToBoard(state, playerId);
 }
 
 const ALL_TRIBES: Tribe[] = [

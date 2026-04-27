@@ -28,7 +28,8 @@ export type Keyword =
   | "rush"
   | "freeze"
   | `collateralDamage${number}`
-  | "magnetic";
+  | "magnetic"
+  | "combo";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;

@@ -267,7 +267,10 @@ export function playMinionToBoard(
     afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
   }
 
-  return afterPlay;
+  // Apply combo: all friendly minions with combo gain +2/+2 when a card is played
+  const afterCombo = applyComboToBoard(afterPlay, playerId);
+
+  return afterCombo;
 }
 
 export function reorderBoard(
@@ -322,4 +325,20 @@ export function upgradeTier(state: GameState, playerId: PlayerId): GameState {
     upgradeCost: nextUpgradeCost,
     upgradedThisTurn: true,
   }));
+}
+
+/** Apply combo: all friendly minions with the combo keyword gain +2/+2. */
+export function applyComboToBoard(state: GameState, playerId: PlayerId): GameState {
+  return updatePlayer(state, playerId, (p) => {
+    const newBoard = p.board.map((m) => {
+      if (!m.keywords.has("combo" as import("./types").Keyword)) return m;
+      return {
+        ...m,
+        atk: m.atk + 2,
+        hp: m.hp + 2,
+        maxHp: m.maxHp + 2,
+      };
+    });
+    return { ...p, board: newBoard };
+  });
 }

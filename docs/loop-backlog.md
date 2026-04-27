@@ -95,6 +95,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `collateralDamage` keyword — type, shop wiring, Bloodsail Pirate tier 1 minion, and tests
 - [x] [S] Add `freeze` keyword — frozen minions cannot attack but still take damage and counterattack, plus Frostbound Golem tier 3 minion
 - [x] [S] Add `magnetic` keyword — type, shop wiring, Grombi the Rotunda tier 2 murloc, and unit tests
+- [x] [S] Add `combo` keyword — type, shop wiring, Combo Minion tier 1 minion, and unit tests
 
 ### M11 — Tier 6 minions (in progress)
 
