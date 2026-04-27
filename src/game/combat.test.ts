@@ -262,7 +262,89 @@ describe("taunt keyword", () => {
   });
 });
 
-// These tests validate that existing features (already implemented) are working
+// ---------------------------------------------------------------------------
+// Windfury keyword
+// ---------------------------------------------------------------------------
+
+describe("windfury keyword", () => {
+  it("windfury minion attacks twice per attack opportunity", () => {
+    const windfury = minion("windfury-minion"); // 2/3 with windfury
+    const enemy = makeMinion(1, 10);
+
+    const r = simulateCombat([windfury], [enemy], makeRng(0));
+
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // Windfury attacks twice (attackCount=2 for windfury).
+    // The enemy counterattacks deal damage but do NOT emit Attack events.
+    // After windfury's 2 attacks, enemy ptr advances and attacks once.
+    // Total: 3 Attack events (2 windfury + 1 enemy)
+    expect(attacks.length).toBe(3);
+    // First 2 attacks should be from windfury to enemy
+    expect(attacks[0]!.attacker).toBe(windfury.instanceId);
+    expect(attacks[1]!.attacker).toBe(windfury.instanceId);
+    // Third attack should be from enemy to windfury
+    expect(attacks[2]!.attacker).toBe(enemy.instanceId);
+    // Enemy should have taken 6 damage (3 hits x 2 ATK from windfury attacks + counter)
+    const enemyDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === enemy.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(enemyDamages).toHaveLength(3);
+    expect(enemyDamages[0]!.amount).toBe(2);
+    expect(enemyDamages[1]!.amount).toBe(2);
+    expect(enemyDamages[2]!.amount).toBe(2);
+    // Windfury should have taken 4 damage (2 enemy counterattacks x 1 ATK + 1 enemy attack x 1 ATK)
+    const windfuryDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === windfury.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(windfuryDamages).toHaveLength(3);
+    expect(windfuryDamages[0]!.amount).toBe(1);
+    expect(windfuryDamages[1]!.amount).toBe(1);
+    expect(windfuryDamages[2]!.amount).toBe(1);
+    // Windfury has 3 HP, took 3 damage = 0 HP, dies
+    // Enemy has 10 HP, took 6 damage = 4 HP
+    expect(r.winner).toBe("right");
+    expect(r.survivorsLeft).toHaveLength(0);
+    expect(r.survivorsRight).toHaveLength(1);
+    expect(r.survivorsRight[0]!.hp).toBe(4);
+  });
+
+  it("windfury minion dies after 1 attack when enemy kills it on counter", () => {
+    const windfury = minion("windfury-minion"); // 2/3 with windfury
+    const enemy = makeMinion(3, 3); // 3/3, no windfury
+
+    const r = simulateCombat([windfury], [enemy], makeRng(0));
+
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    // Windfury attacks once (deals 2 dmg, enemy goes to 1 HP).
+    // Enemy counterattacks (deals 3 dmg, windfury goes to 0 HP, dies).
+    // Windfury is dead, no more attacks from windfury.
+    // Enemy ptr never advances because left is now empty.
+    // Total: 1 Attack event (just windfury's first attack)
+    expect(attacks.length).toBe(1);
+    expect(attacks[0]!.attacker).toBe(windfury.instanceId);
+    // Windfury deals 2 damage, enemy counterattacks deals 3 damage
+    const enemyDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === enemy.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(enemyDamages).toHaveLength(1);
+    expect(enemyDamages[0]!.amount).toBe(2);
+    const windfuryDamages = r.transcript.filter(
+      (e) => e.kind === "Damage" && e.target === windfury.instanceId,
+    ) as Array<{ kind: "Damage"; target: string; amount: number }>;
+    expect(windfuryDamages).toHaveLength(1);
+    expect(windfuryDamages[0]!.amount).toBe(3);
+    // Windfury dies (3-3=0), enemy survives with 1 HP (3-2=1)
+    expect(r.winner).toBe("right");
+    expect(r.survivorsLeft).toHaveLength(0);
+    expect(r.survivorsRight).toHaveLength(1);
+    expect(r.survivorsRight[0]!.hp).toBe(1);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Feature validation (already implemented features)
+// ---------------------------------------------------------------------------
+
 describe("feature validation", () => {
   it("divine shield keyword is properly handled", () => {
     // Just a smoke test - the keyword must be compatible with existing combat
