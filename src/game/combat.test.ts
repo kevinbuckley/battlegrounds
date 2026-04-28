@@ -714,3 +714,51 @@ describe("golden minion — deathrattle doubles", () => {
     expect(mechSummons).toHaveLength(1);
   });
 });
+
+describe("Big League anomaly", () => {
+  it("adds +1/+1 to all minions on both boards", () => {
+    // 1/10 vs 5/1: 1/10 attacks 5/1 (5/1 dies at 0hp), 5/1 counterattacks 1/10 (1/10 at 5/1)
+    // Left wins with 5/1 survivor
+    const oneTen = makeMinion(1, 10);
+    const fiveOne = makeMinion(5, 1);
+
+    const without = simulateCombat([oneTen], [fiveOne], makeRng(0));
+    const withBigLeague = simulateCombat([oneTen], [fiveOne], makeRng(0), "big_league");
+
+    expect(without.winner).toBe("left");
+    expect(without.survivorsLeft[0]!.atk).toBe(1);
+    expect(without.survivorsLeft[0]!.hp).toBe(5);
+
+    // With big league: 2/11 vs 6/1: 2/11 attacks 6/1 (6/1 dies), 6/1 counterattacks 2/11 (2/11 at 5/1)
+    // Left wins with 5/1 survivor — same HP but higher ATK (2 vs 1)
+    expect(withBigLeague.winner).toBe("left");
+    expect(withBigLeague.survivorsLeft[0]!.atk).toBe(2);
+    expect(withBigLeague.survivorsLeft[0]!.hp).toBe(5);
+  });
+
+  it("increases maxHp of all minions", () => {
+    const threeHp = makeMinion(1, 3);
+    const fourHp = makeMinion(1, 4);
+
+    // 1/3 vs 3/1: 1/3 attacks 3/1 (3/1 dies), 3/1 counterattacks 1/3 (1/3 at 0/0, dies) → draw
+    const r1 = simulateCombat([threeHp], [makeMinion(3, 1)], makeRng(0));
+    expect(r1.winner).toBe("draw");
+
+    // 1/4 vs 3/1: 1/4 attacks 3/1 (3/1 dies), 3/1 counterattacks 1/4 (1/4 at 1/1) → left wins
+    const r2 = simulateCombat([fourHp], [makeMinion(3, 1)], makeRng(0));
+    expect(r2.winner).toBe("left");
+    expect(r2.survivorsLeft[0]!.hp).toBe(1);
+
+    // With big league: 1/4 vs 3/1 becomes 2/5 vs 4/1
+    // 2/5 attacks 4/1 (4/1 dies), 4/1 counterattacks 2/5 (2/5 at 2/1) → left wins with 1 HP
+    const r3 = simulateCombat([threeHp], [makeMinion(3, 1)], makeRng(0), "big_league");
+    expect(r3.winner).toBe("draw");
+
+    // With big league: 1/4 vs 3/1 becomes 2/5 vs 4/1
+    // 2/5 attacks 4/1 (4/1 dies), 4/1 counterattacks 2/5 (2/5 at 2/1) → left wins with 1 HP
+    const r4 = simulateCombat([fourHp], [makeMinion(3, 1)], makeRng(0), "big_league");
+    expect(r4.winner).toBe("left");
+    expect(r4.survivorsLeft[0]!.hp).toBe(1);
+    expect(r4.survivorsLeft[0]!.atk).toBe(2);
+  });
+});

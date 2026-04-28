@@ -19,6 +19,7 @@ export function simulateCombat(
   leftBoard: readonly MinionInstance[],
   rightBoard: readonly MinionInstance[],
   rng: Rng,
+  anomaly?: import("./types").AnomalyId,
 ): CombatResult {
   if (leftBoard.length === 0 && rightBoard.length === 0) return resolved("draw", [], []);
   if (leftBoard.length === 0) return resolved("right", [], [...rightBoard]);
@@ -27,8 +28,26 @@ export function simulateCombat(
   const transcript: CombatEvent[] = [];
   const emit = (e: CombatEvent) => transcript.push(e);
 
-  let left = leftBoard.map(cloneMinion);
-  let right = rightBoard.map(cloneMinion);
+  const isBigLeague = anomaly === "big_league";
+
+  let left = leftBoard.map((m) => {
+    const cloned = cloneMinion(m);
+    if (isBigLeague) {
+      cloned.atk += 1;
+      cloned.hp += 1;
+      cloned.maxHp += 1;
+    }
+    return cloned;
+  });
+  let right = rightBoard.map((m) => {
+    const cloned = cloneMinion(m);
+    if (isBigLeague) {
+      cloned.atk += 1;
+      cloned.hp += 1;
+      cloned.maxHp += 1;
+    }
+    return cloned;
+  });
 
   // Determine starting attacker
   const baronOnLeft = left.some((m) => m.baronRivendare);

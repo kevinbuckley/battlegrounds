@@ -1,6 +1,6 @@
-import type { Rng } from "@/lib/rng";
-import { makeRng } from "@/lib/rng";
-import { makeInitialState, beginRecruitTurn } from "@/game/state";
+import { simulateCombat } from "@/game/combat";
+import { applyDamageToPlayer, calcDamage } from "@/game/damage";
+import { getAllHeroIds, HEROES } from "@/game/heroes/index";
 import {
   buyMinion,
   freezeShop,
@@ -10,12 +10,12 @@ import {
   sellMinion,
   upgradeTier,
 } from "@/game/shop";
-import { simulateCombat } from "@/game/combat";
-import { calcDamage, applyDamageToPlayer } from "@/game/damage";
-import { getAllHeroIds, HEROES } from "@/game/heroes/index";
-import { makePlayerView } from "./strategy";
-import type { GameState, Action, PlayerId } from "@/game/types";
+import { beginRecruitTurn, makeInitialState } from "@/game/state";
+import type { Action, GameState, PlayerId } from "@/game/types";
+import type { Rng } from "@/lib/rng";
+import { makeRng } from "@/lib/rng";
 import type { Strategy } from "./strategy";
+import { makePlayerView } from "./strategy";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -75,8 +75,8 @@ function createPairings(aliveIds: PlayerId[], rng: Rng): Array<[PlayerId, Player
 // Public entry point
 // ---------------------------------------------------------------------------
 
-const MAX_TURNS = 60;           // safety limit to prevent infinite loops
-const STALEMATE_THRESHOLD = 5;  // consecutive all-draw turns before force-elim
+const MAX_TURNS = 60; // safety limit to prevent infinite loops
+const STALEMATE_THRESHOLD = 5; // consecutive all-draw turns before force-elim
 
 export function runLobby(seed: number, strategies: Strategy[]): LobbyResult {
   if (strategies.length !== 8) {
@@ -138,7 +138,12 @@ export function runLobby(seed: number, strategies: Strategy[]): LobbyResult {
       const rightPlayer = state.players[rightId]!;
 
       const combatRng = rng.fork(`combat:${leftId}v${rightId}:${turn}`);
-      const result = simulateCombat(leftPlayer.board, rightPlayer.board, combatRng);
+      const result = simulateCombat(
+        leftPlayer.board,
+        rightPlayer.board,
+        combatRng,
+        state.modifierState.anomaly,
+      );
 
       if (result.winner === "left") {
         const dmg = calcDamage(rightPlayer.tier, result.survivorsLeft);

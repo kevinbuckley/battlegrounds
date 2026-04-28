@@ -442,7 +442,7 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
     const leftBoard = left.board.filter((m) => m.hp > 0);
     const rightBoard = right.board.filter((m) => m.hp > 0);
 
-    const combatResult = simulateCombat(leftBoard, rightBoard, rng);
+    const combatResult = simulateCombat(leftBoard, rightBoard, rng, result.modifierState.anomaly);
 
     result = applyCombatResult(result, leftId, rightId, combatResult);
 

@@ -92,6 +92,15 @@ export const tavernDiscount: AnomalyCard = {
   },
 };
 
+export const bigLeague: AnomalyCard = {
+  id: "big_league",
+  name: "Big League",
+  description: "All minions start combat with +1/+1.",
+  onSetup: (_state: GameState, _rng: Rng): void => {
+    // Big League is applied per-combat in combat.ts based on modifierState.anomaly.
+  },
+};
+
 const ALL_ANOMALIES: AnomalyCard[] = [
   goldenTouch,
   heavyHitters,
@@ -99,6 +108,7 @@ const ALL_ANOMALIES: AnomalyCard[] = [
   liquified,
   armoredUp,
   tavernDiscount,
+  bigLeague,
 ];
 
 export function getAnomaly(id: string): AnomalyCard {
