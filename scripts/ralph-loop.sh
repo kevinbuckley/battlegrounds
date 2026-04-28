@@ -214,11 +214,23 @@ caffeinate -d -i -s &
 CAFFEINATE_PID=$!
 trap "kill $CAFFEINATE_PID 2>/dev/null" EXIT
 
+STOP_FILE="$REPO/.ralph-stop"
+# Clean up any leftover stop file from a previous run
+rm -f "$STOP_FILE"
+log "  stop file  = $STOP_FILE  (touch it to stop gracefully after current iteration)"
+
 START_TS=$(date +%s)
 DEADLINE=$(( START_TS + MAX_TIME_HOURS * 3600 ))
 CONSECUTIVE_FAILS=0
 
 for ((i=1; i<=MAX_ITERS; i++)); do
+  # Graceful stop: check for sentinel file before each iteration
+  if [[ -f "$STOP_FILE" ]]; then
+    log "Stop file detected (.ralph-stop) — exiting loop gracefully after $((i-1)) iterations."
+    rm -f "$STOP_FILE"
+    break
+  fi
+
   if [[ $(date +%s) -ge $DEADLINE ]]; then
     log "Hit max-time deadline after $((i-1)) iterations."
     break
@@ -226,6 +238,12 @@ for ((i=1; i<=MAX_ITERS; i++)); do
   run_iteration "$i" || log "  (run_iteration error swallowed; continuing)"
 
   if (( i < MAX_ITERS )); then
+    # Check stop file again after iteration completes (before sleeping)
+    if [[ -f "$STOP_FILE" ]]; then
+      log "Stop file detected after iteration $i — exiting gracefully."
+      rm -f "$STOP_FILE"
+      break
+    fi
     log "  sleeping ${SLEEP_BETWEEN}s..."
     sleep "$SLEEP_BETWEEN"
   fi
