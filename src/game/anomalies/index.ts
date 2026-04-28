@@ -83,7 +83,23 @@ export const armoredUp: AnomalyCard = {
   },
 };
 
-const ALL_ANOMALIES: AnomalyCard[] = [goldenTouch, heavyHitters, doubleDown, liquified, armoredUp];
+export const tavernDiscount: AnomalyCard = {
+  id: "tavern_discount",
+  name: "Tavern Discount",
+  description: "All shop minions cost 1 less gold (minimum 1).",
+  onSetup: (_state: GameState, _rng: Rng): void => {
+    // Discount is applied per-shop-roll in shop.ts based on modifierState.anomaly.
+  },
+};
+
+const ALL_ANOMALIES: AnomalyCard[] = [
+  goldenTouch,
+  heavyHitters,
+  doubleDown,
+  liquified,
+  armoredUp,
+  tavernDiscount,
+];
 
 export function getAnomaly(id: string): AnomalyCard {
   const match = ALL_ANOMALIES.find((a) => a.id === id);

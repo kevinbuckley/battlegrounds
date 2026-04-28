@@ -120,3 +120,4 @@
 2026-04-27 | 41cc0ad | FIXED: Add pairing display — show "You're fighting: <opponent hero name>" banner during combat phase
 2026-04-27 | 81eea95 | FIXED: Add hero damage recap — red banner showing "You took X damage from <opponent>" displayed briefly after combat ends before returning to recruit phase
 2026-04-28 | d49cba3 | FIXED: Add Swat Team spell (tier 3-6, cost 3, summons three 1/1 Recruits with rush to player's board), with unit tests
+2026-04-28 | ac54f88 | FIXED: Add Tavern Discount anomaly — all shop minions cost 1 less gold (minimum 1), wired into rollShopForPlayer

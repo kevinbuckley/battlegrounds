@@ -130,8 +130,14 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
   // Draw fresh shop
   const { instances, pool } = drawFromPool(poolAfterReturn, player.tier, size, rng);
 
+  // Apply Tavern Discount anomaly: all shop minions cost 1 less (min 1).
+  const isTavernDiscount = state.modifierState.anomaly === "tavern_discount";
+  const shopWithDiscount = isTavernDiscount
+    ? instances.map((m) => ({ ...m, discount: 1 }))
+    : instances;
+
   return {
-    ...updatePlayer(state, playerId, (p) => ({ ...p, shop: instances })),
+    ...updatePlayer(state, playerId, (p) => ({ ...p, shop: shopWithDiscount })),
     pool,
   };
 }
@@ -155,7 +161,8 @@ export function buyMinion(
 
   const card = MINIONS[minion.cardId];
   const bountyCost = card?.bountyCost;
-  const buyCost = bountyCost ?? COST_BUY;
+  const baseCost = bountyCost ?? COST_BUY;
+  const buyCost = Math.max(1, baseCost - (minion.discount ?? 0));
 
   if (player.gold < buyCost)
     throw new Error(`Not enough gold to buy (have ${player.gold}, need ${buyCost})`);

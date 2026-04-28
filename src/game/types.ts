@@ -129,6 +129,8 @@ export interface MinionInstance {
   attachments: Record<string, unknown>;
   /** Hook functions copied from the card definition at instantiation time. */
   hooks: MinionHooks;
+  /** Gold discount applied at purchase time (e.g. from anomalies). */
+  discount?: number;
 }
 
 // ---------------------------------------------------------------------------
