@@ -119,3 +119,4 @@
 2026-04-27 | f827bb0 | FIXED: Add victory screen overlay — shows winner's hero name, placement breakdown for all 8 players, and "Play Again" button that resets to hero selection
 2026-04-27 | 41cc0ad | FIXED: Add pairing display — show "You're fighting: <opponent hero name>" banner during combat phase
 2026-04-27 | 81eea95 | FIXED: Add hero damage recap — red banner showing "You took X damage from <opponent>" displayed briefly after combat ends before returning to recruit phase
+2026-04-28 | d49cba3 | FIXED: Add Swat Team spell (tier 3-6, cost 3, summons three 1/1 Recruits with rush to player's board), with unit tests

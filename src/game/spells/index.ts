@@ -308,6 +308,45 @@ export const tavernTipper: SpellCard = {
   },
 };
 
+/** Summon three 1/1 Recruits with Rush to your board. */
+export const swatTeam: SpellCard = {
+  id: "swat_team",
+  name: "Swat Team",
+  description: "Summon three 1/1 Recruits with Rush to your board.",
+  cost: 3,
+  tiers: [3, 4, 5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+      const availableSlots = 7 - player.board.length;
+      const count = Math.min(3, availableSlots);
+      if (count === 0) return ctx.state;
+
+      let state = ctx.state;
+      for (let i = 0; i < count; i++) {
+        const recruit: MinionInstance = {
+          instanceId: nextInstanceId(),
+          cardId: "swat_recruit",
+          atk: 1,
+          hp: 1,
+          maxHp: 1,
+          keywords: new Set(["rush" as const]),
+          tribes: [] as Tribe[],
+          golden: false,
+          spellDamage: 0,
+          attachments: {},
+          hooks: EMPTY_HOOKS,
+        };
+        state = updatePlayer(state, ctx.playerId, (p) => ({
+          ...p,
+          board: [...p.board, recruit],
+        }));
+      }
+      return state;
+    },
+  },
+};
+
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
   [mysteryShot.id]: mysteryShot,
@@ -318,6 +357,7 @@ export const SPELLS: Record<string, SpellCard> = {
   [cauterizingFlame.id]: cauterizingFlame,
   [bananaSpell.id]: bananaSpell,
   [tavernTipper.id]: tavernTipper,
+  [swatTeam.id]: swatTeam,
 };
 
 export function getSpell(id: string): SpellCard {

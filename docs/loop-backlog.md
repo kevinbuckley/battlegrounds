@@ -23,7 +23,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### More spells
 
-- [ ] [S] Add `Swat Team` spell (tier 3-6, cost 3): summon three 1/1 Recruits with rush on player's board
+- [x] [S] Add `Swat Team` spell (tier 3-6, cost 3): summon three 1/1 Recruits with rush on player's board
 - [ ] [S] Add `Tavern Brawl` spell (tier 2-4, cost 2): give a friendly minion +2/+1 — verify it doesn't duplicate the already-registered `tavernBrawler` spell
 
 ### More anomalies
