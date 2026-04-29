@@ -145,10 +145,22 @@ describe("combat phase", () => {
 
   it("deals 0 damage on draws", () => {
     const alley = instantiate(MINIONS["alley_cat"]!);
-    // Player 0 vs Player 1: both have 1 alley_cat → draw
-    // Other fights: player 2-7 have no minions → all draws
-    const state = makeCombatState([alley], [alley], [], [], [], [], [], []);
-    const result = step(state, { kind: "EndTurn", player: 0 }, RNG);
+    // Use a fresh isolated RNG so this test is not affected by shared-RNG
+    // state from other tests. Also force stub_hero for all players so no hero
+    // passives (e.g. Ragnaros deal-8-at-combat-start) can change the outcome.
+    const freshRng = makeRng(99);
+    const base = makeCombatState([alley], [instantiate(MINIONS["alley_cat"]!), ], [], [], [], [], [], []);
+    const state = {
+      ...base,
+      players: base.players.map((p) => ({
+        ...p,
+        heroId: "stub_hero",
+        hp: 40,
+        armor: 0,
+        buddies: [],
+      })),
+    };
+    const result = step(state, { kind: "EndTurn", player: 0 }, freshRng);
     // Both players should still have full HP (no damage on draw)
     expect(result.players[0]!.hp).toBe(40);
     expect(result.players[1]!.hp).toBe(40);

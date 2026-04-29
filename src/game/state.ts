@@ -107,7 +107,13 @@ function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rn
   }));
 }
 
-function playSpell(state: GameState, playerId: number, spellIndex: number, rng: Rng): GameState {
+function playSpell(
+  state: GameState,
+  playerId: number,
+  spellIndex: number,
+  targetIndex: number | undefined,
+  rng: Rng,
+): GameState {
   const player = getPlayer(state, playerId);
   const spellInstance = player.spells[spellIndex];
   if (!spellInstance) throw new Error(`No spell at index ${spellIndex}`);
@@ -116,7 +122,7 @@ function playSpell(state: GameState, playerId: number, spellIndex: number, rng: 
   if (!spellCard) throw new Error(`Unknown spell: ${spellInstance.cardId}`);
 
   if (spellCard.effects.onPlay) {
-    const ctx = {
+    const ctx: Record<string, unknown> = {
       self: {
         instanceId: spellInstance.instanceId,
         cardId: spellInstance.cardId,
@@ -135,7 +141,12 @@ function playSpell(state: GameState, playerId: number, spellIndex: number, rng: 
       rng,
       spellDamage: totalSpellDamage(player),
     };
-    const afterSpell = spellCard.effects.onPlay(ctx);
+    if (targetIndex !== undefined) {
+      (ctx as { targetIndex: number }).targetIndex = targetIndex;
+    }
+    const afterSpell = spellCard.effects.onPlay(
+      ctx as unknown as import("./types").RecruitCtx & { targetIndex?: number },
+    );
     // Fire onCast hooks for all minions on the player's board
     const afterCast = fireOnCastHooks(afterSpell, playerId, rng);
     return applyComboToBoard(afterCast, playerId);
@@ -251,7 +262,7 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
     case "BuySpell":
       return buySpell(state, action.player, action.shopIndex, rng);
     case "PlaySpell":
-      return playSpell(state, action.player, action.spellIndex, rng);
+      return playSpell(state, action.player, action.spellIndex, action.targetIndex, rng);
     case "SellMinion":
       return "handIndex" in action
         ? sellMinion(state, action.player, action.handIndex, true)

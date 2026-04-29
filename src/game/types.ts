@@ -322,7 +322,7 @@ export interface GameState {
 export type SpellId = string;
 
 export interface SpellEffects {
-  onPlay?: (ctx: RecruitCtx) => GameState;
+  onPlay?: (ctx: RecruitCtx & { targetIndex?: number }) => GameState;
 }
 
 export interface SpellCard {
@@ -347,7 +347,7 @@ export type Action =
   | { kind: "SelectHero"; player: PlayerId; heroId: HeroId }
   | { kind: "BuyMinion"; player: PlayerId; shopIndex: number }
   | { kind: "BuySpell"; player: PlayerId; shopIndex: number }
-  | { kind: "PlaySpell"; player: PlayerId; spellIndex: number }
+  | { kind: "PlaySpell"; player: PlayerId; spellIndex: number; targetIndex?: number }
   | { kind: "SellMinion"; player: PlayerId; boardIndex: number }
   | { kind: "SellMinion"; player: PlayerId; handIndex: number }
   | { kind: "PlayMinion"; player: PlayerId; handIndex: number; boardIndex: number }
