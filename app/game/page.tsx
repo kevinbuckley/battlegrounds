@@ -253,7 +253,7 @@ export default function GamePage() {
       return;
     }
 
-    const state = makeInitialState(Date.now());
+    const state = makeInitialState(1);
     const updated = step(
       state,
       { kind: "SelectHero", player: 0, heroId },

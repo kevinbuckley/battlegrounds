@@ -131,3 +131,4 @@
 2026-04-29 | 836e1c3 | FIXED: Wire Banana spell into shop rolls — spells appear in the last 1/4 of shop slots starting at tier 2, plus fix AI heuristic and Curator hero to skip spell items in shop
 2026-04-29 | 39cdbeb | FIXED: Add Ghastcoiler tier 6 beast (deathrattle summons 2 random deathrattle minions from tier 6), with unit tests
 2026-04-29 | e9b5bbe | FIXED: Add Mama Bear tier 6 beast (onShopSummon gives itself +5/+5 whenever a Beast is summoned to the player's board), add onShopSummon to RecruitCtx and wire into shop.ts, with unit tests
+2026-04-29 | 085460c | FIXED: Replace non-deterministic Date.now() seed with fixed seed (1) in game page so every game is deterministic and replayable

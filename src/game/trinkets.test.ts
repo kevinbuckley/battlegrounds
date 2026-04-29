@@ -232,7 +232,7 @@ describe("scalingSoul", () => {
 describe("pickTrinket", () => {
   it("always picks from available trinkets", () => {
     for (let i = 0; i < 100; i++) {
-      const picked = pickTrinket(makeRng(Date.now() + i));
+      const picked = pickTrinket(makeRng(42 + i));
       expect(getAllTrinketIds()).toContain(picked.id);
     }
   });
