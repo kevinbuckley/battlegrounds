@@ -603,7 +603,7 @@ export default function GamePage() {
                           }}
                           className="mt-1 rounded bg-red-500/80 px-2 py-0.5 text-[10px] font-semibold text-white transition hover:bg-red-400"
                         >
-                          Sell (+{playerGold()})g
+                          Sell (+{minion.golden ? 2 : 1})g
                         </button>
                       )}
                     </button>
@@ -761,7 +761,7 @@ export default function GamePage() {
                           }}
                           className="mt-1 rounded bg-red-500/80 px-2 py-0.5 text-[10px] font-semibold text-white transition hover:bg-red-400"
                         >
-                          Sell (+{playerGold()})g
+                          Sell (+{minion.golden ? 2 : 1})g
                         </button>
                       )}
                     </div>

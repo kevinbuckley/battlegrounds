@@ -140,3 +140,4 @@
 2026-04-29 | ddfb483 | FIXED: Make spells visible in shop UI — shop rendering now checks SPELLS registry for spell items, renders them with purple border and cost, and wires BuySpell action handler
 2026-04-29 | 0614ba3 | FIXED: Add Coldlight Seer tier 3 murloc (battlecry gives all friendly murlocs +2 HP), with unit tests
 2026-04-29 | 43eefce | FIXED: Add spell targeting UI — clicking a spell in hand enters targeting mode, board minions highlight as clickable targets, clicking a board minion plays the spell with that target index, cancel button to exit targeting mode
+2026-04-29 | 47a1e48 | FIXED: Sell button on board and hand now shows correct sell value (1g normal, 2g golden) instead of displaying player gold amount
