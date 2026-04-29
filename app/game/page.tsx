@@ -814,65 +814,110 @@ export default function GamePage() {
           <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
             <h2 className="mb-3 text-xl font-semibold text-slate-100">Tavern</h2>
             <div className="flex gap-3">
-              {(gameState.players[0]?.shop ?? []).map((minion, idx) => {
-                const card = MINIONS[minion.cardId];
-                if (!card) return null;
-                const canBuy =
-                  (gameState.players[0]?.gold ?? 0) >= COST_BUY &&
-                  gameState.phase.kind === "Recruit";
-                const handFull = handMinions.length >= 10;
-                const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
-                return (
-                  <button
-                    key={minion.instanceId}
-                    type="button"
-                    onClick={() => handleBuyMinion(idx)}
-                    disabled={!canBuy || handFull}
-                    className={`flex min-w-[120px] flex-col gap-2 rounded-lg border border-slate-600 bg-slate-800 px-4 py-3 transition ${
-                      canBuy && !handFull
-                        ? "cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95"
-                        : "cursor-not-allowed opacity-50"
-                    } ${minion.golden ? "border-amber-400 ring-2 ring-amber-400/30" : ""}`}
-                  >
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={`inline-block rounded px-1.5 py-0.5 text-xs font-medium text-white ${tierColor}`}
-                      >
-                        T{card.tier}
-                      </span>
-                      <span className="text-xs text-slate-400">{card.tribes.join("/")}</span>
-                    </div>
-                    <span className="text-[11px] font-medium leading-tight text-slate-300">
-                      {card.name}
-                    </span>
-                    <div className="flex gap-3 text-sm font-bold">
-                      <span className="flex items-center gap-1 text-red-400">
-                        {card.baseAtk}
-                        <span>⚔</span>
-                      </span>
-                      <span className="flex items-center gap-1 text-orange-400">
-                        {card.baseHp}
-                        <span>❤</span>
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-center gap-1 text-xs font-semibold text-amber-400">
-                      <span>⧉</span>
-                      <span>{COST_BUY}</span>
-                    </div>
-                    {card.baseKeywords.length > 0 && (
-                      <div className="flex flex-wrap gap-1">
-                        {Array.from(card.baseKeywords).map((kw) => (
-                          <span
-                            key={kw}
-                            className="rounded bg-slate-700 px-1 py-0.5 text-[10px] text-slate-300"
-                          >
-                            {kw}
-                          </span>
-                        ))}
+              {(gameState.players[0]?.shop ?? []).map((shopItem, idx) => {
+                const minionCard = MINIONS[shopItem.cardId];
+                const spellCard = SPELLS[shopItem.cardId];
+                if (minionCard) {
+                  const canBuy =
+                    (gameState.players[0]?.gold ?? 0) >= COST_BUY &&
+                    gameState.phase.kind === "Recruit";
+                  const handFull = handMinions.length >= 10;
+                  const tierColor = TIER_COLORS[minionCard.tier] ?? "bg-gray-600";
+                  return (
+                    <button
+                      key={shopItem.instanceId}
+                      type="button"
+                      onClick={() => handleBuyMinion(idx)}
+                      disabled={!canBuy || handFull}
+                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border border-slate-600 bg-slate-800 px-4 py-3 transition ${
+                        canBuy && !handFull
+                          ? "cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95"
+                          : "cursor-not-allowed opacity-50"
+                      } ${shopItem.golden ? "border-amber-400 ring-2 ring-amber-400/30" : ""}`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-block rounded px-1.5 py-0.5 text-xs font-medium text-white ${tierColor}`}
+                        >
+                          T{minionCard.tier}
+                        </span>
+                        <span className="text-xs text-slate-400">
+                          {minionCard.tribes.join("/")}
+                        </span>
                       </div>
-                    )}
-                  </button>
-                );
+                      <span className="text-[11px] font-medium leading-tight text-slate-300">
+                        {minionCard.name}
+                      </span>
+                      <div className="flex gap-3 text-sm font-bold">
+                        <span className="flex items-center gap-1 text-red-400">
+                          {minionCard.baseAtk}
+                          <span>⚔</span>
+                        </span>
+                        <span className="flex items-center gap-1 text-orange-400">
+                          {minionCard.baseHp}
+                          <span>❤</span>
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-center gap-1 text-xs font-semibold text-amber-400">
+                        <span>⧉</span>
+                        <span>{COST_BUY}</span>
+                      </div>
+                      {minionCard.baseKeywords.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                          {Array.from(minionCard.baseKeywords).map((kw) => (
+                            <span
+                              key={kw}
+                              className="rounded bg-slate-700 px-1 py-0.5 text-[10px] text-slate-300"
+                            >
+                              {kw}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  );
+                }
+                if (spellCard) {
+                  const canBuy =
+                    (gameState.players[0]?.gold ?? 0) >= spellCard.cost &&
+                    gameState.phase.kind === "Recruit";
+                  return (
+                    <button
+                      key={shopItem.instanceId}
+                      type="button"
+                      onClick={() => {
+                        if (!gameState) return;
+                        try {
+                          const next = step(
+                            gameState,
+                            { kind: "BuySpell", player: 0, shopIndex: idx },
+                            rngForTurn(gameState, "buySpell"),
+                          );
+                          setGameState(next);
+                          setError(null);
+                        } catch {
+                          setError("Could not buy spell");
+                        }
+                      }}
+                      disabled={!canBuy}
+                      className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${
+                        canBuy
+                          ? "border-purple-500/50 cursor-pointer hover:border-purple-400 hover:bg-slate-750 active:scale-95"
+                          : "border-slate-600 cursor-not-allowed opacity-50"
+                      } bg-slate-800 px-4 py-3 transition`}
+                    >
+                      <span className="text-[11px] font-medium leading-tight text-slate-300">
+                        {spellCard.name}
+                      </span>
+                      <span className="text-xs text-slate-400">{spellCard.description}</span>
+                      <div className="flex items-center justify-center gap-1 text-xs font-semibold text-purple-400">
+                        <span>⧉</span>
+                        <span>{spellCard.cost}</span>
+                      </div>
+                    </button>
+                  );
+                }
+                return null;
               })}
               {!(gameState.players[0]?.shop ?? []).length && (
                 <p className="text-slate-500">Shop is empty</p>
