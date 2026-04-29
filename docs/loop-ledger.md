@@ -145,3 +145,4 @@
 2026-04-29 | 7bbf16b | FIXED: Add Screwjank Clunker tier 3 mech (battlecry gives a friendly mech +2/+2), with unit tests
 
 2026-04-29 | a96b394 | FIXED: Wire AI strategies into endTurn so AI players buy/sell/upgrade during recruit phase before combat resolves, matching real Battlegrounds behavior
+2026-04-29 | da9206b | FIXED: Fix buySpell shop index calculation — shopIndex from UI is absolute index in full shop, but buySpell was indexing it directly into the sliced spellSlots array, causing "No spell at shop index N" errors when buying spells from the shop

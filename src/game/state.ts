@@ -91,11 +91,13 @@ function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rn
   const shopSize = Math.floor(shopItems.length * 0.25); // 1/4 of slots are spells
   const spellSlots = shopItems.slice(-shopSize);
 
-  if (shopIndex < 0 || shopIndex >= spellSlots.length) {
+  // shopIndex is the absolute index in the full shop; convert to relative index
+  const relativeIndex = shopIndex - (shopItems.length - shopSize);
+  if (relativeIndex < 0 || relativeIndex >= spellSlots.length) {
     throw new Error(`No spell at shop index ${shopIndex}`);
   }
 
-  const spellInstance = spellSlots[shopIndex]!;
+  const spellInstance = spellSlots[relativeIndex]!;
   const spellCard = SPELLS[spellInstance.cardId];
   if (!spellCard) throw new Error(`Unknown spell: ${spellInstance.cardId}`);
 
