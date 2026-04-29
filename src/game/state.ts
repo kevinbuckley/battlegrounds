@@ -135,10 +135,32 @@ function playSpell(state: GameState, playerId: number, spellIndex: number, rng: 
       rng,
       spellDamage: totalSpellDamage(player),
     };
-    return applyComboToBoard(spellCard.effects.onPlay(ctx), playerId);
+    const afterSpell = spellCard.effects.onPlay(ctx);
+    // Fire onCast hooks for all minions on the player's board
+    const afterCast = fireOnCastHooks(afterSpell, playerId, rng);
+    return applyComboToBoard(afterCast, playerId);
   }
 
   return applyComboToBoard(state, playerId);
+}
+
+/** Fire onCast hooks for all minions on the player's board. */
+function fireOnCastHooks(state: GameState, playerId: number, rng: Rng): GameState {
+  const player = getPlayer(state, playerId);
+  let result = state;
+  for (const minion of player.board) {
+    const cast = minion.hooks?.onCast;
+    if (cast) {
+      result = cast({
+        self: minion,
+        playerId,
+        state: result,
+        rng,
+        spellDamage: totalSpellDamage(player),
+      });
+    }
+  }
+  return result;
 }
 
 const ALL_TRIBES: Tribe[] = [

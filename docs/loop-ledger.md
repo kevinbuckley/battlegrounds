@@ -127,3 +127,4 @@
 2026-04-29 | 74b48bf | FIXED: Add Extra Life anomaly — each player gets one free revive the first time they reach 0 HP, wired into applyCombatResult, with unit tests
 2026-04-29 | b48216d | FIXED: Add Sindragosa hero — passive buffs frozen shop minions +1/+1 at start of each recruit turn, with unit tests
 2026-04-29 | cca6d37 | FIXED: Add Trade Prince Gallywix hero — active power (2 gold) discovers a random minion from the opponent's current board and adds it to hand, with unit tests
+2026-04-29 | b16133f | FIXED: Add Kalecgos, Arcane Aspect tier 6 dragon (onCast gives all friendly minions +1/+1 when a spell is cast), add onCast hook to MinionHooks, wire into playSpell in state.ts, with unit tests

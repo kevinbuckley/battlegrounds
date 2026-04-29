@@ -1070,3 +1070,79 @@ describe("Brann Bronzebeard", () => {
     expect(callCount).toBe(2);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Kalecgos, Arcane Aspect — onCast hook
+// ---------------------------------------------------------------------------
+
+describe("kalecgos_arcane_aspect onCast", () => {
+  it("is registered in MINIONS", () => {
+    expect(MINIONS["kalecgos_arcane_aspect"]).toBeDefined();
+    expect(MINIONS["kalecgos_arcane_aspect"]!.tier).toBe(6);
+    expect(MINIONS["kalecgos_arcane_aspect"]!.tribes).toContain("Dragon");
+    expect(MINIONS["kalecgos_arcane_aspect"]!.baseAtk).toBe(4);
+    expect(MINIONS["kalecgos_arcane_aspect"]!.baseHp).toBe(8);
+  });
+
+  it("onCast gives all friendly minions +1/+1 when a spell is cast", () => {
+    const kc = MINIONS["kalecgos_arcane_aspect"];
+    expect(kc).toBeDefined();
+    const inst = instantiate(kc!);
+    const ally = defineMinion({
+      id: "test_ally",
+      name: "Test Ally",
+      tier: 3,
+      tribes: ["Beast"],
+      baseAtk: 3,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const allyInst = instantiate(ally);
+    MINIONS[allyInst.cardId] = ally;
+
+    const state = makeTestState({
+      board: [inst, allyInst],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = kc!.hooks.onCast!(ctx);
+    const board = after.players[0]!.board;
+
+    const kcAfter = board.find((m) => m.instanceId === inst.instanceId);
+    const allyAfter = board.find((m) => m.instanceId === allyInst.instanceId);
+
+    expect(kcAfter).toBeDefined();
+    expect(kcAfter!.atk).toBe(5); // 4 + 1
+    expect(kcAfter!.hp).toBe(9); // 8 + 1
+    expect(allyAfter).toBeDefined();
+    expect(allyAfter!.atk).toBe(4); // 3 + 1
+    expect(allyAfter!.hp).toBe(3); // 2 + 1
+  });
+
+  it("onCast does nothing when board is empty", () => {
+    const kc = MINIONS["kalecgos_arcane_aspect"];
+    const inst = instantiate(kc!);
+
+    const state = makeTestState({
+      board: [],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = kc!.hooks.onCast!(ctx);
+    expect(after.players[0]!.board).toEqual([]);
+  });
+});

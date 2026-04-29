@@ -54,6 +54,7 @@ import brannBronzebeard from "./tier5/brann-bronzebeard";
 import junkbot from "./tier5/junkbot";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
+import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
 import terestianManferris from "./tier6/terestian-manferris";
 import zixorProjectHope from "./tier6/zixor-project-hope";
 
@@ -112,6 +113,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [junkbot.id]: junkbot,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [friggentNorthvalley.id]: friggentNorthvalley,
+  [kalecgosArcaneAspect.id]: kalecgosArcaneAspect,
   [terestianManferris.id]: terestianManferris,
   [zixorProjectHope.id]: zixorProjectHope,
   [bountyMinion.id]: bountyMinion,

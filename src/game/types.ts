@@ -108,6 +108,8 @@ export interface MinionHooks {
   onSummon?: (ctx: SummonCombatCtx) => void;
   /** Fires when a friendly divine shield is removed (popped) during combat. */
   onDivineShieldPop?: (ctx: CombatCtx) => void;
+  /** Fires when a spell is cast (recruit phase). */
+  onCast?: (ctx: RecruitCtx) => GameState;
 }
 
 // ---------------------------------------------------------------------------
