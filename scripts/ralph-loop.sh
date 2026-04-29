@@ -21,7 +21,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PROMPT_FILE="$REPO/scripts/ralph-prompt.md"
 MODEL="mlx//Users/kbux/.cache/mlx/Qwen3.6-35B-A3B-4bit"
-APP_URL="http://localhost:3000"
+APP_URL="http://localhost:3007"
 MLX_URL="http://localhost:8080/v1/models"
 
 LOG_DIR="$REPO/logs"

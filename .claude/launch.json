@@ -5,7 +5,7 @@
       "name": "Next.js dev (Turbopack)",
       "runtimeExecutable": "bun",
       "runtimeArgs": ["dev"],
-      "port": 3000
+      "port": 3007
     }
   ]
 }
