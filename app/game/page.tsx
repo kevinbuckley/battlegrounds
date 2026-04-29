@@ -6,12 +6,12 @@ import { DiscoverOverlay } from "@/components/DiscoverOverlay";
 import { GameOverOverlay } from "@/components/GameOverOverlay";
 import { Leaderboard } from "@/components/Leaderboard";
 import { simulateCombat } from "@/game/combat";
-import { applyDamageToPlayer, calcDamage } from "@/game/damage";
-import { baseGoldForTurn, COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
+import { calcDamage } from "@/game/damage";
+import { COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { SPELLS } from "@/game/spells/index";
-import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "@/game/state";
+import { makeInitialState, rngForTurn, step } from "@/game/state";
 import type {
   CombatEvent,
   CombatResult,
@@ -125,63 +125,6 @@ function eventTypeEmoji(evt: CombatEvent): string {
 // ------->-->-->-->-->-->-->-->-->-->-->-->
 // Helpers
 // ------->-->-->-->-->-->-->-->-->-->-->-->
-
-function applyCombatResult(initialState: GameState, result: CombatResult): GameState {
-  const player = initialState.players[0];
-  const opponent = initialState.players.find((p) => p.id !== 0 && !p.eliminated);
-  if (!player || !opponent) return initialState;
-
-  let state = initialState;
-
-  if (result.winner === "left") {
-    const dmg = calcDamage(opponent.tier, result.survivorsLeft);
-    state = applyDamageToPlayer(state, opponent.id, dmg);
-    state = {
-      ...state,
-      players: state.players.map((p) => (p.id === 0 ? { ...p, board: result.survivorsLeft } : p)),
-    };
-    state = {
-      ...state,
-      players: state.players.map((p) => (p.id === opponent.id ? { ...p, board: [] } : p)),
-    };
-  } else if (result.winner === "right") {
-    const dmg = calcDamage(player.tier, result.survivorsRight);
-    state = applyDamageToPlayer(state, player.id, dmg);
-    state = {
-      ...state,
-      players: state.players.map((p) =>
-        p.id === opponent.id ? { ...p, board: result.survivorsRight } : p,
-      ),
-    };
-    state = {
-      ...state,
-      players: state.players.map((p) => (p.id === 0 ? { ...p, board: [] } : p)),
-    };
-  }
-
-  return state;
-}
-
-function rollNextRecruitTurn(prevState: GameState, turnRng: ReturnType<typeof makeRng>): GameState {
-  const turn = prevState.turn + 1;
-  const state = { ...prevState, turn, phase: { kind: "Recruit", turn } };
-  const gold = baseGoldForTurn(turn);
-
-  for (const p of prevState.players) {
-    if (p.eliminated) continue;
-    const next = {
-      ...p,
-      gold,
-      upgradeCost:
-        !p.upgradedThisTurn && p.tier < 6 ? Math.max(0, p.upgradeCost - 1) : p.upgradeCost,
-      upgradedThisTurn: false,
-      heroPowerUsed: false,
-    };
-    // Shop rolling happens inside beginRecruitTurn
-  }
-
-  return beginRecruitTurn(state as GameState, turnRng);
-}
 
 // ------->-->-->-->-->-->-->-->-->-->-->-->
 // Game page
@@ -374,31 +317,15 @@ export default function GamePage() {
       setCombatResult(null);
       setOpponentHeroId("");
 
-      // Calculate damage taken and show recap before returning to recruit
+      // Show damage recap if player lost, then let the state from step(EndTurn)
+      // (already in Recruit phase) be displayed — no need to re-apply combat.
       if (gameState) {
         const player = gameState.players[0];
         const opponent = gameState.players.find((p) => p.id !== 0 && !p.eliminated);
         if (player && opponent && combatResult.winner === "right") {
           const damage = calcDamage(player.tier, combatResult.survivorsRight);
           setDamageRecap({ damage, opponentHeroId: opponent.heroId });
-          // Show recap for 2 seconds, then transition to recruit
-          setTimeout(() => {
-            setDamageRecap(null);
-            const postCombat = applyCombatResult(gameState, combatResult);
-            const { players } = gameState;
-            if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
-            const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
-            const next = rollNextRecruitTurn(postCombat, turnRng);
-            setGameState(next);
-          }, 2000);
-        } else {
-          // No damage recap needed (player won or draw), transition immediately
-          const postCombat = applyCombatResult(gameState, combatResult);
-          const { players } = gameState;
-          if (players.find((p) => p.id === 0)?.eliminated ?? false) return;
-          const turnRng = makeRng(postCombat.seed).fork(`turn:${postCombat.turn + 1}`);
-          const next = rollNextRecruitTurn(postCombat, turnRng);
-          setGameState(next);
+          setTimeout(() => setDamageRecap(null), 2000);
         }
       }
     } else {

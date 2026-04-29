@@ -1,4 +1,5 @@
-2026-04-29 | 6fd23c7 | FIXED: Make hero selection deterministic by passing seed from home page through hero select to game page, replacing Math.random() with seeded RNG
+2026-04-29 | 614ac01 | FIXED: Make hero selection deterministic by passing seed from home page through hero select to game page, replacing Math.random() with seeded RNG
+2026-04-29 | 614ac01 | FIXED: Remove duplicate combat application in game page — step(EndTurn) already resolves combat, applies damage, and transitions to recruit phase; UI no longer re-applies results after animation
 2026-04-29 | 2a0e9ac | FIXED: Fix sell button for hand minions — SellMinion action now supports handIndex so selling from hand works correctly (was passing hand index as boardIndex)
 2026-04-29 | 5efd2f6 | FIXED: Fix sellMinion board path returning minion to pool twice — was calling returnToPool twice (once in unused newPool variable, once directly in return), now correctly returns to pool exactly once
 2026-04-29 | 61fd70f | FIXED: Fix sellMinion variable shadowing bug and incorrect sell value — hand path now correctly returns minion to pool (was shadowed by inner let), and sell value is now 2g for golden / 1g for normal (was always 1g)
