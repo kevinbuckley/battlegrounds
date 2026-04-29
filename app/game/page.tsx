@@ -592,7 +592,7 @@ export default function GamePage() {
                               {
                                 kind: "SellMinion",
                                 player: 0,
-                                boardIndex: handMinions.indexOf(minion),
+                                handIndex: idx,
                               },
                               rngForTurn(gameState, "sell"),
                             );

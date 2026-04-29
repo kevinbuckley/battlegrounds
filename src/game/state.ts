@@ -253,7 +253,9 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
     case "PlaySpell":
       return playSpell(state, action.player, action.spellIndex, rng);
     case "SellMinion":
-      return sellMinion(state, action.player, action.boardIndex);
+      return "handIndex" in action
+        ? sellMinion(state, action.player, action.handIndex, true)
+        : sellMinion(state, action.player, action.boardIndex);
     case "PlayMinion":
       return playMinionToBoard(state, action.player, action.handIndex, action.boardIndex, rng);
     case "ReorderBoard":

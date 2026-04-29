@@ -349,6 +349,7 @@ export type Action =
   | { kind: "BuySpell"; player: PlayerId; shopIndex: number }
   | { kind: "PlaySpell"; player: PlayerId; spellIndex: number }
   | { kind: "SellMinion"; player: PlayerId; boardIndex: number }
+  | { kind: "SellMinion"; player: PlayerId; handIndex: number }
   | { kind: "PlayMinion"; player: PlayerId; handIndex: number; boardIndex: number }
   | { kind: "ReorderBoard"; player: PlayerId; from: number; to: number }
   | { kind: "RefreshShop"; player: PlayerId }

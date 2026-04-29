@@ -226,17 +226,41 @@ export function buyMinion(
   return result;
 }
 
-export function sellMinion(state: GameState, playerId: PlayerId, boardIndex: number): GameState {
+export function sellMinion(
+  state: GameState,
+  playerId: PlayerId,
+  boardIndex: number,
+  fromHand?: boolean,
+): GameState {
   const player = getPlayer(state, playerId);
-  const minion = player.board[boardIndex];
-  if (!minion) throw new Error(`No minion at board index ${boardIndex}`);
+  let minion: MinionInstance | undefined;
+  let newState: GameState;
 
-  const newPool = returnToPool(state.pool, [minion]);
-  const newState = updatePlayer(state, playerId, (p) => ({
-    ...p,
-    gold: p.gold + REFUND_SELL,
-    board: p.board.filter((_, i) => i !== boardIndex),
-  }));
+  if (fromHand) {
+    minion = player.hand[boardIndex];
+    if (!minion) throw new Error(`No minion at hand index ${boardIndex}`);
+    const newPool = returnToPool(state.pool, [minion]);
+    newState = updatePlayer(state, playerId, (p) => ({
+      ...p,
+      gold: p.gold + REFUND_SELL,
+      hand: p.hand.filter((_, i) => i !== boardIndex),
+    }));
+    const hero = HEROES[player.heroId];
+    if (hero?.onSell) {
+      newState = hero.onSell(newState, playerId);
+    }
+    return { ...newState, pool: newPool };
+  } else {
+    minion = player.board[boardIndex];
+    if (!minion) throw new Error(`No minion at board index ${boardIndex}`);
+
+    const newPool = returnToPool(state.pool, [minion]);
+    newState = updatePlayer(state, playerId, (p) => ({
+      ...p,
+      gold: p.gold + REFUND_SELL,
+      board: p.board.filter((_, i) => i !== boardIndex),
+    }));
+  }
 
   const hero = HEROES[player.heroId];
   let result = newState;
@@ -244,7 +268,7 @@ export function sellMinion(state: GameState, playerId: PlayerId, boardIndex: num
     result = hero.onSell(newState, playerId);
   }
 
-  return { ...result, pool: newPool };
+  return { ...result, pool: returnToPool(state.pool, [minion]) };
 }
 
 export function playMinionToBoard(

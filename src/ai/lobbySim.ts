@@ -40,7 +40,9 @@ function applyRecruitAction(state: GameState, action: Action, rng: Rng): GameSta
     case "BuyMinion":
       return buyMinion(state, action.player, action.shopIndex);
     case "SellMinion":
-      return sellMinion(state, action.player, action.boardIndex);
+      return "handIndex" in action
+        ? sellMinion(state, action.player, action.handIndex, true)
+        : sellMinion(state, action.player, action.boardIndex);
     case "PlayMinion":
       return playMinionToBoard(state, action.player, action.handIndex, action.boardIndex, rng);
     case "UpgradeTier":
