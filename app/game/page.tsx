@@ -241,6 +241,7 @@ export default function GamePage() {
   const playerGold = () => gameState?.players[0]?.gold ?? 0;
 
   useEffect(() => {
+    const seed = Number(searchParams.get("seed")) || 1;
     const heroId = searchParams.get("hero");
     if (!heroId) {
       router.push("/hero-select" as never);
@@ -253,7 +254,7 @@ export default function GamePage() {
       return;
     }
 
-    const state = makeInitialState(1);
+    const state = makeInitialState(seed);
     const updated = step(
       state,
       { kind: "SelectHero", player: 0, heroId },

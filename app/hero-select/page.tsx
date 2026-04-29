@@ -1,36 +1,44 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { HEROES } from "@/game/heroes/index";
 import type { Hero } from "@/game/types";
+import { makeRng } from "@/lib/rng";
 
-function pickRandomHeroes(count: number): Hero[] {
+const GAME_SEED = 1;
+
+function pickRandomHeroes(count: number, seed: number): Hero[] {
   const all = Object.values(HEROES);
-  const shuffled = [...all].sort(() => Math.random() - 0.5);
+  const rng = makeRng(seed);
+  const shuffled = rng.shuffle(all);
   return shuffled.slice(0, count);
 }
 
 export default function HeroSelectPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [heroes, setHeroes] = useState<Hero[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const refresh = useCallback(() => {
+  const getSeed = (): number => Number(searchParams.get("seed")) || GAME_SEED;
+
+  const refresh = useCallback((seed: number) => {
     if (Object.values(HEROES).length < 4) {
       setError("Not enough heroes available");
       return;
     }
-    setHeroes(pickRandomHeroes(4));
+    setHeroes(pickRandomHeroes(4, seed));
     setError(null);
   }, []);
 
   useEffect(() => {
-    refresh();
-  }, [refresh]);
+    refresh(getSeed());
+  }, [refresh, searchParams]);
 
   const onSelect = (heroId: string) => {
-    router.push(`/game?hero=${heroId}`);
+    const seed = getSeed();
+    router.push(`/game?seed=${seed}&hero=${heroId}`);
   };
 
   if (error) {
@@ -77,7 +85,7 @@ export default function HeroSelectPage() {
 
       <button
         type="button"
-        onClick={refresh}
+        onClick={() => refresh(getSeed())}
         className="rounded-lg border border-slate-600 bg-slate-800 px-5 py-2 font-medium text-slate-300 transition hover:border-amber-500 hover:text-amber-400"
       >
         Refresh heroes
