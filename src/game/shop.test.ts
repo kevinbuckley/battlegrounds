@@ -191,7 +191,7 @@ describe("sellMinion", () => {
     const p = after.players[0]!;
     expect(p.board).toHaveLength(0);
     expect(p.gold).toBe(6);
-    expect(after.pool.test_murloc).toBeGreaterThan(state.pool.test_murloc ?? 0);
+    expect(after.pool.test_murloc).toBe((state.pool.test_murloc ?? 0) + 1);
   });
 
   it("throws for invalid board index", () => {

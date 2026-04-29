@@ -235,6 +235,7 @@ export function sellMinion(
   const player = getPlayer(state, playerId);
   let minion: MinionInstance | undefined;
   let newState: GameState;
+  let newPool: Record<import("./types").MinionCardId, number> = state.pool;
 
   if (fromHand) {
     minion = player.hand[boardIndex];
@@ -254,7 +255,7 @@ export function sellMinion(
     minion = player.board[boardIndex];
     if (!minion) throw new Error(`No minion at board index ${boardIndex}`);
 
-    const newPool = returnToPool(state.pool, [minion]);
+    newPool = returnToPool(state.pool, [minion]);
     newState = updatePlayer(state, playerId, (p) => ({
       ...p,
       gold: p.gold + REFUND_SELL,
@@ -268,7 +269,7 @@ export function sellMinion(
     result = hero.onSell(newState, playerId);
   }
 
-  return { ...result, pool: returnToPool(state.pool, [minion]) };
+  return { ...result, pool: newPool };
 }
 
 export function playMinionToBoard(

@@ -1,5 +1,6 @@
 2026-04-29 | 6fd23c7 | FIXED: Make hero selection deterministic by passing seed from home page through hero select to game page, replacing Math.random() with seeded RNG
 2026-04-29 | 2a0e9ac | FIXED: Fix sell button for hand minions — SellMinion action now supports handIndex so selling from hand works correctly (was passing hand index as boardIndex)
+2026-04-29 | 5efd2f6 | FIXED: Fix sellMinion board path returning minion to pool twice — was calling returnToPool twice (once in unused newPool variable, once directly in return), now correctly returns to pool exactly once
 2026-04-27 | d5f5e83 | FIXED: Add basic AI strategy — buys cheapest affordable minion from shop, plays all to board, with unit tests
 2026-04-29 | 0359193 | FIXED: Add Jaraxxus hero — passive: demons in your shop gain +1/+1 at start of each recruit turn, with unit tests
 2026-04-27 | ef3bae2 | FIXED: Add Tavern Tipper spell (tier 2-5, costs 2 gold, gives a random friendly minion +2/+2), with unit tests
