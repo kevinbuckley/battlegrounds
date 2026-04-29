@@ -40,6 +40,7 @@ import gromsch from "./tier3/gromsch";
 import infestedWolf from "./tier3/infested-wolf";
 import markku from "./tier3/markku";
 import queenOfPain from "./tier3/queen-of-pain";
+import screwjankClunker from "./tier3/screwjank-clunker";
 import soulJuggler from "./tier3/soul-juggler";
 import stonehillDefender from "./tier3/stonehill-defender";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
@@ -105,6 +106,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [queenOfPain.id]: queenOfPain,
   [soulJuggler.id]: soulJuggler,
   [stonehillDefender.id]: stonehillDefender,
+  [screwjankClunker.id]: screwjankClunker,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [bolvarFireblood.id]: bolvarFireblood,
   [broodkinZealot.id]: broodkinZealot,

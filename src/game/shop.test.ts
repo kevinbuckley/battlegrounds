@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
 import { HEROES } from "./heroes/index";
 import { defineMinion, instantiate } from "./minions/define";
-import { MINIONS } from "./minions/index";
+import { getMinion, MINIONS } from "./minions/index";
 import {
   buyMinion,
   drawFromPool,
@@ -1348,5 +1348,52 @@ describe("Gentle Megasaur", () => {
 
     const afterDemon = after.players[0]!.board.find((m) => m.instanceId === demon.instanceId);
     expect(afterDemon!.keywords.size).toBe(0);
+  });
+
+  it("screwjank_clunker battlecry buffs a friendly mech +2/+2", () => {
+    const mechCard = getMinion("harvest_golem");
+    const mech = instantiate(mechCard);
+    const initialState = makeInitialState(42);
+    const state = beginRecruitTurn(initialState, makeRng(42));
+    const newState = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, board: [mech] } : p)),
+    };
+    const screwjank = instantiate(getMinion("screwjank_clunker"));
+    const ctx = {
+      self: screwjank,
+      playerId: 0,
+      state: newState,
+      rng: makeRng(1),
+      spellDamage: 0,
+    };
+    const after = screwjank.hooks.onBattlecry!(ctx);
+    const buffedMech = after.players[0]!.board.find((m) => m.instanceId === mech.instanceId);
+    expect(buffedMech!.atk).toBe(mech.atk + 2);
+    expect(buffedMech!.hp).toBe(mech.hp + 2);
+    expect(buffedMech!.maxHp).toBe(mech.maxHp + 2);
+  });
+
+  it("screwjank_clunker battlecry does nothing when no friendly mech on board", () => {
+    const beastCard = getMinion("rockpool_hunter");
+    const beast = instantiate(beastCard);
+    const initialState = makeInitialState(42);
+    const state = beginRecruitTurn(initialState, makeRng(42));
+    const newState = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, board: [beast] } : p)),
+    };
+    const screwjank = instantiate(getMinion("screwjank_clunker"));
+    const ctx = {
+      self: screwjank,
+      playerId: 0,
+      state: newState,
+      rng: makeRng(1),
+      spellDamage: 0,
+    };
+    const after = screwjank.hooks.onBattlecry!(ctx);
+    const beastAfter = after.players[0]!.board.find((m) => m.instanceId === beast.instanceId);
+    expect(beastAfter!.atk).toBe(beast.atk);
+    expect(beastAfter!.hp).toBe(beast.hp);
   });
 });

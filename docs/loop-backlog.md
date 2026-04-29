@@ -78,7 +78,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Add `Arcane Tinker` (tier 3): elemental, battlecry add +1 spell damage to your hero power until end of turn
 - [ ] [S] Add `Coldlight Seer` (tier 3): murloc, battlecry give all friendly murlocs +2 HP
-- [ ] [S] Add `Screwjank Clunker` (tier 3): mech, battlecry give a friendly mech +2/+2
+- [x] [S] Add `Screwjank Clunker` (tier 3): mech, battlecry give a friendly mech +2/+2
 
 ### More minions — Tier 4
 
