@@ -3,7 +3,6 @@ import {
   COST_BUY,
   COST_REFRESH,
   POOL_COUNTS,
-  REFUND_SELL,
   SHOP_SIZE_BY_TIER,
   TIER_ODDS,
   TIER_UPGRADE_BASE,
@@ -240,10 +239,11 @@ export function sellMinion(
   if (fromHand) {
     minion = player.hand[boardIndex];
     if (!minion) throw new Error(`No minion at hand index ${boardIndex}`);
-    const newPool = returnToPool(state.pool, [minion]);
+    newPool = returnToPool(state.pool, [minion]);
+    const sellValue = minion.golden ? 2 : 1;
     newState = updatePlayer(state, playerId, (p) => ({
       ...p,
-      gold: p.gold + REFUND_SELL,
+      gold: p.gold + sellValue,
       hand: p.hand.filter((_, i) => i !== boardIndex),
     }));
     const hero = HEROES[player.heroId];
@@ -256,9 +256,10 @@ export function sellMinion(
     if (!minion) throw new Error(`No minion at board index ${boardIndex}`);
 
     newPool = returnToPool(state.pool, [minion]);
+    const sellValue = minion.golden ? 2 : 1;
     newState = updatePlayer(state, playerId, (p) => ({
       ...p,
-      gold: p.gold + REFUND_SELL,
+      gold: p.gold + sellValue,
       board: p.board.filter((_, i) => i !== boardIndex),
     }));
   }

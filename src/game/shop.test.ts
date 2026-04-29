@@ -253,6 +253,46 @@ describe("sellMinion", () => {
     const after = sellMinion(state, 0, 0);
     expect(after.players[0]!.shop.length).toBe(beforeShop);
   });
+
+  it("sells golden minion for 2 gold, normal for 1", () => {
+    const normalMinion = instantiate(TEST_CARD);
+    const goldenMinion = { ...instantiate(TEST_CARD), golden: true };
+    const base = makeInitialState(42);
+    const state = {
+      ...base,
+      phase: { kind: "Recruit", turn: 1 },
+      turn: 1,
+      pool: { test_murloc: 10 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? { ...p, gold: 5, tier: 1, shop: [], hand: [], board: [normalMinion, goldenMinion] }
+          : p,
+      ),
+    } as GameState;
+    // Sell normal minion — should get 1 gold
+    const afterNormal = sellMinion(state, 0, 0);
+    expect(afterNormal.players[0]!.gold).toBe(6); // 5 + 1
+    // Sell golden minion — should get 2 gold
+    const afterGolden = sellMinion(afterNormal, 0, 0);
+    expect(afterGolden.players[0]!.gold).toBe(8); // 6 + 2
+  });
+
+  it("returns sold minion from hand to pool correctly", () => {
+    const handMinion = instantiate(TEST_CARD);
+    const base = makeInitialState(42);
+    const state = {
+      ...base,
+      phase: { kind: "Recruit", turn: 1 },
+      turn: 1,
+      pool: { test_murloc: 5 },
+      players: base.players.map((p, i) =>
+        i === 0 ? { ...p, gold: 5, tier: 1, shop: [], hand: [handMinion], board: [] } : p,
+      ),
+    } as GameState;
+    const after = sellMinion(state, 0, 0, true);
+    expect(after.players[0]!.hand).toHaveLength(0);
+    expect(after.pool.test_murloc).toBe(6); // 5 + 1 returned
+  });
 });
 
 // ---------------------------------------------------------------------------
