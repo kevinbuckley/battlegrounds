@@ -1,3 +1,4 @@
+2026-04-29 | 353df65 | FIXED: Add Virmen Sensei tier 4 dragon (battlecry gives a friendly dragon +2/+2), with unit tests
 2026-04-29 | 1ff1f5f | FIXED: Add frost visual indicator to frozen shop — blue border, sky background tint, and "❄ Frozen" label on shop items when shop is frozen
 2026-04-29 | ac4f57a | FIXED: AI basic strategy prefers buying minions matching the first tribe on board over cheapest minion, with unit test
 2026-04-29 | f426c2f | FIXED: Make buyMinion skip spell items in the shop to prevent AI from crashing when buying spells as minions
