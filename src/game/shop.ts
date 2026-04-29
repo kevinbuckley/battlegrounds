@@ -115,6 +115,8 @@ export function returnToPool(
 // ---------------------------------------------------------------------------
 
 import { applyDamageToPlayer } from "./damage";
+import { nextInstanceId } from "./minions/define";
+import { SPELLS } from "./spells/index";
 import { checkAndProcessTriples } from "./triples";
 
 export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng): GameState {
@@ -136,8 +138,35 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
     ? instances.map((m) => ({ ...m, discount: 1 }))
     : instances;
 
+  // Roll spells into the last 1/4 of shop slots (starting at tier 2).
+  const spellSlotCount = Math.floor(shopWithDiscount.length * 0.25);
+  const finalShop = [...shopWithDiscount];
+
+  if (spellSlotCount > 0 && player.tier >= 2) {
+    // Filter spells available at the player's tier
+    const availableSpellIds = Object.keys(SPELLS).filter((id) => {
+      const spell = SPELLS[id as keyof typeof SPELLS];
+      return spell && spell.tiers.includes(player.tier);
+    }) as string[];
+
+    if (availableSpellIds.length > 0) {
+      const shuffled = [...availableSpellIds].sort(() => rng.next() - 0.5);
+      const picks = shuffled.slice(0, spellSlotCount);
+
+      for (const spellId of picks) {
+        const spell = SPELLS[spellId];
+        if (spell) {
+          finalShop.push({
+            instanceId: nextInstanceId(),
+            cardId: spellId,
+          } as import("./types").MinionInstance);
+        }
+      }
+    }
+  }
+
   return {
-    ...updatePlayer(state, playerId, (p) => ({ ...p, shop: shopWithDiscount })),
+    ...updatePlayer(state, playerId, (p) => ({ ...p, shop: finalShop })),
     pool,
   };
 }

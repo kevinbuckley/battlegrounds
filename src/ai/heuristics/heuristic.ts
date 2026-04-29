@@ -1,8 +1,13 @@
 import { MINIONS } from "@/game/minions/index";
 import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
+import { SPELLS } from "@/game/spells/index";
 import type { Action, MinionInstance, PlayerState } from "@/game/types";
 import type { Rng } from "@/lib/rng";
 import type { PlayerView, Strategy } from "../strategy";
+
+function isSpellInShop(m: MinionInstance): boolean {
+  return SPELLS[m.cardId as keyof typeof SPELLS] !== undefined;
+}
 
 // ---------------------------------------------------------------------------
 // Minion scoring
@@ -45,7 +50,9 @@ function bestShopIndex(shop: MinionInstance[], board: MinionInstance[]): number 
   let best = -1;
   let bestScore = -Infinity;
   for (let i = 0; i < shop.length; i++) {
-    const score = shopMinionScore(shop[i]!, board);
+    const item = shop[i]!;
+    if (isSpellInShop(item)) continue;
+    const score = shopMinionScore(item, board);
     if (score > bestScore) {
       best = i;
       bestScore = score;

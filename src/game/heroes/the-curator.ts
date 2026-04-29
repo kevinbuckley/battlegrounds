@@ -48,9 +48,11 @@ export function ensureCuratorShop(
   // Check which tribes are already represented in the shop
   const shopTribes = new Set<string>();
   for (const m of shop) {
-    for (const t of m.tribes) {
-      if (t !== "All") {
-        shopTribes.add(t);
+    if ("tribes" in m) {
+      for (const t of (m as { tribes: string[] }).tribes) {
+        if (t !== "All") {
+          shopTribes.add(t);
+        }
       }
     }
   }

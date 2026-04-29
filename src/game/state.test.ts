@@ -423,7 +423,9 @@ describe("Ysera hero passive", () => {
     // First recruit turn — Ysera passive should add a dragon to shop
     expect(s.phase.kind).toBe("Recruit");
     const shopAfterFirst = s.players[0]!.shop;
-    const dragonsOnShop = shopAfterFirst.filter((m) => m.tribes.includes("Dragon"));
+    const dragonsOnShop = shopAfterFirst.filter(
+      (m) => "tribes" in m && (m as { tribes: string[] }).tribes.includes("Dragon"),
+    );
     expect(dragonsOnShop.length).toBeGreaterThanOrEqual(1);
   });
 
@@ -438,7 +440,9 @@ describe("Ysera hero passive", () => {
       (m) => m.tribes.includes("Dragon") && m.tier === 1,
     );
     expect(tier1Dragons.length).toBeGreaterThan(0);
-    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    const shopDragons = s.players[0]!.shop.filter(
+      (m) => "tribes" in m && (m as { tribes: string[] }).tribes.includes("Dragon"),
+    );
     for (const dragon of shopDragons) {
       const card = MINIONS[dragon.cardId];
       expect(card!.tier).toBe(1);
@@ -469,7 +473,9 @@ describe("Ysera hero passive", () => {
       (m) => m.tribes.includes("Dragon") && m.tier === 2,
     );
     expect(tier2Dragons.length).toBeGreaterThan(0);
-    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    const shopDragons = s.players[0]!.shop.filter(
+      (m) => "tribes" in m && (m as { tribes: string[] }).tribes.includes("Dragon"),
+    );
     for (const dragon of shopDragons) {
       const card = MINIONS[dragon.cardId];
       expect(card!.tier).toBe(2);
@@ -482,7 +488,9 @@ describe("Ysera hero passive", () => {
     for (let i = 1; i < 8; i++) {
       s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
     }
-    const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
+    const shopDragons = s.players[0]!.shop.filter(
+      (m) => "tribes" in m && (m as { tribes: string[] }).tribes.includes("Dragon"),
+    );
     // Stub hero should NOT have extra dragons added
     expect(shopDragons.length).toBe(0);
   });
