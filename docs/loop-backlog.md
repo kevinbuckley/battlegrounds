@@ -36,7 +36,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Add `Sindragosa` hero — passive `onTurnEnd`: frozen minions in your shop each gain +1/+1
 - [ ] [S] Add `Jaraxxus` hero — passive `onTurnStart`: demons in your shop get +1/+1 at start of recruit turn
-- [ ] [S] Add `Trade Prince Gallywix` hero — active (2 gold): discover one minion from the opponent's last-seen board and add it to hand
+- [x] [S] Add `Trade Prince Gallywix` hero — active (2 gold): discover one minion from the opponent's last-seen board and add it to hand
 
 ### Minions — Tier 6
 
@@ -123,7 +123,7 @@ All entries below are already committed and must not be redone.
 - [x] Triple detection + discover overlay
 - [x] Triple merge animation (golden minion pulse glow)
 - [x] Golden minion: deathrattle and battlecry trigger twice
-- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov, Yogg-Saron, The Curator, King Mukla, George the Fallen, Ragnaros, Sir Finley, Scabbs Cutterbutter, AF Kay, Edwin Van Cleef, Millificent Manastorm — with hero select screen + HP/armor tests
+- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov, Yogg-Saron, The Curator, King Mukla, George the Fallen, Ragnaros, Sir Finley, Scabbs Cutterbutter, AF Kay, Edwin Van Cleef, Millificent Manastorm, Trade Prince Gallywix — with hero select screen + HP/armor tests
 - [x] Hero power UI with active targeting (George the Fallen board target selection)
 - [x] Leaderboard: 8 players ordered by HP, current player highlighted, elimination badges, trinket display
 - [x] Spells framework + Mystery Shot, Cauterizing Flame, Tavern Brawler, Brawl, Tavern Tipper, Bananas (bananaSpell)

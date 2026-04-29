@@ -126,3 +126,4 @@
 2026-04-29 | 989c582 | FIXED: Add Tavern Brawl spell (tier 2-4, cost 2, gives a friendly minion +2/+1), distinct from existing Tavern Brawler (tier 3-6), with unit tests
 2026-04-29 | 74b48bf | FIXED: Add Extra Life anomaly — each player gets one free revive the first time they reach 0 HP, wired into applyCombatResult, with unit tests
 2026-04-29 | b48216d | FIXED: Add Sindragosa hero — passive buffs frozen shop minions +1/+1 at start of each recruit turn, with unit tests
+2026-04-29 | cca6d37 | FIXED: Add Trade Prince Gallywix hero — active power (2 gold) discovers a random minion from the opponent's current board and adds it to hand, with unit tests

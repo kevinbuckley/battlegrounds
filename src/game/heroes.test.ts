@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 17 gameplay heroes (excluding stub)", () => {
+  it("contains all 18 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(17);
+    expect(ids).toHaveLength(18);
   });
 
   it("every hero has a description", () => {
@@ -471,5 +471,129 @@ describe("Jaraxxus passive", () => {
     expect(shop[1]!.hp).toBe(mech.hp);
     expect(shop[2]!.atk).toBe(murloc.atk);
     expect(shop[2]!.hp).toBe(murloc.hp);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Trade Prince Gallywix
+// ---------------------------------------------------------------------------
+
+describe("Trade Prince Gallywix hero power", () => {
+  it("adds a copy of a random opponent board minion to hand", () => {
+    const opponentMinion = instantiate(MINIONS["wrath_weaver"]!);
+    let state = makeStateWithHero("trade-prince-gallywix", []);
+    // Set up an opponent with a minion on board and create a pairing
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 1
+          ? {
+              ...p,
+              heroId: "patchwerk",
+              hp: 40,
+              board: [opponentMinion],
+            }
+          : p,
+      ),
+      pairingsHistory: [[0, 1]],
+    };
+
+    const handBefore = state.players[0]!.hand.length;
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    const handAfter = after.players[0]!.hand;
+
+    expect(handAfter.length).toBe(handBefore + 1);
+    const copied = handAfter[handAfter.length - 1]!;
+    expect(copied.cardId).toBe("wrath_weaver");
+    expect(after.players[0]!.gold).toBe(8); // 10 - 2
+    expect(after.players[0]!.heroPowerUsed).toBe(true);
+  });
+
+  it("copies the minion with correct stats from opponent's board", () => {
+    const opponentMinion = instantiate(MINIONS["venomous_crasher"]!);
+    // Give the opponent's minion boosted stats (e.g. from buffs)
+    const boostedMinion = { ...opponentMinion, atk: 5, hp: 8, maxHp: 8 };
+    let state = makeStateWithHero("trade-prince-gallywix", []);
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 1
+          ? {
+              ...p,
+              heroId: "patchwerk",
+              hp: 40,
+              board: [boostedMinion],
+            }
+          : p,
+      ),
+      pairingsHistory: [[0, 1]],
+    };
+
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    const copied = after.players[0]!.hand[after.players[0]!.hand.length - 1]!;
+    // The copy should have the base stats from the card, not the boosted stats
+    // (we instantiate from the card, not clone the instance)
+    const baseCard = MINIONS["venomous_crasher"]!;
+    expect(copied.atk).toBe(baseCard.baseAtk);
+    expect(copied.hp).toBe(baseCard.baseHp);
+  });
+
+  it("does nothing when opponent has no alive minions", () => {
+    let state = makeStateWithHero("trade-prince-gallywix", []);
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 1
+          ? {
+              ...p,
+              heroId: "patchwerk",
+              hp: 40,
+              board: [],
+            }
+          : p,
+      ),
+      pairingsHistory: [[0, 1]],
+    };
+
+    const handBefore = state.players[0]!.hand.length;
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    expect(after.players[0]!.hand.length).toBe(handBefore);
+  });
+
+  it("does nothing when there is no pairing yet", () => {
+    const state = makeStateWithHero("trade-prince-gallywix", []);
+
+    const handBefore = state.players[0]!.hand.length;
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    expect(after.players[0]!.hand.length).toBe(handBefore);
+  });
+
+  it("finds opponent from the most recent pairing involving player 0", () => {
+    const opponentMinion = instantiate(MINIONS["flame_imp"]!);
+    let state = makeStateWithHero("trade-prince-gallywix", []);
+    // Set up player 3 as the opponent with a minion on board
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 3
+          ? {
+              ...p,
+              heroId: "patchwerk",
+              hp: 40,
+              board: [opponentMinion],
+            }
+          : p,
+      ),
+      pairingsHistory: [
+        [0, 1],
+        [2, 3],
+        [0, 3],
+      ],
+    };
+
+    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    const handAfter = after.players[0]!.hand;
+    expect(handAfter.length).toBe(1);
+    expect(handAfter[0]!.cardId).toBe("flame_imp");
   });
 });

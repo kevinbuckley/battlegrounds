@@ -15,6 +15,7 @@ import { sindragosa } from "./sindragosa";
 import { sirFinley } from "./sir-finley";
 import { stubHero } from "./stub";
 import { theCurator } from "./the-curator";
+import { tradePrinceGallywix } from "./trade-prince-gallywix";
 import { yoggSaron } from "./yogg-saron";
 import { ysera } from "./ysera";
 
@@ -37,6 +38,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [kingMukla.id]: kingMukla,
   [sindragosa.id]: sindragosa,
   [jaraxxus.id]: jaraxxus,
+  [tradePrinceGallywix.id]: tradePrinceGallywix,
 };
 
 export function getHero(id: HeroId): Hero {
