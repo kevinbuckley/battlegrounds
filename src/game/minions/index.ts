@@ -56,6 +56,7 @@ import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
 import ghastcoiler from "./tier6/ghastcoiler";
 import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
+import mamaBear from "./tier6/mama-bear";
 import terestianManferris from "./tier6/terestian-manferris";
 import zixorProjectHope from "./tier6/zixor-project-hope";
 
@@ -118,6 +119,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kalecgosArcaneAspect.id]: kalecgosArcaneAspect,
   [terestianManferris.id]: terestianManferris,
   [zixorProjectHope.id]: zixorProjectHope,
+  [mamaBear.id]: mamaBear,
   [bountyMinion.id]: bountyMinion,
 };
 

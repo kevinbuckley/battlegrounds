@@ -66,6 +66,8 @@ export interface RecruitCtx {
   rng: Rng;
   /** Total spell damage from all board minions. */
   spellDamage: number;
+  /** The minion that was just summoned to the board (for onShopSummon). */
+  summoned?: MinionInstance;
 }
 
 // Combat-phase hooks mutate in place via mutable arrays + emit.
@@ -110,6 +112,8 @@ export interface MinionHooks {
   onDivineShieldPop?: (ctx: CombatCtx) => void;
   /** Fires when a spell is cast (recruit phase). */
   onCast?: (ctx: RecruitCtx) => GameState;
+  /** Fires when a minion is summoned to the player's board (recruit phase). */
+  onShopSummon?: (ctx: RecruitCtx) => GameState;
 }
 
 // ---------------------------------------------------------------------------

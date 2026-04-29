@@ -339,7 +339,11 @@ export function playMinionToBoard(
   // Apply combo: all friendly minions with combo gain +2/+2 when a card is played
   const afterCombo = applyComboToBoard(afterPlay, playerId);
 
-  return afterCombo;
+  // Fire onShopSummon: notify all minions with the hook when a new minion
+  // is summoned to the player's board during the recruit phase.
+  const afterSummon = fireShopSummon(afterCombo, playerId, minion, rng);
+
+  return afterSummon;
 }
 
 export function reorderBoard(
@@ -411,4 +415,21 @@ export function applyComboToBoard(state: GameState, playerId: PlayerId): GameSta
     });
     return { ...p, board: newBoard };
   });
+}
+
+/** Fire onShopSummon hooks when a minion is summoned to the player's board. */
+function fireShopSummon(
+  state: GameState,
+  playerId: PlayerId,
+  summoned: MinionInstance,
+  rng: Rng,
+): GameState {
+  const player = getPlayer(state, playerId);
+  let result = state;
+  for (const m of player.board) {
+    const hook = m.hooks?.onShopSummon;
+    if (!hook) continue;
+    result = hook({ self: m, playerId, state: result, rng, spellDamage: 0, summoned });
+  }
+  return result;
 }
