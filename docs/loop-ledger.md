@@ -149,3 +149,4 @@
 
 2026-04-29 | a96b394 | FIXED: Wire AI strategies into endTurn so AI players buy/sell/upgrade during recruit phase before combat resolves, matching real Battlegrounds behavior
 2026-04-29 | da9206b | FIXED: Fix buySpell shop index calculation — shopIndex from UI is absolute index in full shop, but buySpell was indexing it directly into the sliced spellSlots array, causing "No spell at shop index N" errors when buying spells from the shop
+2026-04-29 | 2bbb9e6 | FIXED: Fix combat animation showing empty fight — handleEndTurn now snapshots player/opponent boards before step(EndTurn) clears them, computing the correct CombatResult from pre-combat state for the animation overlay

@@ -287,16 +287,26 @@ export default function GamePage() {
     const player = gameState.players[0];
     const opponent = gameState.players.find((p) => p.id !== 0 && !p.eliminated);
 
-    // Snapshot before advancing state
-    const combatSnapshot = { ...gameState, phase: { kind: "Recruit", turn: gameState.turn } };
+    // Snapshot boards before advancing state — step(EndTurn) resolves combat
+    // internally and clears the boards, so we need the pre-combat boards
+    // to feed the animation.
+    const preCombatPlayerBoard = player?.board.filter((m) => m.hp > 0) ?? [];
+    const preCombatOpponentBoard = opponent?.board.filter((m) => m.hp > 0) ?? [];
 
-    // Advance UI state immediately (new recruit turn)
+    // Advance state (resolves combat internally, clears boards, transitions to Recruit)
     const next = step(gameState, { kind: "EndTurn", player: 0 }, rngForTurn(gameState, "endTurn"));
     setGameState(next);
 
-    if (opponent && player && !player.eliminated) {
-      const combatRng = makeRng(combatSnapshot.seed).fork(`combat:${opponent.id}`);
-      const result = simulateCombat(player.board, opponent.board, combatRng);
+    // Compute combat result from the pre-combat snapshot for the animation
+    if (
+      opponent &&
+      player &&
+      !player.eliminated &&
+      preCombatPlayerBoard.length > 0 &&
+      preCombatOpponentBoard.length > 0
+    ) {
+      const combatRng = makeRng(gameState.seed).fork(`combat:${opponent.id}`);
+      const result = simulateCombat(preCombatPlayerBoard, preCombatOpponentBoard, combatRng);
 
       if (result.winner !== "draw") {
         setCombatResult(result);
