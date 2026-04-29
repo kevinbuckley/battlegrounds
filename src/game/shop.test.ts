@@ -15,6 +15,7 @@ import {
   sellMinion,
   upgradeTier,
 } from "./shop";
+import { SPELLS } from "./spells/index";
 import { beginRecruitTurn, makeInitialState } from "./state";
 import type { GameState, MinionInstance } from "./types";
 
@@ -1395,5 +1396,39 @@ describe("Gentle Megasaur", () => {
     const beastAfter = after.players[0]!.board.find((m) => m.instanceId === beast.instanceId);
     expect(beastAfter!.atk).toBe(beast.atk);
     expect(beastAfter!.hp).toBe(beast.hp);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// buyMinion skips spell items in the shop
+// ---------------------------------------------------------------------------
+
+describe("buyMinion skips spells", () => {
+  it("does not add a spell to hand when buying a shop item that is a spell", () => {
+    const state = makeInitialState(1);
+    const newState = beginRecruitTurn(state, makeRng(1));
+    const player = newState.players[0]!;
+
+    // Find a spell in the shop (spells appear in the last 1/4 of slots at tier 2+)
+    const spellInShop = player.shop.find((m) => SPELLS[m.cardId as keyof typeof SPELLS]);
+    if (!spellInShop) {
+      // Manually place a spell in the shop
+      const spellInstance = {
+        instanceId: "test_spell_instance",
+        cardId: "mystery_shot",
+      } as import("./types").MinionInstance;
+      const s = { ...newState, players: [{ ...player, shop: [spellInstance] }] };
+      const after = buyMinion(s, 0, 0);
+      expect(after.players[0]!.hand.length).toBe(0);
+      expect(after.players[0]!.shop.length).toBe(1); // shop unchanged
+      return;
+    }
+
+    const shopIndex = player.shop.indexOf(spellInShop);
+    const beforeHand = player.hand.length;
+    const beforeShop = player.shop.length;
+    const after = buyMinion(newState, 0, shopIndex);
+    expect(after.players[0]!.hand.length).toBe(beforeHand);
+    expect(after.players[0]!.shop.length).toBe(beforeShop);
   });
 });

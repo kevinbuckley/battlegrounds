@@ -1,3 +1,4 @@
+2026-04-29 | f426c2f | FIXED: Make buyMinion skip spell items in the shop to prevent AI from crashing when buying spells as minions
 2026-04-29 | 614ac01 | FIXED: Make hero selection deterministic by passing seed from home page through hero select to game page, replacing Math.random() with seeded RNG
 2026-04-29 | 614ac01 | FIXED: Remove duplicate combat application in game page — step(EndTurn) already resolves combat, applies damage, and transitions to recruit phase; UI no longer re-applies results after animation
 2026-04-29 | 2a0e9ac | FIXED: Fix sell button for hand minions — SellMinion action now supports handIndex so selling from hand works correctly (was passing hand index as boardIndex)

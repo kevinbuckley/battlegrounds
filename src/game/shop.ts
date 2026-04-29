@@ -187,6 +187,11 @@ export function buyMinion(
   const minion = player.shop[shopIndex];
   if (!minion) throw new Error(`No minion at shop index ${shopIndex}`);
 
+  // Skip spell items in the shop — they are handled by buySpell instead.
+  if (SPELLS[minion.cardId as keyof typeof SPELLS]) {
+    return state;
+  }
+
   const card = MINIONS[minion.cardId];
   const bountyCost = card?.bountyCost;
   const baseCost = bountyCost ?? COST_BUY;
