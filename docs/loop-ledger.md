@@ -129,3 +129,4 @@
 2026-04-29 | cca6d37 | FIXED: Add Trade Prince Gallywix hero — active power (2 gold) discovers a random minion from the opponent's current board and adds it to hand, with unit tests
 2026-04-29 | b16133f | FIXED: Add Kalecgos, Arcane Aspect tier 6 dragon (onCast gives all friendly minions +1/+1 when a spell is cast), add onCast hook to MinionHooks, wire into playSpell in state.ts, with unit tests
 2026-04-29 | 836e1c3 | FIXED: Wire Banana spell into shop rolls — spells appear in the last 1/4 of shop slots starting at tier 2, plus fix AI heuristic and Curator hero to skip spell items in shop
+2026-04-29 | 39cdbeb | FIXED: Add Ghastcoiler tier 6 beast (deathrattle summons 2 random deathrattle minions from tier 6), with unit tests

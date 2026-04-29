@@ -762,3 +762,71 @@ describe("Big League anomaly", () => {
     expect(r4.survivorsLeft[0]!.atk).toBe(2);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Ghastcoiler — deathrattle summons 2 random deathrattle minions
+// ---------------------------------------------------------------------------
+
+describe("Ghastcoiler", () => {
+  it("summons 2 random deathrattle minions on death", () => {
+    const ghastcoiler = minion("ghastcoiler");
+    // 7/7 enemy — kills ghastcoiler (7/7), takes 7 damage (7/7)
+    const enemy = makeMinion(7, 7);
+
+    const r = simulateCombat([ghastcoiler], [enemy], makeRng(0));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const deathrattleSummons = summonEvents.filter(
+      (e) => e.card === "friggent_northvalley" || e.card === "terestian_manferris",
+    );
+    expect(deathrattleSummons).toHaveLength(2);
+  });
+
+  it("golden ghastcoiler summons 4 deathrattle minions (deathrattle twice)", () => {
+    const ghastcoiler = instantiate(getMinion("ghastcoiler"));
+    const goldenGhastcoiler = {
+      ...ghastcoiler,
+      golden: true,
+      atk: ghastcoiler.atk * 2,
+      hp: ghastcoiler.hp * 2,
+      maxHp: ghastcoiler.maxHp * 2,
+    };
+    // 14/14 enemy — kills golden ghastcoiler (14/14), takes 14 damage
+    const enemy = makeMinion(14, 14);
+
+    const r = simulateCombat([goldenGhastcoiler], [enemy], makeRng(0));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const deathrattleSummons = summonEvents.filter(
+      (e) => e.card === "friggent_northvalley" || e.card === "terestian_manferris",
+    );
+    expect(deathrattleSummons).toHaveLength(4);
+  });
+
+  it("does not summon beyond board cap of 7", () => {
+    // Ghastcoiler dies, leaving 6 allies. First deathrattle summon fills to 7,
+    // second summon should be blocked.
+    const ghastcoiler = minion("ghastcoiler");
+    const allies = [
+      ghastcoiler,
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+      makeMinion(1, 1),
+    ];
+    // Force a specific rng seed so we know which deathrattle is picked first
+    // The first pick will fill to 7, blocking the second
+    const enemy = makeMinion(7, 7);
+
+    const r = simulateCombat(allies, [enemy], makeRng(42));
+
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    const deathrattleSummons = summonEvents.filter(
+      (e) => e.card === "friggent_northvalley" || e.card === "terestian_manferris",
+    );
+    // With 6 allies after ghastcoiler dies, first summon fills to 7, second is blocked
+    expect(deathrattleSummons.length).toBeLessThanOrEqual(1);
+  });
+});
