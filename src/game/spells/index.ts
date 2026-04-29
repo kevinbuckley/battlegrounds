@@ -308,6 +308,37 @@ export const tavernTipper: SpellCard = {
   },
 };
 
+/** Give a friendly minion +2/+1. Available at tiers 2-4. */
+export const tavernBrawl: SpellCard = {
+  id: "tavern_brawl",
+  name: "Tavern Brawl",
+  description: "Give a friendly minion +2/+1.",
+  cost: 2,
+  tiers: [2, 3, 4],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+      if (player.board.length === 0) return ctx.state;
+
+      const boardIndex = ctx.rng.next() % player.board.length;
+      const minion = player.board[boardIndex];
+      if (!minion) return ctx.state;
+
+      return updatePlayer(ctx.state, ctx.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[boardIndex]!;
+        newBoard[boardIndex] = {
+          ...mi,
+          atk: mi.atk + 2,
+          hp: mi.hp + 1,
+          maxHp: mi.maxHp + 1,
+        };
+        return { ...p, board: newBoard };
+      });
+    },
+  },
+};
+
 /** Summon three 1/1 Recruits with Rush to your board. */
 export const swatTeam: SpellCard = {
   id: "swat_team",
@@ -358,6 +389,7 @@ export const SPELLS: Record<string, SpellCard> = {
   [bananaSpell.id]: bananaSpell,
   [tavernTipper.id]: tavernTipper,
   [swatTeam.id]: swatTeam,
+  [tavernBrawl.id]: tavernBrawl,
 };
 
 export function getSpell(id: string): SpellCard {

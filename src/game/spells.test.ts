@@ -10,6 +10,7 @@ import {
   poisonDartShield,
   SPELLS,
   swatTeam,
+  tavernBrawl,
   tavernBrawler,
   tavernTipper,
 } from "@/game/spells";
@@ -18,8 +19,8 @@ import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 10 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(10);
+  it("exports exactly 11 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(11);
   });
 
   it.each([
@@ -28,6 +29,7 @@ describe("spell registry", () => {
     duskrayBuff,
     pancakeSpell,
     tavernBrawler,
+    tavernBrawl,
     brawl,
     cauterizingFlame,
     tavernTipper,
@@ -119,6 +121,16 @@ describe("tavern brawler", () => {
 
   it("costs 2 gold", () => {
     expect(tavernBrawler.cost).toBe(2);
+  });
+});
+
+describe("tavern brawl", () => {
+  it("is available at tiers 2-4 only", () => {
+    expect(tavernBrawl.tiers).toEqual([2, 3, 4]);
+  });
+
+  it("costs 2 gold", () => {
+    expect(tavernBrawl.cost).toBe(2);
   });
 });
 
