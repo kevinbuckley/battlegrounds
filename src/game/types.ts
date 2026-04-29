@@ -186,6 +186,7 @@ export interface PlayerState {
   upgradedThisTurn: boolean;
   heroPowerUsed: boolean;
   eliminated: boolean;
+  extraLifeUsed: boolean;
   placement: number | null;
   aiMemo: Record<string, unknown>;
   spells: SpellInstance[];

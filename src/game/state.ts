@@ -1,5 +1,5 @@
 import { makeRng, type Rng } from "@/lib/rng";
-import { goldenTouch, pickAnomaly } from "./anomalies";
+import { extraLife, goldenTouch, pickAnomaly } from "./anomalies";
 import { activateBuddies, createBuddyInstance, pickBuddy, pickBuddyForPlayer } from "./buddies";
 import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
@@ -605,6 +605,42 @@ function applyCombatResult(
   const survivors = isLeftWinner ? survivorsLeft : survivorsRight;
   const damage = calcDamage(loserPlayer.tier, survivors);
 
+  // Check for Extra Life anomaly: if the loser would be eliminated and hasn't used their extra life, revive them instead.
+  const isExtraLife = result.modifierState.anomaly === "extra_life";
+  if (isExtraLife) {
+    const loser = getPlayer(result, loserId);
+    if (!loser.eliminated && !loser.extraLifeUsed) {
+      const wouldBeEliminated = loser.hp - (damage - Math.min(loser.armor, damage)) <= 0;
+      if (wouldBeEliminated) {
+        // Revive: set to 1 HP, restore board from previous round (stored as hand), use extra life
+        let revived = updatePlayer(result, loserId, (p) => ({
+          ...p,
+          hp: 1,
+          armor: 0,
+          board: [],
+          extraLifeUsed: true,
+        }));
+        // Save current board to hand before clearing (the board they had going into combat)
+        const savedBoard = loser.board.filter((m) => m.hp > 0);
+        if (savedBoard.length > 0) {
+          revived = updatePlayer(revived, loserId, (p) => ({
+            ...p,
+            hand: savedBoard,
+          }));
+        }
+        // Still record the pairing but skip damage application
+        const newPairing: [import("./types").PlayerId, import("./types").PlayerId] = [
+          leftId,
+          rightId,
+        ] as [import("./types").PlayerId, import("./types").PlayerId];
+        return {
+          ...revived,
+          pairingsHistory: [...revived.pairingsHistory, newPairing],
+        };
+      }
+    }
+  }
+
   // Apply damage to loser
   result = applyDamageToPlayer(result, loserId, damage);
 
@@ -736,6 +772,7 @@ export function makeInitialState(seed: number): GameState {
     shopFrozen: false,
     upgradedThisTurn: false,
     heroPowerUsed: false,
+    extraLifeUsed: false,
     eliminated: false,
     placement: null,
     aiMemo: {},

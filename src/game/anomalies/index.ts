@@ -101,6 +101,19 @@ export const bigLeague: AnomalyCard = {
   },
 };
 
+export const extraLife: AnomalyCard = {
+  id: "extra_life",
+  name: "Extra Life",
+  description: "Each player gets one free revive the first time they reach 0 HP.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, extraLifeUsed: false };
+    }
+  },
+};
+
 const ALL_ANOMALIES: AnomalyCard[] = [
   goldenTouch,
   heavyHitters,
@@ -109,6 +122,7 @@ const ALL_ANOMALIES: AnomalyCard[] = [
   armoredUp,
   tavernDiscount,
   bigLeague,
+  extraLife,
 ];
 
 export function getAnomaly(id: string): AnomalyCard {

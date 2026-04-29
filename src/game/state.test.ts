@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { makeRng } from "@/lib/rng";
 import { instantiate } from "./minions/define";
-import { MINIONS } from "./minions/index";
+import { getMinion, MINIONS } from "./minions/index";
 import { makeInitialState, step } from "./state";
 import type { GameState, MinionInstance } from "./types";
 
@@ -485,5 +485,163 @@ describe("Ysera hero passive", () => {
     const shopDragons = s.players[0]!.shop.filter((m) => m.tribes.includes("Dragon"));
     // Stub hero should NOT have extra dragons added
     expect(shopDragons.length).toBe(0);
+  });
+});
+
+describe("Extra Life anomaly", () => {
+  function makeStateWithExtraLife(seed: number): GameState {
+    const state = makeInitialState(seed);
+    return {
+      ...state,
+      modifierState: { anomaly: "extra_life" },
+    };
+  }
+
+  function selectAllHeroes(state: GameState): GameState {
+    let s = state;
+    for (const p of s.players) {
+      s = step(s, { kind: "SelectHero", player: p.id, heroId: "stub_hero" }, makeRng(s.seed));
+    }
+    return s;
+  }
+
+  function makeMinion(atk: number, hp: number): MinionInstance {
+    return instantiate({
+      id: `custom_${atk}_${hp}`,
+      name: `${atk}/${hp}`,
+      tier: 1,
+      tribes: [],
+      baseAtk: atk,
+      baseHp: hp,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+  }
+
+  it("revives a player who would be eliminated, using their extra life", () => {
+    let state = makeStateWithExtraLife(1);
+    state = selectAllHeroes(state);
+
+    const friggent = instantiate(getMinion("friggent_northvalley"));
+
+    // Player 0: tier 1, 5 HP, no board
+    // Player 1: tier 6, Friggent Northvalley (6/6)
+    // Damage = 1 (loser tier) + 6 (minion tier) = 7
+    // 5 HP - 7 = -2, would be eliminated → extra life revives to 1 HP
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, hp: 5, armor: 0, tier: 1, board: [], extraLifeUsed: false }
+          : i === 1
+            ? { ...p, hp: 40, tier: 6, board: [friggent] }
+            : p,
+      ),
+    };
+
+    const afterEndTurn = step(state, { kind: "EndTurn", player: 0 }, makeRng(state.seed));
+
+    const revivedPlayer = afterEndTurn.players[0]!;
+    expect(revivedPlayer.extraLifeUsed).toBe(true);
+    expect(revivedPlayer.hp).toBe(1);
+    expect(revivedPlayer.eliminated).toBe(false);
+  });
+
+  it("does not revive a second time — second death is permanent", () => {
+    let state = makeStateWithExtraLife(2);
+    state = selectAllHeroes(state);
+
+    const friggent = instantiate(getMinion("friggent_northvalley"));
+
+    // Player 0: 5 HP, no board, extraLifeUsed = true (already used)
+    // Player 1: tier 6, Friggent Northvalley
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, hp: 5, armor: 0, tier: 1, board: [], extraLifeUsed: true }
+          : i === 1
+            ? { ...p, hp: 40, tier: 6, board: [friggent] }
+            : p,
+      ),
+    };
+
+    const afterEndTurn = step(state, { kind: "EndTurn", player: 0 }, makeRng(state.seed));
+    const deadPlayer = afterEndTurn.players[0]!;
+    expect(deadPlayer.eliminated).toBe(true);
+    expect(deadPlayer.hp).toBeLessThanOrEqual(0);
+  });
+
+  it("does not trigger extra life when player has enough HP to survive", () => {
+    let state = makeStateWithExtraLife(3);
+    state = selectAllHeroes(state);
+
+    // Player 0: 20 HP, no board — vs Player 1: 3/3 minion
+    // Damage = 1 (tier 1) + 1 (tier 1 minion) = 2
+    // 20 - 2 = 18 HP, survives fine
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, hp: 20, armor: 0, tier: 1, board: [], extraLifeUsed: false }
+          : i === 1
+            ? { ...p, hp: 40, tier: 1, board: [makeMinion(3, 3)] }
+            : p,
+      ),
+    };
+
+    const afterEndTurn = step(state, { kind: "EndTurn", player: 0 }, makeRng(state.seed));
+    const survivingPlayer = afterEndTurn.players[0]!;
+    expect(survivingPlayer.eliminated).toBe(false);
+    expect(survivingPlayer.extraLifeUsed).toBe(false);
+    expect(survivingPlayer.hp).toBeGreaterThan(1);
+  });
+
+  it("does not trigger extra life when armor absorbs the damage", () => {
+    let state = makeStateWithExtraLife(4);
+    state = selectAllHeroes(state);
+
+    // Player 0: 10 HP, 5 armor — vs Player 1: 3/3 minion
+    // Damage = 1 (tier 1) + 1 (tier 1) = 2
+    // 5 armor absorbs 2, 0 damage to HP, survives
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, hp: 10, armor: 5, tier: 1, board: [], extraLifeUsed: false }
+          : i === 1
+            ? { ...p, hp: 40, tier: 1, board: [makeMinion(3, 3)] }
+            : p,
+      ),
+    };
+
+    const afterEndTurn = step(state, { kind: "EndTurn", player: 0 }, makeRng(state.seed));
+    const survivingPlayer = afterEndTurn.players[0]!;
+    expect(survivingPlayer.eliminated).toBe(false);
+    expect(survivingPlayer.extraLifeUsed).toBe(false);
+  });
+
+  it("does not trigger when anomaly is not active", () => {
+    let state = makeInitialState(5);
+    state = selectAllHeroes(state);
+
+    const friggent = instantiate(getMinion("friggent_northvalley"));
+
+    // No extra life anomaly — player should be eliminated normally
+    state = {
+      ...state,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, hp: 5, armor: 0, tier: 1, board: [], extraLifeUsed: false }
+          : i === 1
+            ? { ...p, hp: 40, tier: 6, board: [friggent] }
+            : p,
+      ),
+    };
+
+    const afterEndTurn = step(state, { kind: "EndTurn", player: 0 }, makeRng(state.seed));
+    const deadPlayer = afterEndTurn.players[0]!;
+    expect(deadPlayer.eliminated).toBe(true);
   });
 });

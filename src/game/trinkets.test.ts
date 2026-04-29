@@ -34,6 +34,7 @@ function makeGameState(): GameState {
         shopFrozen: false,
         upgradedThisTurn: false,
         heroPowerUsed: false,
+        extraLifeUsed: false,
         eliminated: false,
         placement: null,
         aiMemo: {},

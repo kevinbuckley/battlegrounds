@@ -123,3 +123,4 @@
 2026-04-28 | ac54f88 | FIXED: Add Tavern Discount anomaly — all shop minions cost 1 less gold (minimum 1), wired into rollShopForPlayer
 2026-04-28 | 4b8f9d3 | FIXED: Add Big League anomaly — all minions start combat with +1/+1, wired into simulateCombat
 2026-04-29 | 989c582 | FIXED: Add Tavern Brawl spell (tier 2-4, cost 2, gives a friendly minion +2/+1), distinct from existing Tavern Brawler (tier 3-6), with unit tests
+2026-04-29 | 74b48bf | FIXED: Add Extra Life anomaly — each player gets one free revive the first time they reach 0 HP, wired into applyCombatResult, with unit tests
