@@ -33,6 +33,7 @@ import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import arcaneTinker from "./tier3/arcane-tinker";
 import cobaltScalebane from "./tier3/cobalt-scalebane";
+import coldlightSeer from "./tier3/coldlight-seer";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
 import gromsch from "./tier3/gromsch";
@@ -98,6 +99,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [frostboundGolem.id]: frostboundGolem,
   [markku.id]: markku,
   [arcaneTinker.id]: arcaneTinker,
+  [coldlightSeer.id]: coldlightSeer,
   [cobaltScalebane.id]: cobaltScalebane,
   [infestedWolf.id]: infestedWolf,
   [queenOfPain.id]: queenOfPain,
