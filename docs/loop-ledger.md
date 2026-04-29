@@ -132,3 +132,4 @@
 2026-04-29 | 39cdbeb | FIXED: Add Ghastcoiler tier 6 beast (deathrattle summons 2 random deathrattle minions from tier 6), with unit tests
 2026-04-29 | e9b5bbe | FIXED: Add Mama Bear tier 6 beast (onShopSummon gives itself +5/+5 whenever a Beast is summoned to the player's board), add onShopSummon to RecruitCtx and wire into shop.ts, with unit tests
 2026-04-29 | 085460c | FIXED: Replace non-deterministic Date.now() seed with fixed seed (1) in game page so every game is deterministic and replayable
+2026-04-29 | 46310c6 | FIXED: Add Gentle Megasaur tier 6 beast (battlecry gives all friendly murlocs a random keyword), with unit tests

@@ -22,7 +22,7 @@ mkdir -p "$LOG_DIR"
 LOG="$LOG_DIR/bg-loop-$(date +%Y%m%d-%H%M).log"
 
 MAX_ITERS=9999
-SLEEP_BETWEEN=15
+SLEEP_BETWEEN=10
 
 # Parse args
 while [[ $# -gt 0 ]]; do

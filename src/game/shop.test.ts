@@ -1146,3 +1146,167 @@ describe("kalecgos_arcane_aspect onCast", () => {
     expect(after.players[0]!.board).toEqual([]);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Gentle Megasaur
+// ---------------------------------------------------------------------------
+
+describe("Gentle Megasaur", () => {
+  it("gives all friendly murlocs a random keyword on battlecry", () => {
+    const gm = MINIONS["gentle_megasaur"];
+    const megasaur = instantiate(gm!);
+    const murloc1 = instantiate(
+      defineMinion({
+        id: "test_murloc_1",
+        name: "Test Murloc 1",
+        tier: 1,
+        tribes: ["Murloc"],
+        baseAtk: 2,
+        baseHp: 1,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+    const murloc2 = instantiate(
+      defineMinion({
+        id: "test_murloc_2",
+        name: "Test Murloc 2",
+        tier: 2,
+        tribes: ["Murloc"],
+        baseAtk: 3,
+        baseHp: 2,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+    const nonMurloc = instantiate(
+      defineMinion({
+        id: "test_demon",
+        name: "Test Demon",
+        tier: 1,
+        tribes: ["Demon"],
+        baseAtk: 1,
+        baseHp: 1,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const state = makeTestState({
+      board: [megasaur, murloc1, murloc2, nonMurloc],
+    });
+
+    const ctx = {
+      self: megasaur,
+      playerId: 0,
+      state,
+      rng: makeRng(1),
+      spellDamage: 0,
+    };
+    const after = gm!.hooks.onBattlecry!(ctx);
+
+    // Murlocs should have exactly 1 keyword each (from battlecry)
+    const afterMurloc1 = after.players[0]!.board.find((m) => m.instanceId === murloc1.instanceId);
+    const afterMurloc2 = after.players[0]!.board.find((m) => m.instanceId === murloc2.instanceId);
+    const afterNonMurloc = after.players[0]!.board.find(
+      (m) => m.instanceId === nonMurloc.instanceId,
+    );
+
+    expect(afterMurloc1!.keywords.size).toBe(1);
+    expect(afterMurloc2!.keywords.size).toBe(1);
+    expect(afterNonMurloc!.keywords.size).toBe(0);
+
+    // Keywords should be valid adapt keywords
+    const ADAPT_KEYWORDS: Set<string> = new Set([
+      "taunt",
+      "divineShield",
+      "windfury",
+      "megaWindfury",
+      "poisonous",
+      "reborn",
+      "venomous",
+      "cleave",
+      "lifesteal",
+      "rush",
+      "magnetic",
+    ]);
+    for (const kw of afterMurloc1!.keywords) {
+      expect(ADAPT_KEYWORDS.has(kw)).toBe(true);
+    }
+    for (const kw of afterMurloc2!.keywords) {
+      expect(ADAPT_KEYWORDS.has(kw)).toBe(true);
+    }
+  });
+
+  it("does not give itself a keyword", () => {
+    const gm = MINIONS["gentle_megasaur"];
+    const megasaur = instantiate(gm!);
+
+    const murloc = instantiate(
+      defineMinion({
+        id: "test_murloc_self",
+        name: "Test Murloc Self",
+        tier: 1,
+        tribes: ["Murloc"],
+        baseAtk: 2,
+        baseHp: 1,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const state = makeTestState({
+      board: [megasaur, murloc],
+    });
+
+    const ctx = {
+      self: megasaur,
+      playerId: 0,
+      state,
+      rng: makeRng(1),
+      spellDamage: 0,
+    };
+    const after = gm!.hooks.onBattlecry!(ctx);
+
+    const afterMegasaur = after.players[0]!.board.find((m) => m.instanceId === megasaur.instanceId);
+    expect(afterMegasaur!.keywords.size).toBe(0);
+  });
+
+  it("does nothing when no friendly murlocs on board", () => {
+    const gm = MINIONS["gentle_megasaur"];
+    const megasaur = instantiate(gm!);
+    const demon = instantiate(
+      defineMinion({
+        id: "test_demon_no_murloc",
+        name: "Test Demon",
+        tier: 1,
+        tribes: ["Demon"],
+        baseAtk: 1,
+        baseHp: 1,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const state = makeTestState({
+      board: [megasaur, demon],
+    });
+
+    const ctx = {
+      self: megasaur,
+      playerId: 0,
+      state,
+      rng: makeRng(1),
+      spellDamage: 0,
+    };
+    const after = gm!.hooks.onBattlecry!(ctx);
+
+    const afterDemon = after.players[0]!.board.find((m) => m.instanceId === demon.instanceId);
+    expect(afterDemon!.keywords.size).toBe(0);
+  });
+});
