@@ -7,7 +7,20 @@ import type { PlayerView, Strategy } from "../strategy";
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Index of the cheapest shop minion. -1 if shop is empty. */
+/**
+ * Find the first tribe present on the board. Returns empty array if board
+ * is empty or has no tribes.
+ */
+function firstBoardTribe(board: MinionInstance[]): string[] {
+  for (const m of board) {
+    if (m.tribes.length > 0) return m.tribes;
+  }
+  return [];
+}
+
+/**
+ * Index of the cheapest shop minion. -1 if shop is empty.
+ */
 function cheapestShopIndex(shop: MinionInstance[], gold: number): number {
   if (shop.length === 0) return -1;
   let cheapest = -1;
@@ -23,6 +36,20 @@ function cheapestShopIndex(shop: MinionInstance[], gold: number): number {
   return cheapest;
 }
 
+/**
+ * Index of the first shop minion matching a tribe, -1 if none.
+ */
+function matchingTribeIndex(shop: MinionInstance[], gold: number, tribe: string[]): number {
+  if (shop.length === 0 || tribe.length === 0) return -1;
+  for (let i = 0; i < shop.length; i++) {
+    const m = shop[i]!;
+    if (m.tribes.some((t) => tribe.includes(t)) && m.atk + m.hp <= gold) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 // ---------------------------------------------------------------------------
 // Basic strategy: buy cheapest affordable minion, play all to board.
 // This is the "Very Easy" difficulty AI.
@@ -35,13 +62,25 @@ export const basic: Strategy = {
     const actions: Action[] = [];
     let sim = state;
 
-    // --- Buy cheapest affordable minion ---
+    // --- Buy cheapest affordable minion, preferring tribe match ---
     let buying = true;
     while (buying) {
       const player = sim.players[me]!;
       if (player.gold < 3 || player.hand.length >= 10) break;
 
-      const idx = cheapestShopIndex(player.shop, player.gold);
+      // Check if board has a tribe to match
+      const tribe = firstBoardTribe(player.board);
+      let idx: number;
+      if (tribe.length > 0) {
+        // Prefer a minion matching the board's first tribe
+        idx = matchingTribeIndex(player.shop, player.gold, tribe);
+        if (idx === -1) {
+          // Fall back to cheapest if no tribe match
+          idx = cheapestShopIndex(player.shop, player.gold);
+        }
+      } else {
+        idx = cheapestShopIndex(player.shop, player.gold);
+      }
       if (idx === -1) break;
 
       try {

@@ -128,6 +128,51 @@ describe("basic strategy", () => {
     const plays = actions.filter((a) => a.kind === "PlayMinion");
     expect(plays.length).toBeGreaterThanOrEqual(1);
   });
+
+  it("prefers tribe match over cheapest when board has a tribe", () => {
+    // Scavenging Hyena is a Beast (tribe match, stat-ball 3).
+    // Taunt minion has no tribe (stat-ball 2, cheaper).
+    // With a beast on board, AI should buy hyena (tribe match) over
+    // the cheaper taunt_minion (no tribe match).
+    const base = makeInitialState(1);
+    const hyena = instantiate(MINIONS["scavenging_hyena"]!); // 2/1 beast, stat-ball 3
+    const tauntMinion = instantiate(MINIONS["taunt_minion"]!); // 2/2, no tribe, stat-ball 4
+    // Use combo_minion (no tribe, stat-ball 2) as the cheaper non-tribe option
+    const comboMinion = instantiate(MINIONS["combo_minion"]!); // no tribe, stat-ball 2
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 2 },
+      turn: 2,
+      pool: { alley_cat: 50, scavenging_hyena: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 4,
+              tier: 1 as const,
+              upgradeCost: 5,
+              board: [hyena],
+              hand: [],
+              shop: [comboMinion, hyena],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    const buys = actions.filter((a) => a.kind === "BuyMinion");
+    expect(buys.length).toBeGreaterThanOrEqual(1);
+    const buyAction = buys[0] as Extract<Action, { kind: "BuyMinion" }>;
+    // Should buy scavenging_hyena (index 1, beast matching board) not combo_minion (index 0, cheaper but no tribe)
+    expect(buyAction.shopIndex).toBe(1);
+  });
 });
 
 // ---------------------------------------------------------------------------
