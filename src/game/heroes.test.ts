@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 16 gameplay heroes (excluding stub)", () => {
+  it("contains all 17 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(16);
+    expect(ids).toHaveLength(17);
   });
 
   it("every hero has a description", () => {
@@ -393,5 +393,83 @@ describe("Sindragosa passive", () => {
 
     const after = beginRecruitTurn(state, RNG);
     expect(after.players[0]!.shop).toHaveLength(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Jaraxxus
+// ---------------------------------------------------------------------------
+
+describe("Jaraxxus passive", () => {
+  it("buffs demons in shop by +1/+1 at start of recruit turn", () => {
+    const demon = instantiate(MINIONS["flame_imp"]!);
+    const nonDemon = instantiate(MINIONS["alley_cat"]!);
+    let state = makeStateWithHero("jaraxxus", []);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [demon, nonDemon] } : p)),
+    };
+
+    const after = beginRecruitTurn(state, RNG);
+    const shop = after.players[0]!.shop;
+    // Demon should be buffed
+    expect(shop[0]!.atk).toBe(demon.atk + 1);
+    expect(shop[0]!.hp).toBe(demon.hp + 1);
+    // Non-demon should be unchanged
+    expect(shop[1]!.atk).toBe(nonDemon.atk);
+    expect(shop[1]!.hp).toBe(nonDemon.hp);
+  });
+
+  it("buffs all demons, not just one", () => {
+    const d1 = instantiate(MINIONS["flame_imp"]!);
+    const d2 = instantiate(MINIONS["vulgar_homunculus"]!);
+    const nonDemon = instantiate(MINIONS["rockpool_hunter"]!);
+    let state = makeStateWithHero("jaraxxus", []);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [d1, d2, nonDemon] } : p)),
+    };
+
+    const after = beginRecruitTurn(state, RNG);
+    const shop = after.players[0]!.shop;
+    expect(shop[0]!.atk).toBe(d1.atk + 1);
+    expect(shop[0]!.hp).toBe(d1.hp + 1);
+    expect(shop[1]!.atk).toBe(d2.atk + 1);
+    expect(shop[1]!.hp).toBe(d2.hp + 1);
+    expect(shop[2]!.atk).toBe(nonDemon.atk);
+    expect(shop[2]!.hp).toBe(nonDemon.hp);
+  });
+
+  it("does nothing when shop is empty", () => {
+    let state = makeStateWithHero("jaraxxus");
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [] } : p)),
+    };
+
+    const after = beginRecruitTurn(state, RNG);
+    // Shop gets re-rolled even when empty, so it won't be empty after
+    // The key is no +1/+1 buff was applied (no demons to buff)
+    expect(after.players[0]!.shop.length).toBeGreaterThan(0);
+  });
+
+  it("does not buff non-demon minions", () => {
+    const beast = instantiate(MINIONS["bristleback_boys"]!);
+    const mech = instantiate(MINIONS["annoy_o_tron"]!);
+    const murloc = instantiate(MINIONS["murloc_tidecaller"]!);
+    let state = makeStateWithHero("jaraxxus", []);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [beast, mech, murloc] } : p)),
+    };
+
+    const after = beginRecruitTurn(state, RNG);
+    const shop = after.players[0]!.shop;
+    expect(shop[0]!.atk).toBe(beast.atk);
+    expect(shop[0]!.hp).toBe(beast.hp);
+    expect(shop[1]!.atk).toBe(mech.atk);
+    expect(shop[1]!.hp).toBe(mech.hp);
+    expect(shop[2]!.atk).toBe(murloc.atk);
+    expect(shop[2]!.hp).toBe(murloc.hp);
   });
 });

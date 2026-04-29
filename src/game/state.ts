@@ -757,6 +757,25 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         next = updatePlayer(next, player.id, (p) => ({ ...p, shop: buffedShop }));
       }
     }
+
+    // Jaraxxus passive: demons in shop gain +1/+1 at start of turn
+    if (player.id === 0 && player.heroId === "jaraxxus") {
+      const shop = player.shop;
+      if (shop.length > 0) {
+        const buffedShop = shop.map((m) => {
+          if (m.tribes.includes("Demon")) {
+            return {
+              ...m,
+              atk: m.atk + 1,
+              hp: m.hp + 1,
+              maxHp: m.maxHp + 1,
+            };
+          }
+          return m;
+        });
+        next = updatePlayer(next, player.id, (p) => ({ ...p, shop: buffedShop }));
+      }
+    }
   }
 
   return next;

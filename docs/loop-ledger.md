@@ -1,4 +1,5 @@
 2026-04-27 | d5f5e83 | FIXED: Add basic AI strategy — buys cheapest affordable minion from shop, plays all to board, with unit tests
+2026-04-29 | 0359193 | FIXED: Add Jaraxxus hero — passive: demons in your shop gain +1/+1 at start of each recruit turn, with unit tests
 2026-04-27 | ef3bae2 | FIXED: Add Tavern Tipper spell (tier 2-5, costs 2 gold, gives a random friendly minion +2/+2), with unit tests
 2026-04-27 | aa8664f | FIXED: Add triple merge animation — golden minions pulse with amber glow on board, hand, and shop when triple triggers
 2026-04-27 | aca8eb3 | FIXED: Golden minion deathrattle/battlecry triggers twice in combat and shop, matching real Battlegrounds golden minion behavior
