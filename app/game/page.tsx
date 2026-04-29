@@ -195,6 +195,7 @@ export default function GamePage() {
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [placingMinionIdx, setPlacingMinionIdx] = useState<number | null>(null);
   const [heroPowerTargetIdx, setHeroPowerTargetIdx] = useState<number | null>(null);
+  const [selectedSpellIdx, setSelectedSpellIdx] = useState<number | null>(null);
 
   // Combat animation state
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
@@ -645,6 +646,32 @@ export default function GamePage() {
                           setHeroPowerTargetIdx(idx);
                           setError(null);
                         }
+                        // Spell targeting: if a spell is selected, play it with this board index as target
+                        if (selectedSpellIdx !== null && gameState) {
+                          const player = gameState.players[0];
+                          if (!player) return;
+                          if (idx >= player.board.length) {
+                            setError("Invalid board target");
+                            return;
+                          }
+                          try {
+                            const next = step(
+                              gameState,
+                              {
+                                kind: "PlaySpell",
+                                player: 0,
+                                spellIndex: selectedSpellIdx,
+                                targetIndex: idx,
+                              },
+                              rngForTurn(gameState, "playSpell"),
+                            );
+                            setGameState(next);
+                            setSelectedSpellIdx(null);
+                            setError(null);
+                          } catch {
+                            setError("Could not play spell");
+                          }
+                        }
                       }}
                       onDragOver={(e) => {
                         e.preventDefault();
@@ -679,8 +706,10 @@ export default function GamePage() {
                       className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 border-blue-500/50 bg-slate-800 px-4 py-3 transition ${
                         isDragging ? "opacity-40" : "opacity-100"
                       } ${isHpTarget ? "border-sky-400 bg-sky-400/10 ring-2 ring-sky-400/30" : ""} ${
-                        showingGolden ? "animate-pulse" : ""
-                      }`}
+                        selectedSpellIdx !== null
+                          ? "cursor-crosshair border-amber-400 bg-amber-400/5 hover:bg-amber-400/15"
+                          : ""
+                      } ${showingGolden ? "animate-pulse" : ""}`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -774,26 +803,23 @@ export default function GamePage() {
                     const card = SPELLS[spell.cardId];
                     if (!card) return null;
                     const canPlay = gameState?.phase.kind === "Recruit";
+                    const isSelected = selectedSpellIdx === idx;
                     return (
                       <button
                         key={spell.instanceId}
                         type="button"
                         onClick={() => {
-                          if (!gameState) return;
-                          try {
-                            const next = step(
-                              gameState,
-                              { kind: "PlaySpell", player: 0, spellIndex: idx },
-                              rngForTurn(gameState, "playSpell"),
-                            );
-                            setGameState(next);
-                            setError(null);
-                          } catch {
-                            setError("Could not play spell");
+                          if (!gameState || gameState.phase.kind !== "Recruit") return;
+                          const player = gameState.players[0];
+                          if (!player || player.board.length === 0) {
+                            setError("No valid targets on board");
+                            return;
                           }
+                          setSelectedSpellIdx(isSelected ? null : idx);
+                          setError(null);
                         }}
                         disabled={!canPlay}
-                        className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${canPlay ? "border-amber-500/50 cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95" : "border-slate-600 cursor-not-allowed opacity-50"} bg-slate-800 px-4 py-3 transition`}
+                        className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${isSelected ? "border-amber-400 bg-amber-400/15 ring-2 ring-amber-400/30" : canPlay ? "border-amber-500/50 cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95" : "border-slate-600 cursor-not-allowed opacity-50"} bg-slate-800 px-4 py-3 transition`}
                       >
                         <span className="text-[11px] font-medium leading-tight text-slate-300">
                           {card.name}
@@ -992,6 +1018,20 @@ export default function GamePage() {
                 }
                 return null;
               })()}
+              {selectedSpellIdx !== null && (
+                <>
+                  <span className="text-xs text-amber-400">
+                    Select a board minion to target, or cancel
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedSpellIdx(null)}
+                    className="rounded bg-amber-500/80 px-3 py-1 text-xs font-semibold text-slate-950 hover:bg-amber-400"
+                  >
+                    Cancel
+                  </button>
+                </>
+              )}
               <button
                 type="button"
                 onClick={handleEndTurn}
