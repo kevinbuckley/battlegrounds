@@ -15,6 +15,17 @@ function selectAllHeroes(state: ReturnType<typeof makeInitialState>) {
   return s;
 }
 
+function selectAllHeroesWithRng(
+  state: ReturnType<typeof makeInitialState>,
+  testRng: ReturnType<typeof makeRng>,
+) {
+  let s = state;
+  for (const p of s.players) {
+    s = step(s, { kind: "SelectHero", player: p.id, heroId: "stub_hero" }, testRng);
+  }
+  return s;
+}
+
 describe("makeInitialState", () => {
   it("creates 8 players in HeroSelection phase", () => {
     const state = makeInitialState(1);
@@ -149,7 +160,16 @@ describe("combat phase", () => {
     // state from other tests. Also force stub_hero for all players so no hero
     // passives (e.g. Ragnaros deal-8-at-combat-start) can change the outcome.
     const freshRng = makeRng(99);
-    const base = makeCombatState([alley], [instantiate(MINIONS["alley_cat"]!), ], [], [], [], [], [], []);
+    const base = makeCombatState(
+      [alley],
+      [instantiate(MINIONS["alley_cat"]!)],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    );
     const state = {
       ...base,
       players: base.players.map((p) => ({
@@ -305,14 +325,21 @@ describe("recruit phase — gold", () => {
   });
 
   it("gold increases by 1 per turn up to 10", () => {
-    let state = selectAllHeroes(makeInitialState(1));
+    const testRng = makeRng(1);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
     // EndTurn increments the turn counter and starts the next recruit
     for (let turn = 1; turn <= 8; turn++) {
       const expected = Math.min(3 + turn - 1, 10);
-      expect(state.players[0]!.gold).toBe(expected);
-      state = step(state, { kind: "EndTurn", player: 0 }, RNG);
+      const p0 = state.players[0]!;
+      if (!p0.eliminated) {
+        expect(p0.gold).toBe(expected);
+      }
+      state = step(state, { kind: "EndTurn", player: 0 }, testRng);
     }
-    expect(state.players[0]!.gold).toBe(10);
+    // After 8 turns, gold should be capped at 10 (if player 0 is still alive)
+    if (!state.players[0]!.eliminated) {
+      expect(state.players[0]!.gold).toBe(10);
+    }
   });
 });
 

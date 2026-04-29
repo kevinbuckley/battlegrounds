@@ -1,3 +1,6 @@
+import { basic } from "@/ai/heuristics/basic";
+import { greedy } from "@/ai/heuristics/greedy";
+import { heuristic } from "@/ai/heuristics/heuristic";
 import { makeRng, type Rng } from "@/lib/rng";
 import { extraLife, goldenTouch, pickAnomaly } from "./anomalies";
 import { activateBuddies, createBuddyInstance, pickBuddy, pickBuddyForPlayer } from "./buddies";
@@ -290,6 +293,76 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
   }
 }
 
+const AI_STRATEGIES: Array<import("@/ai/strategy").Strategy> = [basic, greedy, heuristic];
+
+/** Execute AI recruit actions for all non-player-0 players before combat. */
+function executeAiRecruitActions(state: GameState, nextTurn: number, rng: Rng): GameState {
+  let result = { ...state, turn: nextTurn };
+
+  for (let i = 1; i < result.players.length; i++) {
+    const aiPlayer = result.players[i];
+    if (!aiPlayer || aiPlayer.eliminated) continue;
+
+    const strategy = AI_STRATEGIES[i % AI_STRATEGIES.length]!;
+    const aiRng = rng.fork(`ai:recruit:${i}:${nextTurn}`);
+
+    const aiView: import("@/ai/strategy").PlayerView = {
+      state: result,
+      me: i,
+    };
+
+    const actions = strategy.decideRecruitActions(aiView, aiRng);
+
+    for (const action of actions) {
+      if (action.kind === "EndTurn") break;
+
+      switch (action.kind) {
+        case "BuyMinion": {
+          result = buyMinion(result, action.player, action.shopIndex);
+          break;
+        }
+        case "SellMinion": {
+          result =
+            "handIndex" in action
+              ? sellMinion(result, action.player, action.handIndex, true)
+              : sellMinion(result, action.player, action.boardIndex);
+          break;
+        }
+        case "PlayMinion": {
+          result = playMinionToBoard(
+            result,
+            action.player,
+            action.handIndex,
+            action.boardIndex,
+            aiRng,
+          );
+          break;
+        }
+        case "UpgradeTier": {
+          result = upgradeTier(result, action.player);
+          break;
+        }
+        case "RefreshShop": {
+          result = refreshShop(result, action.player, aiRng);
+          break;
+        }
+        case "FreezeShop": {
+          result = freezeShop(result, action.player);
+          break;
+        }
+        case "ReorderBoard": {
+          result = reorderBoard(result, action.player, action.from, action.to);
+          break;
+        }
+        default:
+          break;
+      }
+    }
+  }
+
+  return result;
+}
+
 function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   const nextTurn = state.turn + 1;
   let result = { ...state, turn: nextTurn };
@@ -313,6 +386,9 @@ function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
 
   // Check for triples at end of turn (between rounds)
   result = checkAndProcessTriples(result, playerId, rng);
+
+  // Execute AI recruit actions for non-player-0 before combat
+  result = executeAiRecruitActions(result, nextTurn, rng);
 
   // Transition to combat phase
   result = {

@@ -143,3 +143,5 @@
 2026-04-29 | 43eefce | FIXED: Add spell targeting UI — clicking a spell in hand enters targeting mode, board minions highlight as clickable targets, clicking a board minion plays the spell with that target index, cancel button to exit targeting mode
 2026-04-29 | 47a1e48 | FIXED: Sell button on board and hand now shows correct sell value (1g normal, 2g golden) instead of displaying player gold amount
 2026-04-29 | 7bbf16b | FIXED: Add Screwjank Clunker tier 3 mech (battlecry gives a friendly mech +2/+2), with unit tests
+
+2026-04-29 | a96b394 | FIXED: Wire AI strategies into endTurn so AI players buy/sell/upgrade during recruit phase before combat resolves, matching real Battlegrounds behavior
