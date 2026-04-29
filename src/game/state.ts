@@ -105,11 +105,16 @@ function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rn
     throw new Error(`Not enough gold to buy spell (need ${spellCard.cost})`);
   }
 
-  return updatePlayer(state, playerId, (p) => ({
-    ...p,
-    gold: p.gold - spellCard.cost,
-    spells: [...p.spells, spellInstance] as import("./types").SpellInstance[],
-  }));
+  const shop = player.shop.filter((_, i) => i !== shopIndex);
+  return {
+    ...updatePlayer(state, playerId, (p) => ({
+      ...p,
+      gold: p.gold - spellCard.cost,
+      shop,
+      spells: [...p.spells, spellInstance] as import("./types").SpellInstance[],
+    })),
+    pool: state.pool,
+  };
 }
 
 function playSpell(
