@@ -284,7 +284,8 @@ function fireRushAttacks(
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng);
     const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
-    void result;
+    left = result.left;
+    right = result.right;
   }
 }
 
