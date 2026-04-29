@@ -777,6 +777,7 @@ export default function GamePage() {
                     gameState.phase.kind === "Recruit";
                   const handFull = handMinions.length >= 10;
                   const tierColor = TIER_COLORS[minionCard.tier] ?? "bg-gray-600";
+                  const isFrozen = gameState?.players[0]?.shopFrozen ?? false;
                   return (
                     <button
                       key={shopItem.instanceId}
@@ -787,7 +788,7 @@ export default function GamePage() {
                         canBuy && !handFull
                           ? "cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95"
                           : "cursor-not-allowed opacity-50"
-                      } ${shopItem.golden ? "border-amber-400 ring-2 ring-amber-400/30" : ""}`}
+                      } ${shopItem.golden ? "border-amber-400 ring-2 ring-amber-400/30" : ""} ${isFrozen ? "border-sky-400/70 bg-sky-950/40 ring-2 ring-sky-400/20" : ""}`}
                     >
                       <div className="flex items-center gap-2">
                         <span
@@ -816,6 +817,12 @@ export default function GamePage() {
                         <span>⧉</span>
                         <span>{COST_BUY}</span>
                       </div>
+                      {isFrozen && (
+                        <div className="flex items-center justify-center gap-1 text-xs font-semibold text-sky-300">
+                          <span>❄</span>
+                          <span>Frozen</span>
+                        </div>
+                      )}
                       {minionCard.baseKeywords.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {Array.from(minionCard.baseKeywords).map((kw) => (
