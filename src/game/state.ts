@@ -743,6 +743,20 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
 
     // Activate buddies that have reached their activation turn
     next = activateBuddies(next, player.id, rng);
+
+    // Sindragosa passive: frozen shop minions gain +1/+1 at end of turn
+    if (player.id === 0 && player.heroId === "sindragosa" && player.shopFrozen) {
+      const shop = player.shop;
+      if (shop.length > 0) {
+        const buffedShop = shop.map((m) => ({
+          ...m,
+          atk: m.atk + 1,
+          hp: m.hp + 1,
+          maxHp: m.maxHp + 1,
+        }));
+        next = updatePlayer(next, player.id, (p) => ({ ...p, shop: buffedShop }));
+      }
+    }
   }
 
   return next;

@@ -10,6 +10,7 @@ import { patchwerk } from "./patchwerk";
 import { ragnaros } from "./ragnaros";
 import { rakanishu } from "./rakanishu";
 import { scabbsCutterbutter } from "./scabbs-cutterbutter";
+import { sindragosa } from "./sindragosa";
 import { sirFinley } from "./sir-finley";
 import { stubHero } from "./stub";
 import { theCurator } from "./the-curator";
@@ -33,6 +34,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [theCurator.id]: theCurator,
   [yoggSaron.id]: yoggSaron,
   [kingMukla.id]: kingMukla,
+  [sindragosa.id]: sindragosa,
 };
 
 export function getHero(id: HeroId): Hero {
