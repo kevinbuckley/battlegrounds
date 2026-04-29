@@ -10,8 +10,15 @@ import { applyDamageToPlayer, calcDamage } from "@/game/damage";
 import { baseGoldForTurn, COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
+import { SPELLS } from "@/game/spells/index";
 import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "@/game/state";
-import type { CombatEvent, CombatResult, GameState, MinionInstance } from "@/game/types";
+import type {
+  CombatEvent,
+  CombatResult,
+  GameState,
+  MinionInstance,
+  SpellInstance,
+} from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 // ------------------------------------->-----
@@ -750,6 +757,58 @@ export default function GamePage() {
               })}
             </div>
           </div>
+
+          {/* Spells */}
+          {(() => {
+            const player = gameState?.players[0];
+            const spells = player?.spells ?? [];
+            if (spells.length === 0) return null;
+            return (
+              <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
+                <h2 className="mb-3 text-xl font-semibold text-slate-100">
+                  Spells ({spells.length})
+                </h2>
+                <div className="flex gap-3">
+                  {spells.map((spell, idx) => {
+                    const card = SPELLS[spell.cardId];
+                    if (!card) return null;
+                    const canPlay = gameState?.phase.kind === "Recruit";
+                    return (
+                      <button
+                        key={spell.instanceId}
+                        type="button"
+                        onClick={() => {
+                          if (!gameState) return;
+                          try {
+                            const next = step(
+                              gameState,
+                              { kind: "PlaySpell", player: 0, spellIndex: idx },
+                              rngForTurn(gameState, "playSpell"),
+                            );
+                            setGameState(next);
+                            setError(null);
+                          } catch {
+                            setError("Could not play spell");
+                          }
+                        }}
+                        disabled={!canPlay}
+                        className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${canPlay ? "border-amber-500/50 cursor-pointer hover:border-amber-400 hover:bg-slate-750 active:scale-95" : "border-slate-600 cursor-not-allowed opacity-50"} bg-slate-800 px-4 py-3 transition`}
+                      >
+                        <span className="text-[11px] font-medium leading-tight text-slate-300">
+                          {card.name}
+                        </span>
+                        <span className="text-xs text-slate-400">{card.description}</span>
+                        <div className="flex items-center justify-center gap-1 text-xs font-semibold text-amber-400">
+                          <span>⧉</span>
+                          <span>{card.cost}</span>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })()}
 
           {/* Tavern / Shop */}
           <div className="rounded-xl border border-slate-700 bg-slate-900 p-4">
