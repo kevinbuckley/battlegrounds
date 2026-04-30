@@ -912,8 +912,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         (m) => m.tribes.includes("Dragon") && m.tier === player.tier,
       );
       if (dragonMinions.length > 0) {
-        const idx = Math.floor(rng.next() % dragonMinions.length);
-        const chosen = dragonMinions[idx]!;
+        const chosen = rng.pick(dragonMinions) as MinionCard;
         const minionInstance = instantiate(chosen);
         next = updatePlayer(next, player.id, (p) => ({
           ...p,
