@@ -478,6 +478,48 @@ describe("feature validation", () => {
     expect(r.survivorsRight[0]!.hp).toBe(8);
   });
 
+  it("opponent (right side) rush minions also attack during rush phase", () => {
+    // Left side has no rush, right side has a rush minion.
+    // The right-side rush minion should attack during the rush phase,
+    // not wait for the normal cycle.
+    const leftMinion = makeMinion(3, 3);
+    const rightRush = makeMinion(4, 5); // 5 HP so it survives the counterattack
+    rightRush.keywords.add("rush");
+
+    const r = simulateCombat([leftMinion], [rightRush], makeRng(0));
+
+    // The first attack should be from the rush minion (rush phase).
+    // Since right goes first when left has more minions (3 > 1), the
+    // starting side is left. But the right-side rush minion should
+    // still attack during the rush phase after the starting side's rush.
+    const attacks = r.transcript.filter((e) => e.kind === "Attack");
+    expect(attacks.length).toBeGreaterThanOrEqual(1);
+
+    // The right-side rush minion should have attacked.
+    const rightRushAttacks = attacks.filter(
+      (e) => e.kind === "Attack" && e.attacker === rightRush.instanceId,
+    );
+    expect(rightRushAttacks.length).toBeGreaterThanOrEqual(1);
+
+    // The left minion should have been attacked during rush phase.
+    const leftDamaged = r.transcript.filter(
+      (e): e is { kind: "Damage"; target: string; amount: number } =>
+        e.kind === "Damage" && e.target === leftMinion.instanceId,
+    );
+    expect(leftDamaged.length).toBeGreaterThanOrEqual(1);
+    expect(leftDamaged[0]!.amount).toBe(4); // rush minion's atk
+
+    // The right-side rush minion should have attacked the left minion
+    // during the rush phase (first attack in transcript).
+    const firstAttack = attacks[0]!;
+    expect(firstAttack.attacker).toBe(rightRush.instanceId);
+
+    // Right wins because the rush minion kills the left minion during rush phase
+    // and survives the counterattack (5 HP - 3 counter = 2 HP remaining).
+    expect(r.winner).toBe("right");
+    expect(r.survivorsRight[0]!.hp).toBe(2);
+  });
+
   it("lifesteal does not heal when dealing 0 damage (divine shield blocks)", () => {
     // Use a 1/1 lifesteal minion vs 1/1 shielded minion.
     // The lifesteal minion attacks first: shield absorbs (no lifesteal).
