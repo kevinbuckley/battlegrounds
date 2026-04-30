@@ -1,6 +1,7 @@
 2026-04-30 | 439ba12 | FIXED: Game feel audit — fix isGhost in state.ts to return true for eliminated players, so odd-player-round ghost fights no longer get skipped — previously all ghost fights were silently skipped because isGhost always returned false
 2026-04-30 | fbb2b3d | FIXED: fireRushAttacks in combat.ts now re-reads alive defenders from updated left/right arrays after each reapDeaths call, and skips dead rush minions — previously stale array references caused dead rush minions to attack and rush minions to attack multiple times per round
 2026-04-30 | c904cd7 | FIXED: playSpell now removes the played spell from the player's spells array after use, matching real Battlegrounds where spells are one-time use
+2026-04-30 | 625abba | FIXED: AI combat board placement — all three AI strategies (basic, greedy, heuristic) now sort board by ATK descending before combat, matching real Battlegrounds where ordering by strength is a key strategic decision
 2026-04-30 | c904cd7 | FIXED: Game feel audit — fix handleEndTurn to find the actual combat opponent from pairingsHistory instead of just grabbing the first non-eliminated player, matching real Battlegrounds where you fight a specific opponent each round
 2026-04-30 | 2179f91 | FIXED: Move Scavenging Hyena from tier 2 to tier 1 (real Battlegrounds tier), with unit tests
 2026-04-30 | 2d75926 | FIXED: Add Lightfang Enforcer tier 5 beast (onTurnEnd gives a friendly minion of each tribe on board +2/+1), with unit tests

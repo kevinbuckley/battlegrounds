@@ -280,4 +280,113 @@ describe("lobby simulation", () => {
     // Heuristic should win more than half the time (not guaranteed every seed)
     expect(heuristicWins).toBeGreaterThanOrEqual(3);
   });
+
+  it("basic strategy sorts board by ATK descending before EndTurn", () => {
+    const base = makeInitialState(1);
+    const highAtk = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const lowAtk = instantiate(MINIONS["alley_cat"]!); // 1/1
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 2 },
+      turn: 2,
+      pool: { alley_cat: 50, murloc_warleader: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 4,
+              tier: 1 as const,
+              upgradeCost: 5,
+              board: [lowAtk, highAtk], // low ATK first
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    // Board should be sorted by ATK descending after AI actions
+    const finalBoard = state.players[0]!.board;
+    expect(finalBoard[0]!.atk).toBeGreaterThanOrEqual(finalBoard[1]!.atk);
+  });
+
+  it("greedy strategy sorts board by ATK descending before EndTurn", () => {
+    const base = makeInitialState(1);
+    const highAtk = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const lowAtk = instantiate(MINIONS["alley_cat"]!); // 1/1
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 2 },
+      turn: 2,
+      pool: { alley_cat: 50, murloc_warleader: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 4,
+              tier: 1 as const,
+              upgradeCost: 5,
+              board: [lowAtk, highAtk], // low ATK first
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const finalBoard = state.players[0]!.board;
+    expect(finalBoard[0]!.atk).toBeGreaterThanOrEqual(finalBoard[1]!.atk);
+  });
+
+  it("heuristic strategy sorts board by ATK descending before EndTurn", () => {
+    const base = makeInitialState(1);
+    const highAtk = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const lowAtk = instantiate(MINIONS["alley_cat"]!); // 1/1
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 2 },
+      turn: 2,
+      pool: { alley_cat: 50, murloc_warleader: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 4,
+              tier: 1 as const,
+              upgradeCost: 5,
+              board: [lowAtk, highAtk], // low ATK first
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = heuristic.decideRecruitActions(view, RNG);
+    const finalBoard = state.players[0]!.board;
+    expect(finalBoard[0]!.atk).toBeGreaterThanOrEqual(finalBoard[1]!.atk);
+  });
 });

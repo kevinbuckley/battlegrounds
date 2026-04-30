@@ -51,6 +51,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [M] Greedy AI: upgrade tavern tier when it can afford it and board is strong enough — implement as a new `greedy` strategy in `src/ai/heuristics/greedy.ts`
 - [ ] [S] AI tier preference: basic AI prefers buying minions that match its existing tribe (first tribe on board) over cheapest minion
+- [ ] [M] AI combat board placement: AI orders board minions by ATK descending before combat (attackers positioned optimally)
 
 ---
 
@@ -93,7 +94,6 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### AI improvements
 
-- [ ] [S] AI opponent name display: show each AI's hero name on the leaderboard instead of "AI Player N"
 - [ ] [M] AI combat board placement: AI orders board minions by ATK descending before combat (attackers positioned optimally)
 
 ---

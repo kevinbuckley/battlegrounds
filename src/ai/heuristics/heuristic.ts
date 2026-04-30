@@ -179,6 +179,12 @@ export const heuristic: Strategy = {
       }
     }
 
+    // --- Sort board by ATK descending before combat ---
+    {
+      const player = sim.players[me]!;
+      player.board.sort((a, b) => b.atk - a.atk);
+    }
+
     actions.push({ kind: "EndTurn", player: me });
     return actions;
   },
