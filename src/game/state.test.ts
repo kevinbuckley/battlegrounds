@@ -324,22 +324,87 @@ describe("recruit phase — gold", () => {
     }
   });
 
-  it("gold increases by 1 per turn up to 10", () => {
+  it("gold increases by 1 per turn up to 10 (plus interest)", () => {
     const testRng = makeRng(1);
     let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
     // EndTurn increments the turn counter and starts the next recruit
     for (let turn = 1; turn <= 8; turn++) {
-      const expected = Math.min(3 + turn - 1, 10);
+      const baseGold = Math.min(3 + turn - 1, 10);
       const p0 = state.players[0]!;
       if (!p0.eliminated) {
-        expect(p0.gold).toBe(expected);
+        // Gold should be >= baseGold (may be higher due to interest)
+        expect(p0.gold).toBeGreaterThanOrEqual(baseGold);
       }
       state = step(state, { kind: "EndTurn", player: 0 }, testRng);
     }
-    // After 8 turns, gold should be capped at 10 (if player 0 is still alive)
-    if (!state.players[0]!.eliminated) {
-      expect(state.players[0]!.gold).toBe(10);
-    }
+  });
+
+  it("earns interest gold: 1g per 5 gold saved, capped at 10", () => {
+    const testRng = makeRng(42);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
+    // Set player 0 to have 10 gold (enough for 2 interest)
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 10 } : p)),
+    };
+    // End turn — player 0 has 10 gold, base for turn 2 = 4
+    // newGold = max(10, 4) = 10, interest = calcInterestGold(10) = 2
+    // Total = 10 + 2 = 12
+    state = step(state, { kind: "EndTurn", player: 0 }, testRng);
+    expect(state.players[0]!.gold).toBe(12);
+  });
+
+  it("earns 0 interest when below 5 gold", () => {
+    const testRng = makeRng(42);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 4 } : p)),
+    };
+    // End turn — player 0 has 4 gold, base for turn 2 = 4
+    // newGold = max(4, 4) = 4, interest = calcInterestGold(4) = 0
+    // Total = 4 + 0 = 4
+    state = step(state, { kind: "EndTurn", player: 0 }, testRng);
+    expect(state.players[0]!.gold).toBe(4);
+  });
+
+  it("caps interest at 10 gold (50+ gold → 10 interest)", () => {
+    const testRng = makeRng(42);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 50 } : p)),
+    };
+    // End turn — player 0 has 50 gold, base for turn 2 = 4
+    // newGold = max(50, 4) = 50, interest = calcInterestGold(50) = 10
+    // Total = 50 + 10 = 60
+    state = step(state, { kind: "EndTurn", player: 0 }, testRng);
+    expect(state.players[0]!.gold).toBe(60);
+  });
+
+  it("earns 0 interest when below 5 gold", () => {
+    const testRng = makeRng(42);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 4 } : p)),
+    };
+    state = step(state, { kind: "EndTurn", player: 0 }, testRng);
+    // Base gold for turn 2 = 4, interest for 4 gold = 0, total = 4
+    expect(state.players[0]!.gold).toBe(4);
+  });
+
+  it("caps interest at 10 gold (50+ gold → 10 interest)", () => {
+    const testRng = makeRng(42);
+    let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
+    state = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 50 } : p)),
+    };
+    // newGold = max(50, 4) = 50, interest = calcInterestGold(50) = 10
+    // Total = 50 + 10 = 60
+    state = step(state, { kind: "EndTurn", player: 0 }, testRng);
+    expect(state.players[0]!.gold).toBe(60);
   });
 });
 

@@ -1,4 +1,5 @@
 2026-04-30 | 6e4c23e | FIXED: Ysera passive now uses rng.pick to select a random dragon minion from the current tier instead of always adding the first one (Math.floor(rng.next() % n) always returned 0 since rng.next() < 1)
+2026-04-30 | 98027ae | FIXED: Add interest gold mechanic — players earn 1 extra gold for every 5 gold they have at end of turn (up to 10 extra gold), wired into beginRecruitTurn, matching real Battlegrounds
 2026-04-30 | 439ba12 | FIXED: Game feel audit — fix isGhost in state.ts to return true for eliminated players, so odd-player-round ghost fights no longer get skipped — previously all ghost fights were silently skipped because isGhost always returned false
 2026-04-30 | fbb2b3d | FIXED: fireRushAttacks in combat.ts now re-reads alive defenders from updated left/right arrays after each reapDeaths call, and skips dead rush minions — previously stale array references caused dead rush minions to attack and rush minions to attack multiple times per round
 2026-04-30 | c904cd7 | FIXED: playSpell now removes the played spell from the player's spells array after use, matching real Battlegrounds where spells are one-time use

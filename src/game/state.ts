@@ -6,7 +6,7 @@ import { extraLife, goldenTouch, pickAnomaly } from "./anomalies";
 import { activateBuddies, createBuddyInstance, pickBuddy, pickBuddyForPlayer } from "./buddies";
 import { simulateCombat } from "./combat";
 import { applyDamageToPlayer, calcDamage, healHero } from "./damage";
-import { baseGoldForTurn, TIER_UPGRADE_BASE } from "./economy";
+import { baseGoldForTurn, calcInterestGold, TIER_UPGRADE_BASE } from "./economy";
 import { getAllHeroIds, HEROES, theCurator } from "./heroes/index";
 import { grantBanana } from "./heroes/king-mukla";
 import { ensureCuratorShop } from "./heroes/the-curator";
@@ -895,9 +895,10 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         : player.upgradeCost;
 
     const newGold = Math.max(player.gold, gold);
+    const interestGold = calcInterestGold(newGold);
     next = updatePlayer(next, player.id, (p) => ({
       ...p,
-      gold: newGold,
+      gold: newGold + interestGold,
       upgradeCost: discountedCost,
       upgradedThisTurn: false,
       heroPowerUsed: false,

@@ -11,6 +11,11 @@ export function baseGoldForTurn(turn: number): number {
   return Math.min(GOLD_PER_TURN_START + turn - 1, GOLD_PER_TURN_CAP);
 }
 
+/** Calculate interest gold: 1g per 5 gold saved, capped at 10. */
+export function calcInterestGold(gold: number): number {
+  return Math.min(Math.floor(gold / 5), 10);
+}
+
 export const TIER_UPGRADE_BASE: Record<Exclude<Tier, 1>, number> = {
   2: 5,
   3: 7,
