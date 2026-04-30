@@ -404,6 +404,13 @@ describe("refreshShop", () => {
     const state = makeTestState({ gold: 0 });
     expect(() => refreshShop(state, 0, RNG)).toThrow("Not enough gold to refresh");
   });
+
+  it("does nothing when shop is frozen", () => {
+    const shopMinion = instantiate(TEST_CARD);
+    const state = makeTestState({ shop: [shopMinion], shopFrozen: true, gold: 5 });
+    const after = refreshShop(state, 0, RNG);
+    expect(after).toBe(state);
+  });
 });
 
 // ---------------------------------------------------------------------------

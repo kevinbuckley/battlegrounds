@@ -1074,7 +1074,7 @@ export default function GamePage() {
 
                 const canUpgrade =
                   player.tier < 6 && player.gold >= player.upgradeCost && !player.upgradedThisTurn;
-                const canRefresh = player.gold >= COST_REFRESH;
+                const canRefresh = player.gold >= COST_REFRESH && !player.shopFrozen;
                 const canFreeze = player.gold >= COST_FREEZE;
 
                 return (

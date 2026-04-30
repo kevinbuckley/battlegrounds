@@ -393,6 +393,9 @@ export function reorderBoard(
 
 export function refreshShop(state: GameState, playerId: PlayerId, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
+  if (player.shopFrozen) {
+    return state;
+  }
   if (player.gold < COST_REFRESH)
     throw new Error(`Not enough gold to refresh (have ${player.gold}, need ${COST_REFRESH})`);
 
@@ -403,7 +406,7 @@ export function refreshShop(state: GameState, playerId: PlayerId, rng: Rng): Gam
   const { instances, pool } = drawFromPool(poolAfterReturn, player.tier, size, rng);
 
   return {
-    ...updatePlayer(afterGold, playerId, (p) => ({ ...p, shop: instances, shopFrozen: false })),
+    ...updatePlayer(afterGold, playerId, (p) => ({ ...p, shop: instances })),
     pool,
   };
 }
