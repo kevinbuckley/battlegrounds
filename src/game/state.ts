@@ -690,9 +690,7 @@ function stepCombat(state: GameState, action: Action, rng: Rng): GameState {
 }
 
 function isGhost(state: GameState, playerId: import("./types").PlayerId): boolean {
-  // Ghost players are identified by having a frozen board from a previous round
-  // For now, all eliminated players are ghosts in odd-count rounds
-  return false;
+  return state.players[playerId]?.eliminated ?? false;
 }
 
 function pairPlayers(
