@@ -703,21 +703,72 @@ function pairPlayers(
 ): Array<[import("./types").PlayerId, import("./types").PlayerId]> {
   if (players.length === 0) return [];
 
-  // Simple pairing: sort by id, pair adjacent players
-  // In a full implementation, this would avoid immediate rematches
   const sorted = [...players].sort((a, b) => a.id - b.id);
+
+  // Build a set of opponents each player faced in the most recent round.
+  // pairingsHistory entries are ordered chronologically; the last N/2 entries
+  // (where N = number of pairings in the previous round) are the most recent.
+  // We look at the last pairing for each player to find who they just fought.
+  const lastOpponents = new Map<import("./types").PlayerId, import("./types").PlayerId>();
+  for (let i = pairingHistory.length - 1; i >= 0; i--) {
+    const [a, b] = pairingHistory[i]!;
+    if (!lastOpponents.has(a)) lastOpponents.set(a, b);
+    if (!lastOpponents.has(b)) lastOpponents.set(b, a);
+  }
+
+  // Try to find pairings that avoid rematching players who faced each other
+  // in the previous round. Use a greedy approach: for each player, find the
+  // best available opponent (one they haven't faced recently).
+  const paired = new Set<import("./types").PlayerId>();
   const pairings: Array<[import("./types").PlayerId, import("./types").PlayerId]> = [];
 
-  for (let i = 0; i + 1 < sorted.length; i += 2) {
-    const a = sorted[i];
-    const b = sorted[i + 1];
-    if (a && b) {
+  for (let i = 0; i < sorted.length; i++) {
+    if (paired.has(sorted[i]!.id)) continue;
+
+    // Find the best available opponent for this player.
+    // "Best" = someone they didn't fight last round. If all available opponents
+    // are from last round, pick any available one.
+    const myId = sorted[i]!.id;
+    const myLastOpp = lastOpponents.get(myId);
+
+    let bestIdx = -1;
+    for (let j = i + 1; j < sorted.length; j++) {
+      if (paired.has(sorted[j]!.id)) continue;
+      if (sorted[j]!.id !== myId) {
+        // Prefer opponents we didn't just fight
+        if (myLastOpp === undefined || sorted[j]!.id !== myLastOpp) {
+          bestIdx = j;
+          break; // Found a non-rematch, use it
+        }
+        if (bestIdx === -1) bestIdx = j; // Fallback: rematch is unavoidable
+      }
+    }
+
+    if (bestIdx !== -1) {
+      const a = sorted[i]!;
+      const b = sorted[bestIdx]!;
       pairings.push([a.id, b.id]);
+      paired.add(a.id);
+      paired.add(b.id);
     }
   }
 
-  // If odd number, last player gets a bye (or fights ghost — handled separately)
-  // For now, skip the last player
+  // If odd number of players, the unpaired player gets a ghost.
+  // Find the unpaired player and pair them with a ghost of an eliminated player
+  // from a previous round (or a stub if none available).
+  const unpaired = sorted.find((p) => !paired.has(p.id));
+  if (unpaired) {
+    // Find an eliminated player to use as ghost (prefer recently eliminated)
+    const eliminatedPlayer = players.filter((p) => p.eliminated).sort((a, b) => b.id - a.id)[0];
+    if (eliminatedPlayer) {
+      // Ghost fights the unpaired player — the ghost is controlled by AI
+      pairings.push([unpaired.id, eliminatedPlayer.id]);
+    } else {
+      // No eliminated player — pair with self (bye)
+      pairings.push([unpaired.id, unpaired.id]);
+    }
+  }
+
   return pairings;
 }
 
