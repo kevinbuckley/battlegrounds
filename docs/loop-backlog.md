@@ -65,7 +65,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### More minions — Tier 1
 
 - [ ] [S] Add `Wrath Weaver` (tier 1): at end of turn, deal 1 damage to your hero and give all friendly demons +2/+2
-- [ ] [S] Add `Scavenging Hyena` (tier 1): beast, whenever a friendly beast dies gain +2/+1
+- [x] [S] Add `Scavenging Hyena` (tier 1): beast, whenever a friendly beast dies gain +2/+1
 - [ ] [S] Add `Murloc Tidecaller` (tier 1): murloc, whenever a murloc is summoned on either side gain +1 ATK
 - [ ] [S] Add `Murloc Tidehunter` (tier 1): murloc battlecry summon a 1/1 Murloc Scout
 

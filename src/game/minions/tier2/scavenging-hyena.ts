@@ -3,7 +3,7 @@ import { defineMinion } from "../define";
 export default defineMinion({
   id: "scavenging_hyena",
   name: "Scavenging Hyena",
-  tier: 2,
+  tier: 1,
   tribes: ["Beast"],
   baseAtk: 2,
   baseHp: 1,
