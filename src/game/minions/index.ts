@@ -50,6 +50,7 @@ import caveHydra from "./tier4/cave-hydra";
 import crystalweaver from "./tier4/crystalweaver";
 import defenderOfArgus from "./tier4/defender-of-argus";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
+import securityRover from "./tier4/security-rover";
 import virmenSensei from "./tier4/virmen-sensei";
 import baronRivendare from "./tier5/baron-rivendare";
 import blingtron5000 from "./tier5/blingtron-5000";
@@ -114,6 +115,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [crystalweaver.id]: crystalweaver,
   [defenderOfArgus.id]: defenderOfArgus,
   [nagaSecretGuardian.id]: nagaSecretGuardian,
+  [securityRover.id]: securityRover,
   [caveHydra.id]: caveHydra,
   [virmenSensei.id]: virmenSensei,
   [blingtron5000.id]: blingtron5000,

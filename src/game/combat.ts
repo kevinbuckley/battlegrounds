@@ -376,6 +376,17 @@ function applyDamage(
   target.hp -= dmg;
   emit({ kind: "Damage", target: target.instanceId, amount: dmg });
 
+  // Fire onDamageTaken hook on the target
+  const isOnLeft = left.includes(target);
+  target.hooks?.onDamageTaken?.({
+    self: target,
+    selfSide: isOnLeft ? "left" : "right",
+    left,
+    right,
+    emit,
+    rng,
+  });
+
   if (source.keywords.has("poisonous") || source.keywords.has("venomous")) {
     target.hp = Math.min(target.hp, 0);
   }
