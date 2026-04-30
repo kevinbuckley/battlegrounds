@@ -1,6 +1,6 @@
-import type { Rng } from "@/lib/rng";
+import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
 import type { Action, MinionInstance } from "@/game/types";
-import { buyMinion, playMinionToBoard, sellMinion } from "@/game/shop";
+import type { Rng } from "@/lib/rng";
 import type { PlayerView, Strategy } from "../strategy";
 
 // ---------------------------------------------------------------------------
@@ -52,6 +52,22 @@ export const greedy: Strategy = {
     const { state, me } = view;
     const actions: Action[] = [];
     let sim = state;
+
+    // --- Tier upgrade: greedy upgrades when it can afford it and still buy ---
+    {
+      const player = sim.players[me]!;
+      if (player.tier < 6) {
+        const cost = player.upgradeCost;
+        if (cost === 0 || cost <= player.gold - 3) {
+          try {
+            sim = upgradeTier(sim, me);
+            actions.push({ kind: "UpgradeTier", player: me });
+          } catch {
+            // ignore
+          }
+        }
+      }
+    }
 
     // --- Buy loop ---
     let buying = true;

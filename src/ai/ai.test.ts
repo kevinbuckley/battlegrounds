@@ -85,6 +85,24 @@ describe("greedy strategy", () => {
     const buys = actions.filter((a) => a.kind === "BuyMinion");
     expect(buys.length).toBeLessThanOrEqual(1);
   });
+
+  it("upgrades tier when it can afford it and still buy", () => {
+    // Turn 4: gold=6, upgradeCost=2 → 2 ≤ 6-3 (2≤3) → should upgrade
+    const state = stateAtTurn(4);
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
+    expect(upgrades.length).toBe(1);
+  });
+
+  it("does NOT upgrade when it would leave no gold for a buy", () => {
+    // Turn 1: 3g, upgradeCost=5 → 5 > 3-3 (0) → no upgrade
+    const state = stateAtTurn(1);
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
+    expect(upgrades.length).toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------
