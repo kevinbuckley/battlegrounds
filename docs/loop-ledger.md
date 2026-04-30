@@ -1,3 +1,4 @@
+2026-04-30 | 4255c7b | FIXED: Combat animation RNG now matches actual combat — animation uses the same `turn:{turn}:endTurn` RNG fork as the state machine, preventing mismatched combat events between animation and game state
 2026-04-30 | a9912e1 | FIXED: Add Wrath Weaver tier 1 demon (onTurnEnd deals 1 damage to your hero and gives all friendly demons +2/+2), with unit tests
 2026-04-30 | 205d9c5 | FIXED: refreshShop now skips when shop is frozen instead of clearing the freeze flag, matching real Battlegrounds where a frozen shop cannot be changed by refreshing
 2026-04-30 | c0d8eb3 | FIXED: Greedy AI now checks board strength before upgrading tavern tier — only upgrades when total minion stat-ball ≥ 10 or board has 4+ minions, preventing early upgrades with weak boards
