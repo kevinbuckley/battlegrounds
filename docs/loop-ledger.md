@@ -185,3 +185,4 @@
 2026-04-30 | 5d87f31 | FIXED: Add Murozond tier 5 dragon (battlecry adds a copy of a random enemy minion from their board to your hand), with unit tests
 2026-04-30 | 08d2cd3 | FIXED: applyCombatResult now keeps loser's surviving minions on board instead of clearing to [] — both players retain their boards after combat, matching real Battlegrounds where only HP changes between rounds
 2026-04-30 | 8fd1924 | FIXED: Triples at tier 6 now correctly create golden minions — previously the early return at tier >= 6 skipped golden conversion entirely, only skipping the discover offer as intended
+2026-04-30 | d03c81c | FIXED: Shop UI now shows actual minion stats (atk/hp) instead of base card stats — buffs from heroes (Sindragosa, Jaraxxus) and other effects are now visible in the shop, matching real Battlegrounds

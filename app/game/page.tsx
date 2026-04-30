@@ -894,11 +894,11 @@ export default function GamePage() {
                       </span>
                       <div className="flex gap-3 text-sm font-bold">
                         <span className="flex items-center gap-1 text-red-400">
-                          {minionCard.baseAtk}
+                          {shopItem.atk}
                           <span>⚔</span>
                         </span>
                         <span className="flex items-center gap-1 text-orange-400">
-                          {minionCard.baseHp}
+                          {shopItem.hp}
                           <span>❤</span>
                         </span>
                       </div>
