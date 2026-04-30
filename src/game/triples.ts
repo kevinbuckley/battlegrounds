@@ -110,35 +110,38 @@ export function checkAndProcessTriples(
   }
 
   // Discover phase: offer 3 minions from tier+1 (only if below tier 6)
+  // At tier 6, triples still create golden minions — just no discover offer.
   const playerState = getPlayer(result, playerId);
-  if (playerState.tier >= 6) return result;
+  if (playerState.tier < 6) {
+    const nextTier = (playerState.tier + 1) as Tier;
+    const eligibleIds = Object.keys(MINIONS).filter(
+      (id): id is MinionCardId => MINIONS[id as MinionCardId]?.tier === nextTier,
+    );
 
-  const nextTier = (playerState.tier + 1) as Tier;
-  const eligibleIds = Object.keys(MINIONS).filter(
-    (id): id is MinionCardId => MINIONS[id as MinionCardId]?.tier === nextTier,
-  );
+    if (eligibleIds.length === 0) return result;
 
-  if (eligibleIds.length === 0) return result;
+    const shuffled = [...eligibleIds].sort(() => rng.next() - 0.5);
+    const picks = shuffled.slice(0, Math.min(3, eligibleIds.length));
 
-  const shuffled = [...eligibleIds].sort(() => rng.next() - 0.5);
-  const picks = shuffled.slice(0, Math.min(3, eligibleIds.length));
+    if (picks.length === 0) return result;
 
-  if (picks.length === 0) return result;
+    const offers: import("./types").DiscoverOffer[] = [];
+    for (const cardId of picks) {
+      const card = MINIONS[cardId];
+      if (!card) continue;
+      offers.push({
+        minion: instantiate(card),
+        offerId: `${cardId}_discover_${picks.indexOf(cardId)}`,
+      });
+    }
 
-  const offers: import("./types").DiscoverOffer[] = [];
-  for (const cardId of picks) {
-    const card = MINIONS[cardId];
-    if (!card) continue;
-    offers.push({
-      minion: instantiate(card),
-      offerId: `${cardId}_discover_${picks.indexOf(cardId)}`,
-    });
+    if (offers.length === 0) return result;
+
+    return updatePlayer(result, playerId, (p) => ({
+      ...p,
+      discoverOffer: { offers, title: "Triple! Discover a minion" },
+    }));
   }
 
-  if (offers.length === 0) return result;
-
-  return updatePlayer(result, playerId, (p) => ({
-    ...p,
-    discoverOffer: { offers, title: "Triple! Discover a minion" },
-  }));
+  return result;
 }

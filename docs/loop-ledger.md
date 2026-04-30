@@ -180,3 +180,4 @@
 2026-04-29 | 2bbb9e6 | FIXED: Fix combat animation showing empty fight — handleEndTurn now snapshots player/opponent boards before step(EndTurn) clears them, computing the correct CombatResult from pre-combat state for the animation overlay
 2026-04-30 | 5d87f31 | FIXED: Add Murozond tier 5 dragon (battlecry adds a copy of a random enemy minion from their board to your hand), with unit tests
 2026-04-30 | 08d2cd3 | FIXED: applyCombatResult now keeps loser's surviving minions on board instead of clearing to [] — both players retain their boards after combat, matching real Battlegrounds where only HP changes between rounds
+2026-04-30 | 8fd1924 | FIXED: Triples at tier 6 now correctly create golden minions — previously the early return at tier >= 6 skipped golden conversion entirely, only skipping the discover offer as intended
