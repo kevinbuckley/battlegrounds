@@ -159,7 +159,12 @@ function playSpell(
     );
     // Fire onCast hooks for all minions on the player's board
     const afterCast = fireOnCastHooks(afterSpell, playerId, rng);
-    return applyComboToBoard(afterCast, playerId);
+    // Remove the spell from the player's spells array — spells are one-time use
+    const afterRemove = updatePlayer(afterCast, playerId, (p) => ({
+      ...p,
+      spells: p.spells.filter((_, i) => i !== spellIndex),
+    }));
+    return applyComboToBoard(afterRemove, playerId);
   }
 
   return applyComboToBoard(

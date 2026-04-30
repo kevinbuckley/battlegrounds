@@ -294,6 +294,89 @@ describe("EndTurn flow", () => {
 });
 
 // ------
+// PlaySpell — spells are one-time use
+// ------
+
+describe("playSpell removes spell from spells array", () => {
+  it("removes a target spell (Duskray Buff) after playing", () => {
+    let state = startGame(1);
+
+    // Upgrade to tier 3 to access Duskray Buff (tiers 3-6)
+    for (let t = 1; t < 3; t++) {
+      const cost = p(state).upgradeCost;
+      p(state).gold = cost + 100;
+      state = step(state, { kind: "UpgradeTier", player: 0 }, rngForTurn(state, "upgrade"));
+    }
+
+    // Manually add a spell instance to the player's spells array
+    // (simulating having bought one from the shop)
+    const spellInstance = {
+      instanceId: "spell_duskray_1",
+      cardId: "duskray_buff",
+    } as import("./../src/game/types").SpellInstance;
+    // Directly set the spells array
+    state = {
+      ...state,
+      players: state.players.map((pl, i) => (i === 0 ? { ...pl, spells: [spellInstance] } : pl)),
+    } as GameState;
+
+    // Add a minion to the board so we have a target
+    const minionCard = state.players[0]!.shop.find((m) => m.cardId !== "duskray_buff");
+    if (minionCard) {
+      const buyIdx = state.players[0]!.shop.indexOf(minionCard);
+      state = step(
+        state,
+        { kind: "BuyMinion", player: 0, shopIndex: buyIdx },
+        rngForTurn(state, "buy"),
+      );
+      state = step(
+        state,
+        { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 0 },
+        rngForTurn(state, "play"),
+      );
+    }
+
+    expect(p(state).spells).toHaveLength(1);
+    expect(p(state).spells[0]!.cardId).toBe("duskray_buff");
+
+    // Play the spell — it should be removed from the spells array
+    state = step(
+      state,
+      { kind: "PlaySpell", player: 0, spellIndex: 0, targetIndex: 0 },
+      rngForTurn(state, "playSpell"),
+    );
+
+    expect(p(state).spells).toHaveLength(0);
+  });
+
+  it("removes a no-target spell (Banana) after playing", () => {
+    let state = startGame(1);
+
+    // Manually add a Banana spell instance
+    const spellInstance = {
+      instanceId: "spell_banana_1",
+      cardId: "banana",
+    } as import("./../src/game/types").SpellInstance;
+    state = {
+      ...state,
+      players: state.players.map((pl, i) => (i === 0 ? { ...pl, spells: [spellInstance] } : pl)),
+    } as GameState;
+
+    expect(p(state).spells).toHaveLength(1);
+    expect(p(state).spells[0]!.cardId).toBe("banana");
+
+    // Play the spell (no-target spells play directly)
+    state = step(
+      state,
+      { kind: "PlaySpell", player: 0, spellIndex: 0 },
+      rngForTurn(state, "playSpell"),
+    );
+
+    expect(p(state).spells).toHaveLength(0);
+  });
+});
+
+// ------
 // Upgrade tier
 // ------
 
