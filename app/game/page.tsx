@@ -264,7 +264,7 @@ export default function GamePage() {
   const handlePlaceToEmptySlot = useCallback(
     (boardIndex: number) => {
       if (!gameState) return;
-      if (!placingMinionIdx && placingMinionIdx !== 0) return;
+      if (placingMinionIdx === null) return;
       if (gameState.phase.kind !== "Recruit") return;
       const player = gameState.players[0];
       if (!player) return;
