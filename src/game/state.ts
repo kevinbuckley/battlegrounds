@@ -487,7 +487,7 @@ function applyRagnarosPassive(
   });
 }
 
-function applyRagnarosAfterCombat(
+function applyRagnarosToPairing(
   state: GameState,
   leftId: import("./types").PlayerId,
   rightId: import("./types").PlayerId,
@@ -568,11 +568,17 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
     if (left.eliminated && !isGhost(result, leftId)) continue;
     if (right.eliminated && !isGhost(result, rightId)) continue;
 
-    const leftBoard = left.board.filter((m) => m.hp > 0);
-    const rightBoard = right.board.filter((m) => m.hp > 0);
+    // Apply Ragnaros hero passive at the START of combat: deal 8 damage to
+    // lowest-ATK enemy minion.  In real Battlegrounds this happens before
+    // any attacks, potentially killing a minion and weakening the enemy board.
+    result = applyRagnarosToPairing(result, leftId, rightId);
+
+    // Re-read boards after Ragnaros damage (minions may have been killed).
+    const postRagnarosLeft = getPlayer(result, leftId).board.filter((m) => m.hp > 0);
+    const postRagnarosRight = getPlayer(result, rightId).board.filter((m) => m.hp > 0);
 
     // Update Annihilan Battlemaster ATK based on total damage taken by hero.
-    for (const board of [leftBoard, rightBoard]) {
+    for (const board of [postRagnarosLeft, postRagnarosRight]) {
       for (const m of board) {
         if (m.cardId === "annihilan_battlemaster") {
           const totalDamageTaken =
@@ -583,12 +589,14 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
       }
     }
 
-    const combatResult = simulateCombat(leftBoard, rightBoard, rng, result.modifierState.anomaly);
+    const combatResult = simulateCombat(
+      postRagnarosLeft,
+      postRagnarosRight,
+      rng,
+      result.modifierState.anomaly,
+    );
 
     result = applyCombatResult(result, leftId, rightId, combatResult);
-
-    // Apply Ragnaros hero passive after combat result: deal 8 damage to lowest-ATK enemy minion
-    result = applyRagnarosAfterCombat(result, leftId, rightId);
   }
 
   // Process quest progress for all players after combat resolves
