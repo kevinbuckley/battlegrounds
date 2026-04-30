@@ -507,8 +507,16 @@ export default function GamePage() {
                     <button
                       type="button"
                       key={minion.instanceId}
-                      onClick={() => canPlay && setPlacingMinionIdx(idx)}
-                      disabled={!canPlay}
+                      onClick={() => {
+                        if (isSelected) {
+                          setPlacingMinionIdx(null);
+                        } else if (canPlay) {
+                          setPlacingMinionIdx(idx);
+                        } else {
+                          setError("Board is full");
+                        }
+                      }}
+                      disabled={!canPlay && !isSelected}
                       className={`flex min-w-[120px] flex-col gap-2 rounded-lg border-2 ${isSelected ? "border-amber-400 bg-amber-400/10" : "border-amber-500/50"} bg-slate-800 px-4 py-3 transition ${canPlay ? "cursor-pointer hover:bg-slate-750 active:scale-95 opacity-90" : "cursor-not-allowed opacity-50"} ${showingGolden ? "animate-pulse" : ""}`}
                     >
                       <div className="flex items-center gap-2">
