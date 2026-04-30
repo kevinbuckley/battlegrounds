@@ -57,6 +57,7 @@ import baronRivendare from "./tier5/baron-rivendare";
 import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
 import junkbot from "./tier5/junkbot";
+import lightfangEnforcer from "./tier5/lightfang-enforcer";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import murozond from "./tier5/murozond";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
@@ -126,6 +127,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [brannBronzebeard.id]: brannBronzebeard,
   [junkbot.id]: junkbot,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
+  [lightfangEnforcer.id]: lightfangEnforcer,
   [murozond.id]: murozond,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [ghastcoiler.id]: ghastcoiler,

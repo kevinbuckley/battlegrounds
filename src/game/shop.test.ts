@@ -1432,3 +1432,163 @@ describe("buyMinion skips spells", () => {
     expect(after.players[0]!.shop.length).toBe(beforeShop);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Lightfang Enforcer — onTurnEnd hook
+// ---------------------------------------------------------------------------
+
+describe("lightfang_enforcer onTurnEnd", () => {
+  it("is registered in MINIONS", () => {
+    expect(MINIONS["lightfang_enforcer"]).toBeDefined();
+    expect(MINIONS["lightfang_enforcer"]!.tier).toBe(5);
+    expect(MINIONS["lightfang_enforcer"]!.tribes).toContain("Beast");
+  });
+
+  it("onTurnEnd gives +2/+1 to one friendly minion per tribe on board", () => {
+    const le = MINIONS["lightfang_enforcer"];
+    expect(le).toBeDefined();
+    const inst = instantiate(le!);
+
+    // A murloc
+    const murloc = defineMinion({
+      id: "test_murloc_1",
+      name: "Test Murloc",
+      tier: 2,
+      tribes: ["Murloc"],
+      baseAtk: 2,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[murloc.id] = murloc;
+    const murlocInst = instantiate(murloc);
+
+    // A demon
+    const demon = defineMinion({
+      id: "test_demon_1",
+      name: "Test Demon",
+      tier: 3,
+      tribes: ["Demon"],
+      baseAtk: 3,
+      baseHp: 3,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[demon.id] = demon;
+    const demonInst = instantiate(demon);
+
+    const state = makeTestState({
+      board: [inst, murlocInst, demonInst],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = le!.hooks.onTurnEnd!(ctx);
+    const board = after.players[0]!.board;
+
+    // Murloc should have +2/+1
+    const murlocAfter = board.find((m) => m.instanceId === murlocInst.instanceId);
+    expect(murlocAfter).toBeDefined();
+    expect(murlocAfter!.atk).toBe(4); // 2 + 2
+    expect(murlocAfter!.hp).toBe(3); // 2 + 1
+
+    // Demon should have +2/+1
+    const demonAfter = board.find((m) => m.instanceId === demonInst.instanceId);
+    expect(demonAfter).toBeDefined();
+    expect(demonAfter!.atk).toBe(5); // 3 + 2
+    expect(demonAfter!.hp).toBe(4); // 3 + 1
+
+    // Self should be unchanged
+    const selfAfter = board.find((m) => m.instanceId === inst.instanceId);
+    expect(selfAfter!.atk).toBe(4); // base, unchanged
+    expect(selfAfter!.hp).toBe(5); // base, unchanged
+  });
+
+  it("onTurnEnd handles a minion with multiple tribes satisfying multiple buffs", () => {
+    const le = MINIONS["lightfang_enforcer"];
+    const inst = instantiate(le!);
+
+    // A murloc/demon (multi-tribe)
+    const multi = defineMinion({
+      id: "test_multi_tribe",
+      name: "Test Multi-tribe",
+      tier: 3,
+      tribes: ["Murloc", "Demon"],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[multi.id] = multi;
+    const multiInst = instantiate(multi);
+
+    const state = makeTestState({
+      board: [inst, multiInst],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = le!.hooks.onTurnEnd!(ctx);
+    const board = after.players[0]!.board;
+
+    // Multi-tribe minion should get +2/+1 for Murloc AND +2/+1 for Demon (total +4/+2)
+    const multiAfter = board.find((m) => m.instanceId === multiInst.instanceId);
+    expect(multiAfter).toBeDefined();
+    expect(multiAfter!.atk).toBe(5); // 1 + 2 + 2
+    expect(multiAfter!.hp).toBe(3); // 1 + 1 + 1
+  });
+
+  it("onTurnEnd does nothing when board has only self", () => {
+    const le = MINIONS["lightfang_enforcer"];
+    const inst = instantiate(le!);
+
+    const state = makeTestState({
+      board: [inst],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = le!.hooks.onTurnEnd!(ctx);
+    const board = after.players[0]!.board;
+    const selfAfter = board.find((m) => m.instanceId === inst.instanceId);
+    expect(selfAfter!.atk).toBe(4); // base, unchanged
+    expect(selfAfter!.hp).toBe(5); // base, unchanged
+  });
+
+  it("onTurnEnd does nothing when board is empty", () => {
+    const le = MINIONS["lightfang_enforcer"];
+    const inst = instantiate(le!);
+
+    const state = makeTestState({
+      board: [],
+    });
+
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = le!.hooks.onTurnEnd!(ctx);
+    expect(after.players[0]!.board).toHaveLength(0);
+  });
+});
