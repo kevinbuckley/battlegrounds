@@ -858,16 +858,12 @@ function applyCombatResult(
     result = healHero(result, winnerId, lifestealTotal);
   }
 
-  // Loser's board is cleared (they lost)
-  const loser = getPlayer(result, loserId);
-  if (!loser.eliminated) {
-    // If not eliminated, keep their board but they took damage
-    // Their minions still died in combat
-    result = updatePlayer(result, loserId, (p) => ({
-      ...p,
-      board: [],
-    }));
-  }
+  // Loser's board: keep surviving minions (real Battlegrounds keeps both boards)
+  const loserSurvivors = isLeftWinner ? survivorsRight : survivorsLeft;
+  result = updatePlayer(result, loserId, (p) => ({
+    ...p,
+    board: loserSurvivors,
+  }));
 
   return result;
 }
