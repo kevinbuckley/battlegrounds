@@ -162,7 +162,13 @@ function playSpell(
     return applyComboToBoard(afterCast, playerId);
   }
 
-  return applyComboToBoard(state, playerId);
+  return applyComboToBoard(
+    updatePlayer(state, playerId, (p) => ({
+      ...p,
+      spells: p.spells.filter((_, i) => i !== spellIndex),
+    })),
+    playerId,
+  );
 }
 
 /** Fire onCast hooks for all minions on the player's board. */
