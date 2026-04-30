@@ -60,7 +60,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 ### Game feel — Spells & discover polish
 
 - [ ] [S] Spell targeting UI: after clicking a spell in hand, highlight valid board targets and require a click to cast; currently spells fire immediately
-- [ ] [S] Discover shows real next-tier minions: verify that when a triple fires, the discover overlay offers 3 minions from tier+1 (not from the pool at large)
+- [x] [S] Discover shows real next-tier minions: verify that when a triple fires, the discover overlay offers 3 minions from tier+1 (not from the pool at large) — verified, triples.ts correctly filters by tier+1
+- [x] [S] Game feel audit: onTurnEnd hooks and hero passives now fire for all players, not just player 0
 - [ ] [S] Add `Bananas` spell to shop rolls — verify it appears in the shop (it exists as `bananaSpell` in registry but may not be offered in shop rolls)
 
 ### More minions — Tier 1

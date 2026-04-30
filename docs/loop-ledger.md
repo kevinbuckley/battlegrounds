@@ -1,4 +1,5 @@
 2026-04-30 | 3d4c326 | FIXED: Ragnaros passive now deals 8 damage at the START of combat instead of after — enemy minions can be killed before attacks begin, matching real Battlegrounds
+2026-04-30 | 73c54b3 | FIXED: onTurnEnd hooks now fire for all non-eliminated players during endTurn (not just the active player), and hero passives (Ysera, Jaraxxus, Sindragosa, Curator, King Mukla) now apply to all players — matching real Battlegrounds where start-of-round effects affect all 8 players
 2026-04-30 | 4255c7b | FIXED: Combat animation RNG now matches actual combat — animation uses the same `turn:{turn}:endTurn` RNG fork as the state machine, preventing mismatched combat events between animation and game state
 2026-04-30 | a9912e1 | FIXED: Add Wrath Weaver tier 1 demon (onTurnEnd deals 1 damage to your hero and gives all friendly demons +2/+2), with unit tests
 2026-04-30 | 205d9c5 | FIXED: refreshShop now skips when shop is frozen instead of clearing the freeze flag, matching real Battlegrounds where a frozen shop cannot be changed by refreshing

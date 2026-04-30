@@ -385,14 +385,15 @@ function endTurn(state: GameState, playerId: number, rng: Rng): GameState {
   const nextTurn = state.turn + 1;
   let result = { ...state, turn: nextTurn };
 
-  // Fire onTurnEnd hooks for all minions on the player's board
-  const player = getPlayer(result, playerId);
-  if (!player.eliminated) {
+  // Fire onTurnEnd hooks for all non-eliminated players (real Battlegrounds
+  // fires start-of-round effects for all 8 players, not just the active one).
+  for (const player of result.players) {
+    if (player.eliminated) continue;
     for (const minion of player.board) {
       if (minion.hooks?.onTurnEnd) {
         const ctx: import("./types").RecruitCtx = {
           self: minion,
-          playerId,
+          playerId: player.id,
           state: result,
           rng,
           spellDamage: totalSpellDamage(player),
@@ -911,7 +912,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     next = rollShopForPlayer(next, player.id, rng.fork(`shop:${player.id}:${turn}`));
 
     // Ysera passive: add a random Dragon from the current tier to the shop
-    if (player.id === 0 && player.heroId === "ysera") {
+    if (player.heroId === "ysera") {
       const allMinionCards = Object.values(MINIONS) as MinionCard[];
       const dragonMinions = allMinionCards.filter(
         (m) => m.tribes.includes("Dragon") && m.tier === player.tier,
@@ -927,12 +928,12 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     }
 
     // The Curator passive: ensure shop contains at least one of each tribe on board
-    if (player.id === 0 && player.heroId === theCurator.id) {
+    if (player.heroId === theCurator.id) {
       next = ensureCuratorShop(next, player.id, rng);
     }
 
     // King Mukla passive: grant a Banana each turn
-    if (player.id === 0 && player.heroId === "king_mukla") {
+    if (player.heroId === "king_mukla") {
       next = grantBanana(next, player.id);
     }
 
@@ -940,7 +941,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     next = activateBuddies(next, player.id, rng);
 
     // Sindragosa passive: frozen shop minions gain +1/+1 at end of turn
-    if (player.id === 0 && player.heroId === "sindragosa" && player.shopFrozen) {
+    if (player.heroId === "sindragosa" && player.shopFrozen) {
       const shop = player.shop;
       if (shop.length > 0) {
         const buffedShop = shop.map((m) => ({
@@ -954,11 +955,11 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     }
 
     // Jaraxxus passive: demons in shop gain +1/+1 at start of turn
-    if (player.id === 0 && player.heroId === "jaraxxus") {
+    if (player.heroId === "jaraxxus") {
       const shop = player.shop;
       if (shop.length > 0) {
         const buffedShop = shop.map((m) => {
-          if (m.tribes.includes("Demon")) {
+          if (m.tribes && m.tribes.includes("Demon")) {
             return {
               ...m,
               atk: m.atk + 1,
