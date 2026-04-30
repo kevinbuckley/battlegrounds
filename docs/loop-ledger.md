@@ -1,3 +1,4 @@
+2026-04-30 | c0d8eb3 | FIXED: Greedy AI now checks board strength before upgrading tavern tier — only upgrades when total minion stat-ball ≥ 10 or board has 4+ minions, preventing early upgrades with weak boards
 2026-04-30 | 6e4c23e | FIXED: Ysera passive now uses rng.pick to select a random dragon minion from the current tier instead of always adding the first one (Math.floor(rng.next() % n) always returned 0 since rng.next() < 1)
 2026-04-30 | 98027ae | FIXED: Add interest gold mechanic — players earn 1 extra gold for every 5 gold they have at end of turn (up to 10 extra gold), wired into beginRecruitTurn, matching real Battlegrounds
 2026-04-30 | 439ba12 | FIXED: Game feel audit — fix isGhost in state.ts to return true for eliminated players, so odd-player-round ghost fights no longer get skipped — previously all ghost fights were silently skipped because isGhost always returned false

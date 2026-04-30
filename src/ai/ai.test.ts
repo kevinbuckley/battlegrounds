@@ -86,9 +86,38 @@ describe("greedy strategy", () => {
     expect(buys.length).toBeLessThanOrEqual(1);
   });
 
-  it("upgrades tier when it can afford it and still buy", () => {
+  it("upgrades tier when it can afford it, still buy, and board is strong enough", () => {
     // Turn 4: gold=6, upgradeCost=2 → 2 ≤ 6-3 (2≤3) → should upgrade
-    const state = stateAtTurn(4);
+    // Board needs strength ≥ 10 or 4+ minions
+    const base = makeInitialState(1);
+    const mw1 = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const mw2 = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 4 },
+      turn: 4,
+      pool: { alley_cat: 50, murloc_warleader: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 6,
+              tier: 1 as const,
+              upgradeCost: 2,
+              board: [mw1, mw2], // strength = (3+2)*2 = 10
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
     const view = makePlayerView(state, 0);
     const actions = greedy.decideRecruitActions(view, RNG);
     const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
@@ -102,6 +131,126 @@ describe("greedy strategy", () => {
     const actions = greedy.decideRecruitActions(view, RNG);
     const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
     expect(upgrades.length).toBe(0);
+  });
+
+  it("does NOT upgrade when board is too weak (strength < 10 and < 4 minions)", () => {
+    // Board has one 1/1 minion (strength = 2), upgradeCost = 2, gold = 5
+    // Can afford (2 ≤ 5-3 = 2), but board strength 2 < 10 and length 1 < 4
+    const base = makeInitialState(1);
+    const alleyCat = instantiate(MINIONS["alley_cat"]!); // 1/1, stat-ball 2
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 4 },
+      turn: 4,
+      pool: { alley_cat: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 5,
+              tier: 1 as const,
+              upgradeCost: 2,
+              board: [alleyCat],
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
+    expect(upgrades.length).toBe(0);
+  });
+
+  it("DOES upgrade when board is strong enough (strength ≥ 10)", () => {
+    // Board has two 3/3 minions (strength = 12), upgradeCost = 2, gold = 5
+    // Can afford (2 ≤ 5-3 = 2) and board strength 12 ≥ 10
+    const base = makeInitialState(1);
+    const murlocWarleader = instantiate(MINIONS["murloc_warleader"]!); // 3/2
+    const rockpoolHunter = instantiate(MINIONS["rockpool_hunter"]!); // 2/1
+    // Put two copies on board: 3+2 + 2+1 = 8... need more strength
+    // Use two murloc_warleaders: (3+2)*2 = 10
+    const mw1 = instantiate(MINIONS["murloc_warleader"]!);
+    const mw2 = instantiate(MINIONS["murloc_warleader"]!);
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 4 },
+      turn: 4,
+      pool: { alley_cat: 50, murloc_warleader: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 5,
+              tier: 1 as const,
+              upgradeCost: 2,
+              board: [mw1, mw2],
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
+    expect(upgrades.length).toBe(1);
+  });
+
+  it("DOES upgrade when board has 4+ minions even if weak", () => {
+    // Board has 4 minions with total strength < 10, but length ≥ 4
+    const base = makeInitialState(1);
+    const alleyCat = instantiate(MINIONS["alley_cat"]!); // 1/1
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 4 },
+      turn: 4,
+      pool: { alley_cat: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 5,
+              tier: 1 as const,
+              upgradeCost: 2,
+              board: [
+                instantiate(MINIONS["alley_cat"]!),
+                instantiate(MINIONS["alley_cat"]!),
+                instantiate(MINIONS["alley_cat"]!),
+                instantiate(MINIONS["alley_cat"]!),
+              ],
+              hand: [],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+    const upgrades = actions.filter((a) => a.kind === "UpgradeTier");
+    expect(upgrades.length).toBe(1);
   });
 });
 

@@ -12,6 +12,11 @@ function minionScore(m: MinionInstance): number {
   return m.atk + m.hp;
 }
 
+/** Total board strength: sum of all minion stat-balls. */
+function boardStrength(board: MinionInstance[]): number {
+  return board.reduce((sum, m) => sum + minionScore(m), 0);
+}
+
 /** Index of the shop minion with the best score. -1 if shop is empty. */
 function bestShopIndex(shop: MinionInstance[]): number {
   if (shop.length === 0) return -1;
@@ -53,12 +58,17 @@ export const greedy: Strategy = {
     const actions: Action[] = [];
     let sim = state;
 
-    // --- Tier upgrade: greedy upgrades when it can afford it and still buy ---
+    // --- Tier upgrade: greedy upgrades when it can afford it, still has
+    // room for a buy, AND board is strong enough to survive higher-tier combat.
+    // Board is "strong enough" when total strength ≥ 10 (roughly two decent
+    // minions) or board has 4+ minions. ---
     {
       const player = sim.players[me]!;
       if (player.tier < 6) {
         const cost = player.upgradeCost;
-        if (cost === 0 || cost <= player.gold - 3) {
+        const canAfford = cost === 0 || cost <= player.gold - 3;
+        const boardStrongEnough = boardStrength(player.board) >= 10 || player.board.length >= 4;
+        if (canAfford && boardStrongEnough) {
           try {
             sim = upgradeTier(sim, me);
             actions.push({ kind: "UpgradeTier", player: me });
