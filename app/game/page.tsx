@@ -316,6 +316,28 @@ export default function GamePage() {
         return;
       }
     }
+
+    // Handle one-sided combat: show a brief "no combat" animation when one side
+    // has no minions but the other does (real Battlegrounds still shows this).
+    if (opponent && player && !player.eliminated) {
+      const playerWon = preCombatPlayerBoard.length > 0 && preCombatOpponentBoard.length === 0;
+      const opponentWon = preCombatOpponentBoard.length > 0 && preCombatPlayerBoard.length === 0;
+      if (playerWon || opponentWon) {
+        const combatRng = makeRng(gameState.seed).fork(`combat:${opponent.id}`);
+        const result = simulateCombat(
+          playerWon ? preCombatPlayerBoard : [],
+          playerWon ? [] : preCombatOpponentBoard,
+          combatRng,
+        );
+        if (result.winner !== "draw") {
+          setCombatResult(result);
+          setCombatTick(-1);
+          setOpponentHeroId(opponent.heroId);
+          setDisplayingCombat(true);
+          return;
+        }
+      }
+    }
   }, [gameState]);
 
   // Combat animation tick progression

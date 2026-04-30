@@ -1,3 +1,4 @@
+2026-04-30 | dd388d4 | FIXED: Show combat animation overlay when one side has no minions on board — previously clicking "End Turn" with an empty opponent board gave zero visual feedback, silently transitioning back to recruit phase
 2026-04-29 | 7249678 | FIXED: Fix buySpell not removing purchased spell from shop — spells are now removed from shop when bought, preventing duplicate purchases
 2026-04-29 | 9a5cfc1 | FIXED: Fix fireRushAttacks discarding reapDeaths result — rush minions now properly process deaths so subsequent rush attacks see updated board state
 2026-04-29 | 353df65 | FIXED: Add Virmen Sensei tier 4 dragon (battlecry gives a friendly dragon +2/+2), with unit tests
