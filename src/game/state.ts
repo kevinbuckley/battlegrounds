@@ -167,13 +167,12 @@ function playSpell(
     return applyComboToBoard(afterRemove, playerId);
   }
 
-  return applyComboToBoard(
-    updatePlayer(state, playerId, (p) => ({
-      ...p,
-      spells: p.spells.filter((_, i) => i !== spellIndex),
-    })),
-    playerId,
-  );
+  const afterRemove = updatePlayer(state, playerId, (p) => ({
+    ...p,
+    spells: p.spells.filter((_, i) => i !== spellIndex),
+  }));
+  const afterCast = fireOnCastHooks(afterRemove, playerId, rng);
+  return applyComboToBoard(afterCast, playerId);
 }
 
 /** Fire onCast hooks for all minions on the player's board. */
