@@ -1,3 +1,4 @@
+2026-04-30 | fbb2b3d | FIXED: fireRushAttacks in combat.ts now re-reads alive defenders from updated left/right arrays after each reapDeaths call, and skips dead rush minions — previously stale array references caused dead rush minions to attack and rush minions to attack multiple times per round
 2026-04-30 | c904cd7 | FIXED: playSpell now removes the played spell from the player's spells array after use, matching real Battlegrounds where spells are one-time use
 2026-04-30 | c904cd7 | FIXED: Game feel audit — fix handleEndTurn to find the actual combat opponent from pairingsHistory instead of just grabbing the first non-eliminated player, matching real Battlegrounds where you fight a specific opponent each round
 2026-04-30 | 49e3ed7 | FIXED: Game feel audit — fix handlePlaceToEmptySlot condition that prevented placing a hand minion at board position 0 (placingMinionIdx === 0 was treated as null by the broken `!placingMinionIdx && placingMinionIdx !== 0` check)

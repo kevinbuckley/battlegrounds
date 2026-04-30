@@ -274,14 +274,15 @@ function fireRushAttacks(
   // In real Battlegrounds, every minion with Rush attacks before the normal
   // attack order, regardless of who goes first.
   const isLeft = startSide === "left";
-  const rushBoard = isLeft ? left : right;
-  const defenders = isLeft ? right : left;
 
-  for (const m of rushBoard) {
+  // First loop: process rush minions from the starting side.
+  for (const m of [...(isLeft ? left : right)]) {
     if (!m.keywords.has("rush")) continue;
-    if (defenders.length === 0) continue;
+    if (m.hp <= 0) continue;
+    const aliveDefenders = (isLeft ? right : left).filter((d) => d.hp > 0);
+    if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
-    const target = pickTarget(defenders, rng);
+    const target = pickTarget(aliveDefenders, rng);
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
@@ -291,16 +292,14 @@ function fireRushAttacks(
     right = result.right;
   }
 
-  // Now process rush minions from the OTHER side (defenders with rush).
-  // They also attack during the rush phase, after the starting side's rush.
-  const otherRushBoard = isLeft ? right : left;
-  const otherDefenders = isLeft ? left : right;
-
-  for (const m of otherRushBoard) {
+  // Second loop: process rush minions from the OTHER side (defenders with rush).
+  for (const m of [...(isLeft ? right : left)]) {
     if (!m.keywords.has("rush")) continue;
-    if (otherDefenders.length === 0) continue;
+    if (m.hp <= 0) continue;
+    const aliveDefenders = (isLeft ? left : right).filter((d) => d.hp > 0);
+    if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
-    const target = pickTarget(otherDefenders, rng);
+    const target = pickTarget(aliveDefenders, rng);
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
