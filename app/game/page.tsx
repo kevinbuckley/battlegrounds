@@ -351,12 +351,13 @@ export default function GamePage() {
 
       // Show damage recap if player lost, then let the state from step(EndTurn)
       // (already in Recruit phase) be displayed — no need to re-apply combat.
-      if (gameState) {
+      // Use opponentHeroId from the pre-step snapshot so the recap always shows
+      // the correct opponent name even if that player was eliminated in combat.
+      if (gameState && opponentHeroId) {
         const player = gameState.players[0];
-        const opponent = gameState.players.find((p) => p.id !== 0 && !p.eliminated);
-        if (player && opponent && combatResult.winner === "right") {
+        if (player && combatResult.winner === "right") {
           const damage = calcDamage(player.tier, combatResult.survivorsRight);
-          setDamageRecap({ damage, opponentHeroId: opponent.heroId });
+          setDamageRecap({ damage, opponentHeroId });
           setTimeout(() => setDamageRecap(null), 2000);
         }
       }
@@ -364,7 +365,7 @@ export default function GamePage() {
       const timer = setTimeout(() => setCombatTick((t) => t + 1), 180);
       return () => clearTimeout(timer);
     }
-  }, [displayingCombat, combatTick, combatResult, gameState]);
+  }, [displayingCombat, combatTick, combatResult, gameState, opponentHeroId]);
 
   // Build card name lookup for event descriptions
   const nameMap = useRef<Map<string, string>>(new Map());
