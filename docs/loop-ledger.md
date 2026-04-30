@@ -1,4 +1,5 @@
 2026-04-30 | 8bfe92e | FIXED: Damage recap now uses pre-step opponent hero ID instead of re-finding opponent from post-step gameState, so the hero name is always correct even when the opponent is eliminated in combat
+2026-04-30 | ef7abab | FIXED: Add Annihilan Battlemaster tier 4 demon (gains +1 ATK for each damage your hero has taken), with unit tests
 2026-04-30 | 68d1838 | FIXED: fireRushAttacks in combat.ts now processes rush minions from BOTH sides during the rush phase, matching real Battlegrounds where all rush minions attack before the normal cycle (previously only the starting side's rush minions attacked)
 2026-04-30 | 0de6be5 | FIXED: Add Security Rover tier 4 mech (onDamageTaken summons a 2/3 Security Bot with divine shield), add onDamageTaken hook to MinionHooks, wire into combat.ts applyDamage, with unit tests
 2026-04-30 | 8bfe92e | FIXED: No-target spells (Banana, Mystery Shot, Swat Team, etc.) now play directly when clicked instead of requiring board targeting, matching real Battlegrounds behavior where these spells pick random targets internally

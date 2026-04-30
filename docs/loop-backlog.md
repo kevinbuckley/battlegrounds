@@ -84,7 +84,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Add `Virmen Sensei` (tier 4): dragon, battlecry give a friendly dragon +2/+2
 - [x] [S] Add `Security Rover` (tier 4): mech, whenever this minion takes damage summon a 2/3 Bot with divine shield
-- [ ] [S] Add `Annihilan Battlemaster` (tier 4): demon, gains +1 ATK for each damage your hero has taken
+- [x] [S] Add `Annihilan Battlemaster` (tier 4): demon, gains +1 ATK for each damage your hero has taken
 
 ### More minions — Tier 5
 

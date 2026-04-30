@@ -924,3 +924,52 @@ describe("Security Rover", () => {
     expect(bots[0]!.keywords.has("divineShield")).toBe(true);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Annihilan Battlemaster
+// ---------------------------------------------------------------------------
+
+describe("Annihilan Battlemaster", () => {
+  function makeAnnihilan(baseAtk = 1, baseHp = 4, totalDamageTaken = 0): MinionInstance {
+    const m = instantiate(getMinion("annihilan_battlemaster"));
+    (m.attachments as { totalDamageTaken?: number }).totalDamageTaken = totalDamageTaken;
+    return m;
+  }
+
+  it("has base stats 1/4", () => {
+    const m = makeAnnihilan();
+    expect(m.atk).toBe(1);
+    expect(m.hp).toBe(4);
+  });
+
+  it("gains +1 ATK per damage taken by hero", () => {
+    const m = makeAnnihilan(1, 4, 5);
+    expect((m.attachments as { totalDamageTaken?: number }).totalDamageTaken).toBe(5);
+  });
+
+  it("deals baseAtk + totalDamageTaken damage in combat", () => {
+    const m = makeAnnihilan(1, 4, 5);
+    m.atk = 1 + 5; // Simulating what state.ts does before combat
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([m], enemy, makeRng(0));
+    expect(result.winner).toBe("left");
+    expect(result.survivorsLeft[0]!.atk).toBe(6);
+  });
+
+  it("deals 1 damage when hero has taken 0 damage", () => {
+    const m = makeAnnihilan(1, 4, 0);
+    m.atk = 1;
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([m], enemy, makeRng(0));
+    expect(result.winner).toBe("right");
+  });
+
+  it("becomes a strong fighter after heavy hero damage", () => {
+    const m = makeAnnihilan(1, 4, 20);
+    m.atk = 1 + 20;
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([m], enemy, makeRng(0));
+    expect(result.winner).toBe("left");
+    expect(result.survivorsLeft[0]!.hp).toBeGreaterThan(0);
+  });
+});

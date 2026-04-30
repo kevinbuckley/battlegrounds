@@ -16,6 +16,7 @@ export function calcDamage(loserTier: number, winnerSurvivors: MinionInstance[])
 /**
  * Apply `amount` damage to a player: armor absorbs first, then HP.
  * Sets `eliminated = true` if HP drops to 0 or below.
+ * Also updates `totalDamageTaken` on Annihilan Battlemaster minions.
  */
 export function applyDamageToPlayer(
   state: GameState,
@@ -26,11 +27,22 @@ export function applyDamageToPlayer(
     const armorAbsorb = Math.min(p.armor, amount);
     const hpLoss = amount - armorAbsorb;
     const newHp = p.hp - hpLoss;
+    const updatedBoard = p.board.map((m) => {
+      if (m.cardId === "annihilan_battlemaster") {
+        const existing = (m.attachments as { totalDamageTaken?: number }).totalDamageTaken ?? 0;
+        return {
+          ...m,
+          attachments: { ...m.attachments, totalDamageTaken: existing + hpLoss },
+        } as MinionInstance;
+      }
+      return m;
+    });
     return {
       ...p,
       armor: p.armor - armorAbsorb,
       hp: newHp,
       eliminated: newHp <= 0,
+      board: updatedBoard,
     };
   });
 }
