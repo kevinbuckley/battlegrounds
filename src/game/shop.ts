@@ -374,7 +374,11 @@ export function playMinionToBoard(
   // is summoned to the player's board during the recruit phase.
   const afterSummon = fireShopSummon(afterCombo, playerId, minion, rng);
 
-  return afterSummon;
+  // Fire onRecruitSummon: notify all minions with the hook when a friendly
+  // minion is summoned to the player's board during the recruit phase.
+  const afterRecruitSummon = fireRecruitSummon(afterSummon, playerId, minion, rng);
+
+  return afterRecruitSummon;
 }
 
 export function reorderBoard(
@@ -464,6 +468,30 @@ function fireShopSummon(
     const hook = m.hooks?.onShopSummon;
     if (!hook) continue;
     result = hook({ self: m, playerId, state: result, rng, spellDamage: 0, summoned });
+  }
+  return result;
+}
+
+/** Fire onRecruitSummon hooks when a friendly minion is summoned to the player's board. */
+function fireRecruitSummon(
+  state: GameState,
+  playerId: PlayerId,
+  summoned: MinionInstance,
+  rng: Rng,
+): GameState {
+  const player = getPlayer(state, playerId);
+  let result = state;
+  for (const m of player.board) {
+    const hook = m.hooks?.onRecruitSummon;
+    if (!hook) continue;
+    result = hook({
+      self: m,
+      playerId,
+      state: result,
+      rng,
+      spellDamage: 0,
+      summoned,
+    });
   }
   return result;
 }

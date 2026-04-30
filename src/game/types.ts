@@ -95,6 +95,10 @@ export interface SummonCombatCtx extends CombatCtx {
   summoned: MinionInstance;
 }
 
+export interface SummonRecruitCtx extends RecruitCtx {
+  summoned: MinionInstance;
+}
+
 export interface MinionHooks {
   onBattlecry?: (ctx: RecruitCtx) => GameState;
   onSell?: (ctx: RecruitCtx) => GameState;
@@ -116,6 +120,8 @@ export interface MinionHooks {
   onCast?: (ctx: RecruitCtx) => GameState;
   /** Fires when a minion is summoned to the player's board (recruit phase). */
   onShopSummon?: (ctx: RecruitCtx) => GameState;
+  /** Fires when a friendly minion is summoned to the player's board (recruit phase). */
+  onRecruitSummon?: (ctx: SummonRecruitCtx) => GameState;
 }
 
 // ---------------------------------------------------------------------------

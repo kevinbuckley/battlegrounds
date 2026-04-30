@@ -22,5 +22,16 @@ export default defineMinion({
         ctx.emit({ kind: "Death", source: target.instanceId });
       }
     },
+    // After a friendly minion is summoned during the recruit phase, deal 1
+    // damage to a random enemy minion on their board.
+    onRecruitSummon: (ctx) => {
+      const enemyPlayer = ctx.state.players.find((p) => p.id !== ctx.playerId);
+      if (!enemyPlayer || enemyPlayer.board.length === 0) return ctx.state;
+      const aliveEnemy = enemyPlayer.board.filter((m) => m.hp > 0);
+      if (aliveEnemy.length === 0) return ctx.state;
+      const target = ctx.rng.pick(aliveEnemy);
+      target.hp -= 1;
+      return ctx.state;
+    },
   },
 });
