@@ -764,12 +764,45 @@ export default function GamePage() {
                     if (!card) return null;
                     const canPlay = gameState?.phase.kind === "Recruit";
                     const isSelected = selectedSpellIdx === idx;
+                    // Spells that pick targets randomly internally don't need UI targeting.
+                    const NO_TARGET_SPELLS = new Set([
+                      "banana",
+                      "mystery_shot",
+                      "poison_dart_shield",
+                      "pancake",
+                      "swat_team",
+                      "tavern_tipper",
+                      "tavern_brawl",
+                      "cauterizing_flame",
+                    ]);
+                    const isNoTargetSpell = NO_TARGET_SPELLS.has(card.id);
                     return (
                       <button
                         key={spell.instanceId}
                         type="button"
                         onClick={() => {
                           if (!gameState || gameState.phase.kind !== "Recruit") return;
+                          // No-target spells play directly without entering targeting mode.
+                          if (isNoTargetSpell) {
+                            const player = gameState.players[0];
+                            if (!player) return;
+                            try {
+                              const next = step(
+                                gameState,
+                                {
+                                  kind: "PlaySpell",
+                                  player: 0,
+                                  spellIndex: idx,
+                                },
+                                rngForTurn(gameState, "playSpell"),
+                              );
+                              setGameState(next);
+                              setError(null);
+                            } catch {
+                              setError("Could not play spell");
+                            }
+                            return;
+                          }
                           const player = gameState.players[0];
                           if (!player || player.board.length === 0) {
                             setError("No valid targets on board");
