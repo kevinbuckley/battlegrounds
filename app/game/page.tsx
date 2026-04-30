@@ -285,7 +285,22 @@ export default function GamePage() {
   const handleEndTurn = useCallback(() => {
     if (!gameState) return;
     const player = gameState.players[0];
-    const opponent = gameState.players.find((p) => p.id !== 0 && !p.eliminated);
+    // Find the actual opponent from the most recent pairing involving player 0,
+    // matching real Battlegrounds where you fight a specific opponent each round.
+    let opponentId: number | null = null;
+    for (let i = gameState.pairingsHistory.length - 1; i >= 0; i--) {
+      const pairing = gameState.pairingsHistory[i]!;
+      if (pairing[0] === 0) {
+        opponentId = pairing[1];
+        break;
+      }
+      if (pairing[1] === 0) {
+        opponentId = pairing[0];
+        break;
+      }
+    }
+    const opponent =
+      opponentId !== null ? gameState.players.find((p) => p.id === opponentId) : undefined;
 
     // Snapshot boards before advancing state — step(EndTurn) resolves combat
     // internally and clears the boards, so we need the pre-combat boards

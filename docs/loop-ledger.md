@@ -1,4 +1,5 @@
-2026-04-30 | 4784489 | FIXED: playSpell now removes the played spell from the player's spells array after use, matching real Battlegrounds where spells are one-time use
+2026-04-30 | c904cd7 | FIXED: playSpell now removes the played spell from the player's spells array after use, matching real Battlegrounds where spells are one-time use
+2026-04-30 | c904cd7 | FIXED: Game feel audit — fix handleEndTurn to find the actual combat opponent from pairingsHistory instead of just grabbing the first non-eliminated player, matching real Battlegrounds where you fight a specific opponent each round
 2026-04-30 | 49e3ed7 | FIXED: Game feel audit — fix handlePlaceToEmptySlot condition that prevented placing a hand minion at board position 0 (placingMinionIdx === 0 was treated as null by the broken `!placingMinionIdx && placingMinionIdx !== 0` check)
 2026-04-30 | 619f020 | FIXED: playSpell now removes spells with onPlay effects from the player's spells array after use — previously only spells without onPlay effects were consumed, allowing all spells to be played infinitely
 2026-04-30 | b61f7e4 | FIXED: Greedy AI now upgrades tavern tier when it can afford it and still has gold for a buy, matching real Battlegrounds where aggressive players invest in tavern tier early
