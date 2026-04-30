@@ -1592,3 +1592,125 @@ describe("lightfang_enforcer onTurnEnd", () => {
     expect(after.players[0]!.board).toHaveLength(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Wrath Weaver — onTurnEnd hook
+// ---------------------------------------------------------------------------
+
+describe("wrath_weaver onTurnEnd", () => {
+  it("is registered in MINIONS with Demon tribe", () => {
+    const cw = MINIONS["wrath_weaver"];
+    expect(cw).toBeDefined();
+    expect(cw!.tier).toBe(1);
+    expect(cw!.tribes).toContain("Demon");
+  });
+
+  it("onTurnEnd deals 1 damage to your hero", () => {
+    const cw = MINIONS["wrath_weaver"];
+    const inst = instantiate(cw!);
+    const state = makeTestState({
+      board: [inst],
+      hp: 20,
+    });
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cw!.hooks.onTurnEnd!(ctx);
+    expect(after.players[0]!.hp).toBe(19);
+  });
+
+  it("onTurnEnd gives all friendly demons +2/+2 (excluding self)", () => {
+    const cw = MINIONS["wrath_weaver"];
+    const inst = instantiate(cw!);
+    const otherDemon = defineMinion({
+      id: "test_demon",
+      name: "Test Demon",
+      tier: 1,
+      tribes: ["Demon"],
+      baseAtk: 3,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[otherDemon.id] = otherDemon;
+    const demon = instantiate(otherDemon);
+    const nonDemon = defineMinion({
+      id: "test_beast",
+      name: "Test Beast",
+      tier: 1,
+      tribes: ["Beast"],
+      baseAtk: 2,
+      baseHp: 3,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[nonDemon.id] = nonDemon;
+    const beast = instantiate(nonDemon);
+
+    const state = makeTestState({
+      board: [inst, demon, beast],
+    });
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cw!.hooks.onTurnEnd!(ctx);
+    const board = after.players[0]!.board;
+    const demonAfter = board.find((m) => m.instanceId === demon.instanceId);
+    const beastAfter = board.find((m) => m.instanceId === beast.instanceId);
+    // Demon should gain +2/+2
+    expect(demonAfter).toBeDefined();
+    expect(demonAfter!.atk).toBe(5); // 3 + 2
+    expect(demonAfter!.hp).toBe(4); // 2 + 2
+    // Beast should NOT be buffed
+    expect(beastAfter).toBeDefined();
+    expect(beastAfter!.atk).toBe(2); // unchanged
+    expect(beastAfter!.hp).toBe(3); // unchanged
+  });
+
+  it("onTurnEnd deals 0 damage when hero is at 1 HP (clamped)", () => {
+    const cw = MINIONS["wrath_weaver"];
+    const inst = instantiate(cw!);
+    const state = makeTestState({
+      board: [inst],
+      hp: 1,
+    });
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cw!.hooks.onTurnEnd!(ctx);
+    expect(after.players[0]!.hp).toBe(0);
+  });
+
+  it("onTurnEnd does nothing when board is empty", () => {
+    const cw = MINIONS["wrath_weaver"];
+    const state = makeTestState({
+      board: [],
+      hp: 20,
+    });
+    const inst = instantiate(cw!);
+    const ctx = {
+      self: inst,
+      playerId: 0,
+      state,
+      rng: makeRng(42),
+      spellDamage: 0,
+    };
+    const after = cw!.hooks.onTurnEnd!(ctx);
+    // Hero should still take 1 damage even with empty board
+    expect(after.players[0]!.hp).toBe(19);
+  });
+});

@@ -56,8 +56,8 @@ describe("tribe filtering", () => {
   it("tribeless minions always appear regardless of active tribes", () => {
     const pool = buildPool(["Murloc"]);
     const cardIds = Object.keys(pool);
-    const hasWrathWeaver = cardIds.includes("wrath_weaver");
-    expect(hasWrathWeaver).toBe(true);
+    const hasTauntMinion = cardIds.includes("taunt_minion");
+    expect(hasTauntMinion).toBe(true);
   });
 
   it("only tribal cards of active tribes appear in draws", () => {

@@ -60,7 +60,7 @@ describe("quest progress tracking", () => {
         quests: { 0: questInstance },
       },
     };
-    const player = questState.players[0]!!;
+    const player = questState.players[0]!;
     expect(player.quests[0]?.progress).toBe(0);
     expect(player.quests[0]?.completed).toBe(false);
     expect(player.heroId).toBe("rakanishu");
@@ -412,7 +412,7 @@ describe("quest progress tracking", () => {
     const questInstance = createQuestInstance(quest.id, 0, RNG);
     const questPlayerState = makeQuestPlayer(selected, 0, "stub_hero", [
       "flame_imp",
-      "wrath_weaver",
+      "taunt_minion",
     ]);
 
     const rewardState: GameState = {
@@ -436,11 +436,11 @@ describe("quest progress tracking", () => {
     const resultPlayer = result.players[0]!;
 
     const demon = resultPlayer.board.find((m) => m.cardId === "flame_imp");
-    const nonDemon = resultPlayer.board.find((m) => m.cardId === "wrath_weaver");
+    const nonDemon = resultPlayer.board.find((m) => m.cardId === "taunt_minion");
 
     expect(demon).toBeDefined();
     expect(demon!.atk).toBe(instantiate(MINIONS["flame_imp"]!).atk + 2);
 
-    expect(nonDemon!.atk).toBe(instantiate(MINIONS["wrath_weaver"]!).atk);
+    expect(nonDemon!.atk).toBe(instantiate(MINIONS["taunt_minion"]!).atk);
   });
 });
