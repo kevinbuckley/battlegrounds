@@ -861,8 +861,11 @@ export default function GamePage() {
                 const minionCard = MINIONS[shopItem.cardId];
                 const spellCard = SPELLS[shopItem.cardId];
                 if (minionCard) {
+                  const bountyCost = minionCard.bountyCost ?? 0;
+                  const baseCost = bountyCost > 0 ? bountyCost : COST_BUY;
+                  const buyCost = Math.max(1, baseCost - (shopItem.discount ?? 0));
                   const canBuy =
-                    (gameState.players[0]?.gold ?? 0) >= COST_BUY &&
+                    (gameState.players[0]?.gold ?? 0) >= buyCost &&
                     gameState.phase.kind === "Recruit";
                   const handFull = handMinions.length >= 10;
                   const tierColor = TIER_COLORS[minionCard.tier] ?? "bg-gray-600";
@@ -904,7 +907,7 @@ export default function GamePage() {
                       </div>
                       <div className="flex items-center justify-center gap-1 text-xs font-semibold text-amber-400">
                         <span>⧉</span>
-                        <span>{COST_BUY}</span>
+                        <span>{buyCost}</span>
                       </div>
                       {isFrozen && (
                         <div className="flex items-center justify-center gap-1 text-xs font-semibold text-sky-300">
