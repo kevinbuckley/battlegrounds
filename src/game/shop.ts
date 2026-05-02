@@ -116,8 +116,6 @@ export function returnToPool(
 import { applyDamageToPlayer } from "./damage";
 import { nextInstanceId } from "./minions/define";
 import { SPELLS } from "./spells/index";
-import { checkAndProcessTriples } from "./triples";
-
 export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
   if (player.shopFrozen) {
@@ -176,12 +174,7 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
 // Shop actions — each returns a new GameState or throws on invalid input
 // ---------------------------------------------------------------------------
 
-export function buyMinion(
-  state: GameState,
-  playerId: PlayerId,
-  shopIndex: number,
-  rng: Rng | null = null,
-): GameState {
+export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: number): GameState {
   const player = getPlayer(state, playerId);
 
   if (player.hand.length >= 10) throw new Error("Hand is full");
@@ -217,17 +210,12 @@ export function buyMinion(
     }
   }
 
-  let result = updatePlayer(state, playerId, (p) => ({
+  const result = updatePlayer(state, playerId, (p) => ({
     ...p,
     gold: p.gold - buyCost,
     hand: [...p.hand, boughtMinion],
     shop: p.shop.filter((_, i) => i !== shopIndex),
   }));
-
-  // Check for triples after adding to hand
-  if (rng) {
-    result = checkAndProcessTriples(result, playerId, rng);
-  }
 
   return result;
 }

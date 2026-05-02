@@ -278,7 +278,7 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
 function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
   switch (action.kind) {
     case "BuyMinion":
-      return buyMinion(state, action.player, action.shopIndex, rng);
+      return buyMinion(state, action.player, action.shopIndex);
     case "BuySpell":
       return buySpell(state, action.player, action.shopIndex, rng);
     case "PlaySpell":
