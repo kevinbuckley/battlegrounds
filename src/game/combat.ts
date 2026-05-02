@@ -192,8 +192,10 @@ function reapDeaths(
       if (dead.keywords.has("reborn") && !dead.attachments.rebornUsed) {
         const ghost: MinionInstance = {
           ...dead,
+          atk: 1,
           hp: 1,
           maxHp: 1,
+          spellDamage: 0,
           keywords: new Set(dead.keywords),
           attachments: { ...dead.attachments, rebornUsed: true },
         };

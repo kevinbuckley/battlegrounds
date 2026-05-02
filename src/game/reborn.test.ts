@@ -42,4 +42,26 @@ describe("reborn keyword test", () => {
     expect(r.survivorsLeft[0]!.hp).toBe(1);
     expect(r.survivorsLeft[0]!.keywords.has("reborn")).toBe(false);
   });
+
+  it("reborn minion comes back at 1/1 regardless of previous stats", () => {
+    const bigMinion = makeMinion(8, 8, ["reborn"]);
+    // Two 6/6 helpers ensure left wins after the reborn 1/1 dies.
+    const helper1 = makeMinion(6, 6);
+    const helper2 = makeMinion(6, 6);
+    // Opponent has 15 HP and 5 ATK — all three left minions kill it,
+    // but the reborn 1/1 dies before finishing.
+    const opponent = makeMinion(5, 15);
+
+    const r = simulateCombat([bigMinion, helper1, helper2], [opponent], makeRng(0));
+    expect(r).toBeDefined();
+    expect(r.winner).toBe("left");
+    // Find the reborn minion (1/1) among survivors
+    const reborn = r.survivorsLeft.find((m) => m.atk === 1 && m.hp === 1);
+    expect(reborn).toBeDefined();
+    expect(reborn!.atk).toBe(1);
+    expect(reborn!.hp).toBe(1);
+    expect(reborn!.maxHp).toBe(1);
+    expect(reborn!.spellDamage).toBe(0);
+    expect(reborn!.keywords.has("reborn")).toBe(false);
+  });
 });
