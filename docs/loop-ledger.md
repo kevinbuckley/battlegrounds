@@ -1,3 +1,5 @@
+2026-05-02 | 581e311 | FIXED: Leaderboard now shows opponent boards during recruit phase — each alive opponent's minions display as compact stat cards (attack/hp, golden star, tribe, taunt/divine shield borders), matching real Battlegrounds where you can see all 7 opponents' boards to make strategic decisions
+
 2026-05-02 | 0d6a857 | FIXED: Gold no longer bumped up to base gold on subsequent turns — players keep their actual gold from previous turns (e.g., 3 gold on turn 1 stays 3 on turn 2 instead of being set to 4), matching real Battlegrounds where gold carries over exactly as-is
 2026-05-02 | a64b607 | FIXED: Magnetic spell damage now calculated as max(sd1, sd2) + sd2 matching the attack formula, instead of 2 * max(sd1, sd2) which overcounted when the base minion had higher spell damage than the magnetic minion
 2026-05-02 | 0d162ba | FIXED: Interest gold indicator now shown next to gold amount in HUD — when player has 5+ gold, a green "+N" appears showing interest earned (floor(gold/5)), matching real Battlegrounds where interest is visually displayed
