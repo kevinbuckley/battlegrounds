@@ -305,8 +305,7 @@ export function playMinionToBoard(
         ...minion.keywords,
       ]);
       const combinedSpellDamage =
-        Math.max(baseMinion.spellDamage, minion.spellDamage) +
-        Math.max(baseMinion.spellDamage, minion.spellDamage);
+        Math.max(baseMinion.spellDamage, minion.spellDamage) + minion.spellDamage;
       const combined: MinionInstance = {
         ...baseMinion,
         atk: combinedAtk,
