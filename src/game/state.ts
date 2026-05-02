@@ -939,7 +939,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     // Sindragosa passive: frozen minions (with freeze keyword) in your shop
     // each gain +1/+1 at start of each recruit turn.
     if (player.heroId === "sindragosa") {
-      const shop = player.shop;
+      const shop = next.players[player.id]?.shop ?? [];
       if (shop.length > 0) {
         const buffedShop = shop.map((m) => {
           if (m.keywords && m.keywords.has("freeze" as import("./types").Keyword)) {
@@ -958,7 +958,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
 
     // Jaraxxus passive: demons in shop gain +1/+1 at start of turn
     if (player.heroId === "jaraxxus") {
-      const shop = player.shop;
+      const shop = next.players[player.id]?.shop ?? [];
       if (shop.length > 0) {
         const buffedShop = shop.map((m) => {
           if (m.tribes && m.tribes.includes("Demon")) {
