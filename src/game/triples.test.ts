@@ -48,12 +48,13 @@ describe("triples detection", () => {
     const player = result.players[0]!;
 
     // Golden should be on hand (where the 3 originals were)
+    // Golden stats = sum of all three merged copies' actual stats
     expect(player.hand.length).toBe(1);
     const golden = player.hand[0]!;
     expect(golden.golden).toBe(true);
-    expect(golden.atk).toBe(baseCard.baseAtk * 2);
-    expect(golden.hp).toBe(baseCard.baseHp * 2);
-    expect(golden.maxHp).toBe(baseCard.baseHp * 2);
+    expect(golden.atk).toBe(baseCard.baseAtk * 3);
+    expect(golden.hp).toBe(baseCard.baseHp * 3);
+    expect(golden.maxHp).toBe(baseCard.baseHp * 3);
   });
 
   it("creates a golden when 3 identical copies exist on board", () => {
@@ -71,8 +72,8 @@ describe("triples detection", () => {
     expect(player.board.length).toBe(1);
     const golden = player.board[0]!;
     expect(golden.golden).toBe(true);
-    expect(golden.atk).toBe(baseCard.baseAtk * 2);
-    expect(golden.hp).toBe(baseCard.baseHp * 2);
+    expect(golden.atk).toBe(baseCard.baseAtk * 3);
+    expect(golden.hp).toBe(baseCard.baseHp * 3);
   });
 
   it("detects triples across board and hand (1 on board + 2 in hand)", () => {
@@ -88,8 +89,8 @@ describe("triples detection", () => {
     expect(player.board.length + player.hand.length).toBe(1);
     const golden = [...player.board, ...player.hand].find((m) => m.golden === true);
     expect(golden).toBeDefined();
-    expect(golden!.atk).toBe(baseCard.baseAtk * 2);
-    expect(golden!.hp).toBe(baseCard.baseHp * 2);
+    expect(golden!.atk).toBe(baseCard.baseAtk * 3);
+    expect(golden!.hp).toBe(baseCard.baseHp * 3);
   });
 
   it("detects triples across board and hand (2 on board + 1 in hand)", () => {
@@ -104,8 +105,8 @@ describe("triples detection", () => {
     expect(player.board.length + player.hand.length).toBe(1);
     const golden = [...player.board, ...player.hand].find((m) => m.golden === true);
     expect(golden).toBeDefined();
-    expect(golden!.atk).toBe(baseCard.baseAtk * 2);
-    expect(golden!.hp).toBe(baseCard.baseHp * 2);
+    expect(golden!.atk).toBe(baseCard.baseAtk * 3);
+    expect(golden!.hp).toBe(baseCard.baseHp * 3);
   });
 });
 

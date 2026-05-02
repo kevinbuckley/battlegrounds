@@ -1,4 +1,5 @@
 2026-05-02 | 7914bc5 | FIXED: Interest gold now calculated on actual player gold instead of Math.max(player.gold, baseGold) — players with less than 5 gold correctly receive 0 interest, matching real Battlegrounds
+2026-05-02 | c3f7f34 | FIXED: Triple golden minion now sums actual stats of all three merged copies instead of baseCard.baseAtk * 2 — buffs from auras, hero passives, and battlecries are correctly inherited by the golden, matching real Battlegrounds
 2026-04-30 | 969181f | FIXED: playSpell now fires onCast hooks (Kalecgos, etc.) even for spells without onPlay effects — all spell casts trigger minion onCast hooks regardless of whether the spell has an onPlay effect
 2026-05-02 | c424d77 | FIXED: Sir Finley hero power now swaps to another active hero instead of giving +1/+1 — correctly implements real Battlegrounds where Sir Finley swaps your Hero Power with one of 3 randomly chosen alternatives
 2026-04-30 | 3d4c326 | FIXED: Ragnaros passive now deals 8 damage at the START of combat instead of after — enemy minions can be killed before attacks begin, matching real Battlegrounds

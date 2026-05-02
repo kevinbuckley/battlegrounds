@@ -115,10 +115,11 @@ describe("triples: checkAndProcessTriples", () => {
     const finalState = checkAndProcessTriples(s, 0, rngForTurn(s, "triple"));
     const hand = finalState.players[0]?.hand;
 
+    // Golden stats = sum of all three merged copies' actual stats
     const golden = hand?.find((m) => m.cardId === cardId);
-    expect(golden?.atk).toBe(baseAtk * 2);
-    expect(golden?.hp).toBe(baseHp * 2);
-    expect(golden?.maxHp).toBe(baseHp * 2);
+    expect(golden?.atk).toBe(baseAtk * 3);
+    expect(golden?.hp).toBe(baseHp * 3);
+    expect(golden?.maxHp).toBe(baseHp * 3);
   });
 
   it("no triples without 3 copies", () => {

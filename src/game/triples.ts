@@ -84,16 +84,22 @@ export function checkAndProcessTriples(
     const third = copies[2];
     if (!third) continue;
 
+    // Sum actual stats of all three merged copies (real Battlegrounds
+    // inherits buffs from the merged minions, not just base stats * 2).
+    const totalAtk = copies.reduce((sum, c) => sum + c.atk, 0);
+    const totalHp = copies.reduce((sum, c) => sum + c.hp, 0);
+    const totalMaxHp = copies.reduce((sum, c) => sum + c.maxHp, 0);
+
     const golden: MinionInstance = {
       instanceId: third.instanceId,
       cardId,
       golden: true,
-      atk: baseCard.baseAtk * 2,
-      hp: baseCard.baseHp * 2,
-      maxHp: baseCard.baseHp * 2,
+      atk: totalAtk,
+      hp: totalHp,
+      maxHp: totalMaxHp,
       keywords: new Set([...baseCard.baseKeywords]),
       tribes: [...baseCard.tribes],
-      spellDamage: baseCard.spellDamage * 2,
+      spellDamage: copies.reduce((sum, c) => sum + (c.spellDamage ?? 0), 0),
       attachments: {},
       hooks: { ...baseCard.hooks },
     };
