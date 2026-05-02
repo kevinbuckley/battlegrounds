@@ -5,7 +5,7 @@ export const GOLD_PER_TURN_CAP = 10;
 export const COST_BUY = 3;
 export const REFUND_SELL = 1;
 export const COST_REFRESH = 1;
-export const COST_FREEZE = 0;
+export const COST_FREEZE = 1;
 
 export function baseGoldForTurn(turn: number): number {
   return Math.min(GOLD_PER_TURN_START + turn - 1, GOLD_PER_TURN_CAP);
