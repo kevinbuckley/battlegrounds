@@ -332,74 +332,63 @@ describe("King Mukla", () => {
 // ---------------------------------------------------------------------------
 
 describe("Sindragosa passive", () => {
-  it("buffs frozen shop minions by +1/+1 at start of recruit turn", () => {
-    const minion = instantiate(MINIONS["wrath_weaver"]!);
+  it("buffs frozen shop minions (with freeze keyword) by +1/+1 at start of recruit turn", () => {
+    const frozenMinion = instantiate(MINIONS["frostbound-golem"]!);
     let state = makeStateWithHero("sindragosa", []);
-    // Put a minion in the shop and freeze it
     state = {
       ...state,
-      players: state.players.map((p, i) =>
-        i === 0 ? { ...p, shop: [minion], shopFrozen: true } : p,
-      ),
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [frozenMinion] } : p)),
     };
 
     const after = beginRecruitTurn(state, RNG);
     const shop = after.players[0]!.shop;
-    expect(shop[0]!.atk).toBe(minion.atk + 1);
-    expect(shop[0]!.hp).toBe(minion.hp + 1);
+    expect(shop[0]!.atk).toBe(frozenMinion.atk + 1);
+    expect(shop[0]!.hp).toBe(frozenMinion.hp + 1);
   });
 
-  it("does nothing when shop is not frozen", () => {
+  it("does not buff non-frozen shop minions", () => {
     const minion = instantiate(MINIONS["wrath_weaver"]!);
     let state = makeStateWithHero("sindragosa", []);
     state = {
       ...state,
-      players: state.players.map((p, i) =>
-        i === 0 ? { ...p, shop: [minion], shopFrozen: false } : p,
-      ),
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [minion] } : p)),
     };
 
     const after = beginRecruitTurn(state, RNG);
-    // When not frozen, the shop gets re-rolled normally (Sindragosa does not buff)
-    // The re-rolled shop should not have the +1/+1 buff from Sindragosa
-    // Just verify the shop exists and was re-rolled (different from original)
     const shop = after.players[0]!.shop;
-    expect(shop.length).toBeGreaterThan(0);
-    // The original minion should not be in the shop (it was re-rolled)
-    const originalStillThere = shop.some((m) => m.instanceId === minion.instanceId);
-    // It's fine if it's there or not — the key is no +1/+1 buff was applied
-    // Verify shopFrozen is still false
-    expect(after.players[0]!.shopFrozen).toBe(false);
+    expect(shop[0]!.atk).toBe(minion.atk);
+    expect(shop[0]!.hp).toBe(minion.hp);
   });
 
-  it("buffs all frozen shop minions, not just one", () => {
-    const m1 = instantiate(MINIONS["wrath_weaver"]!);
-    const m2 = instantiate(MINIONS["alley_cat"]!);
+  it("buffs only frozen minions when shop has mixed types", () => {
+    const frozenMinion = instantiate(MINIONS["frostbound-golem"]!);
+    const normalMinion = instantiate(MINIONS["wrath_weaver"]!);
     let state = makeStateWithHero("sindragosa", []);
     state = {
       ...state,
       players: state.players.map((p, i) =>
-        i === 0 ? { ...p, shop: [m1, m2], shopFrozen: true } : p,
+        i === 0 ? { ...p, shop: [frozenMinion, normalMinion] } : p,
       ),
     };
 
     const after = beginRecruitTurn(state, RNG);
     const shop = after.players[0]!.shop;
-    expect(shop[0]!.atk).toBe(m1.atk + 1);
-    expect(shop[0]!.hp).toBe(m1.hp + 1);
-    expect(shop[1]!.atk).toBe(m2.atk + 1);
-    expect(shop[1]!.hp).toBe(m2.hp + 1);
+    expect(shop[0]!.atk).toBe(frozenMinion.atk + 1);
+    expect(shop[0]!.hp).toBe(frozenMinion.hp + 1);
+    expect(shop[1]!.atk).toBe(normalMinion.atk);
+    expect(shop[1]!.hp).toBe(normalMinion.hp);
   });
 
   it("does nothing when shop is empty", () => {
     let state = makeStateWithHero("sindragosa");
     state = {
       ...state,
-      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [], shopFrozen: true } : p)),
+      players: state.players.map((p, i) => (i === 0 ? { ...p, shop: [] } : p)),
     };
 
     const after = beginRecruitTurn(state, RNG);
-    expect(after.players[0]!.shop).toHaveLength(0);
+    // Shop gets re-rolled by beginRecruitTurn even when empty — key is no crash
+    expect(after.players[0]!.shop.length).toBeGreaterThan(0);
   });
 });
 
