@@ -32,7 +32,7 @@ export function applyDamageToPlayer(
         const existing = (m.attachments as { totalDamageTaken?: number }).totalDamageTaken ?? 0;
         return {
           ...m,
-          attachments: { ...m.attachments, totalDamageTaken: existing + hpLoss },
+          attachments: { ...m.attachments, totalDamageTaken: existing + amount },
         } as MinionInstance;
       }
       return m;
