@@ -293,7 +293,7 @@ export function playMinionToBoard(
   const hasMagnetic = card && (card.magnetic || card.baseKeywords.includes("magnetic"));
   if (hasMagnetic) {
     const magneticBoardIndex = clamped;
-    const sameTribe = newBoard.findIndex(
+    const sameTribe = newBoard.findLastIndex(
       (m) => m.tribes.some((t) => minion.tribes.includes(t)) && m.cardId !== minion.cardId,
     );
     if (sameTribe !== -1) {

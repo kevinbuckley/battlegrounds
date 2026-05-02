@@ -714,6 +714,53 @@ describe("magnetic", () => {
     expect(board).toHaveLength(2);
   });
 
+  it("stacks on the rightmost same-tribe minion", () => {
+    const murlocA = defineMinion({
+      id: "test_murloc_a",
+      name: "Test Murloc A",
+      tier: 1,
+      tribes: ["Murloc"],
+      baseAtk: 3,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[murlocA.id] = murlocA;
+
+    const murlocB = defineMinion({
+      id: "test_murloc_b",
+      name: "Test Murloc B",
+      tier: 1,
+      tribes: ["Murloc"],
+      baseAtk: 1,
+      baseHp: 4,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[murlocB.id] = murlocB;
+
+    const murlocAInst = instantiate(murlocA);
+    const murlocBInst = instantiate(murlocB);
+    const magneticInst = instantiate(magneticCard);
+    const state = makeTestState({
+      hand: [magneticInst],
+      board: [murlocAInst, murlocBInst],
+    });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+    const board = after.players[0]!.board;
+    expect(board).toHaveLength(2);
+    // Should stack on murlocB (rightmost), not murlocA
+    // murlocB stats: max(2,1)+2 = 4 atk, max(2,4)+2 = 6 hp
+    expect(board[1]!.atk).toBe(4);
+    expect(board[1]!.hp).toBe(6);
+    expect(board[1]!.cardId).toBe("test_murloc_b");
+    // murlocA stays unchanged at index 0
+    expect(board[0]!.atk).toBe(3);
+    expect(board[0]!.hp).toBe(1);
+  });
+
   it("does not stack when magnetic minion is the only one on board", () => {
     const magneticInst = instantiate(magneticCard);
     const state = makeTestState({
