@@ -594,6 +594,7 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
       postRagnarosRight,
       rng,
       result.modifierState.anomaly,
+      result.turn,
     );
 
     // Apply lifesteal healing to the winner's hero during combat resolution.

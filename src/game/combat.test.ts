@@ -64,7 +64,7 @@ describe("determinism", () => {
   });
 
   it("different seeds can produce different target selection", () => {
-    // 3 left vs 2 right → left attacks first; left[0] picks among 2 right targets
+    // 3 left vs 2 right — turn 1: left attacks first; left[0] picks among 2 right targets
     const leftMinion = minion("murloc_tidecaller");
     const r1 = minion("alley_cat");
     const r2 = minion("alley_cat");
@@ -72,7 +72,7 @@ describe("determinism", () => {
     const right = [r1, r2];
     const results = new Set<string>();
     for (let seed = 0; seed < 30; seed++) {
-      const r = simulateCombat(left, right, makeRng(seed));
+      const r = simulateCombat(left, right, makeRng(seed), undefined, 1);
       const firstAttack = r.transcript.find((e) => e.kind === "Attack");
       if (firstAttack?.kind === "Attack") results.add(firstAttack.target);
     }
@@ -104,11 +104,11 @@ describe("winner determination", () => {
   });
 
   it("side with more minions attacks first", () => {
-    // Left has 3 minions, right has 1. Left attacks first.
+    // Left has 3 minions, right has 1. On turn 1, left attacks first.
     // If both 1/1, first attack kills 1 from right and one from left.
     const left = [makeMinion(1, 1), makeMinion(1, 1), makeMinion(1, 1)];
     const right = [makeMinion(1, 1)];
-    const r = simulateCombat(left, right, makeRng(0));
+    const r = simulateCombat(left, right, makeRng(0), undefined, 1);
     expect(r.winner).toBe("left");
   });
 });
@@ -162,8 +162,8 @@ describe("multi-minion combat", () => {
   it("attack pointer advances each turn", () => {
     const [a, b, c] = [makeMinion(1, 10), makeMinion(1, 10), makeMinion(1, 10)];
     const enemy = [makeMinion(1, 1)];
-    const r = simulateCombat([a!, b!, c!], enemy, makeRng(0));
-    // Enemy is 1/1. Left side has 3 minions and attacks first.
+    const r = simulateCombat([a!, b!, c!], enemy, makeRng(0), undefined, 1);
+    // Enemy is 1/1. Left side has 3 minions and attacks first on turn 1.
     // The first attacker kills the 1/1. Left wins.
     expect(r.winner).toBe("left");
     // First Attack event attacker should be a! (leftPtr starts at 0)
@@ -663,7 +663,7 @@ describe("knife_juggler", () => {
     ];
     const enemy = [makeMinion(3, 4)];
 
-    const r = simulateCombat(allies, enemy, makeRng(42));
+    const r = simulateCombat(allies, enemy, makeRng(42), undefined, 1);
 
     const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
     const spiderSummons = summonEvents.filter((e) => e.card === "spider_token");
@@ -862,7 +862,7 @@ describe("Ghastcoiler", () => {
     // The first pick will fill to 7, blocking the second
     const enemy = makeMinion(7, 7);
 
-    const r = simulateCombat(allies, [enemy], makeRng(42));
+    const r = simulateCombat(allies, [enemy], makeRng(42), undefined, 1);
 
     const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
     const deathrattleSummons = summonEvents.filter(

@@ -325,7 +325,13 @@ export default function GamePage() {
       preCombatOpponentBoard.length > 0
     ) {
       const combatRng = makeRng(gameState.seed).fork(`turn:${gameState.turn}:endTurn`);
-      const result = simulateCombat(preCombatPlayerBoard, preCombatOpponentBoard, combatRng);
+      const result = simulateCombat(
+        preCombatPlayerBoard,
+        preCombatOpponentBoard,
+        combatRng,
+        undefined,
+        gameState.turn,
+      );
 
       if (result.winner !== "draw") {
         setCombatResult(result);
@@ -347,6 +353,8 @@ export default function GamePage() {
           playerWon ? preCombatPlayerBoard : [],
           playerWon ? [] : preCombatOpponentBoard,
           combatRng,
+          undefined,
+          gameState.turn,
         );
         if (result.winner !== "draw") {
           setCombatResult(result);

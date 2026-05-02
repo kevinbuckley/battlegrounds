@@ -10,18 +10,18 @@ exports[`vanilla combat snapshots 1v1: murloc_tidehunter (2/1) vs wrath_weaver (
     "target": "x2",
   },
   {
-    "amount": 1,
+    "amount": 2,
     "kind": "Damage",
     "target": "x2",
   },
   {
-    "amount": 2,
+    "amount": 1,
     "kind": "Damage",
     "target": "x1",
   },
   {
     "kind": "Death",
-    "source": "x2",
+    "source": "x1",
   },
   {
     "kind": "End",
@@ -40,28 +40,23 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
     "target": "x2",
   },
   {
-    "amount": 2,
+    "amount": 1,
     "kind": "Damage",
     "target": "x2",
   },
   {
-    "amount": 1,
+    "amount": 2,
     "kind": "Damage",
     "target": "x1",
   },
   {
     "kind": "Death",
-    "source": "x2",
+    "source": "x1",
   },
   {
-    "attacker": "x3",
+    "attacker": "x2",
     "kind": "Attack",
-    "target": "x1",
-  },
-  {
-    "amount": 2,
-    "kind": "Damage",
-    "target": "x1",
+    "target": "x3",
   },
   {
     "amount": 2,
@@ -69,12 +64,17 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
     "target": "x3",
   },
   {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
     "kind": "Death",
     "source": "x3",
   },
   {
     "kind": "Death",
-    "source": "x1",
+    "source": "x2",
   },
   {
     "kind": "End",
@@ -260,6 +260,36 @@ exports[`vanilla combat snapshots poisonous minion kills target on attack 2`] = 
     "target": "x2",
   },
   {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42) 3`] = `"right"`;
+
+exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42) 4`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
     "amount": 1,
     "kind": "Damage",
     "target": "x2",
@@ -271,7 +301,227 @@ exports[`vanilla combat snapshots poisonous minion kills target on attack 2`] = 
   },
   {
     "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "attacker": "x2",
+    "kind": "Attack",
+    "target": "x3",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "kind": "Death",
+    "source": "x3",
+  },
+  {
+    "kind": "Death",
     "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 3`] = `"right"`;
+
+exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 4`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "attacker": "x2",
+    "kind": "Attack",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x4",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "kind": "Death",
+    "source": "x3",
+  },
+  {
+    "kind": "Death",
+    "source": "x4",
+  },
+  {
+    "kind": "End",
+    "winner": "right",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99) 3`] = `"left"`;
+
+exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99) 4`] = `
+[
+  {
+    "atk": 4,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x1",
+  },
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 4,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x3",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x4",
+  },
+  {
+    "kind": "Death",
+    "source": "x4",
+  },
+  {
+    "kind": "End",
+    "winner": "left",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 3`] = `"left"`;
+
+exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 4`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 3,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
+  },
+  {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "attacker": "x2",
+    "kind": "Attack",
+    "target": "x3",
+  },
+  {
+    "kind": "DivineShield",
+    "target": "x3",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "kind": "Death",
+    "source": "x2",
+  },
+  {
+    "kind": "End",
+    "winner": "left",
+  },
+]
+`;
+
+exports[`vanilla combat snapshots poisonous minion kills target on attack 3`] = `"right"`;
+
+exports[`vanilla combat snapshots poisonous minion kills target on attack 4`] = `
+[
+  {
+    "attacker": "x1",
+    "kind": "Attack",
+    "target": "x2",
+  },
+  {
+    "amount": 2,
+    "kind": "Damage",
+    "target": "x2",
+  },
+  {
+    "amount": 1,
+    "kind": "Damage",
+    "target": "x1",
+  },
+  {
+    "kind": "Death",
+    "source": "x1",
   },
   {
     "kind": "End",

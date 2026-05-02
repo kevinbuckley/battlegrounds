@@ -44,7 +44,13 @@ function normalizeTranscript(transcript: CombatEvent[]): unknown[] {
 
 describe("vanilla combat snapshots", () => {
   it("1v1: murloc_tidehunter (2/1) vs wrath_weaver (1/3)", () => {
-    const result = simulateCombat([m("murloc_tidehunter")], [m("wrath_weaver")], makeRng(1));
+    const result = simulateCombat(
+      [m("murloc_tidehunter")],
+      [m("wrath_weaver")],
+      makeRng(1),
+      undefined,
+      1,
+    );
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
@@ -52,14 +58,14 @@ describe("vanilla combat snapshots", () => {
   it("2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42)", () => {
     const left = [m("murloc_tidecaller"), m("murloc_tidehunter")];
     const right = [m("dragonspawn_lieutenant"), m("alley_cat")];
-    const result = simulateCombat(left, right, makeRng(42));
+    const result = simulateCombat(left, right, makeRng(42), undefined, 1);
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
 
   it("3v1: three 1/1s vs one 1/3 (seed 7)", () => {
     const tidecallers = [m("murloc_tidecaller"), m("murloc_tidecaller"), m("murloc_tidecaller")];
-    const result = simulateCombat(tidecallers, [m("wrath_weaver")], makeRng(7));
+    const result = simulateCombat(tidecallers, [m("wrath_weaver")], makeRng(7), undefined, 1);
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
@@ -67,7 +73,7 @@ describe("vanilla combat snapshots", () => {
   it("tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99)", () => {
     const left = [m("glyph_guardian"), m("metaltooth_leaper")];
     const right = [m("unstable_ghoul"), m("scavenging_hyena")];
-    const result = simulateCombat(left, right, makeRng(99));
+    const result = simulateCombat(left, right, makeRng(99), undefined, 1);
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
@@ -77,16 +83,68 @@ describe("vanilla combat snapshots", () => {
       [m("selfless_hero"), m("glyph_guardian")],
       [m("metaltooth_leaper")],
       makeRng(1),
+      undefined,
+      1,
     );
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });
 
   it("poisonous minion kills target on attack", () => {
-    // Test with tidehunter (2/1) attacking wrath_weaver (1/3) with poisonous
-    // Tidehunter attacks first (2 damage to 3 HP target, should survive)
-    // Wrath_weaver (1 damage to 1 hp target) would get killed by poisonous effect
-    const result = simulateCombat([m("murloc_tidehunter")], [m("wrath_weaver")], makeRng(1));
+    const result = simulateCombat(
+      [m("murloc_tidehunter")],
+      [m("wrath_weaver")],
+      makeRng(1),
+      undefined,
+      1,
+    );
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("2v2: tidecaller+tidehunter vs dragonspawn+alley_cat (seed 42)", () => {
+    const left = [m("murloc_tidecaller"), m("murloc_tidehunter")];
+    const right = [m("dragonspawn_lieutenant"), m("alley_cat")];
+    const result = simulateCombat(left, right, makeRng(42), undefined, 1);
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("3v1: three 1/1s vs one 1/3 (seed 7)", () => {
+    const tidecallers = [m("murloc_tidecaller"), m("murloc_tidecaller"), m("murloc_tidecaller")];
+    const result = simulateCombat(tidecallers, [m("wrath_weaver")], makeRng(7), undefined, 1);
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("tier2 brawl: glyph_guardian+metaltooth vs unstable_ghoul+scavenging_hyena (seed 99)", () => {
+    const left = [m("glyph_guardian"), m("metaltooth_leaper")],
+      right = [m("unstable_ghoul"), m("scavenging_hyena")];
+    const result = simulateCombat(left, right, makeRng(99), undefined, 1);
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("selfless_hero survives a big hit (seed 1)", () => {
+    const result = simulateCombat(
+      [m("selfless_hero"), m("glyph_guardian")],
+      [m("metaltooth_leaper")],
+      makeRng(1),
+      undefined,
+      1,
+    );
+    expect(result.winner).toMatchSnapshot();
+    expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
+  });
+
+  it("poisonous minion kills target on attack", () => {
+    const result = simulateCombat(
+      [m("murloc_tidehunter")],
+      [m("wrath_weaver")],
+      makeRng(1),
+      undefined,
+      1,
+    );
     expect(result.winner).toMatchSnapshot();
     expect(normalizeTranscript(result.transcript)).toMatchSnapshot();
   });

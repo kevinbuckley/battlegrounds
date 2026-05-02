@@ -20,6 +20,7 @@ export function simulateCombat(
   rightBoard: readonly MinionInstance[],
   rng: Rng,
   anomaly?: import("./types").AnomalyId,
+  turn?: number,
 ): CombatResult {
   if (leftBoard.length === 0 && rightBoard.length === 0) return resolved("draw", [], []);
   if (leftBoard.length === 0) return resolved("right", [], [...rightBoard]);
@@ -50,18 +51,14 @@ export function simulateCombat(
     return cloned;
   });
 
-  // Determine starting attacker
+  // Determine starting attacker: alternates by turn number, matching real
+  // Battlegrounds where the starting attacker rotates each round regardless
+  // of board sizes. Turn 1: left goes first, turn 2: right goes first, etc.
   const baronOnLeft = left.some((m) => m.baronRivendare);
   const baronOnRight = right.some((m) => m.baronRivendare);
 
   const startSide: Side =
-    left.length > right.length
-      ? "left"
-      : right.length > left.length
-        ? "right"
-        : rng.next() < 0.5
-          ? "left"
-          : "right";
+    turn !== undefined ? (turn % 2 === 1 ? "left" : "right") : rng.next() < 0.5 ? "left" : "right";
 
   // Fire start-of-combat hooks (interleaved, attacker side first)
   fireStartOfCombat(left, right, startSide, emit, rng);
