@@ -898,11 +898,11 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         ? Math.max(0, player.upgradeCost - 1)
         : player.upgradeCost;
 
-    const newGold = Math.max(player.gold, gold);
     const interestGold = calcInterestGold(player.gold);
+    const startingGold = turn === 1 ? gold : player.gold;
     next = updatePlayer(next, player.id, (p) => ({
       ...p,
-      gold: newGold + interestGold,
+      gold: startingGold + interestGold,
       upgradeCost: discountedCost,
       upgradedThisTurn: false,
       heroPowerUsed: false,

@@ -166,15 +166,15 @@ describe("beginRecruitTurn", () => {
     expect(beforeGold).toBe(3);
   });
 
-  it("sets gold linearly by turn (GOLD_PER_TURN_START + turn - 1)", () => {
+  it("keeps actual gold across turns (no base gold bump on subsequent turns)", () => {
     let state = startGame(42);
-    expect(p(state).gold).toBe(3); // turn 1, 0 interest
+    expect(p(state).gold).toBe(3); // turn 1, starts with 3 gold
 
     state = next(state);
-    expect(p(state).gold).toBe(4); // turn 2, 4 gold, 0 interest
+    expect(p(state).gold).toBe(3); // turn 2, keeps 3 gold (no bump to base 4)
 
     state = next(state);
-    expect(p(state).gold).toBe(5); // turn 3, 5 base + 0 interest (4 gold < 5 threshold)
+    expect(p(state).gold).toBe(3); // turn 3, keeps 3 gold (no bump to base 5)
   });
 
   it("caps gold at 10", () => {

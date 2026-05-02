@@ -324,16 +324,17 @@ describe("recruit phase — gold", () => {
     }
   });
 
-  it("gold increases by 1 per turn up to 10 (plus interest)", () => {
+  it("gold carries over from previous turn without base gold bump", () => {
     const testRng = makeRng(1);
     let state = selectAllHeroesWithRng(makeInitialState(1), testRng);
     // EndTurn increments the turn counter and starts the next recruit
+    // Gold should stay at 3 (turn 1 gold) since player never spends
     for (let turn = 1; turn <= 8; turn++) {
-      const baseGold = Math.min(3 + turn - 1, 10);
       const p0 = state.players[0]!;
       if (!p0.eliminated) {
-        // Gold should be >= baseGold (may be higher due to interest)
-        expect(p0.gold).toBeGreaterThanOrEqual(baseGold);
+        // Gold stays at 3 (turn 1 gold) since player never spends;
+        // interest may add extra gold once gold >= 5
+        expect(p0.gold).toBeGreaterThanOrEqual(3);
       }
       state = step(state, { kind: "EndTurn", player: 0 }, testRng);
     }
