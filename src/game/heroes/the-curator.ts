@@ -74,8 +74,7 @@ export function ensureCuratorShop(
 
     if (candidates.length === 0) continue;
 
-    const idx = Math.floor(rng.next() % candidates.length);
-    const chosen = candidates[idx]!;
+    const chosen = rng.pick(candidates);
     const instance = instantiate(chosen);
 
     // If shop is at max size, remove the last slot and add the new minion

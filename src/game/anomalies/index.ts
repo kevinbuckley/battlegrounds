@@ -136,6 +136,5 @@ export function getAllAnomalyIds(): string[] {
 }
 
 export function pickAnomaly(rng: Rng): AnomalyCard {
-  const idx = Math.floor(rng.next() % ALL_ANOMALIES.length);
-  return ALL_ANOMALIES[idx]!;
+  return rng.pick(ALL_ANOMALIES);
 }

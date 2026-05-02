@@ -36,9 +36,7 @@ export const tradePrinceGallywix: Hero = {
     if (aliveBoard.length === 0) return state;
 
     // Pick a random minion from the opponent's board
-    const idx = Math.floor(rng.next() % aliveBoard.length);
-    const chosen = aliveBoard[idx];
-    if (!chosen) return state;
+    const chosen = rng.pick(aliveBoard);
 
     // Instantiate a copy of the chosen minion's card
     const card = MINIONS[chosen.cardId];

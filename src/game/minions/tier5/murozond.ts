@@ -28,16 +28,8 @@ export default defineMinion({
         }
       }
 
-      if (enemyMinions.length === 0) {
-        return ctx.state;
-      }
-
       // Pick a random enemy minion
-      const idx = Math.floor(ctx.rng.next() % enemyMinions.length);
-      const chosen = enemyMinions[idx];
-      if (!chosen) {
-        return ctx.state;
-      }
+      const chosen = ctx.rng.pick(enemyMinions);
 
       // Instantiate a copy of the chosen minion's card
       const card = MINIONS[chosen.cardId];
