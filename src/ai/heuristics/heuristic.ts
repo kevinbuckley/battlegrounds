@@ -1,6 +1,8 @@
+import { getHero } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
 import { SPELLS } from "@/game/spells/index";
+import { step as stateStep, step } from "@/game/state";
 import type { Action, MinionInstance, PlayerState } from "@/game/types";
 import type { Rng } from "@/lib/rng";
 import type { PlayerView, Strategy } from "../strategy";
@@ -160,6 +162,25 @@ export const heuristic: Strategy = {
           } catch {
             // ignore
           }
+        }
+      }
+    }
+
+    // --- Use hero power if available (real Battlegrounds AIs use hero powers) ---
+    {
+      const player = sim.players[me]!;
+      const hero = getHero(player.heroId);
+      if (
+        hero &&
+        hero.power.kind === "active" &&
+        !player.heroPowerUsed &&
+        player.gold >= hero.power.cost
+      ) {
+        try {
+          sim = step(sim, { kind: "HeroPower", player: me, target: null }, rng);
+          actions.push({ kind: "HeroPower", player: me, target: null });
+        } catch {
+          // ignore hero power failure
         }
       }
     }
