@@ -596,6 +596,15 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
       result.modifierState.anomaly,
     );
 
+    // Apply lifesteal healing to the winner's hero during combat resolution.
+    // In real Battlegrounds, lifesteal heals as damage is dealt, so a hero
+    // with enough lifesteal on board will never reach 0 HP from combat damage.
+    if (combatResult.lifestealHealing > 0 && combatResult.winner !== "draw") {
+      const isLeftWinner = combatResult.winner === "left";
+      const lifestealWinnerId = isLeftWinner ? leftId : rightId;
+      result = healHero(result, lifestealWinnerId, combatResult.lifestealHealing);
+    }
+
     result = applyCombatResult(result, leftId, rightId, combatResult);
   }
 
@@ -851,14 +860,6 @@ function applyCombatResult(
     ...p,
     board: survivors,
   }));
-
-  // Apply lifesteal healing to the winner's hero
-  const lifestealTotal = combatResult.transcript
-    .filter((e) => e.kind === "Lifesteal")
-    .reduce((sum, e) => sum + (e as { kind: "Lifesteal"; amount: number }).amount, 0);
-  if (lifestealTotal > 0) {
-    result = healHero(result, winnerId, lifestealTotal);
-  }
 
   // Loser's board: keep surviving minions (real Battlegrounds keeps both boards)
   const loserSurvivors = isLeftWinner ? survivorsRight : survivorsLeft;

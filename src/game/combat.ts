@@ -27,6 +27,7 @@ export function simulateCombat(
 
   const transcript: CombatEvent[] = [];
   const emit = (e: CombatEvent) => transcript.push(e);
+  const lifestealAccum = { total: 0 };
 
   const isBigLeague = anomaly === "big_league";
 
@@ -66,7 +67,7 @@ export function simulateCombat(
   fireStartOfCombat(left, right, startSide, emit, rng);
 
   // Fire rush attacks before the normal attack cycle
-  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight);
+  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight, lifestealAccum);
 
   let side: Side = startSide;
   let leftPtr = 0;
@@ -122,11 +123,11 @@ export function simulateCombat(
 
       // Apply damage from attacker to all hit targets
       for (const t of hitTargets) {
-        applyDamage(attacker, t, emit, left, right, rng);
+        applyDamage(attacker, t, emit, left, right, rng, lifestealAccum);
       }
 
       // Counterattack: primary target hits back (only once, regardless of cleave)
-      applyDamage(currentTarget, attacker, emit, left, right, rng);
+      applyDamage(currentTarget, attacker, emit, left, right, rng, lifestealAccum);
 
       // Process deaths (including deathrattle chains)
       const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
@@ -148,7 +149,13 @@ export function simulateCombat(
         : "draw";
 
   emit({ kind: "End", winner });
-  return { transcript, survivorsLeft: left, survivorsRight: right, winner };
+  return {
+    transcript,
+    survivorsLeft: left,
+    survivorsRight: right,
+    winner,
+    lifestealHealing: lifestealAccum.total,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -271,6 +278,7 @@ function fireRushAttacks(
   rng: Rng,
   baronOnLeft: boolean,
   baronOnRight: boolean,
+  lifestealAccum: { total: number },
 ): void {
   // Process ALL rush minions from both sides before the normal cycle.
   // In real Battlegrounds, every minion with Rush attacks before the normal
@@ -288,7 +296,7 @@ function fireRushAttacks(
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
-    applyDamage(m, target, emit, left, right, rng);
+    applyDamage(m, target, emit, left, right, rng, lifestealAccum);
     const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
@@ -305,7 +313,7 @@ function fireRushAttacks(
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
-    applyDamage(m, target, emit, left, right, rng);
+    applyDamage(m, target, emit, left, right, rng, lifestealAccum);
     const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
@@ -373,6 +381,7 @@ function applyDamage(
   left: MinionInstance[],
   right: MinionInstance[],
   rng: Rng,
+  lifestealAccum: { total: number },
 ): void {
   const dmg = source.atk;
   if (dmg <= 0) return;
@@ -418,6 +427,7 @@ function applyDamage(
   }
   if (source.keywords.has("lifesteal") && dmg > 0) {
     emit({ kind: "Lifesteal", target: source.instanceId, amount: dmg });
+    lifestealAccum.total += dmg;
   }
 }
 
@@ -435,5 +445,6 @@ function resolved(
     survivorsLeft: left,
     survivorsRight: right,
     winner,
+    lifestealHealing: 0,
   };
 }

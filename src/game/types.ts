@@ -397,4 +397,6 @@ export interface CombatResult {
   survivorsLeft: MinionInstance[];
   survivorsRight: MinionInstance[];
   winner: Side | "draw";
+  /** Total lifesteal healing dealt during combat (applied to winner's hero). */
+  lifestealHealing: number;
 }
