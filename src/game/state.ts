@@ -899,7 +899,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
         : player.upgradeCost;
 
     const newGold = Math.max(player.gold, gold);
-    const interestGold = calcInterestGold(newGold);
+    const interestGold = calcInterestGold(player.gold);
     next = updatePlayer(next, player.id, (p) => ({
       ...p,
       gold: newGold + interestGold,

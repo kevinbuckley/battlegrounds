@@ -174,7 +174,7 @@ describe("beginRecruitTurn", () => {
     expect(p(state).gold).toBe(4); // turn 2, 4 gold, 0 interest
 
     state = next(state);
-    expect(p(state).gold).toBe(6); // turn 3, 5 base + 1 interest (5/5=1)
+    expect(p(state).gold).toBe(5); // turn 3, 5 base + 0 interest (4 gold < 5 threshold)
   });
 
   it("caps gold at 10", () => {
