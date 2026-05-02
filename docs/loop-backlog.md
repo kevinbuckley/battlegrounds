@@ -15,6 +15,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ## Now (highest priority, model should pick from here first)
 
+- [ ] [S] Game feel audit: open http://localhost:3000, play one turn, find and fix one broken or missing behaviour (stuck since 2026-05-02, snap c424d77bfdc0caa0bb73a888f8294c4152361db9)
+
 - [ ] [S] Game feel audit: open http://localhost:3000, play one turn, find and fix one broken or missing behaviour (stuck since 2026-04-30, snap 8038470925af3ac743121141f9ecd0133419b8a1)
 
 - [ ] [S] Game feel audit: open http://localhost:3000, play one turn, find and fix one broken or missing behaviour (stuck since 2026-04-30, snap 969181ffbd80853809f3099933d982541d7846b9)

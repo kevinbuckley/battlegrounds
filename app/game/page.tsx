@@ -990,9 +990,7 @@ export default function GamePage() {
 
                 if (hasActivePower) {
                   const needsTarget =
-                    hero?.id === "george_the_fallen" ||
-                    hero?.id === "scabbs_cutterbutter" ||
-                    hero?.id === "sir_finley";
+                    hero?.id === "george_the_fallen" || hero?.id === "scabbs_cutterbutter";
                   const isTargeted = needsTarget && heroPowerTargetIdx !== null;
                   const powerEnabled = canUsePower && (!needsTarget || isTargeted);
 

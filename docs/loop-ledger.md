@@ -1,4 +1,5 @@
 2026-04-30 | 969181f | FIXED: playSpell now fires onCast hooks (Kalecgos, etc.) even for spells without onPlay effects — all spell casts trigger minion onCast hooks regardless of whether the spell has an onPlay effect
+2026-05-02 | c424d77 | FIXED: Sir Finley hero power now swaps to another active hero instead of giving +1/+1 — correctly implements real Battlegrounds where Sir Finley swaps your Hero Power with one of 3 randomly chosen alternatives
 2026-04-30 | 3d4c326 | FIXED: Ragnaros passive now deals 8 damage at the START of combat instead of after — enemy minions can be killed before attacks begin, matching real Battlegrounds
 2026-04-30 | 73c54b3 | FIXED: onTurnEnd hooks now fire for all non-eliminated players during endTurn (not just the active player), and hero passives (Ysera, Jaraxxus, Sindragosa, Curator, King Mukla) now apply to all players — matching real Battlegrounds where start-of-round effects affect all 8 players
 2026-04-30 | 8038470 | FIXED: Add onRecruitSummon hook to MinionHooks, wire into shop.ts playMinionToBoard — Murloc Tidecaller and Knife Juggler now fire during recruit phase when buying minions, matching real Battlegrounds

@@ -187,16 +187,22 @@ describe("Edwin Van Cleef hero power", () => {
 });
 
 describe("Sir Finley Mrrgglton hero power", () => {
-  it("gives +1/+1 to the targeted board minion", () => {
+  it("swaps hero power to another active hero", () => {
     const minion = instantiate(MINIONS["wrath_weaver"]!);
     const state = makeStateWithHero("sir_finley", [minion]);
-    const origAtk = minion.atk;
-    const origHp = minion.hp;
+    expect(state.players[0]!.heroId).toBe("sir_finley");
+    expect(state.players[0]!.hp).toBe(40);
+    expect(state.players[0]!.armor).toBe(0);
 
     const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
-    const buffed = after.players[0]!.board[0]!;
-    expect(buffed.atk).toBe(origAtk + 1);
-    expect(buffed.hp).toBe(origHp + 1);
+    // Should have swapped to a different active hero (not sir_finley, not stub)
+    expect(after.players[0]!.heroId).not.toBe("sir_finley");
+    expect(after.players[0]!.heroId).not.toBe("stub_hero");
+    // HP and armor should change to match the new hero
+    const newHero = HEROES[after.players[0]!.heroId];
+    expect(after.players[0]!.hp).toBe(newHero!.startHp);
+    expect(after.players[0]!.armor).toBe(newHero!.startArmor);
+    // Should cost 2 gold
     expect(after.players[0]!.gold).toBe(8);
   });
 });

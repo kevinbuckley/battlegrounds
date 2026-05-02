@@ -1,27 +1,45 @@
-import type { Hero } from "../types";
+import type { Hero, HeroId, MinionInstance, PlayerId } from "../types";
 import { getPlayer, updatePlayer } from "../utils";
+import { HEROES } from "./index";
 
 export const sirFinley: Hero = {
   id: "sir_finley",
   name: "Sir Finley Mrrgglton",
-  description: "Hero Power (2): Give a friendly minion +1/+1.",
+  description: "Hero Power (2): Swap your Hero Power with another available one.",
   startHp: 40,
   startArmor: 0,
   power: { kind: "active", cost: 2, usesPerTurn: 1 },
 
   onHeroPower: (state, playerId, target) => {
-    const boardIndex = typeof target === "number" ? target : 0;
     const player = getPlayer(state, playerId);
-    const minion = player.board[boardIndex];
-    if (!minion) return state;
 
+    // Collect all other active hero powers (excluding our own and passive/start_of_game)
+    const otherActiveHeroes: HeroId[] = [];
+    for (const id of Object.keys(HEROES) as HeroId[]) {
+      const hero = HEROES[id]!;
+      if (id === "stub_hero" || id === "sir_finley") continue;
+      if (hero.power.kind !== "active") continue;
+      otherActiveHeroes.push(id);
+    }
+
+    // Pick 3 random hero powers to offer (or fewer if not enough exist)
+    const shuffled = [...otherActiveHeroes].sort(() => state.seed + Math.random() - 0.5);
+    const offers = shuffled.slice(0, 3);
+
+    if (offers.length === 0) return state;
+
+    // target is the index into the offers array (which hero power to swap to)
+    const chosenIndex = typeof target === "number" ? target : 0;
+    const chosenHeroId = offers[Math.min(chosenIndex, offers.length - 1)] as HeroId;
+    const chosenHero = HEROES[chosenHeroId];
+    if (!chosenHero || chosenHero.power.kind !== "active") return state;
+
+    // Swap: replace our hero with the chosen one, keeping our HP, armor, board, etc.
     return updatePlayer(state, playerId, (p) => ({
       ...p,
-      board: p.board.map((m, i) =>
-        i === boardIndex
-          ? { ...m, atk: m.atk + 1, hp: m.hp + 1, maxHp: m.maxHp + 1 }
-          : m,
-      ),
+      heroId: chosenHeroId,
+      hp: chosenHero.startHp,
+      armor: chosenHero.startArmor,
     }));
   },
 };
