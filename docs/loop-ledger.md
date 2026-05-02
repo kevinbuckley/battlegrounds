@@ -1,3 +1,4 @@
+2026-05-02 | 59133e6 | FIXED: Replace broken sort-based shuffle with rng.shuffle() in shop.ts and triples.ts — discover offers and shop spell rolls now use uniform Fisher-Yates shuffle instead of non-uniform sort(() => rng.next() - 0.5), matching real Battlegrounds where random selection is truly uniform
 2026-05-02 | 581e311 | FIXED: Leaderboard now shows opponent boards during recruit phase — each alive opponent's minions display as compact stat cards (attack/hp, golden star, tribe, taunt/divine shield borders), matching real Battlegrounds where you can see all 7 opponents' boards to make strategic decisions
 
 2026-05-02 | 0d6a857 | FIXED: Gold no longer bumped up to base gold on subsequent turns — players keep their actual gold from previous turns (e.g., 3 gold on turn 1 stays 3 on turn 2 instead of being set to 4), matching real Battlegrounds where gold carries over exactly as-is

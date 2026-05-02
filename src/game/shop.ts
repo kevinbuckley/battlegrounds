@@ -149,7 +149,7 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
     }) as string[];
 
     if (availableSpellIds.length > 0) {
-      const shuffled = [...availableSpellIds].sort(() => rng.next() - 0.5);
+      const shuffled = rng.shuffle(availableSpellIds);
       const picks = shuffled.slice(0, spellSlotCount);
 
       for (const spellId of picks) {

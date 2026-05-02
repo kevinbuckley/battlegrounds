@@ -126,7 +126,7 @@ export function checkAndProcessTriples(
 
     if (eligibleIds.length === 0) return result;
 
-    const shuffled = [...eligibleIds].sort(() => rng.next() - 0.5);
+    const shuffled = rng.shuffle(eligibleIds);
     const picks = shuffled.slice(0, Math.min(3, eligibleIds.length));
 
     if (picks.length === 0) return result;
