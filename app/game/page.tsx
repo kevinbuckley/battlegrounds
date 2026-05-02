@@ -7,7 +7,7 @@ import { GameOverOverlay } from "@/components/GameOverOverlay";
 import { Leaderboard } from "@/components/Leaderboard";
 import { simulateCombat } from "@/game/combat";
 import { calcDamage } from "@/game/damage";
-import { COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
+import { COST_BUY, COST_FREEZE, COST_REFRESH, calcInterestGold } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { SPELLS } from "@/game/spells/index";
@@ -476,8 +476,15 @@ export default function GamePage() {
             <div className="flex gap-8">
               <div className="flex flex-col items-center">
                 <span className="text-[11px] uppercase tracking-wider text-slate-500">Gold</span>
-                <span className="text-2xl font-bold tracking-tight text-amber-400">
+                <span className="flex items-baseline gap-1 text-2xl font-bold tracking-tight text-amber-400">
                   {gameState.players[0]?.gold ?? 0}
+                  {(() => {
+                    const g = gameState.players[0]?.gold ?? 0;
+                    const interest = calcInterestGold(g);
+                    return interest > 0 ? (
+                      <span className="text-sm font-medium text-emerald-400">+{interest}</span>
+                    ) : null;
+                  })()}
                 </span>
               </div>
               <div className="flex flex-col items-center">
