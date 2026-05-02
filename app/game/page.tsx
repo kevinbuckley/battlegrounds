@@ -814,6 +814,7 @@ export default function GamePage() {
                       "swat_team",
                       "tavern_tipper",
                       "cauterizing_flame",
+                      "banana",
                     ]);
                     const isNoTargetSpell = NO_TARGET_SPELLS.has(card.id);
                     return (

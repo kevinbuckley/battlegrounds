@@ -141,7 +141,7 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
   const spellSlotCount = Math.floor(shopWithDiscount.length * 0.25);
   const finalShop = [...shopWithDiscount];
 
-  if (spellSlotCount > 0 && player.tier >= 2) {
+  if (spellSlotCount > 0) {
     // Filter spells available at the player's tier
     const availableSpellIds = Object.keys(SPELLS).filter((id) => {
       const spell = SPELLS[id as keyof typeof SPELLS];
