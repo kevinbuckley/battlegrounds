@@ -53,7 +53,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ---
 
-## Soon
+## Now (continued)
 
 ### Game feel — Spells & discover polish
 

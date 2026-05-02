@@ -248,19 +248,19 @@ export const cauterizingFlame: SpellCard = {
       let state = ctx.state;
       const player = getPlayer(state, ctx.playerId);
 
-      // Deal 3 damage to all enemy minions
+      // Deal 3 damage to all enemy minions (respects Divine Shield)
       for (const p of state.players) {
         if (p.eliminated || p.id === ctx.playerId) continue;
         const newBoard: MinionInstance[] = [];
         for (const m of p.board) {
           if (!m) continue;
-          const newHp = m.hp - 3;
-          if (newHp <= 0) {
-            // Minion dies — apply death logic via update
-            newBoard.push({ ...m, hp: 0 });
+          let updated = { ...m };
+          if (updated.keywords.has("divineShield" as import("../types").Keyword)) {
+            updated.keywords.delete("divineShield" as import("../types").Keyword);
           } else {
-            newBoard.push({ ...m, hp: newHp });
+            updated = { ...updated, hp: updated.hp - 3 };
           }
+          newBoard.push(updated);
         }
         state = updatePlayer(state, p.id, (pl) => ({ ...pl, board: newBoard }));
       }
