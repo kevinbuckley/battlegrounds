@@ -424,13 +424,13 @@ describe("freezeShop", () => {
     expect(after.players[0]!.shopFrozen).toBe(true);
   });
 
-  it("rollShopForPlayer skips re-roll when frozen and clears flag", () => {
+  it("rollShopForPlayer skips re-roll when frozen and keeps freeze flag", () => {
     const shopMinion = instantiate(TEST_CARD);
     const state = makeTestState({ shop: [shopMinion], shopFrozen: true });
     const after = rollShopForPlayer(state, 0, RNG);
-    // Minion stays, freeze cleared
+    // Minion stays, freeze flag is NOT cleared (shop stays frozen until explicitly unfrozen)
     expect(after.players[0]!.shop[0]!.instanceId).toBe(shopMinion.instanceId);
-    expect(after.players[0]!.shopFrozen).toBe(false);
+    expect(after.players[0]!.shopFrozen).toBe(true);
   });
 });
 

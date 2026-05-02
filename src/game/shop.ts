@@ -121,8 +121,10 @@ import { checkAndProcessTriples } from "./triples";
 export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
   if (player.shopFrozen) {
-    // Frozen: keep shop, clear freeze for next turn
-    return updatePlayer(state, playerId, (p) => ({ ...p, shopFrozen: false }));
+    // Frozen: keep shop as-is. Do NOT clear the freeze flag — the shop stays
+    // frozen until the player explicitly unfreezes it, matching real
+    // Battlegrounds where a frozen shop persists across turns.
+    return state;
   }
 
   const size = SHOP_SIZE_BY_TIER[player.tier];
