@@ -897,9 +897,11 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
     next = updatePlayer(next, player.id, (p) => ({
       ...p,
       gold: startingGold + interestGold,
+      tier: p.tier,
       upgradeCost: discountedCost,
       upgradedThisTurn: false,
       heroPowerUsed: false,
+      armor: 0,
     }));
 
     next = rollShopForPlayer(next, player.id, rng.fork(`shop:${player.id}:${turn}`));

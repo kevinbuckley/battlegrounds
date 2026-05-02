@@ -140,7 +140,8 @@ describe("SelectHero action", () => {
       rngForTurn(state, "sel"),
     );
     expect(p(after).hp).toBe(35);
-    expect(p(after).armor).toBe(5);
+    // Armor resets to 0 at start of recruit turn (real Battlegrounds behavior)
+    expect(p(after).armor).toBe(0);
   });
 
   it("throws on unknown heroId", () => {
