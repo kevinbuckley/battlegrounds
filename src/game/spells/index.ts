@@ -288,7 +288,17 @@ export const bananaSpell: SpellCard = {
       const player = getPlayer(ctx.state, ctx.playerId);
       if (player.board.length === 0) return ctx.state;
 
-      const boardIndex = ctx.rng.next() % player.board.length;
+      let boardIndex: number;
+      if (
+        "targetIndex" in ctx &&
+        ctx.targetIndex !== undefined &&
+        ctx.targetIndex >= 0 &&
+        ctx.targetIndex < player.board.length
+      ) {
+        boardIndex = ctx.targetIndex;
+      } else {
+        boardIndex = ctx.rng.next() % player.board.length;
+      }
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
 

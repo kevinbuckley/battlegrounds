@@ -796,13 +796,11 @@ export default function GamePage() {
                     const isSelected = selectedSpellIdx === idx;
                     // Spells that pick targets randomly internally don't need UI targeting.
                     const NO_TARGET_SPELLS = new Set([
-                      "banana",
                       "mystery_shot",
                       "poison_dart_shield",
                       "pancake",
                       "swat_team",
                       "tavern_tipper",
-                      "tavern_brawl",
                       "cauterizing_flame",
                     ]);
                     const isNoTargetSpell = NO_TARGET_SPELLS.has(card.id);
