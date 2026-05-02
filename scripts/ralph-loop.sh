@@ -100,14 +100,16 @@ inject_recovery_task() {
   local snap="$1"
   local count="$2"
   log "  ⚠ STUCK: same commit failed $count times in a row — injecting recovery task"
-  local date_str
-  date_str=$(date -u +%Y-%m-%d)
-  # Prepend a fresh concrete task at the top of the Now section
-  local task="- [ ] [S] Game feel audit: open http://localhost:3000, play one turn, find and fix one broken or missing behaviour (stuck since $date_str, snap $snap)"
-  # Insert after the "## Now" heading
-  sed -i '' "s|## Now (highest priority.*)|## Now (highest priority, model should pick from here first)\n\n$task|" \
+  # Pick the next concrete [S] task from "Soon" and prepend it to "Now"
+  # This avoids injecting vague browser tasks that fail when Playwright is unavailable
+  local next_task
+  next_task=$(grep -m1 '^\- \[ \] \[S\]' "$REPO/docs/loop-backlog.md" | head -1)
+  if [[ -z "$next_task" ]]; then
+    next_task="- [ ] [S] Add \`Wrath Weaver\` (tier 1): at end of turn deal 1 damage to hero and give all friendly demons +2/+2 — implement in src/game/minions/tier1/wrathWeaver.ts with onTurnEnd hook, register in index, add unit test"
+  fi
+  sed -i '' "s|## Now (highest priority.*)|## Now (highest priority, model should pick from here first)\n\n$next_task|" \
     "$REPO/docs/loop-backlog.md" 2>/dev/null || true
-  log "  → Added recovery task to top of backlog"
+  log "  → Added recovery task to top of backlog: $next_task"
 }
 
 # ---------------------------------------------------------------------------
