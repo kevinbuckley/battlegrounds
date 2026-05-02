@@ -1,3 +1,5 @@
+import { COST_BUY } from "@/game/economy";
+import { MINIONS } from "@/game/minions/index";
 import { buyMinion, playMinionToBoard, refreshShop } from "@/game/shop";
 import type { Action, MinionInstance } from "@/game/types";
 import type { Rng } from "@/lib/rng";
@@ -20,17 +22,25 @@ function firstBoardTribe(board: MinionInstance[]): string[] {
 
 /**
  * Index of the cheapest shop minion. -1 if shop is empty.
+ * "Cheapest" = lowest stat-ball among affordable minions.
+ * Affordability is determined by actual gold cost (3g or bountyCost), not stat-ball.
  */
 function cheapestShopIndex(shop: MinionInstance[], gold: number): number {
   if (shop.length === 0) return -1;
   let cheapest = -1;
-  let cheapestCost = Infinity;
+  let cheapestScore = Infinity;
   for (let i = 0; i < shop.length; i++) {
     const m = shop[i]!;
-    const cost = m.atk + m.hp; // cheapest = lowest stat-ball
-    if (cost < cheapestCost && cost <= gold) {
+    const card = MINIONS[m.cardId];
+    if (!card) continue;
+    const bountyCost = card.bountyCost ?? 0;
+    const baseCost = bountyCost > 0 ? bountyCost : COST_BUY;
+    const actualCost = Math.max(1, baseCost - (m.discount ?? 0));
+    if (actualCost > gold) continue;
+    const score = m.atk + m.hp;
+    if (score < cheapestScore) {
       cheapest = i;
-      cheapestCost = cost;
+      cheapestScore = score;
     }
   }
   return cheapest;
@@ -38,12 +48,19 @@ function cheapestShopIndex(shop: MinionInstance[], gold: number): number {
 
 /**
  * Index of the first shop minion matching a tribe, -1 if none.
+ * Affordability is determined by actual gold cost, not stat-ball.
  */
 function matchingTribeIndex(shop: MinionInstance[], gold: number, tribe: string[]): number {
   if (shop.length === 0 || tribe.length === 0) return -1;
   for (let i = 0; i < shop.length; i++) {
     const m = shop[i]!;
-    if (m.tribes.some((t) => tribe.includes(t)) && m.atk + m.hp <= gold) {
+    if (!m.tribes.some((t) => tribe.includes(t))) continue;
+    const card = MINIONS[m.cardId];
+    if (!card) continue;
+    const bountyCost = card.bountyCost ?? 0;
+    const baseCost = bountyCost > 0 ? bountyCost : COST_BUY;
+    const actualCost = Math.max(1, baseCost - (m.discount ?? 0));
+    if (actualCost <= gold) {
       return i;
     }
   }
