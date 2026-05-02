@@ -1,3 +1,4 @@
+2026-05-02 | b66549d | FIXED: Extra Life anomaly now restores the player's board on revival instead of clearing it to [] — the board the player had going into combat is now correctly preserved, matching real Battlegrounds where Extra Life revives you with your pre-combat board at 1 HP
 2026-05-02 | 59133e6 | FIXED: Replace broken sort-based shuffle with rng.shuffle() in shop.ts and triples.ts — discover offers and shop spell rolls now use uniform Fisher-Yates shuffle instead of non-uniform sort(() => rng.next() - 0.5), matching real Battlegrounds where random selection is truly uniform
 2026-05-02 | 581e311 | FIXED: Leaderboard now shows opponent boards during recruit phase — each alive opponent's minions display as compact stat cards (attack/hp, golden star, tribe, taunt/divine shield borders), matching real Battlegrounds where you can see all 7 opponents' boards to make strategic decisions
 

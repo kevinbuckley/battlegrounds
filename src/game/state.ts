@@ -810,22 +810,16 @@ function applyCombatResult(
     if (!loser.eliminated && !loser.extraLifeUsed) {
       const wouldBeEliminated = loser.hp - (damage - Math.min(loser.armor, damage)) <= 0;
       if (wouldBeEliminated) {
-        // Revive: set to 1 HP, restore board from previous round (stored as hand), use extra life
-        let revived = updatePlayer(result, loserId, (p) => ({
+        // Save the board before combat clears it — Extra Life revives with the
+        // board the player had going into combat, matching real Battlegrounds.
+        const savedBoard = loser.board.filter((m) => m.hp > 0);
+        const revived = updatePlayer(result, loserId, (p) => ({
           ...p,
           hp: 1,
           armor: 0,
-          board: [],
+          board: savedBoard,
           extraLifeUsed: true,
         }));
-        // Save current board to hand before clearing (the board they had going into combat)
-        const savedBoard = loser.board.filter((m) => m.hp > 0);
-        if (savedBoard.length > 0) {
-          revived = updatePlayer(revived, loserId, (p) => ({
-            ...p,
-            hand: savedBoard,
-          }));
-        }
         // Still record the pairing but skip damage application
         const newPairing: [import("./types").PlayerId, import("./types").PlayerId] = [
           leftId,
