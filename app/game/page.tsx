@@ -94,6 +94,8 @@ function eventTypeColor(evt: CombatEvent): string {
       return "text-blue-300";
     case "End":
       return "text-amber-400 text-lg font-bold";
+    case "Lifesteal":
+      return "text-emerald-400";
     default:
       return "";
   }
@@ -117,6 +119,8 @@ function eventTypeEmoji(evt: CombatEvent): string {
       return "\u{1F4CB}";
     case "End":
       return "\u{1F3C6}";
+    case "Lifesteal":
+      return "\u{1F9E1}";
     default:
       return "";
   }
