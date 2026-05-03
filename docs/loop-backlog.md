@@ -50,8 +50,6 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ---
 
-## Soon
-
 ### Game feel — UX polish (no browser needed — verifiable by reading code + bun test)
 
 - [ ] [S] Spell targeting UI: highlight valid board targets when a target-required spell is selected (already gated by NO_TARGET_SPELLS list in app/game/page.tsx)
@@ -68,7 +66,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### More minions (only those NOT yet on disk — verify with `ls src/game/minions/tierN/` first)
 
-- [ ] [S] Add `Pack Leader` (tier 2): beast, whenever you summon a beast on your side give it +3 ATK
+- [x] [S] Add `Pack Leader` (tier 2): beast, onShopSummon gives summoned Beast +3 ATK
 - [ ] [S] Add `Old Murk-Eye` (tier 4): murloc, +1 ATK for each other murloc on the battlefield (both sides)
 - [ ] [S] Add `Drakonid Enforcer` (tier 4): dragon, whenever a friendly minion loses divine shield gain +2/+2
 - [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2

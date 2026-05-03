@@ -371,3 +371,82 @@ describe("junkbot", () => {
     }
   });
 });
+
+// ---------------------------------------------------------------------------
+// Pack Leader
+// ---------------------------------------------------------------------------
+
+describe("pack_leader", () => {
+  it("gives +3 ATK to the summoned beast (self-buffs when bought)", () => {
+    const rng = makeRng(0);
+    const state = makeInitialState(42);
+    const packLeader = instantiate(MINIONS["pack_leader"]!); // 3/3
+    const beast = instantiate(MINIONS["alley_cat"]!); // 1/1 Beast
+
+    const withBoard = {
+      ...state,
+      phase: { kind: "Recruit" as const, turn: 1 },
+      players: state.players.map((p, i) =>
+        i === 0 ? { ...p, hand: [packLeader], board: [beast], gold: 10, tier: 2 as const } : p,
+      ),
+    };
+
+    const after = playMinionToBoard(withBoard, 0, 0, 2, rng);
+    const board = after.players[0]!.board;
+    // Pack Leader is a Beast, so when it's summoned it buffs itself
+    const leaderOnBoard = board.find((m) => m.cardId === "pack_leader");
+    expect(leaderOnBoard).toBeDefined();
+    if (leaderOnBoard) {
+      expect(leaderOnBoard.atk).toBe(6); // 3 + 3 (self-buff)
+      expect(leaderOnBoard.hp).toBe(3); // unchanged
+    }
+  });
+
+  it("gives +3 ATK to another beast when Pack Leader is already on board", () => {
+    const rng = makeRng(0);
+    const state = makeInitialState(42);
+    const packLeader = instantiate(MINIONS["pack_leader"]!); // 3/3
+    const beast = instantiate(MINIONS["alley_cat"]!); // 1/1 Beast
+
+    const withBoard = {
+      ...state,
+      phase: { kind: "Recruit" as const, turn: 1 },
+      players: state.players.map((p, i) =>
+        i === 0 ? { ...p, hand: [beast], board: [packLeader], gold: 10, tier: 2 as const } : p,
+      ),
+    };
+
+    const after = playMinionToBoard(withBoard, 0, 0, 2, rng);
+    const board = after.players[0]!.board;
+    const catOnBoard = board.find((m) => m.cardId === "alley_cat");
+    expect(catOnBoard).toBeDefined();
+    if (catOnBoard) {
+      expect(catOnBoard.atk).toBe(4); // 1 + 3 (buffed by Pack Leader)
+    }
+  });
+
+  it("does NOT buff when a non-beast is summoned (Pack Leader already on board)", () => {
+    const rng = makeRng(0);
+    const state = makeInitialState(42);
+    const packLeader = instantiate(MINIONS["pack_leader"]!); // 3/3
+    const nonBeast = instantiate(MINIONS["taunt_minion"]!); // not a beast
+    // Put Pack Leader already on board, buy a non-beast from hand
+    const handMinion = instantiate(MINIONS["taunt_minion"]!);
+
+    const withBoard = {
+      ...state,
+      phase: { kind: "Recruit" as const, turn: 1 },
+      players: state.players.map((p, i) =>
+        i === 0 ? { ...p, hand: [handMinion], board: [packLeader], gold: 10, tier: 2 as const } : p,
+      ),
+    };
+
+    const after = playMinionToBoard(withBoard, 0, 0, 2, rng);
+    const board = after.players[0]!.board;
+    const leaderOnBoard = board.find((m) => m.cardId === "pack_leader");
+    expect(leaderOnBoard).toBeDefined();
+    if (leaderOnBoard) {
+      expect(leaderOnBoard.atk).toBe(3); // unchanged, non-beast summoned
+    }
+  });
+});
