@@ -1,3 +1,4 @@
+2026-05-03 | daa1550 | FIXED: Add Ysera the Dreamer tier 6 dragon (start of combat, transform a random friendly minion into a 0/5 with Taunt), with unit tests
 2026-05-03 | 723feb4 | FIXED: Add shop-freezing behavior to all AI strategies — when AI has board minions and shop contains unaffordable minions, freeze the shop to preserve it for future turns
 2026-05-03 | 5d1081b | FIXED: Add Siphon Soul (tier 5 spell, cost 3) — destroy a friendly minion, summon a random tier 6 minion to your board, with unit tests
 2026-05-03 | 8d6b630 | FIXED: Add tier 8 support — extend Tier type to 7|8, create 4 tier 8 minions (Alexstrasza, Ysera, Deathwing, Old Murk-Eye T8), update Siphon Soul to summon tier 8, update economy tables, with tests

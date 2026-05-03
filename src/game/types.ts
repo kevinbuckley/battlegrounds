@@ -398,6 +398,7 @@ export type CombatEvent =
   | { kind: "Bounty"; source: MinionInstanceId; amount: number }
   | { kind: "Summon"; card: MinionCardId; side: Side; position: number }
   | { kind: "Stat"; target: MinionInstanceId; atk: number; hp: number }
+  | { kind: "Transform"; target: MinionInstanceId; from: MinionInstanceId }
   | { kind: "End"; winner: Side | "draw" };
 
 export interface CombatResult {
