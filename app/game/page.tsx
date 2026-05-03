@@ -1108,15 +1108,19 @@ export default function GamePage() {
                   const minionCard = MINIONS[shopItem.cardId];
                   const spellCard = SPELLS[shopItem.cardId];
                   if (minionCard) {
-                    const canBuy =
-                      (gameState.players[0]?.gold ?? 0) >= COST_BUY &&
-                      gameState.phase.kind === "Recruit";
                     const handFull = handMinions.length >= 10;
                     const tierColor = TIER_COLORS[minionCard.tier] ?? "bg-gray-600";
                     const isFrozen = gameState?.players[0]?.shopFrozen ?? false;
                     const isDormant =
                       shopItem.keywords &&
                       shopItem.keywords.has("dormant" as import("@/game/types").Keyword);
+                    const actualCost = Math.max(
+                      1,
+                      (minionCard.bountyCost ?? COST_BUY) - (shopItem.discount ?? 0),
+                    );
+                    const canBuy =
+                      (gameState.players[0]?.gold ?? 0) >= actualCost &&
+                      gameState.phase.kind === "Recruit";
                     return (
                       <button
                         key={shopItem.instanceId}
