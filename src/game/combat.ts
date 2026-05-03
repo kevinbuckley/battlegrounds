@@ -135,6 +135,14 @@ export function simulateCombat(
       left = result.left;
       right = result.right;
       totalBountyGold += result.bountyGold;
+
+      // Emit stat updates for all surviving minions so the UI can show real-time changes
+      for (const m of left) {
+        emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+      }
+      for (const m of right) {
+        emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+      }
     }
 
     if (isLeft) leftPtr++;

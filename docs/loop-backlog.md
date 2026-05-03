@@ -54,30 +54,6 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ---
 
-### Game feel — UX polish (no browser needed — verifiable by reading code + bun test)
-
-- [ ] [S] Spell targeting UI: highlight valid board targets when a target-required spell is selected (already gated by NO_TARGET_SPELLS list in app/game/page.tsx)
-- [ ] [S] Combat result toast: persist "You took X damage from Y" banner for 3 seconds after combat ends (currently 1 second)
-- [ ] [S] Tier-up animation: show a brief flash on the tier indicator when player upgrades tavern tier
-- [ ] [S] Sell confirmation: require a second click on the sell button within 1.5s to actually sell (prevent misclicks)
-
-### Combat & engine fixes
-
-- [ ] [S] Combat transcript: include the attacker's and defender's instanceIds in every "attack" event so the UI can highlight which minion is attacking
-- [ ] [S] Deathrattle ordering: verify deathrattles fire in left-to-right order on the board, not by death timestamp — add a unit test in tests/combat
-- [ ] [S] Cleave hits adjacent only: verify cleave damage hits exactly the two minions adjacent to the defender, not all friendlies — add a unit test
-- [ ] [S] Poisonous + Divine Shield interaction: poisonous hit on a divine-shielded minion should pop shield without killing — add a unit test
-
-### More minions (only those NOT yet on disk — verify with `ls src/game/minions/tierN/` first)
-
-- [x] [S] Add `Pack Leader` (tier 2): beast, onShopSummon gives summoned Beast +3 ATK
-- [ ] [S] Add `Old Murk-Eye` (tier 4): murloc, +1 ATK for each other murloc on the battlefield (both sides)
-- [ ] [S] Add `Drakonid Enforcer` (tier 4): dragon, whenever a friendly minion loses divine shield gain +2/+2
-- [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
-- [x] [S] Add `Foe Reaper 4000` (tier 6): mech, cleave — file exists at src/game/minions/tier6/foe-reaper-4000.ts
-
----
-
 ## ♾️ Forever task (backstop — only pick this if every Now and Soon item is ledgered)
 
 - [ ] [∞] **Game feel audit**: load `http://localhost:3000` in the browser, play through a full recruit → combat → recruit cycle, identify ONE thing that feels wrong compared to real Hearthstone Battlegrounds (wrong number, missing feedback, broken flow, incorrect rule), and fix it with a focused code change + test.

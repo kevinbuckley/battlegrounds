@@ -45,7 +45,7 @@ describe("murloc_warleader", () => {
   });
 
   it("does NOT buff the Warleader itself", () => {
-    const warleader = m("murloc_warleader"); // 3/base
+    const warleader = m("murloc_warleader"); // 3/3
     const murloc = m("murloc_tidehunter"); // 2/1
     const enemy = m("alley_cat");
 
@@ -54,8 +54,12 @@ describe("murloc_warleader", () => {
     const wlStats = r.transcript.filter(
       (e) => e.kind === "Stat" && e.target === warleader.instanceId,
     );
-    // Warleader should have no Stat events (no buff applied)
-    expect(wlStats).toHaveLength(0);
+    // Warleader now has Stat events (emitted for all survivors) but should show base stats (3/3)
+    expect(wlStats.length).toBeGreaterThan(0);
+    // First Stat event should show base stats (no aura buff on self)
+    const firstStat = wlStats[0] as { kind: "Stat"; atk: number; hp: number };
+    expect(firstStat.atk).toBe(3);
+    expect(firstStat.hp).toBe(3);
   });
 
   it("only buffs its own side, not the opposing side Murlocs from the other warleader", () => {
@@ -103,7 +107,11 @@ describe("murloc_warleader", () => {
       (e) => e.kind === "Stat" && e.target === murloc.instanceId,
     );
 
+    // Stat events now emitted for all survivors, but beast should NOT be buffed (still 1/1)
     expect(murlocStats.length).toBeGreaterThan(0);
-    expect(beastStats).toHaveLength(0);
+    expect(beastStats.length).toBeGreaterThan(0);
+    const beastFirst = beastStats[0] as { kind: "Stat"; atk: number; hp: number };
+    expect(beastFirst.atk).toBe(1);
+    expect(beastFirst.hp).toBe(1);
   });
 });

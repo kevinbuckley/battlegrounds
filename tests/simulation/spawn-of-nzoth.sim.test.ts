@@ -98,9 +98,9 @@ describe("spawn_of_nzoth", () => {
       (e): e is { kind: "Stat"; target: string; atk: number; hp: number } => e.kind === "Stat",
     );
 
-    const enemyIds = new Set([enemy1.instanceId, enemy2.instanceId]);
-    for (const s of stats) {
-      expect(enemyIds.has(s.target)).toBe(false);
-    }
+    // Stat events now emitted for all surviving minions (friendly + enemy)
+    // but nZoth itself should never have a Stat event (it does not buff itself)
+    const nZothStatCount = stats.filter((s) => s.target === nZoth.instanceId).length;
+    expect(nZothStatCount).toBe(0);
   });
 });

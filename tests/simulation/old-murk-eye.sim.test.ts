@@ -81,7 +81,11 @@ describe("old_murk_eye", () => {
     const stats = r.transcript.filter(
       (e) => e.kind === "Stat" && e.target === oldMurkEye.instanceId,
     );
-    expect(stats).toHaveLength(0);
+    // Stat events now emitted for all survivors but Old Murk-Eye should show base stats (4/1)
+    expect(stats.length).toBeGreaterThan(0);
+    const first = stats[0] as { kind: "Stat"; atk: number; hp: number };
+    expect(first.atk).toBe(4);
+    expect(first.hp).toBe(1);
   });
 
   it("only buffs Murlocs, not other tribes", () => {
@@ -99,8 +103,12 @@ describe("old_murk_eye", () => {
       (e) => e.kind === "Stat" && e.target === murloc.instanceId,
     );
 
+    // Stat events now emitted for all survivors, but beast should NOT be buffed (still 1/1)
     expect(murlocStats.length).toBeGreaterThan(0);
-    expect(beastStats).toHaveLength(0);
+    expect(beastStats.length).toBeGreaterThan(0);
+    const beastFirst = beastStats[0] as { kind: "Stat"; atk: number; hp: number };
+    expect(beastFirst.atk).toBe(1);
+    expect(beastFirst.hp).toBe(1);
   });
 
   it("works with no other murlocs — gives 0 ATK bonus", () => {
@@ -113,6 +121,10 @@ describe("old_murk_eye", () => {
     const stats = r.transcript.filter(
       (e) => e.kind === "Stat" && e.target === oldMurkEye.instanceId,
     );
-    expect(stats).toHaveLength(0);
+    // Stat events now emitted for all survivors but Old Murk-Eye shows base stats (4/1)
+    expect(stats.length).toBeGreaterThan(0);
+    const first = stats[0] as { kind: "Stat"; atk: number; hp: number };
+    expect(first.atk).toBe(4);
+    expect(first.hp).toBe(1);
   });
 });

@@ -24,6 +24,12 @@ exports[`vanilla combat snapshots 1v1: murloc_tidehunter (2/1) vs wrath_weaver (
     "source": "x1",
   },
   {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "kind": "End",
     "winner": "right",
   },
@@ -54,6 +60,24 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
     "source": "x1",
   },
   {
+    "atk": 2,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 2,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -75,6 +99,12 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
   {
     "kind": "Death",
     "source": "x2",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
   },
   {
     "kind": "End",
@@ -107,6 +137,24 @@ exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 2`] = `
     "source": "x1",
   },
   {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
+  },
+  {
+    "atk": 1,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -133,6 +181,12 @@ exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 2`] = `
   {
     "kind": "Death",
     "source": "x4",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
   },
   {
     "kind": "End",
@@ -190,6 +244,18 @@ exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unst
     "source": "x4",
   },
   {
+    "atk": 4,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x1",
+  },
+  {
+    "atk": 3,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
     "kind": "End",
     "winner": "left",
   },
@@ -226,6 +292,18 @@ exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 2`] 
     "target": "x3",
   },
   {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 3,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -242,6 +320,12 @@ exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 2`] 
   {
     "kind": "Death",
     "source": "x2",
+  },
+  {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
   },
   {
     "kind": "End",
@@ -274,6 +358,12 @@ exports[`vanilla combat snapshots poisonous minion kills target on attack 2`] = 
     "source": "x1",
   },
   {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "kind": "End",
     "winner": "right",
   },
@@ -304,6 +394,24 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
     "source": "x1",
   },
   {
+    "atk": 2,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 2,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -325,6 +433,12 @@ exports[`vanilla combat snapshots 2v2: tidecaller+tidehunter vs dragonspawn+alle
   {
     "kind": "Death",
     "source": "x2",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
   },
   {
     "kind": "End",
@@ -357,6 +471,24 @@ exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 4`] = `
     "source": "x1",
   },
   {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x4",
+  },
+  {
+    "atk": 1,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -383,6 +515,12 @@ exports[`vanilla combat snapshots 3v1: three 1/1s vs one 1/3 (seed 7) 4`] = `
   {
     "kind": "Death",
     "source": "x4",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
   },
   {
     "kind": "End",
@@ -440,6 +578,18 @@ exports[`vanilla combat snapshots tier2 brawl: glyph_guardian+metaltooth vs unst
     "source": "x4",
   },
   {
+    "atk": 4,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x1",
+  },
+  {
+    "atk": 3,
+    "hp": 2,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
     "kind": "End",
     "winner": "left",
   },
@@ -476,6 +626,18 @@ exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 4`] 
     "target": "x3",
   },
   {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
+  },
+  {
+    "atk": 3,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
+  },
+  {
     "attacker": "x2",
     "kind": "Attack",
     "target": "x3",
@@ -492,6 +654,12 @@ exports[`vanilla combat snapshots selfless_hero survives a big hit (seed 1) 4`] 
   {
     "kind": "Death",
     "source": "x2",
+  },
+  {
+    "atk": 2,
+    "hp": 4,
+    "kind": "Stat",
+    "target": "x3",
   },
   {
     "kind": "End",
@@ -522,6 +690,12 @@ exports[`vanilla combat snapshots poisonous minion kills target on attack 4`] = 
   {
     "kind": "Death",
     "source": "x1",
+  },
+  {
+    "atk": 1,
+    "hp": 1,
+    "kind": "Stat",
+    "target": "x2",
   },
   {
     "kind": "End",
