@@ -369,6 +369,39 @@ describe("playMinionToBoard", () => {
     expect(capturedCtx!.selfInstanceId).toBe(inst.instanceId);
     expect(capturedCtx!.playerId).toBe(0);
   });
+
+  it("Strongshell Scavenger buffs all friendly Taunt minions", () => {
+    const ssc = MINIONS["strongshell_scavenger"];
+    expect(ssc).toBeDefined();
+    const scavenger = instantiate(ssc!);
+    const tauntMinion = instantiate(getMinion("taunt_minion"));
+    const nonTauntMinion = instantiate(getMinion("rush_minion"));
+    // Put taunt and non-taunt on board first, then play scavenger
+    const state = makeTestState({
+      hand: [scavenger],
+      board: [tauntMinion, nonTauntMinion],
+    });
+    // Play scavenger (hand index 0) to board at index 2 — battlecry should buff taunt minion
+    const finalState = playMinionToBoard(state, 0, 0, 2, RNG);
+    const finalBoard = finalState.players[0]!.board;
+    expect(finalBoard.length).toBe(3);
+    // Find scavenger and taunt minion
+    const scavengerOnBoard = finalBoard.find((m) => m.cardId === "strongshell_scavenger");
+    const tauntOnBoard = finalBoard.find((m) => m.cardId === "taunt_minion");
+    const nonTauntOnBoard = finalBoard.find((m) => m.cardId === "rush_minion");
+    expect(scavengerOnBoard).toBeDefined();
+    expect(tauntOnBoard).toBeDefined();
+    expect(nonTauntOnBoard).toBeDefined();
+    // Taunt minion should be buffed to 3/3 (1+2 atk, 1+2 hp)
+    expect(tauntOnBoard!.atk).toBe(3);
+    expect(tauntOnBoard!.hp).toBe(3);
+    // Non-taunt should remain 3/2 (its base stats, not buffed)
+    expect(nonTauntOnBoard!.atk).toBe(3);
+    expect(nonTauntOnBoard!.hp).toBe(2);
+    // Scavenger itself should be 2/3
+    expect(scavengerOnBoard!.atk).toBe(2);
+    expect(scavengerOnBoard!.hp).toBe(3);
+  });
 });
 
 // ---------------------------------------------------------------------------

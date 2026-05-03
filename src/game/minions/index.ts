@@ -63,6 +63,7 @@ import junkbot from "./tier5/junkbot";
 import lightfangEnforcer from "./tier5/lightfang-enforcer";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import murozond from "./tier5/murozond";
+import strongshellScavenger from "./tier5/strongshell-scavenger";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
 import gentleMegasaur from "./tier6/gentle-megasaur";
 import ghastcoiler from "./tier6/ghastcoiler";
@@ -135,6 +136,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [lightfangEnforcer.id]: lightfangEnforcer,
   [murozond.id]: murozond,
+  [strongshellScavenger.id]: strongshellScavenger,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [ghastcoiler.id]: ghastcoiler,
   [gentleMegasaur.id]: gentleMegasaur,
