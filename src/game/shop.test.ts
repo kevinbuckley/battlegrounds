@@ -444,6 +444,41 @@ describe("refreshShop", () => {
     const after = refreshShop(state, 0, RNG);
     expect(after).toBe(state);
   });
+
+  it("preserves dormant minions when refreshing the shop", () => {
+    const dormantCard = defineMinion({
+      id: "dormant_test",
+      name: "Dormant Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 5,
+      baseHp: 5,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[dormantCard.id] = dormantCard;
+    const dormantMinion = instantiate(dormantCard);
+    // Mark it as dormant by adding the keyword
+    const dormantWithKeyword = {
+      ...dormantMinion,
+      keywords: new Set<import("./types").Keyword>(["dormant"]),
+      attachments: { dormantTurnsLeft: 2 },
+    };
+    const regularMinion = instantiate(TEST_CARD);
+    const state = makeTestState({
+      shop: [dormantWithKeyword, regularMinion],
+      gold: 5,
+    });
+    const after = refreshShop(state, 0, RNG);
+    // The dormant minion should still be in the shop
+    const shopAfter = after.players[0]!.shop;
+    const preservedDormant = shopAfter.find((m) => m.instanceId === dormantWithKeyword.instanceId);
+    expect(preservedDormant).toBeDefined();
+    expect(preservedDormant!.keywords.has("dormant")).toBe(true);
+    // The shop should also have new regular minions filling remaining slots
+    expect(shopAfter.length).toBeGreaterThanOrEqual(1);
+  });
 });
 
 // ---------------------------------------------------------------------------

@@ -413,14 +413,33 @@ export function refreshShop(state: GameState, playerId: PlayerId, rng: Rng): Gam
   if (player.gold < COST_REFRESH)
     throw new Error(`Not enough gold to refresh (have ${player.gold}, need ${COST_REFRESH})`);
 
+  // Preserve dormant minions — they stay in the shop across refreshes,
+  // matching real Battlegrounds where refreshing only replaces non-dormant
+  // shop items.
+  const dormantMinions = player.shop.filter(
+    (m) => m.keywords && m.keywords.has("dormant" as import("./types").Keyword),
+  );
+  const regularShop = player.shop.filter(
+    (m) => !(m.keywords && m.keywords.has("dormant" as import("./types").Keyword)),
+  );
+
   const afterGold = updatePlayer(state, playerId, (p) => ({ ...p, gold: p.gold - COST_REFRESH }));
-  // Return shop to pool, draw fresh
-  const poolAfterReturn = returnToPool(afterGold.pool, player.shop);
+  // Return only non-dormant shop items to pool
+  const poolAfterReturn = returnToPool(afterGold.pool, regularShop);
   const size = SHOP_SIZE_BY_TIER[player.tier];
-  const { instances, pool } = drawFromPool(poolAfterReturn, player.tier, size, rng);
+  const remainingSlots = size - dormantMinions.length;
+  const { instances, pool } = drawFromPool(
+    poolAfterReturn,
+    player.tier,
+    Math.max(0, remainingSlots),
+    rng,
+  );
+
+  // Combine dormant minions with the newly drawn shop.
+  const finalShop = [...dormantMinions, ...instances];
 
   return {
-    ...updatePlayer(afterGold, playerId, (p) => ({ ...p, shop: instances })),
+    ...updatePlayer(afterGold, playerId, (p) => ({ ...p, shop: finalShop })),
     pool,
   };
 }
