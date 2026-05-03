@@ -45,6 +45,10 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
 - [x] [S] Add `Bigfernal` (tier 5 demon): whenever another friendly demon is summoned gain +2/+2
 
+### New minions — Tier 4 (only those NOT yet on disk)
+
+- [x] [S] Add `Boulderfog Ogre` (tier 4 elemental, 10/2): vanilla high-attack minion filling the high-ATK gap
+
 ### New minions — Tier 6 (only those NOT yet on disk)
 
 - [x] [S] Add `Foe Reaper 4000` (tier 6 mech): cleave keyword (no other text)
