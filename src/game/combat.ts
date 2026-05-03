@@ -66,9 +66,20 @@ export function simulateCombat(
   fireStartOfCombat(left, right, startSide, emit, rng);
 
   // Fire rush attacks before the normal attack cycle
-  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight, lifestealAccum, {
-    total: 0,
-  });
+  fireRushAttacks(
+    left,
+    right,
+    startSide,
+    transcript,
+    emit,
+    rng,
+    baronOnLeft,
+    baronOnRight,
+    lifestealAccum,
+    {
+      total: 0,
+    },
+  );
 
   let side: Side = startSide;
   let leftPtr = 0;
@@ -131,7 +142,7 @@ export function simulateCombat(
       applyDamage(currentTarget, attacker, emit, left, right, rng, lifestealAccum);
 
       // Process deaths (including deathrattle chains)
-      const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
+      const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
       left = result.left;
       right = result.right;
       totalBountyGold += result.bountyGold;
@@ -175,6 +186,7 @@ export function simulateCombat(
 function reapDeaths(
   left: MinionInstance[],
   right: MinionInstance[],
+  transcript: CombatEvent[],
   emit: (e: CombatEvent) => void,
   rng: Rng,
   baronOnLeft: boolean,
@@ -192,6 +204,16 @@ function reapDeaths(
     const deadRight = r.filter((m) => m.hp <= 0);
     if (deadLeft.length === 0 && deadRight.length === 0) break;
 
+    // Record original indices of dead minions before filtering, so we can
+    // reposition deathrattle summons to the correct board position.
+    const originalIndices = new Map<string, number>();
+    for (const m of l) {
+      if (m.hp <= 0) originalIndices.set(m.instanceId, l.indexOf(m));
+    }
+    for (const m of r) {
+      if (m.hp <= 0) originalIndices.set(m.instanceId, r.indexOf(m));
+    }
+
     l = l.filter((m) => m.hp > 0);
     r = r.filter((m) => m.hp > 0);
 
@@ -207,12 +229,35 @@ function reapDeaths(
         emit({ kind: "Bounty", source: dead.instanceId, amount: bountyAmount });
       }
 
+      // Record array length before deathrattle fires, so we can detect
+      // newly summoned minions and reposition them to the dead minion's index.
+      const boardBefore = deadSide === "left" ? l.length : r.length;
+
       // Deathrattle
       const deadCtx: CombatCtx = { self: dead, selfSide: deadSide, left: l, right: r, emit, rng };
       const baronOnSide = deadSide === "left" ? baronOnLeft : baronOnRight;
       dead.hooks?.onDeath?.(deadCtx);
       if (baronOnSide || dead.golden) {
         dead.hooks?.onDeath?.(deadCtx);
+      }
+
+      // Reposition any newly summoned minions to the dead minion's original index.
+      const boardAfter = deadSide === "left" ? l.length : r.length;
+      if (boardAfter > boardBefore) {
+        const board = deadSide === "left" ? l : r;
+        const originalIdx = originalIndices.get(dead.instanceId) ?? board.length;
+        const insertPos = Math.max(0, Math.min(originalIdx, board.length - 1));
+        // Move newly added minions (from boardBefore to end) to the correct position.
+        const newMinions = board.splice(boardBefore);
+        board.splice(insertPos, 0, ...newMinions);
+        // Update the position in the last Summon event in the transcript to match.
+        const lastSummonIdx = transcript.findLastIndex((e: CombatEvent) => e.kind === "Summon");
+        if (lastSummonIdx !== -1 && transcript[lastSummonIdx]) {
+          const lastSummon = transcript[lastSummonIdx]!;
+          if (lastSummon.kind === "Summon") {
+            (lastSummon as { position: number }).position = insertPos;
+          }
+        }
       }
 
       // Reborn
@@ -294,6 +339,7 @@ function fireRushAttacks(
   left: MinionInstance[],
   right: MinionInstance[],
   startSide: Side,
+  transcript: CombatEvent[],
   emit: (e: CombatEvent) => void,
   rng: Rng,
   baronOnLeft: boolean,
@@ -318,7 +364,7 @@ function fireRushAttacks(
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng, lifestealAccum);
-    const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
+    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
     bountyGoldAccum.total += result.bountyGold;
@@ -336,7 +382,7 @@ function fireRushAttacks(
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng, lifestealAccum);
-    const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
+    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
     bountyGoldAccum.total += result.bountyGold;
