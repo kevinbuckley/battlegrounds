@@ -74,6 +74,10 @@ import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
 import mamaBear from "./tier6/mama-bear";
 import terestianManferris from "./tier6/terestian-manferris";
 import zixorProjectHope from "./tier6/zixor-project-hope";
+import alexstraszaSelflessDragon from "./tier8/alexstrasza-selfless-dragon";
+import deathwingRazeToBone from "./tier8/deathwing-raze-to-bone";
+import oldMurkEyeTier8 from "./tier8/old-murk-eye";
+import yseraTheDreamer from "./tier8/ysera-the-dreamer";
 
 export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kaboomBot.id]: kaboomBot,
@@ -151,6 +155,10 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [mamaBear.id]: mamaBear,
   [foeReaper4000.id]: foeReaper4000,
   [bountyMinion.id]: bountyMinion,
+  [alexstraszaSelflessDragon.id]: alexstraszaSelflessDragon,
+  [deathwingRazeToBone.id]: deathwingRazeToBone,
+  [oldMurkEyeTier8.id]: oldMurkEyeTier8,
+  [yseraTheDreamer.id]: yseraTheDreamer,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {

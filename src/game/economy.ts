@@ -22,6 +22,8 @@ export const TIER_UPGRADE_BASE: Record<Exclude<Tier, 1>, number> = {
   4: 8,
   5: 9,
   6: 10,
+  7: 10,
+  8: 12,
 };
 
 export const SHOP_SIZE_BY_TIER: Record<Tier, number> = {
@@ -31,6 +33,8 @@ export const SHOP_SIZE_BY_TIER: Record<Tier, number> = {
   4: 5,
   5: 6,
   6: 7,
+  7: 7,
+  8: 8,
 };
 
 // Probability (0–100) that a single shop slot comes from each card tier,
@@ -43,6 +47,8 @@ export const TIER_ODDS: Record<Tier, Partial<Record<Tier, number>>> = {
   4: { 1: 25, 2: 25, 3: 25, 4: 25 },
   5: { 1: 20, 2: 20, 3: 20, 4: 20, 5: 20 },
   6: { 1: 15, 2: 15, 3: 20, 4: 20, 5: 15, 6: 15 },
+  7: { 1: 10, 2: 10, 3: 15, 4: 15, 5: 15, 6: 15, 7: 20 },
+  8: { 1: 5, 2: 5, 3: 10, 4: 10, 5: 10, 6: 15, 7: 25, 8: 20 },
 };
 
 export const POOL_COUNTS: Record<Tier, number> = {
@@ -52,4 +58,6 @@ export const POOL_COUNTS: Record<Tier, number> = {
   4: 11,
   5: 9,
   6: 7,
+  7: 5,
+  8: 4,
 };

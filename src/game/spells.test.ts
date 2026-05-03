@@ -399,10 +399,10 @@ describe("siphon soul", () => {
     // The destroyed minion stays on board with hp 0, plus a new tier 6 minion
     const minions = player.board.filter((m) => m.hp > 0);
     expect(minions.length).toBe(1);
-    // The summoned minion should be tier 6
+    // The summoned minion should be tier 8
     const summoned = minions[0]!;
     const summonedCard = MINIONS[summoned.cardId as keyof typeof MINIONS];
-    expect(summonedCard?.tier).toBe(6);
+    expect(summonedCard?.tier).toBe(8);
   });
 
   it("does nothing when board is empty", () => {

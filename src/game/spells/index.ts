@@ -417,11 +417,11 @@ export const swatTeam: SpellCard = {
   },
 };
 
-/** Destroy a friendly minion, summon a random tier 6 minion to your board. */
+/** Destroy a friendly minion, summon a random tier 8 minion to your board. */
 export const siphonSoul: SpellCard = {
   id: "siphon_soul",
   name: "Siphon Soul",
-  description: "Destroy a friendly minion, summon a random tier 6 minion to your board.",
+  description: "Destroy a friendly minion, summon a random tier 8 minion to your board.",
   cost: 3,
   tiers: [5, 6],
   effects: {
@@ -454,20 +454,15 @@ export const siphonSoul: SpellCard = {
         return { ...p, board: newBoard };
       });
 
-      // Summon a random tier 6 minion
-      const TIER6_IDS = [
-        "foe_reaper_4000",
-        "friggent_northvalley",
-        "gentle_megasaur",
-        "ghastcoiler",
-        "kalecgos_arcane_aspect",
-        "mama_bear",
-        "terestian_manferris",
-        "zixor_project_hope",
-        "sneed_old_shredder",
+      // Summon a random tier 8 minion
+      const TIER8_IDS = [
+        "alexstrasza_selfless_dragon",
+        "ysera_the_dreamer",
+        "deathwing_razes_to_bone",
+        "old_murk_eye_t8",
       ] as const;
 
-      const available = TIER6_IDS.filter((id) => MINIONS[id]);
+      const available = TIER8_IDS.filter((id) => MINIONS[id]);
       if (available.length === 0) return state;
 
       const chosenId = ctx.rng.pick(available);
