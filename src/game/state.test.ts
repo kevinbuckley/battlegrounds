@@ -302,6 +302,32 @@ describe("combat phase", () => {
     // For simplicity, just check that it doesn't crash
     expect(result.pairingsHistory.length).toBeGreaterThanOrEqual(0);
   });
+
+  it("sorts player boards by ATK descending before combat", () => {
+    const alley = instantiate(MINIONS["alley_cat"]!); // tier 1, 1/1
+    const dragon = instantiate(MINIONS["dragonspawn_lieutenant"]!); // tier 4, 4/6
+    // Create a board with minions in unsorted order: low ATK first
+    const unsortedBoard = [alley, dragon]; // 1/1 then 4/6 (ascending, not sorted)
+    const state = makeCombatState(
+      unsortedBoard,
+      [instantiate(MINIONS["alley_cat"]!)],
+      [],
+      [],
+      [],
+      [],
+      [],
+      [],
+    );
+    // Verify the board is unsorted before end turn
+    expect(state.players[0]!.board[0]!.atk).toBeLessThan(state.players[0]!.board[1]!.atk);
+    const result = step(state, { kind: "EndTurn", player: 0 }, RNG);
+    // After combat, the winner's board should be sorted by ATK descending
+    // Player 0 wins (has dragon vs player 1's alley cat)
+    const winnerBoard = result.players[0]!.board;
+    if (winnerBoard.length >= 2) {
+      expect(winnerBoard[0]!.atk).toBeGreaterThanOrEqual(winnerBoard[1]!.atk);
+    }
+  });
 });
 
 describe("recruit phase — gold", () => {

@@ -628,6 +628,12 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
       }
     }
 
+    // Sort both boards by ATK descending before combat — matching real
+    // Battlegrounds where all 8 players' boards are ordered by strength
+    // before the combat phase begins.
+    postRagnarosLeft.sort((a, b) => b.atk - a.atk);
+    postRagnarosRight.sort((a, b) => b.atk - a.atk);
+
     const combatResult = simulateCombat(
       postRagnarosLeft,
       postRagnarosRight,
