@@ -19,6 +19,8 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 - [ ] [S] Victory screen: when `gameState.phase.kind === "GameOver"` render a full-screen overlay showing the winner's hero name and a "Play Again" button that resets to hero selection
 
+- [ ] [S] Victory screen: when `gameState.phase.kind === "GameOver"` render a full-screen overlay showing the winner's hero name and a "Play Again" button that resets to hero selection
+
 ### Game feel — End game & UI polish
 
 - [ ] [S] Victory screen: when `gameState.phase.kind === "GameOver"` render a full-screen overlay showing the winner's hero name and a "Play Again" button that resets to hero selection

@@ -409,6 +409,8 @@ function applyDamage(
   const dmg = source.atk;
   if (dmg <= 0) return;
 
+  let actualHpDamage = 0;
+
   if (target.keywords.has("divineShield")) {
     target.keywords.delete("divineShield");
     emit({ kind: "DivineShield", target: target.instanceId });
@@ -431,6 +433,8 @@ function applyDamage(
     } else {
       return;
     }
+  } else {
+    actualHpDamage = dmg;
   }
 
   target.hp -= dmg;
@@ -453,9 +457,9 @@ function applyDamage(
   if (source.keywords.has("venomous")) {
     source.keywords.delete("venomous");
   }
-  if (source.keywords.has("lifesteal") && dmg > 0) {
-    emit({ kind: "Lifesteal", target: source.instanceId, amount: dmg });
-    lifestealAccum.total += dmg;
+  if (source.keywords.has("lifesteal") && actualHpDamage > 0) {
+    emit({ kind: "Lifesteal", target: source.instanceId, amount: actualHpDamage });
+    lifestealAccum.total += actualHpDamage;
   }
 }
 
