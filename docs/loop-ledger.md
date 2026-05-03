@@ -1,3 +1,4 @@
+2026-05-03 | 9081e4c | FIXED: Add unit test verifying applyDamageToPlayer damage calculation matches spec — armor absorbs first then HP, elimination at 0 HP, Annihilan tracks total damage including armor, with calcDamage formula tests
 2026-05-03 | 3de0f36 | FIXED: Add brann.test.ts — unit tests verifying Brann triggers battlecry 2x, golden triggers 2x, and Brann+golden triggers 4x (multiplicative stacking)
 2026-05-03 | 603d722 | FIXED: Update combat result toast persistence from 3 seconds to 5 seconds in app/game/page.tsx
 2026-05-03 | cefdb3c | FIXED: Add spellCardId parameter to onCast hook — fires when player sells a minion (used by future sell-synergy minions), wired into sellMinion in shop.ts for both board and hand paths, with unit tests
