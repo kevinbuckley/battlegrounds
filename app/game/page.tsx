@@ -11,12 +11,7 @@ import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { SPELLS } from "@/game/spells/index";
 import { makeInitialState, rngForTurn, step } from "@/game/state";
-import type {
-  CombatEvent,
-  CombatResult,
-  GameState,
-  MinionInstance,
-} from "@/game/types";
+import type { CombatEvent, CombatResult, GameState, MinionInstance } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 // ------------------------------------->-----
@@ -190,7 +185,9 @@ function MinionCard({
       `}
     >
       <div className="flex items-center gap-1.5">
-        <span className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}>
+        <span
+          className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}
+        >
           T{card.tier}
         </span>
         {card.tribes.length > 0 && (
@@ -203,10 +200,12 @@ function MinionCard({
       </span>
       <div className="flex gap-2 text-xs font-bold">
         <span className="flex items-center gap-0.5 text-red-400">
-          {minion.atk}<span className="text-[9px]">atk</span>
+          {minion.atk}
+          <span className="text-[9px]">atk</span>
         </span>
         <span className="flex items-center gap-0.5 text-orange-400">
-          {minion.hp}<span className="text-[9px]">hp</span>
+          {minion.hp}
+          <span className="text-[9px]">hp</span>
         </span>
       </div>
       {minion.keywords.size > 0 && (
@@ -253,7 +252,8 @@ function OpponentBoardRow({ gameState }: { gameState: GameState }) {
     }
   }
 
-  const opponent = opponentId !== null ? gameState.players.find((p) => p.id === opponentId) : undefined;
+  const opponent =
+    opponentId !== null ? gameState.players.find((p) => p.id === opponentId) : undefined;
   const opponentHero = opponent?.heroId ? HEROES[opponent.heroId] : undefined;
 
   return (
@@ -263,63 +263,64 @@ function OpponentBoardRow({ gameState }: { gameState: GameState }) {
         {opponentHero && (
           <span className="text-[11px] font-semibold text-slate-300">{opponentHero.name}</span>
         )}
-        {opponent && (
-          <span className="text-[11px] text-emerald-400 ml-auto">{opponent.hp} HP</span>
-        )}
+        {opponent && <span className="text-[11px] text-emerald-400 ml-auto">{opponent.hp} HP</span>}
       </div>
       <div className="flex gap-2 min-h-[90px] items-center">
-        {opponent && opponent.board.length > 0 ? (
-          Array.from({ length: 7 }, (_, idx) => {
-            const minion = opponent.board[idx];
-            if (minion) {
-              const card = MINIONS[minion.cardId];
-              if (!card) return null;
-              const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
+        {opponent && opponent.board.length > 0
+          ? Array.from({ length: 7 }, (_, idx) => {
+              const minion = opponent.board[idx];
+              if (minion) {
+                const card = MINIONS[minion.cardId];
+                if (!card) return null;
+                const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
+                return (
+                  <div
+                    key={minion.instanceId}
+                    className={`flex w-[110px] flex-shrink-0 flex-col gap-1.5 rounded-lg border-2 border-red-900/50 bg-slate-800/70 px-3 py-2 ${minion.golden ? "ring-2 ring-amber-400/50" : ""}`}
+                  >
+                    <div className="flex items-center gap-1.5">
+                      <span
+                        className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}
+                      >
+                        T{card.tier}
+                      </span>
+                    </div>
+                    <span className="text-[10px] font-medium leading-tight text-slate-400">
+                      {card.name}
+                      {minion.golden && <span className="ml-0.5 text-amber-400">*</span>}
+                    </span>
+                    <div className="flex gap-2 text-xs font-bold">
+                      <span className="text-red-400">{minion.atk}</span>
+                      <span className="text-orange-400">{minion.hp}</span>
+                    </div>
+                    {minion.keywords.size > 0 && (
+                      <div className="flex flex-wrap gap-0.5">
+                        {Array.from(minion.keywords).map((kw) => (
+                          <span
+                            key={kw}
+                            className="rounded bg-slate-700 px-1 py-0.5 text-[8px] text-slate-300"
+                          >
+                            {kw}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
               return (
                 <div
-                  key={minion.instanceId}
-                  className={`flex w-[110px] flex-shrink-0 flex-col gap-1.5 rounded-lg border-2 border-red-900/50 bg-slate-800/70 px-3 py-2 ${minion.golden ? "ring-2 ring-amber-400/50" : ""}`}
-                >
-                  <div className="flex items-center gap-1.5">
-                    <span className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}>
-                      T{card.tier}
-                    </span>
-                  </div>
-                  <span className="text-[10px] font-medium leading-tight text-slate-400">
-                    {card.name}
-                    {minion.golden && <span className="ml-0.5 text-amber-400">*</span>}
-                  </span>
-                  <div className="flex gap-2 text-xs font-bold">
-                    <span className="text-red-400">{minion.atk}</span>
-                    <span className="text-orange-400">{minion.hp}</span>
-                  </div>
-                  {minion.keywords.size > 0 && (
-                    <div className="flex flex-wrap gap-0.5">
-                      {Array.from(minion.keywords).map((kw) => (
-                        <span key={kw} className="rounded bg-slate-700 px-1 py-0.5 text-[8px] text-slate-300">
-                          {kw}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  key={`opp-empty-${idx}`}
+                  className="flex w-[110px] flex-shrink-0 h-[80px] items-center justify-center rounded-lg border-2 border-dashed border-slate-800/60"
+                />
               );
-            }
-            return (
+            })
+          : Array.from({ length: 7 }, (_, idx) => (
               <div
                 key={`opp-empty-${idx}`}
-                className="flex w-[110px] flex-shrink-0 h-[80px] items-center justify-center rounded-lg border-2 border-dashed border-slate-800/60"
+                className="flex w-[110px] flex-shrink-0 h-[80px] items-center justify-center rounded-lg border-2 border-dashed border-slate-800/40"
               />
-            );
-          })
-        ) : (
-          Array.from({ length: 7 }, (_, idx) => (
-            <div
-              key={`opp-empty-${idx}`}
-              className="flex w-[110px] flex-shrink-0 h-[80px] items-center justify-center rounded-lg border-2 border-dashed border-slate-800/40"
-            />
-          ))
-        )}
+            ))}
       </div>
     </div>
   );
@@ -355,7 +356,9 @@ function LeaderboardSidebar({ state, heroId }: { state: GameState; heroId: strin
 
   return (
     <div className="flex flex-col gap-1 overflow-y-auto">
-      <h2 className="mb-1 text-[11px] uppercase tracking-wider text-slate-500 font-semibold px-1">Standings</h2>
+      <h2 className="mb-1 text-[11px] uppercase tracking-wider text-slate-500 font-semibold px-1">
+        Standings
+      </h2>
       {ranked.map((p, rankIdx) => {
         const isCurrentPlayer = p.id === playerId;
         const hero = HEROES[p.heroId];
@@ -658,7 +661,7 @@ export default function GamePage() {
         if (player && combatResult.winner === "right") {
           const damage = calcDamage(player.tier, combatResult.survivorsRight);
           setDamageRecap({ damage, opponentHeroId });
-          setTimeout(() => setDamageRecap(null), 2000);
+          setTimeout(() => setDamageRecap(null), 3000);
         }
       }
     } else {
@@ -741,18 +744,13 @@ export default function GamePage() {
 
       {gameState && (
         <div className="flex h-full w-full min-w-[1280px]">
-
           {/* ---- LEFT SIDEBAR: Leaderboard ---- */}
           <aside className="flex w-[180px] flex-shrink-0 flex-col border-r border-slate-800 bg-slate-900/80 p-3 overflow-y-auto">
-            <LeaderboardSidebar
-              state={gameState}
-              heroId={gameState.players[0]?.heroId ?? ""}
-            />
+            <LeaderboardSidebar state={gameState} heroId={gameState.players[0]?.heroId ?? ""} />
           </aside>
 
           {/* ---- CENTER COLUMN ---- */}
           <div className="flex flex-1 flex-col overflow-y-auto px-4 py-3 gap-3 min-w-0">
-
             {/* Opponent board row */}
             <OpponentBoardRow gameState={gameState} />
 
@@ -768,7 +766,9 @@ export default function GamePage() {
             {/* Player board */}
             <div className="rounded-xl border border-slate-700 bg-slate-900 p-3">
               <div className="mb-2 flex items-center gap-2">
-                <span className="text-[11px] uppercase tracking-wider text-slate-500">Your Board</span>
+                <span className="text-[11px] uppercase tracking-wider text-slate-500">
+                  Your Board
+                </span>
                 <span className="text-[11px] text-slate-500">({boardMinions.length}/7)</span>
               </div>
               <div className="flex gap-2 min-h-[100px] items-start">
@@ -778,7 +778,9 @@ export default function GamePage() {
                     const isDragging = dragIndex === idx;
                     const isHpTarget = heroPowerTargetIdx === idx;
                     const playerForHp = gameState?.players[0];
-                    const currentHero = playerForHp?.heroId ? HEROES[playerForHp.heroId] : undefined;
+                    const currentHero = playerForHp?.heroId
+                      ? HEROES[playerForHp.heroId]
+                      : undefined;
                     const needsHpTarget =
                       currentHero?.power.kind === "active" &&
                       (currentHero.id === "george_the_fallen" ||
@@ -883,7 +885,11 @@ export default function GamePage() {
                         disabled={!isPlacing}
                         className={`flex w-[110px] flex-shrink-0 h-[100px] flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed ${isPlacing ? "border-amber-400 bg-amber-400/10 cursor-pointer" : "border-slate-700 bg-slate-900/50 cursor-not-allowed"} px-4 py-3 transition`}
                       >
-                        <span className={`text-2xl ${isPlacing ? "text-amber-400" : "text-slate-700"}`}>+</span>
+                        <span
+                          className={`text-2xl ${isPlacing ? "text-amber-400" : "text-slate-700"}`}
+                        >
+                          +
+                        </span>
                       </button>
                     );
                   }
@@ -902,41 +908,41 @@ export default function GamePage() {
                   <p className="text-slate-500 text-sm self-center">Hand is empty</p>
                 )}
                 {handMinions.map((minion, idx) => {
-                    const card = MINIONS[minion.cardId];
-                    if (!card) return null;
-                    const isSelected = placingMinionIdx === idx;
-                    const canPlay = gameState?.phase.kind === "Recruit" && boardMinions.length < 7;
-                    return (
-                      <MinionCard
-                        key={minion.instanceId}
-                        minion={minion}
-                        isSelected={isSelected}
-                        canPlay={canPlay || isSelected}
-                        showSell={gameState?.phase.kind === "Recruit"}
-                        sellValue={minion.golden ? 2 : 1}
-                        showingGolden={showingGolden}
-                        onClick={() => {
-                          if (isSelected) {
-                            setPlacingMinionIdx(null);
-                          } else if (canPlay) {
-                            setPlacingMinionIdx(idx);
-                          } else {
-                            setError("Board is full");
-                          }
-                        }}
-                        onSell={() => {
-                          if (!gameState) return;
-                          const next = step(
-                            gameState,
-                            { kind: "SellMinion", player: 0, handIndex: idx },
-                            rngForTurn(gameState, "sell"),
-                          );
-                          setGameState(next);
-                          setError(null);
-                        }}
-                      />
-                    );
-                  })}
+                  const card = MINIONS[minion.cardId];
+                  if (!card) return null;
+                  const isSelected = placingMinionIdx === idx;
+                  const canPlay = gameState?.phase.kind === "Recruit" && boardMinions.length < 7;
+                  return (
+                    <MinionCard
+                      key={minion.instanceId}
+                      minion={minion}
+                      isSelected={isSelected}
+                      canPlay={canPlay || isSelected}
+                      showSell={gameState?.phase.kind === "Recruit"}
+                      sellValue={minion.golden ? 2 : 1}
+                      showingGolden={showingGolden}
+                      onClick={() => {
+                        if (isSelected) {
+                          setPlacingMinionIdx(null);
+                        } else if (canPlay) {
+                          setPlacingMinionIdx(idx);
+                        } else {
+                          setError("Board is full");
+                        }
+                      }}
+                      onSell={() => {
+                        if (!gameState) return;
+                        const next = step(
+                          gameState,
+                          { kind: "SellMinion", player: 0, handIndex: idx },
+                          rngForTurn(gameState, "sell"),
+                        );
+                        setGameState(next);
+                        setError(null);
+                      }}
+                    />
+                  );
+                })}
               </div>
             </div>
 
@@ -972,10 +978,14 @@ export default function GamePage() {
                         `}
                       >
                         <div className="flex items-center gap-1.5">
-                          <span className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}>
+                          <span
+                            className={`inline-block rounded px-1 py-0.5 text-[10px] font-medium text-white ${tierColor}`}
+                          >
                             T{minionCard.tier}
                           </span>
-                          <span className="text-[9px] text-slate-500 truncate">{minionCard.tribes.join("/")}</span>
+                          <span className="text-[9px] text-slate-500 truncate">
+                            {minionCard.tribes.join("/")}
+                          </span>
                         </div>
                         <span className="text-[10px] font-medium leading-tight text-slate-300">
                           {minionCard.name}
@@ -991,7 +1001,10 @@ export default function GamePage() {
                         {minionCard.baseKeywords.length > 0 && (
                           <div className="flex flex-wrap gap-0.5">
                             {Array.from(minionCard.baseKeywords).map((kw) => (
-                              <span key={kw} className="rounded bg-slate-700 px-1 py-0.5 text-[8px] text-slate-300">
+                              <span
+                                key={kw}
+                                className="rounded bg-slate-700 px-1 py-0.5 text-[8px] text-slate-300"
+                              >
                                 {kw}
                               </span>
                             ))}
@@ -1027,8 +1040,12 @@ export default function GamePage() {
                           ${canBuy ? "border-purple-500/50 cursor-pointer hover:border-purple-400 active:scale-95" : "border-slate-600 cursor-not-allowed opacity-50"}
                         `}
                       >
-                        <span className="text-[10px] font-medium leading-tight text-slate-300">{spellCard.name}</span>
-                        <span className="text-[9px] text-slate-400 line-clamp-2">{spellCard.description}</span>
+                        <span className="text-[10px] font-medium leading-tight text-slate-300">
+                          {spellCard.name}
+                        </span>
+                        <span className="text-[9px] text-slate-400 line-clamp-2">
+                          {spellCard.description}
+                        </span>
                         <div className="flex items-center gap-0.5 text-[10px] font-semibold text-purple-400">
                           <span>{spellCard.cost}g</span>
                         </div>
@@ -1051,7 +1068,9 @@ export default function GamePage() {
               return (
                 <div className="rounded-xl border border-slate-700 bg-slate-900 p-3">
                   <div className="mb-2 flex items-center gap-2">
-                    <span className="text-[11px] uppercase tracking-wider text-slate-500">Spells</span>
+                    <span className="text-[11px] uppercase tracking-wider text-slate-500">
+                      Spells
+                    </span>
                     <span className="text-[11px] text-slate-500">({spells.length})</span>
                   </div>
                   <div className="flex gap-2 flex-wrap">
@@ -1106,8 +1125,12 @@ export default function GamePage() {
                             ${isSelected ? "border-amber-400 bg-amber-400/15 ring-2 ring-amber-400/30" : canPlay ? "border-amber-500/50 cursor-pointer hover:border-amber-400 active:scale-95" : "border-slate-600 cursor-not-allowed opacity-50"}
                           `}
                         >
-                          <span className="text-[10px] font-medium leading-tight text-slate-300">{card.name}</span>
-                          <span className="text-[9px] text-slate-400 line-clamp-2">{card.description}</span>
+                          <span className="text-[10px] font-medium leading-tight text-slate-300">
+                            {card.name}
+                          </span>
+                          <span className="text-[9px] text-slate-400 line-clamp-2">
+                            {card.description}
+                          </span>
                           <div className="flex items-center gap-0.5 text-[10px] font-semibold text-amber-400">
                             <span>{card.cost}g</span>
                           </div>
@@ -1128,7 +1151,9 @@ export default function GamePage() {
                   if (!player) return null;
 
                   const canUpgrade =
-                    player.tier < 6 && player.gold >= player.upgradeCost && !player.upgradedThisTurn;
+                    player.tier < 6 &&
+                    player.gold >= player.upgradeCost &&
+                    !player.upgradedThisTurn;
                   const canRefresh = player.gold >= COST_REFRESH && !player.shopFrozen;
                   const canFreeze = player.gold >= COST_FREEZE;
 
@@ -1347,7 +1372,9 @@ export default function GamePage() {
 
             {/* Tier */}
             <div className="rounded-lg border border-slate-700 bg-slate-800/60 p-3 flex flex-col gap-1">
-              <span className="text-[10px] uppercase tracking-wider text-slate-500">Tavern Tier</span>
+              <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                Tavern Tier
+              </span>
               <span className="text-3xl font-bold text-blue-400 tabular-nums">
                 {gameState.players[0]?.tier ?? 1}
               </span>
