@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MINIONS } from "@/game/minions/index";
 import {
   brawl,
   cauterizingFlame,
@@ -9,6 +10,7 @@ import {
   pancakeSpell,
   poisonDartShield,
   SPELLS,
+  siphonSoul,
   swatTeam,
   tavernBrawl,
   tavernBrawler,
@@ -19,8 +21,8 @@ import type { Action, GameState } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 describe("spell registry", () => {
-  it("exports exactly 11 spells", () => {
-    expect(getAllSpellIds()).toHaveLength(11);
+  it("exports exactly 12 spells", () => {
+    expect(getAllSpellIds()).toHaveLength(12);
   });
 
   it.each([
@@ -34,6 +36,7 @@ describe("spell registry", () => {
     cauterizingFlame,
     tavernTipper,
     swatTeam,
+    siphonSoul,
   ])("%s has valid fields", (spell) => {
     expect(spell.id).toBeDefined();
     expect(spell.name).toBeDefined();
@@ -338,6 +341,126 @@ describe("swat team", () => {
     // Play swat team — should add nothing
     s = step(s, { kind: "PlaySpell", player: 0, spellIndex: 0 }, rng);
 
+    expect(s.players[0]!.board.length).toBe(7);
+  });
+});
+
+describe("siphon soul", () => {
+  it("is available at tiers 5-6 only", () => {
+    expect(siphonSoul.tiers).toEqual([5, 6]);
+  });
+
+  it("costs 3 gold", () => {
+    expect(siphonSoul.cost).toBe(3);
+  });
+
+  it("destroys a friendly minion and summons a random tier 6 minion", () => {
+    const state = makeInitialState(42);
+    const rng = rngForTurn(state, "selectHero");
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, rng);
+    s = step(s, { kind: "EndTurn", player: 0 }, rng);
+
+    // Add a friendly minion to the board
+    const boardMinions: import("./types").MinionInstance[] = [
+      {
+        instanceId: "friendly_minion_1",
+        cardId: "rush_minion",
+        atk: 3,
+        hp: 2,
+        maxHp: 2,
+        keywords: new Set(),
+        tribes: [],
+        golden: false,
+        spellDamage: 0,
+        attachments: {},
+        hooks: {},
+      },
+    ];
+    s = {
+      ...s,
+      players: s.players.map((p, i) => (i === 0 ? { ...p, board: boardMinions, gold: 15 } : p)),
+    };
+
+    // Add siphon soul spell
+    const siphonInstance = {
+      instanceId: "siphon_inst_1",
+      cardId: "siphon_soul",
+    } as import("./types").SpellInstance;
+    s = {
+      ...s,
+      players: s.players.map((p, i) => (i === 0 ? { ...p, spells: [siphonInstance] } : p)),
+    };
+
+    // Play the spell targeting the friendly minion
+    s = step(s, { kind: "PlaySpell", player: 0, spellIndex: 0, targetIndex: 0 }, rng);
+
+    const player = s.players[0]!;
+    // Should have 1 minion (destroyed one set to 0 hp + 1 tier 6 summoned)
+    // The destroyed minion stays on board with hp 0, plus a new tier 6 minion
+    const minions = player.board.filter((m) => m.hp > 0);
+    expect(minions.length).toBe(1);
+    // The summoned minion should be tier 6
+    const summoned = minions[0]!;
+    const summonedCard = MINIONS[summoned.cardId as keyof typeof MINIONS];
+    expect(summonedCard?.tier).toBe(6);
+  });
+
+  it("does nothing when board is empty", () => {
+    const state = makeInitialState(42);
+    const rng = rngForTurn(state, "selectHero");
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, rng);
+    s = step(s, { kind: "EndTurn", player: 0 }, rng);
+
+    const siphonInstance = {
+      instanceId: "siphon_inst_2",
+      cardId: "siphon_soul",
+    } as import("./types").SpellInstance;
+    s = {
+      ...s,
+      players: s.players.map((p, i) => (i === 0 ? { ...p, spells: [siphonInstance] } : p)),
+    };
+
+    s = step(s, { kind: "PlaySpell", player: 0, spellIndex: 0 }, rng);
+    expect(s.players[0]!.board.length).toBe(0);
+  });
+
+  it("does nothing when board is full", () => {
+    const state = makeInitialState(42);
+    const rng = rngForTurn(state, "selectHero");
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, rng);
+    s = step(s, { kind: "EndTurn", player: 0 }, rng);
+
+    const boardMinions: import("./types").MinionInstance[] = [];
+    for (let i = 0; i < 7; i++) {
+      boardMinions.push({
+        instanceId: `board_minion_${i}`,
+        cardId: "rush_minion",
+        atk: 1,
+        hp: 1,
+        maxHp: 1,
+        keywords: new Set(),
+        tribes: [],
+        golden: false,
+        spellDamage: 0,
+        attachments: {},
+        hooks: {},
+      });
+    }
+    s = {
+      ...s,
+      players: s.players.map((p, i) => (i === 0 ? { ...p, board: boardMinions } : p)),
+    };
+
+    const siphonInstance = {
+      instanceId: "siphon_inst_3",
+      cardId: "siphon_soul",
+    } as import("./types").SpellInstance;
+    s = {
+      ...s,
+      players: s.players.map((p, i) => (i === 0 ? { ...p, spells: [siphonInstance] } : p)),
+    };
+
+    s = step(s, { kind: "PlaySpell", player: 0, spellIndex: 0, targetIndex: 0 }, rng);
     expect(s.players[0]!.board.length).toBe(7);
   });
 });

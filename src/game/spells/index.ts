@@ -1,5 +1,6 @@
 import type { Rng } from "@/lib/rng";
-import { nextInstanceId } from "../minions/define";
+import { instantiate, nextInstanceId } from "../minions/define";
+import { MINIONS } from "../minions/index";
 import type { GameState, MinionHooks, MinionInstance, SpellCard, Tier, Tribe } from "../types";
 import { getPlayer, updatePlayer } from "../utils";
 
@@ -416,6 +417,74 @@ export const swatTeam: SpellCard = {
   },
 };
 
+/** Destroy a friendly minion, summon a random tier 6 minion to your board. */
+export const siphonSoul: SpellCard = {
+  id: "siphon_soul",
+  name: "Siphon Soul",
+  description: "Destroy a friendly minion, summon a random tier 6 minion to your board.",
+  cost: 3,
+  tiers: [5, 6],
+  effects: {
+    onPlay: (ctx) => {
+      const player = getPlayer(ctx.state, ctx.playerId);
+
+      // Find target minion index
+      let boardIndex: number;
+      if (
+        "targetIndex" in ctx &&
+        ctx.targetIndex !== undefined &&
+        ctx.targetIndex >= 0 &&
+        ctx.targetIndex < player.board.length
+      ) {
+        boardIndex = ctx.targetIndex;
+      } else {
+        boardIndex = ctx.rng.int(0, player.board.length);
+      }
+      const targetMinion = player.board[boardIndex];
+      if (!targetMinion) return ctx.state;
+
+      // Check board has room
+      if (player.board.length >= 7) return ctx.state;
+
+      // Destroy the target minion (set hp to 0, it will be handled by deathrattle)
+      let state = updatePlayer(ctx.state, ctx.playerId, (p) => {
+        const newBoard = [...p.board];
+        const mi = newBoard[boardIndex]!;
+        newBoard[boardIndex] = { ...mi, hp: 0 };
+        return { ...p, board: newBoard };
+      });
+
+      // Summon a random tier 6 minion
+      const TIER6_IDS = [
+        "foe_reaper_4000",
+        "friggent_northvalley",
+        "gentle_megasaur",
+        "ghastcoiler",
+        "kalecgos_arcane_aspect",
+        "mama_bear",
+        "terestian_manferris",
+        "zixor_project_hope",
+        "sneed_old_shredder",
+      ] as const;
+
+      const available = TIER6_IDS.filter((id) => MINIONS[id]);
+      if (available.length === 0) return state;
+
+      const chosenId = ctx.rng.pick(available);
+      const card = MINIONS[chosenId];
+      if (!card) return state;
+
+      const spawned = instantiate(card);
+      state = updatePlayer(state, ctx.playerId, (p) => ({
+        ...p,
+        board: [...p.board, spawned],
+      }));
+
+      return state;
+    },
+  },
+};
+
 export const SPELLS: Record<string, SpellCard> = {
   [poisonDartShield.id]: poisonDartShield,
   [mysteryShot.id]: mysteryShot,
@@ -428,6 +497,7 @@ export const SPELLS: Record<string, SpellCard> = {
   [tavernTipper.id]: tavernTipper,
   [swatTeam.id]: swatTeam,
   [tavernBrawl.id]: tavernBrawl,
+  [siphonSoul.id]: siphonSoul,
 };
 
 export function getSpell(id: string): SpellCard {
