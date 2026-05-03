@@ -70,7 +70,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [ ] [S] Add `Old Murk-Eye` (tier 4): murloc, +1 ATK for each other murloc on the battlefield (both sides)
 - [ ] [S] Add `Drakonid Enforcer` (tier 4): dragon, whenever a friendly minion loses divine shield gain +2/+2
 - [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
-- [ ] [S] Add `Foe Reaper 4000` (tier 6): mech, cleave
+- [x] [S] Add `Foe Reaper 4000` (tier 6): mech, cleave — file exists at src/game/minions/tier6/foe-reaper-4000.ts
 
 ---
 
