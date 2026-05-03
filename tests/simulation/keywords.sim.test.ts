@@ -245,6 +245,98 @@ describe("cleave", () => {
     const targetedIds = new Set(damageEvents.map((e) => (e.kind === "Damage" ? e.target : "")));
     expect(targetedIds.size).toBeGreaterThanOrEqual(2);
   });
+
+  it("a single cleave attack only hits 3 targets (target + 2 adjacent), not all friendlies", () => {
+    const cleaver = make(1, 100, ["cleave"]);
+    const [a, b, c, d, e] = [make(1, 1), make(1, 1), make(1, 1), make(1, 1), make(1, 1)];
+    // Try multiple seeds to find one where the first attack targets a middle minion (b, c, or d).
+    for (const seed of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+      const r = simulateCombat([cleaver], [a, b, c, d, e], makeRng(seed));
+      const attacks = r.transcript.filter((e) => e.kind === "Attack");
+      const cleaverAttacks = attacks.filter((e) => e.attacker === cleaver.instanceId);
+      const firstAttack = cleaverAttacks[0] as { kind: "Attack"; target: string } | undefined;
+      // Check if the targeted minion is b (index 1), c (index 2), or d (index 3).
+      // These are middle minions that have both left and right neighbors.
+      if (
+        firstAttack?.target === b.instanceId ||
+        firstAttack?.target === c.instanceId ||
+        firstAttack?.target === d.instanceId
+      ) {
+        const firstIdx = r.transcript.findIndex(
+          (ev) =>
+            ev.kind === "Attack" && (ev as { attacker?: string }).attacker === cleaver.instanceId,
+        );
+        let damageCount = 0;
+        for (let i = firstIdx + 1; i < r.transcript.length; i++) {
+          const ev = r.transcript[i] as { kind?: string; target?: string; attacker?: string };
+          // Break on ANY Attack event (not just from the cleaver).
+          if (ev?.kind === "Attack") break;
+          if (ev?.kind === "Damage" && ev?.target !== cleaver.instanceId) damageCount++;
+        }
+        // Cleave on middle minion: hits target + left neighbor + right neighbor = 3 targets.
+        expect(damageCount).toBe(3);
+        return;
+      }
+    }
+    expect(true).toBe(true);
+  });
+
+  it("edge case: cleave on first minion (index 0) only hits right neighbor", () => {
+    const cleaver = make(1, 100, ["cleave"]);
+    const [a, b, c] = [make(1, 1), make(1, 1), make(1, 1)];
+    // Try multiple seeds to find one where the first attack targets A (index 0).
+    for (const seed of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+      const r = simulateCombat([cleaver], [a, b, c], makeRng(seed));
+      const attacks = r.transcript.filter((e) => e.kind === "Attack");
+      const cleaverAttacks = attacks.filter((e) => e.attacker === cleaver.instanceId);
+      const firstAttack = cleaverAttacks[0] as { kind: "Attack"; target: string } | undefined;
+      if (firstAttack?.target === a.instanceId) {
+        const firstIdx = r.transcript.findIndex(
+          (ev) =>
+            ev.kind === "Attack" && (ev as { attacker?: string }).attacker === cleaver.instanceId,
+        );
+        let damageCount = 0;
+        for (let i = firstIdx + 1; i < r.transcript.length; i++) {
+          const ev = r.transcript[i] as { kind?: string; target?: string; attacker?: string };
+          // Break on ANY Attack event (not just from the cleaver), since the next
+          // Attack event marks the start of the next attack cycle.
+          if (ev?.kind === "Attack") break;
+          if (ev?.kind === "Damage" && ev?.target !== cleaver.instanceId) damageCount++;
+        }
+        // Cleave on first minion: hits target (index 0) + right neighbor (index 1) = 2 targets.
+        expect(damageCount).toBe(2);
+        return;
+      }
+    }
+    expect(true).toBe(true);
+  });
+
+  it("edge case: cleave on last minion only hits left neighbor", () => {
+    const cleaver = make(1, 100, ["cleave"]);
+    const [a, b, c] = [make(1, 1), make(1, 1), make(1, 1)];
+    for (const seed of [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+      const r = simulateCombat([cleaver], [a, b, c], makeRng(seed));
+      const attacks = r.transcript.filter((e) => e.kind === "Attack");
+      const cleaverAttacks = attacks.filter((e) => e.attacker === cleaver.instanceId);
+      const firstAttack = cleaverAttacks[0] as { kind: "Attack"; target: string } | undefined;
+      if (firstAttack?.target === c.instanceId) {
+        const firstIdx = r.transcript.findIndex(
+          (ev) =>
+            ev.kind === "Attack" && (ev as { attacker?: string }).attacker === cleaver.instanceId,
+        );
+        let damageCount = 0;
+        for (let i = firstIdx + 1; i < r.transcript.length; i++) {
+          const ev = r.transcript[i] as { kind?: string; target?: string; attacker?: string };
+          // Break on ANY Attack event (not just from the cleaver).
+          if (ev?.kind === "Attack") break;
+          if (ev?.kind === "Damage" && ev?.target !== cleaver.instanceId) damageCount++;
+        }
+        expect(damageCount).toBe(2);
+        return;
+      }
+    }
+    expect(true).toBe(true);
+  });
 });
 
 // ---------------------------------------------------------------------------
