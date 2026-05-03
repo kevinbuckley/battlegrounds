@@ -1,3 +1,4 @@
+2026-05-03 | 4260771 | FIXED: Add Dragonspawn Lieutenant golden test — verify golden version has 4/6 stats (base 2/3 doubled), with unit test
 2026-05-03 | 9081e4c | FIXED: Add unit test verifying applyDamageToPlayer damage calculation matches spec — armor absorbs first then HP, elimination at 0 HP, Annihilan tracks total damage including armor, with calcDamage formula tests
 2026-05-03 | 3de0f36 | FIXED: Add brann.test.ts — unit tests verifying Brann triggers battlecry 2x, golden triggers 2x, and Brann+golden triggers 4x (multiplicative stacking)
 2026-05-03 | 603d722 | FIXED: Update combat result toast persistence from 3 seconds to 5 seconds in app/game/page.tsx
