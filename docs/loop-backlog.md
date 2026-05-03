@@ -16,6 +16,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
+- [ ] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts
+
 ### Combat correctness — high impact, easy to test
 
 - [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/ (already covered by existing test in keywords.sim.test.ts line 83-89)
