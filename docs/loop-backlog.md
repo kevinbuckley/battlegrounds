@@ -19,6 +19,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### Combat correctness — high impact, easy to test
 
 - [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/
+- [x] [S] Add unit test verifying poisonous + divine shield interaction: verifies that poisonous is NOT consumed (only venomous is), shield pops without dealing damage to non-poisonous attackers, and poisonous kills shielded defenders without being consumed. Test in tests/combat/poisonous-shield.test.ts
 - [x] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
 - [x] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
 - [x] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
@@ -82,7 +83,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `onMinionSold` hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions)
 - [ ] [S] Combat transcript: include attacker's and defender's instanceIds in every "attack" event (UI uses to highlight which minion is fighting)
-- [ ] [S] Add `onSpellCast` hook param including the cast spell's cardId so reactive minions can branch on spell type (Kalecgos already exists — verify it uses this)
+- [x] [S] Add `onSpellCast` hook param including the cast spell's cardId so reactive minions can branch on spell type (Kalecgos already exists — verify it uses this)
 
 ### More minions for variety
 
