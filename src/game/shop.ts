@@ -413,34 +413,69 @@ export function refreshShop(state: GameState, playerId: PlayerId, rng: Rng): Gam
   if (player.gold < COST_REFRESH)
     throw new Error(`Not enough gold to refresh (have ${player.gold}, need ${COST_REFRESH})`);
 
-  // Preserve dormant minions — they stay in the shop across refreshes,
-  // matching real Battlegrounds where refreshing only replaces non-dormant
-  // shop items.
+  // Separate dormant minions, spells, and regular minions.
+  // In real Battlegrounds, refreshing replaces all non-frozen items
+  // (minions and spells), but dormant minions stay put.
   const dormantMinions = player.shop.filter(
     (m) => m.keywords && m.keywords.has("dormant" as import("./types").Keyword),
   );
-  const regularShop = player.shop.filter(
-    (m) => !(m.keywords && m.keywords.has("dormant" as import("./types").Keyword)),
+  const spellItems = player.shop.filter((m) => SPELLS[m.cardId as keyof typeof SPELLS]);
+  const regularMinions = player.shop.filter(
+    (m) =>
+      !(m.keywords && m.keywords.has("dormant" as import("./types").Keyword)) &&
+      !SPELLS[m.cardId as keyof typeof SPELLS],
   );
 
   const afterGold = updatePlayer(state, playerId, (p) => ({ ...p, gold: p.gold - COST_REFRESH }));
-  // Return only non-dormant shop items to pool
-  const poolAfterReturn = returnToPool(afterGold.pool, regularShop);
+  // Return non-dormant minions to pool (spells are not in the minion pool).
+  const poolAfterReturn = returnToPool(afterGold.pool, regularMinions);
   const size = SHOP_SIZE_BY_TIER[player.tier];
   const remainingSlots = size - dormantMinions.length;
-  const { instances, pool } = drawFromPool(
+  const { instances: newMinions, pool: minionPool } = drawFromPool(
     poolAfterReturn,
     player.tier,
     Math.max(0, remainingSlots),
     rng,
   );
 
-  // Combine dormant minions with the newly drawn shop.
-  const finalShop = [...dormantMinions, ...instances];
+  // Re-roll spells into the last 1/4 of the shop (matching real Battlegrounds
+  // where refreshing replaces all non-frozen shop items including spells).
+  const minionCount = newMinions.length;
+  const totalNonDormant = minionCount;
+  const spellSlotCount = Math.floor((totalNonDormant + spellItems.length) * 0.25);
+  const newMinionCount = Math.max(0, totalNonDormant - spellSlotCount);
+
+  // Keep the right number of minions, move the rest to spell slots.
+  const finalMinions = newMinions.slice(0, newMinionCount);
+  const movedToSpells = newMinions.slice(newMinionCount);
+
+  // Roll new spells.
+  const availableSpellIds = Object.keys(SPELLS).filter((id) => {
+    const spell = SPELLS[id as keyof typeof SPELLS];
+    return spell && spell.tiers.includes(player.tier);
+  }) as string[];
+
+  const newSpellItems: MinionInstance[] = [];
+  if (availableSpellIds.length > 0) {
+    const shuffled = rng.shuffle(availableSpellIds);
+    const picks = shuffled.slice(0, spellSlotCount);
+    for (const spellId of picks) {
+      const spell = SPELLS[spellId];
+      if (spell) {
+        newSpellItems.push({
+          instanceId: nextInstanceId(),
+          cardId: spellId,
+        } as import("./types").MinionInstance);
+      }
+    }
+  }
+
+  // Combine: dormant minions + new minions + new spells.
+  const finalShop = [...dormantMinions, ...finalMinions, ...newSpellItems];
 
   return {
     ...updatePlayer(afterGold, playerId, (p) => ({ ...p, shop: finalShop })),
-    pool,
+    pool: minionPool,
   };
 }
 

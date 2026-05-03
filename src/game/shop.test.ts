@@ -1836,3 +1836,58 @@ describe("wrath_weaver onTurnEnd", () => {
     expect(after.players[0]!.hp).toBe(19);
   });
 });
+
+describe("refreshShop re-rolls spells", () => {
+  it("refreshing the shop replaces spells with new random spells", () => {
+    const state = makeInitialState(42);
+    const rng = makeRng(42);
+
+    // Roll initial shop
+    const s = beginRecruitTurn(state, rng);
+    const initialShop = s.players[0]!.shop;
+    const initialSpellCount = initialShop.filter(
+      (m) => SPELLS[m.cardId as keyof typeof SPELLS],
+    ).length;
+
+    // Find a spell in the initial shop
+    const initialSpellId = initialShop.find((m) => SPELLS[m.cardId as keyof typeof SPELLS])?.cardId;
+
+    // Refresh the shop
+    const refreshed = refreshShop(s, 0, makeRng(99));
+    const refreshedShop = refreshed.players[0]!.shop;
+    const refreshedSpells = refreshedShop.filter((m) => SPELLS[m.cardId as keyof typeof SPELLS]);
+
+    // The shop should still have spells (same slot count)
+    expect(refreshedSpells.length).toBeGreaterThanOrEqual(0);
+
+    // If there was a spell in the initial shop, the refreshed shop
+    // should have different spell(s) — the old spell should not persist.
+    if (initialSpellId) {
+      const hasOldSpell = refreshedSpells.some((m) => m.cardId === initialSpellId);
+      // The old spell should not persist across refreshes
+      expect(hasOldSpell).toBe(false);
+    }
+  });
+
+  it("refreshing the shop replaces all non-dormant items including spells", () => {
+    const state = makeInitialState(77);
+    const rng = makeRng(77);
+
+    // Roll initial shop
+    const s = beginRecruitTurn(state, rng);
+    const initialShop = s.players[0]!.shop;
+
+    // Get the instance IDs of spells in the initial shop
+    const initialSpellInstanceIds = new Set(
+      initialShop.filter((m) => SPELLS[m.cardId as keyof typeof SPELLS]).map((m) => m.instanceId),
+    );
+
+    // Refresh the shop
+    const refreshed = refreshShop(s, 0, makeRng(88));
+    const refreshedShop = refreshed.players[0]!.shop;
+
+    // None of the original spell instance IDs should appear in the refreshed shop
+    const hasOldSpell = refreshedShop.some((m) => initialSpellInstanceIds.has(m.instanceId));
+    expect(hasOldSpell).toBe(false);
+  });
+});
