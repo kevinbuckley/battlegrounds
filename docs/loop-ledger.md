@@ -1,3 +1,4 @@
+2026-05-03 | 2096484 | FIXED: Add combo keyword unit test — verifies all friendly minions with combo gain +2/+2 when a card is played, stacking across multiple plays, with unit test in tests/combat/combo.test.ts
 2026-05-03 | b0322c0 | FIXED: Replace Math.floor(rng.next() * n) with rng.pick() in buddies, quests, trinkets, and alley-cat — rng.next() returns [0,1) so Math.floor always returned 0, making all random selection deterministic and always picking the first item
 2026-05-03 | 4260771 | FIXED: Add Dragonspawn Lieutenant golden test — verify golden version has 4/6 stats (base 2/3 doubled), with unit test
 2026-05-03 | 9081e4c | FIXED: Add unit test verifying applyDamageToPlayer damage calculation matches spec — armor absorbs first then HP, elimination at 0 HP, Annihilan tracks total damage including armor, with calcDamage formula tests

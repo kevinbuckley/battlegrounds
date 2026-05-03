@@ -22,9 +22,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
 - [x] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
 - [x] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
-- [ ] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
-- [x] [S] Add unit test verifying golden minions trigger battlecry/deathrattle exactly twice — tests/combat/golden.test.ts
-- [ ] [S] Verify Brann + non-golden battlecry triggers 2x and Brann + golden triggers 4x — add unit test
+- [x] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
+- [x] [S] Verify Brann + non-golden battlecry triggers 2x and Brann + golden triggers 4x — add unit test
+- [x] [S] Add unit test for combo keyword — verifies all friendly minions with combo gain +2/+2 when a card is played, stacking across multiple plays, tests/combat/combo.test.ts
 
 ### New minions — Tier 2 (only those NOT yet on disk)
 
