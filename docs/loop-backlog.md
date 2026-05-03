@@ -41,7 +41,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 5 (only those NOT yet on disk)
 
 - [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
-- [ ] [S] Add `Bigfernal` (tier 5 demon): whenever another friendly demon is summoned gain +2/+2
+- [x] [S] Add `Bigfernal` (tier 5 demon): whenever another friendly demon is summoned gain +2/+2
 
 ### New minions — Tier 6 (only those NOT yet on disk)
 

@@ -1,3 +1,4 @@
+2026-05-03 | 8967f10 | FIXED: Add Bigfernal (tier 5 demon) — onShopSummon gives itself +2/+2 whenever another friendly demon is summoned to board, with unit tests
 2026-05-03 | 7ec5495 | FIXED: Add unit test verifying Brann + non-golden battlecry triggers 2x (2 × 1 multiplicative stacking)
 2026-05-03 | daa1550 | FIXED: Add Ysera the Dreamer tier 6 dragon (start of combat, transform a random friendly minion into a 0/5 with Taunt), with unit tests
 2026-05-03 | 723feb4 | FIXED: Add shop-freezing behavior to all AI strategies — when AI has board minions and shop contains unaffordable minions, freeze the shop to preserve it for future turns
