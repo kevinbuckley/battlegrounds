@@ -21,8 +21,7 @@ export default defineMinion({
       }
       if (enemies.length === 0) return ctx.state;
 
-      const idx = ctx.rng.next() % enemies.length;
-      const target = enemies[idx]!;
+      const target = ctx.rng.pick(enemies);
       const targetPlayer = getPlayer(ctx.state, target.playerId);
       const targetMinion = targetPlayer.board[target.boardIndex];
       if (!targetMinion) return ctx.state;

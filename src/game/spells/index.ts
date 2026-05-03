@@ -23,8 +23,7 @@ export const poisonDartShield: SpellCard = {
       }
       if (enemies.length === 0) return ctx.state;
 
-      const idx = ctx.rng.next() % enemies.length;
-      const target = enemies[idx]!;
+      const target = ctx.rng.pick(enemies);
       const targetPlayer = getPlayer(ctx.state, target.playerId);
       const targetMinion = targetPlayer.board[target.boardIndex];
       if (!targetMinion) return ctx.state;
@@ -57,8 +56,7 @@ export const mysteryShot: SpellCard = {
       }
       if (enemies.length === 0) return ctx.state;
 
-      const idx = ctx.rng.next() % enemies.length;
-      const target = enemies[idx]!;
+      const target = ctx.rng.pick(enemies);
       const targetPlayer = getPlayer(ctx.state, target.playerId);
       const targetMinion = targetPlayer.board[target.boardIndex];
       if (!targetMinion) return ctx.state;
@@ -94,7 +92,7 @@ export const duskrayBuff: SpellCard = {
       ) {
         boardIndex = ctx.targetIndex;
       } else {
-        boardIndex = ctx.rng.next() % player.board.length;
+        boardIndex = ctx.rng.int(0, player.board.length);
       }
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
@@ -175,7 +173,7 @@ export const tavernBrawler: SpellCard = {
       ) {
         boardIndex = ctx.targetIndex;
       } else {
-        boardIndex = ctx.rng.next() % player.board.length;
+        boardIndex = ctx.rng.int(0, player.board.length);
       }
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
@@ -216,7 +214,7 @@ export const brawl: SpellCard = {
       ) {
         boardIndex = ctx.targetIndex;
       } else {
-        boardIndex = ctx.rng.next() % player.board.length;
+        boardIndex = ctx.rng.int(0, player.board.length);
       }
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
@@ -297,7 +295,7 @@ export const bananaSpell: SpellCard = {
       ) {
         boardIndex = ctx.targetIndex;
       } else {
-        boardIndex = ctx.rng.next() % player.board.length;
+        boardIndex = ctx.rng.int(0, player.board.length);
       }
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
@@ -329,7 +327,7 @@ export const tavernTipper: SpellCard = {
       const player = getPlayer(ctx.state, ctx.playerId);
       if (player.board.length === 0) return ctx.state;
 
-      const boardIndex = ctx.rng.next() % player.board.length;
+      const boardIndex = ctx.rng.int(0, player.board.length);
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
 
@@ -360,7 +358,7 @@ export const tavernBrawl: SpellCard = {
       const player = getPlayer(ctx.state, ctx.playerId);
       if (player.board.length === 0) return ctx.state;
 
-      const boardIndex = ctx.rng.next() % player.board.length;
+      const boardIndex = ctx.rng.int(0, player.board.length);
       const minion = player.board[boardIndex];
       if (!minion) return ctx.state;
 

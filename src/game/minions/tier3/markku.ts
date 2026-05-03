@@ -25,8 +25,7 @@ export default defineMinion({
       }
       if (murlocs.length === 0) return state;
 
-      const idx = rng.next() % murlocs.length;
-      const source = murlocs[idx]!;
+      const source = rng.pick(murlocs);
       const copy: MinionInstance = {
         instanceId: nextInstanceId(),
         cardId: source.cardId,
