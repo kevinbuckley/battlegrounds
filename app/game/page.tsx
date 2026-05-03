@@ -139,6 +139,8 @@ interface MinionCardProps {
   onDragLeave?: (e: React.DragEvent<HTMLDivElement>) => void;
   showingGolden?: boolean;
   draggable?: boolean;
+  isAttacking?: boolean;
+  isBeingAttacked?: boolean;
 }
 
 function MinionCard({
@@ -161,6 +163,8 @@ function MinionCard({
   onDragLeave,
   showingGolden,
   draggable: isDraggable,
+  isAttacking,
+  isBeingAttacked,
 }: MinionCardProps) {
   const card = MINIONS[minion.cardId];
   if (!card) return null;
@@ -184,6 +188,8 @@ function MinionCard({
         ${canPlay === false ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:border-slate-500"}
         ${showingGolden ? "animate-pulse" : ""}
         ${minion.golden ? "ring-2 ring-amber-400/50" : ""}
+        ${isAttacking ? "border-red-500 bg-red-500/15 ring-2 ring-red-500/40 scale-105" : ""}
+        ${isBeingAttacked ? "border-orange-500 bg-orange-500/15 ring-2 ring-orange-500/40" : ""}
       `}
     >
       <div className="flex items-center gap-1.5">
@@ -243,7 +249,15 @@ function MinionCard({
 // Opponent board row
 // ------->-->-->-->-->-->-->-->-->-->-->-->
 
-function OpponentBoardRow({ gameState }: { gameState: GameState }) {
+function OpponentBoardRow({
+  gameState,
+  combatHighlightIds,
+  displayingCombat,
+}: {
+  gameState: GameState;
+  combatHighlightIds: { attackerId: string; targetId: string };
+  displayingCombat: boolean;
+}) {
   // Find opponent from the most recent pairing involving player 0
   let opponentId: number | null = null;
   for (let i = gameState.pairingsHistory.length - 1; i >= 0; i--) {
@@ -279,10 +293,19 @@ function OpponentBoardRow({ gameState }: { gameState: GameState }) {
                 const card = MINIONS[minion.cardId];
                 if (!card) return null;
                 const tierColor = TIER_COLORS[card.tier] ?? "bg-gray-600";
+                const isAttacking =
+                  displayingCombat && minion.instanceId === combatHighlightIds.attackerId;
+                const isBeingAttacked =
+                  displayingCombat && minion.instanceId === combatHighlightIds.targetId;
+                const highlightClass = isAttacking
+                  ? "border-red-500 bg-red-500/15 ring-2 ring-red-500/40 scale-105"
+                  : isBeingAttacked
+                    ? "border-orange-500 bg-orange-500/15 ring-2 ring-orange-500/40"
+                    : "";
                 return (
                   <div
                     key={minion.instanceId}
-                    className={`flex w-[110px] flex-shrink-0 flex-col gap-1.5 rounded-lg border-2 border-red-900/50 bg-slate-800/70 px-3 py-2 ${minion.golden ? "ring-2 ring-amber-400/50" : ""}`}
+                    className={`flex w-[110px] flex-shrink-0 flex-col gap-1.5 rounded-lg border-2 ${minion.golden ? "ring-2 ring-amber-400/50" : ""} bg-slate-800/70 px-3 py-2 ${highlightClass || "border-red-900/50"}`}
                   >
                     <div className="flex items-center gap-1.5">
                       <span
@@ -727,6 +750,18 @@ export default function GamePage() {
         : []
       : [];
 
+  // Extract the latest Attack event's instanceIds for highlighting during combat
+  const combatHighlightIds = (() => {
+    if (!displayingCombat || !combatResult) return { attackerId: "", targetId: "" };
+    for (let i = seenEvents.length - 1; i >= 0; i--) {
+      const evt = seenEvents[i];
+      if (evt && evt.kind === "Attack") {
+        return { attackerId: evt.attacker, targetId: evt.target };
+      }
+    }
+    return { attackerId: "", targetId: "" };
+  })();
+
   const boardMinions = gameState?.players[0]?.board ?? [];
   const handMinions = gameState?.players[0]?.hand ?? [];
 
@@ -794,7 +829,11 @@ export default function GamePage() {
           {/* ---- CENTER COLUMN ---- */}
           <div className="flex flex-1 flex-col overflow-y-auto px-4 py-3 gap-3 min-w-0">
             {/* Opponent board row */}
-            <OpponentBoardRow gameState={gameState} />
+            <OpponentBoardRow
+              gameState={gameState}
+              combatHighlightIds={combatHighlightIds}
+              displayingCombat={displayingCombat}
+            />
 
             {/* Divider with turn/phase info */}
             <div className="flex items-center gap-3">
@@ -938,6 +977,12 @@ export default function GamePage() {
                             target.style.borderColor = "rgba(59,130,246,0.5)";
                           }
                         }}
+                        isAttacking={
+                          displayingCombat && minion.instanceId === combatHighlightIds.attackerId
+                        }
+                        isBeingAttacked={
+                          displayingCombat && minion.instanceId === combatHighlightIds.targetId
+                        }
                       />
                     );
                   } else {
