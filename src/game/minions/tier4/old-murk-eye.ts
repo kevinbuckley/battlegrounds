@@ -24,10 +24,10 @@ export default defineMinion({
         (m) => m.instanceId !== ctx.self.instanceId && m.tribes.includes("Murloc"),
       ).length;
 
-      // Give +1 ATK to each other friendly murloc
+      // Give +1 ATK to each other friendly murloc (not +N)
       for (const ally of allies) {
         if (ally.instanceId !== ctx.self.instanceId && ally.tribes.includes("Murloc")) {
-          ally.atk += otherMurlocCount;
+          ally.atk += 1;
           ctx.emit({
             kind: "Stat",
             target: ally.instanceId,
