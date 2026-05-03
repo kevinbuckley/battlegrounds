@@ -49,7 +49,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 6 (only those NOT yet on disk)
 
 - [ ] [S] Add `Foe Reaper 4000` (tier 6 mech): cleave keyword (no other text)
-- [ ] [S] Add `Sneed's Old Shredder` (tier 6 mech): deathrattle summon a random Legendary minion
+- [x] [S] Add `Sneed's Old Shredder` (tier 6 mech): deathrattle summon a random Legendary minion — src/game/minions/tier6/sneed-old-shredder.ts, tests/combat/sneed.test.ts
 
 ### AI improvements
 
