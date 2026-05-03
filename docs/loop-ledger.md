@@ -1,6 +1,7 @@
 2026-05-02 | 1fc1d87 | FIXED: Bananas now appear in tier 1 shops and are a no-target spell — clicking it directly buffs a random minion instead of requiring board targeting, matching real Battlegrounds where Bananas are a free, no-target shop item
 2026-05-03 | d42cd78 | FIXED: Add Reno Jackson hero — active power (5 gold, once per game): makes a friendly minion golden, with unit tests
 2026-05-02 | 7cb509a | FIXED: Cauterizing Flame spell now respects Divine Shield — pops shield first before dealing 3 damage to HP, matching real Battlegrounds where Cauterizing Flame pops divine shields before damaging minions
+2026-05-03 | 9d9efc0 | FIXED: Add Drakonid Enforcer tier 4 dragon (onDivineShieldPop gains +2/+2 when a friendly minion loses divine shield), with unit tests
 2026-05-03 | d1791c1 | FIXED: Add Pack Leader tier 2 minion (Beast, 3/3, onShopSummon gives summoned Beast +3 ATK), with unit tests
 2026-05-03 | 5c3da7d | FIXED: Add Maiev Shadowsong hero — active power (1 gold): puts a shop minion "Dormant" for 2 turns, then awakens it with +3/+3, with dormant preservation during shop rolls, unit tests
 2026-05-02 | 6e50014 | FIXED: Annihilan Battlemaster totalDamageTaken now tracks total damage dealt to hero (before armor) instead of only damage passing through armor — in real Battlegrounds the Annihilan gains +1 ATK for all damage your hero takes, including armor absorption

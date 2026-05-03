@@ -51,6 +51,7 @@ import broodkinZealot from "./tier4/broodkin-zealot";
 import caveHydra from "./tier4/cave-hydra";
 import crystalweaver from "./tier4/crystalweaver";
 import defenderOfArgus from "./tier4/defender-of-argus";
+import drakonidEnforcer from "./tier4/drakonid-enforcer";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 import oldMurkEye from "./tier4/old-murk-eye";
 import securityRover from "./tier4/security-rover";
@@ -119,6 +120,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [annihilanBattlemaster.id]: annihilanBattlemaster,
   [bolvarFireblood.id]: bolvarFireblood,
   [broodkinZealot.id]: broodkinZealot,
+  [drakonidEnforcer.id]: drakonidEnforcer,
   [crystalweaver.id]: crystalweaver,
   [defenderOfArgus.id]: defenderOfArgus,
   [nagaSecretGuardian.id]: nagaSecretGuardian,

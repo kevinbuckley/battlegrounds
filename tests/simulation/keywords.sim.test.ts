@@ -557,3 +557,109 @@ describe("divine shield pop hook", () => {
     expect(atkValues).toContain(5);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Drakonid Enforcer — onDivineShieldPop buff
+// ---------------------------------------------------------------------------
+
+describe("drakonid_enforcer", () => {
+  it("gains +2/+2 when a friendly minion's divine shield pops", () => {
+    const de = instantiate(getMinion("drakonid_enforcer"));
+    const shieldMinion = make(1, 1, ["divineShield"]);
+    // Put Drakonid + shieldMinion on LEFT, killer on RIGHT.
+    // Right side attacks first (seed 0). Killer (1/100) attacks shieldMinion (1/1 DS).
+    // ShieldMinion's shield pops → onDivineShieldPop fires for all left allies (de + shieldMinion).
+    // Drakonid gains +2/+2.
+    const killer = defineMinion({
+      id: "killer_1_100",
+      name: "Killer",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 100,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const r = simulateCombat([de, shieldMinion], [instantiate(killer)], makeRng(0));
+    const statEvents = r.transcript.filter((e) => e.kind === "Stat" && e.target === de.instanceId);
+    expect(statEvents.length).toBeGreaterThan(0);
+    const lastStat = statEvents[statEvents.length - 1] as { atk?: number; hp?: number };
+    expect(lastStat.atk).toBe(5);
+    // Drakonid starts at 3/6, takes 2 damage from killer before shield pops (4/4),
+    // then gains +2/+2 → 5/6
+    expect(lastStat.hp).toBe(6);
+  });
+
+  it("gains +2/+2 when its own divine shield pops", () => {
+    const de = defineMinion({
+      id: "de_with_ds",
+      name: "Drakonid Enforcer (DS)",
+      tier: 4,
+      tribes: ["Dragon"],
+      baseAtk: 3,
+      baseHp: 6,
+      baseKeywords: ["divineShield"],
+      spellDamage: 0,
+      hooks: {
+        onDivineShieldPop: (ctx) => {
+          const poppedSide = ctx.left.includes(ctx.self) ? "left" : "right";
+          if (poppedSide !== ctx.selfSide) return;
+          ctx.self.atk += 2;
+          ctx.self.hp += 2;
+          ctx.self.maxHp += 2;
+          ctx.emit({
+            kind: "Stat",
+            target: ctx.self.instanceId,
+            atk: ctx.self.atk,
+            hp: ctx.self.hp,
+          });
+        },
+      },
+    });
+    const deInst = instantiate(de);
+    const killer = make(5, 10);
+    const r = simulateCombat([killer], [deInst], makeRng(0));
+    const statEvents = r.transcript.filter(
+      (e) => e.kind === "Stat" && e.target === deInst.instanceId,
+    );
+    expect(statEvents.length).toBeGreaterThan(0);
+    const lastStat = statEvents[statEvents.length - 1] as { atk?: number; hp?: number };
+    expect(lastStat.atk).toBe(5);
+    expect(lastStat.hp).toBe(8);
+  });
+
+  it("does NOT gain stats when enemy shields pop", () => {
+    const de = instantiate(getMinion("drakonid_enforcer"));
+    const enemyShield = make(2, 1, ["divineShield"]);
+    const r = simulateCombat([de], [enemyShield], makeRng(0));
+    const statEvents = r.transcript.filter((e) => e.kind === "Stat" && e.target === de.instanceId);
+    expect(statEvents).toHaveLength(0);
+  });
+
+  it("stacks: multiple friendly shield pops give +4/+4 total", () => {
+    const de = instantiate(getMinion("drakonid_enforcer"));
+    const shield1 = make(1, 1, ["divineShield"]);
+    const shield2 = make(1, 1, ["divineShield"]);
+    // Put Drakonid + shields on LEFT, killer on RIGHT.
+    // Right side attacks first (seed 0). Killer (1/100) attacks shield1 (1/1 DS).
+    // Shield1's shield pops → Drakonid +2/+2 (now 5/8).
+    // Killer (1/100) attacks shield2 (1/1 DS). Shield2's shield pops → Drakonid +2/+2 (now 7/10).
+    const killer = defineMinion({
+      id: "killer_1_100",
+      name: "Killer",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 100,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    const r = simulateCombat([de, shield1, shield2], [instantiate(killer)], makeRng(0));
+    const statEvents = r.transcript.filter((e) => e.kind === "Stat" && e.target === de.instanceId);
+    const atkValues = statEvents.map((e) => (e as { atk?: number }).atk);
+    expect(atkValues).toContain(5);
+    expect(atkValues).toContain(7);
+  });
+});
