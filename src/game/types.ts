@@ -217,6 +217,8 @@ export interface PlayerState {
   quests: QuestInstance[];
   /** Buddy instances for this player (if the buddies modifier is active). */
   buddies: BuddyInstance[];
+  /** Number of Pogo-Hoppers played this game (for Pogo-Hopper battlecry scaling). */
+  pogoHoppersPlayed: number;
 }
 
 export type Phase =

@@ -26,6 +26,7 @@ import knifeJuggler from "./tier2/knife-juggler";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
 import packLeader from "./tier2/pack-leader";
+import pogoHopper from "./tier2/pogo-hopper";
 import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
@@ -102,6 +103,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
   [packLeader.id]: packLeader,
+  [pogoHopper.id]: pogoHopper,
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,

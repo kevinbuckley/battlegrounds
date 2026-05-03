@@ -1094,6 +1094,7 @@ export function makeInitialState(seed: number): GameState {
     trinkets: [],
     quests: [],
     buddies: [],
+    pogoHoppersPlayed: 0,
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec

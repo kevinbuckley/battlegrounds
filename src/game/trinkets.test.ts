@@ -45,6 +45,7 @@ function makeGameState(): GameState {
         trinkets: [],
         quests: [],
         buddies: [],
+        pogoHoppersPlayed: 0,
       },
     ],
     tribesInLobby: ["Murloc", "Beast", "Demon", "Mech", "Elemental"],
