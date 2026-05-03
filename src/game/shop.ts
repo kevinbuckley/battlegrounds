@@ -1,4 +1,4 @@
-import type { Rng } from "@/lib/rng";
+import { makeRng, type Rng } from "@/lib/rng";
 import {
   COST_BUY,
   COST_REFRESH,
@@ -266,6 +266,20 @@ export function sellMinion(
     if (hero?.onSell) {
       newState = hero.onSell(newState, playerId);
     }
+
+    // Fire the minion's onSell hook if it has one.
+    const sellHook = minion.hooks?.onSell;
+    if (sellHook) {
+      const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+      newState = sellHook({
+        self: minion,
+        playerId,
+        state: newState,
+        rng: makeRng(0),
+        spellDamage,
+      });
+    }
+
     return { ...newState, pool: newPool };
   } else {
     minion = player.board[boardIndex];
@@ -284,6 +298,19 @@ export function sellMinion(
   let result = newState;
   if (hero?.onSell) {
     result = hero.onSell(newState, playerId);
+  }
+
+  // Fire the minion's onSell hook if it has one.
+  const sellHook = minion.hooks?.onSell;
+  if (sellHook) {
+    const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+    result = sellHook({
+      self: minion,
+      playerId,
+      state: result,
+      rng: makeRng(0),
+      spellDamage,
+    });
   }
 
   return { ...result, pool: newPool };
