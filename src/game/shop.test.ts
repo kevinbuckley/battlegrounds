@@ -1378,6 +1378,7 @@ describe("kalecgos_arcane_aspect onCast", () => {
       state,
       rng: makeRng(42),
       spellDamage: 0,
+      spellCardId: "mystery_shot",
     };
     const after = kc!.hooks.onCast!(ctx);
     const board = after.players[0]!.board;
@@ -1407,6 +1408,7 @@ describe("kalecgos_arcane_aspect onCast", () => {
       state,
       rng: makeRng(42),
       spellDamage: 0,
+      spellCardId: "mystery_shot",
     };
     const after = kc!.hooks.onCast!(ctx);
     expect(after.players[0]!.board).toEqual([]);

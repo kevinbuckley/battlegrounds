@@ -149,7 +149,7 @@ function playSpell(
       ctx as unknown as import("./types").RecruitCtx & { targetIndex?: number },
     );
     // Fire onCast hooks for all minions on the player's board
-    const afterCast = fireOnCastHooks(afterSpell, playerId, rng);
+    const afterCast = fireOnCastHooks(afterSpell, playerId, rng, spellInstance.cardId);
     // Remove the spell from the player's spells array — spells are one-time use
     const afterRemove = updatePlayer(afterCast, playerId, (p) => ({
       ...p,
@@ -162,12 +162,17 @@ function playSpell(
     ...p,
     spells: p.spells.filter((_, i) => i !== spellIndex),
   }));
-  const afterCast = fireOnCastHooks(afterRemove, playerId, rng);
+  const afterCast = fireOnCastHooks(afterRemove, playerId, rng, spellInstance.cardId);
   return applyComboToBoard(afterCast, playerId);
 }
 
 /** Fire onCast hooks for all minions on the player's board. */
-function fireOnCastHooks(state: GameState, playerId: number, rng: Rng): GameState {
+function fireOnCastHooks(
+  state: GameState,
+  playerId: number,
+  rng: Rng,
+  spellCardId: string,
+): GameState {
   const player = getPlayer(state, playerId);
   let result = state;
   for (const minion of player.board) {
@@ -179,6 +184,7 @@ function fireOnCastHooks(state: GameState, playerId: number, rng: Rng): GameStat
         state: result,
         rng,
         spellDamage: totalSpellDamage(player),
+        spellCardId,
       });
     }
   }
