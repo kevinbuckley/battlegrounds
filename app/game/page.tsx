@@ -449,6 +449,10 @@ export default function GamePage() {
   // Discover overlay state
   // Derived from gameState — no separate useState needed
 
+  // Tier-up flash animation
+  const prevTier = useRef<number>(1);
+  const [tierFlashKey, setTierFlashKey] = useState(0);
+
   // Detect triple merges and trigger animation
   const prevGoldenCount = useRef(0);
   useEffect(() => {
@@ -468,6 +472,17 @@ export default function GamePage() {
       }, 800);
     }
     prevGoldenCount.current = currentGoldenCount;
+  }, [gameState]);
+
+  // Detect tier-up and trigger flash animation
+  useEffect(() => {
+    if (!gameState) return;
+    const p = gameState.players[0];
+    if (!p) return;
+    if (p.tier > prevTier.current) {
+      setTierFlashKey((k) => k + 1);
+      prevTier.current = p.tier;
+    }
   }, [gameState]);
 
   const playerGold = () => gameState?.players[0]?.gold ?? 0;
@@ -726,6 +741,10 @@ export default function GamePage() {
           @keyframes flash {
             0% { background-color: rgba(251, 191, 36, 0.3); }
             100% { background-color: rgba(251, 191, 36, 0.05); }
+          }
+          @keyframes tierFlash {
+            0% { background-color: rgba(96, 165, 250, 0.4); transform: scale(1.15); }
+            100% { background-color: rgba(96, 165, 250, 0.05); transform: scale(1); }
           }
         `}
       </style>
@@ -1371,7 +1390,17 @@ export default function GamePage() {
             </div>
 
             {/* Tier */}
-            <div className="rounded-lg border border-slate-700 bg-slate-800/60 p-3 flex flex-col gap-1">
+            <div
+              key={tierFlashKey}
+              className="rounded-lg border border-slate-700 bg-slate-800/60 p-3 flex flex-col gap-1"
+              style={
+                tierFlashKey > 0
+                  ? {
+                      animation: "tierFlash 0.6s ease-out",
+                    }
+                  : undefined
+              }
+            >
               <span className="text-[10px] uppercase tracking-wider text-slate-500">
                 Tavern Tier
               </span>
