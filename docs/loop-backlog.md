@@ -21,7 +21,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### Combat correctness — high impact, easy to test
 
 - [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/ (already covered by existing test in keywords.sim.test.ts line 83-89)
-- [ ] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
+- [x] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
+- [ ] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right) — tests/combat/cleave.test.ts
 - [ ] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
 - [ ] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
 - [ ] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
