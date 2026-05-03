@@ -1,4 +1,5 @@
 2026-05-03 | e475a44 | FIXED: Tier-up animation — brief blue flash + scale animation on the tavern tier indicator when player upgrades, matching real Battlegrounds where upgrading shows a visual flash
+2026-05-03 | fe12190 | FIXED: Sell confirmation — sell button now requires a second click within 1.5s to actually sell (first click shows "Confirm?" with amber pulse animation), preventing misclicks matching real Battlegrounds where selling is a deliberate action
 2026-05-02 | 1fc1d87 | FIXED: Bananas now appear in tier 1 shops and are a no-target spell — clicking it directly buffs a random minion instead of requiring board targeting, matching real Battlegrounds where Bananas are a free, no-target shop item
 2026-05-03 | 43d829d | FIXED: AI plays battlecry minions before non-battlecry from hand in all three strategies (basic, greedy, heuristic), matching real Battlegrounds where battlecry value is prioritized
 2026-05-03 | b9f078e | FIXED: Add Edwin Van Cleef hero passive — every 2nd action this turn gives all friendly minions +1/+1, with actionsThisTurn counter in PlayerState, unit tests

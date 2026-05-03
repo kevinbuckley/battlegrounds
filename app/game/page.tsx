@@ -127,6 +127,7 @@ interface MinionCardProps {
   isSpellTarget?: boolean;
   showSell?: boolean;
   sellValue?: number;
+  sellConfirming?: boolean;
   canPlay?: boolean;
   onClick?: () => void;
   onSell?: () => void;
@@ -148,6 +149,7 @@ function MinionCard({
   isSpellTarget,
   showSell,
   sellValue,
+  sellConfirming,
   canPlay,
   onClick,
   onSell,
@@ -224,9 +226,13 @@ function MinionCard({
             e.stopPropagation();
             onSell?.();
           }}
-          className="mt-0.5 rounded bg-red-500/80 px-1.5 py-0.5 text-[9px] font-semibold text-white transition hover:bg-red-400"
+          className={`mt-0.5 rounded px-1.5 py-0.5 text-[9px] font-semibold text-white transition ${
+            sellConfirming
+              ? "bg-amber-500 text-slate-950 animate-pulse"
+              : "bg-red-500/80 hover:bg-red-400"
+          }`}
         >
-          Sell +{sellValue ?? 1}g
+          {sellConfirming ? "Confirm?" : `Sell +${sellValue ?? 1}g`}
         </button>
       )}
     </div>
@@ -452,6 +458,23 @@ export default function GamePage() {
   // Tier-up flash animation
   const prevTier = useRef<number>(1);
   const [tierFlashKey, setTierFlashKey] = useState(0);
+
+  // Sell confirmation state
+  const [sellConfirmIdx, setSellConfirmIdx] = useState<number | null>(null);
+  const [sellConfirmType, setSellConfirmType] = useState<"board" | "hand" | null>(null);
+  const sellTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clear sell confirmation when phase changes
+  useEffect(() => {
+    if (gameState?.phase.kind !== "Recruit") {
+      setSellConfirmIdx(null);
+      setSellConfirmType(null);
+      if (sellTimerRef.current) {
+        clearTimeout(sellTimerRef.current);
+        sellTimerRef.current = null;
+      }
+    }
+  }, [gameState?.phase.kind]);
 
   // Detect triple merges and trigger animation
   const prevGoldenCount = useRef(0);
@@ -815,6 +838,7 @@ export default function GamePage() {
                         isSpellTarget={selectedSpellIdx !== null}
                         showSell={gameState?.phase.kind === "Recruit"}
                         sellValue={minion.golden ? 2 : 1}
+                        sellConfirming={sellConfirmIdx === idx && sellConfirmType === "board"}
                         draggable
                         showingGolden={showingGolden}
                         onClick={() => {
@@ -849,16 +873,38 @@ export default function GamePage() {
                           }
                         }}
                         onSell={() => {
-                          if (!gameState) return;
-                          const player = gameState.players[0];
-                          if (!player) return;
-                          const next = step(
-                            gameState,
-                            { kind: "SellMinion", player: 0, boardIndex: idx },
-                            rngForTurn(gameState, "sell"),
-                          );
-                          setGameState(next);
-                          setError(null);
+                          if (sellConfirmIdx === idx && sellConfirmType === "board") {
+                            // Second click — actually sell
+                            if (!gameState) return;
+                            const player = gameState.players[0];
+                            if (!player) return;
+                            const next = step(
+                              gameState,
+                              { kind: "SellMinion", player: 0, boardIndex: idx },
+                              rngForTurn(gameState, "sell"),
+                            );
+                            setGameState(next);
+                            setSellConfirmIdx(null);
+                            setSellConfirmType(null);
+                            if (sellTimerRef.current) {
+                              clearTimeout(sellTimerRef.current);
+                              sellTimerRef.current = null;
+                            }
+                            setError(null);
+                          } else {
+                            // First click — show confirmation
+                            if (sellTimerRef.current) {
+                              clearTimeout(sellTimerRef.current);
+                              sellTimerRef.current = null;
+                            }
+                            setSellConfirmIdx(idx);
+                            setSellConfirmType("board");
+                            sellTimerRef.current = setTimeout(() => {
+                              setSellConfirmIdx(null);
+                              setSellConfirmType(null);
+                              sellTimerRef.current = null;
+                            }, 1500);
+                          }
                         }}
                         onDragStart={() => setDragIndex(idx)}
                         onDragEnd={() => setDragIndex(null)}
@@ -939,6 +985,7 @@ export default function GamePage() {
                       canPlay={canPlay || isSelected}
                       showSell={gameState?.phase.kind === "Recruit"}
                       sellValue={minion.golden ? 2 : 1}
+                      sellConfirming={sellConfirmIdx === idx && sellConfirmType === "hand"}
                       showingGolden={showingGolden}
                       onClick={() => {
                         if (isSelected) {
@@ -950,14 +997,36 @@ export default function GamePage() {
                         }
                       }}
                       onSell={() => {
-                        if (!gameState) return;
-                        const next = step(
-                          gameState,
-                          { kind: "SellMinion", player: 0, handIndex: idx },
-                          rngForTurn(gameState, "sell"),
-                        );
-                        setGameState(next);
-                        setError(null);
+                        if (sellConfirmIdx === idx && sellConfirmType === "hand") {
+                          // Second click — actually sell
+                          if (!gameState) return;
+                          const next = step(
+                            gameState,
+                            { kind: "SellMinion", player: 0, handIndex: idx },
+                            rngForTurn(gameState, "sell"),
+                          );
+                          setGameState(next);
+                          setSellConfirmIdx(null);
+                          setSellConfirmType(null);
+                          if (sellTimerRef.current) {
+                            clearTimeout(sellTimerRef.current);
+                            sellTimerRef.current = null;
+                          }
+                          setError(null);
+                        } else {
+                          // First click — show confirmation
+                          if (sellTimerRef.current) {
+                            clearTimeout(sellTimerRef.current);
+                            sellTimerRef.current = null;
+                          }
+                          setSellConfirmIdx(idx);
+                          setSellConfirmType("hand");
+                          sellTimerRef.current = setTimeout(() => {
+                            setSellConfirmIdx(null);
+                            setSellConfirmType(null);
+                            sellTimerRef.current = null;
+                          }, 1500);
+                        }
                       }}
                     />
                   );
