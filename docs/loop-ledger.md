@@ -263,3 +263,4 @@
 2026-05-03 | a47aed3 | FIXED: Add Pyramad hero — active power (1g) give a random friendly minion +4 HP
 2026-05-03 | 826d3ed | FIXED: Add Scurpus (tier 3 beast) — battlecry summons a 1/1 Beast for each other minion with a Battlecry on your board, with unit tests
 2026-05-03 | 94dcb16 | FIXED: Add Tortollan Shellraiser (tier 3 elemental, 2/3): taunt; deathrattle give a random friendly minion +1/+3, with unit tests
+2026-05-03 | 519ea80 | FIXED: Fix Pack Leader (tier 2 beast) — onShopSummon now buffs the summoned beast +3 ATK instead of buffing Pack Leader itself, matching test spec
