@@ -34,8 +34,8 @@ MAX_ITERS=999
 SLEEP_BETWEEN=20
 MAX_TIME_HOURS=12
 DEBUG=0
-ITER_TIMEOUT=1800   # 30 min per iteration
-STUCK_THRESHOLD=5   # consecutive reverts before injecting a recovery task
+ITER_TIMEOUT=600    # 10 min per iteration (was 30 — analysis loops were burning the full budget)
+STUCK_THRESHOLD=3   # consecutive reverts before quarantining the picked task and injecting recovery
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -100,13 +100,19 @@ inject_recovery_task() {
   local snap="$1"
   local count="$2"
   log "  ⚠ STUCK: same commit failed $count times in a row — injecting recovery task"
-  # Pick the next concrete [S] task from "Soon" and prepend it to "Now"
-  # This avoids injecting vague browser tasks that fail when Playwright is unavailable
-  local next_task
-  next_task=$(grep -m1 '^\- \[ \] \[S\]' "$REPO/docs/loop-backlog.md" | head -1)
-  if [[ -z "$next_task" ]]; then
-    next_task="- [ ] [S] Add a unit test in tests/combat that verifies cleave damage hits exactly the two minions adjacent to the defender, not all friendlies"
-  fi
+  # Cycle through a small bank of resilient, concrete fallback tasks so we don't
+  # keep injecting the same one if it itself proves problematic.
+  local fallbacks=(
+    "- [ ] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts"
+    "- [ ] [S] Add unit test verifying poisonous + divine shield interaction: poisonous hit pops shield without killing — tests/combat/poisonous-divine-shield.test.ts"
+    "- [ ] [S] Add \`Pack Leader\` (tier 2 beast): whenever you summon a beast on your side give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts"
+    "- [ ] [S] Add \`Foe Reaper 4000\` (tier 6 mech): cleave keyword on attack — src/game/minions/tier6/foe-reaper-4000.ts"
+    "- [ ] [S] Add \`Strongshell Scavenger\` (tier 5): battlecry give all friendly taunt minions +2/+2 — src/game/minions/tier5/strongshell-scavenger.ts"
+    "- [ ] [S] Add \`Old Murk-Eye\` (tier 4 murloc): +1 ATK per other murloc on the battlefield (both sides) — onStartOfCombat hook"
+  )
+  local idx=$(( CONSECUTIVE_FAILS_TOTAL % ${#fallbacks[@]} ))
+  local next_task="${fallbacks[$idx]}"
+  CONSECUTIVE_FAILS_TOTAL=$(( CONSECUTIVE_FAILS_TOTAL + 1 ))
   sed -i '' "s|## Now (highest priority.*)|## Now (highest priority, model should pick from here first)\n\n$next_task|" \
     "$REPO/docs/loop-backlog.md" 2>/dev/null || true
   log "  → Added recovery task to top of backlog: $next_task"
@@ -125,20 +131,23 @@ run_iteration() {
   snap=$(git -C "$REPO" rev-parse HEAD)
   log "  snapshot: $snap"
 
-  # Build the prompt: project prompt + full ledger + current file inventory
+  # Build the prompt: project prompt + recent ledger only + minion/hero inventory.
+  # IMPORTANT: keep this LEAN — every byte here is in the model's context every iteration.
   local prompt
   prompt=$(cat "$PROMPT_FILE")
 
-  # Full ledger — model needs ALL entries to avoid redoing old work
-  prompt+=$'\n\n## Current ledger (every line is DONE — do NOT redo any of these)\n\n'
-  prompt+="$(cat "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
+  # Recent ledger only — last 40 entries. Older entries are still on disk if the
+  # model wants them; injecting all 250+ lines was eating the context window.
+  prompt+=$'\n\n## Recent ledger (last 40 entries — these are DONE, do NOT redo)\n\n'
+  prompt+="$(tail -40 "$REPO/docs/loop-ledger.md" 2>/dev/null || echo '(empty)')"
 
-  # Minion + hero file inventory so model can check existence without a bash call
-  prompt+=$'\n\n## Already-implemented files (skip any backlog item whose file is listed here)\n\n'
-  prompt+="### Minions on disk\n"
-  prompt+="$(find "$REPO/src/game/minions" -name '*.ts' ! -name 'index.ts' ! -name 'define.ts' | sed "s|$REPO/||" | sort)"
-  prompt+=$'\n\n### Heroes on disk\n'
-  prompt+="$(find "$REPO/src/game/heroes" -name '*.ts' ! -name 'index.ts' ! -name 'stub.ts' | sed "s|$REPO/||" | sort)"
+  # Minion + hero file inventory so model can check existence without a bash call.
+  # Just basenames to keep it compact.
+  prompt+=$'\n\n## Already-implemented files (basename only — skip any task whose file is here)\n\n'
+  prompt+="Minions: "
+  prompt+="$(find "$REPO/src/game/minions" -name '*.ts' ! -name 'index.ts' ! -name 'define.ts' -exec basename {} .ts \; | sort | tr '\n' ' ')"
+  prompt+=$'\n\nHeroes: '
+  prompt+="$(find "$REPO/src/game/heroes" -name '*.ts' ! -name 'index.ts' ! -name 'stub.ts' -exec basename {} .ts \; | sort | tr '\n' ' ')"
 
   # Sync with remote so the model sees the latest commits
   git -C "$REPO" pull --ff-only origin main >/dev/null 2>&1 || true
@@ -184,14 +193,58 @@ run_iteration() {
     CONSECUTIVE_FAILS=0
   else
     log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok real_diff=$real_diff new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
+
+    # Quarantine the task the model picked, if we can find it in the iter log.
+    # The prompt instructs the model to emit "CHOSEN TASK: ..." on its own line.
+    local chosen_task
+    chosen_task=$(grep -m1 -oE 'CHOSEN TASK:.*' "$iter_log" | head -1 | sed 's/CHOSEN TASK: *//')
+    if [[ -n "$chosen_task" ]]; then
+      # Find the matching backlog line (first ~30 chars of the task), move to quarantine.
+      local task_key
+      task_key=$(echo "$chosen_task" | head -c 50 | sed 's/[][().*+?^$\\/]/\\&/g')
+      if grep -qF "$task_key" "$REPO/docs/loop-backlog.md" 2>/dev/null; then
+        # Ensure Quarantine section exists
+        if ! grep -q "^## Quarantined" "$REPO/docs/loop-backlog.md"; then
+          printf '\n---\n\n## Quarantined (failed multiple times — DO NOT pick)\n\n' \
+            >> "$REPO/docs/loop-backlog.md"
+        fi
+        # Find the matching task line and append failure marker
+        local matching_line
+        matching_line=$(grep -nF "$task_key" "$REPO/docs/loop-backlog.md" | head -1 | cut -d: -f1)
+        if [[ -n "$matching_line" ]]; then
+          local existing_line
+          existing_line=$(sed -n "${matching_line}p" "$REPO/docs/loop-backlog.md")
+          # Only quarantine if it's a backlog item (starts with - [ ] or - [x])
+          if [[ "$existing_line" =~ ^-\ \[[\ x]\] ]]; then
+            sed -i '' "${matching_line}d" "$REPO/docs/loop-backlog.md"
+            echo "$existing_line  <!-- failed iteration $n -->" \
+              >> "$REPO/docs/loop-backlog.md"
+            log "  ↪ Quarantined task: $(echo "$chosen_task" | head -c 80)"
+          fi
+        fi
+      fi
+    fi
+
     git -C "$REPO" reset --hard "$snap" >/dev/null
-    git -C "$REPO" clean -fd src/ app/ tests/ docs/ 2>/dev/null || true
+    git -C "$REPO" clean -fd src/ app/ tests/ 2>/dev/null || true
+    # NOTE: do NOT clean docs/ — we want our backlog quarantine edits to persist.
+    # Commit the quarantine edit so it survives the next iteration's pull/reset.
+    if ! git -C "$REPO" diff --quiet docs/loop-backlog.md 2>/dev/null; then
+      git -C "$REPO" add docs/loop-backlog.md
+      git -C "$REPO" commit -m "chore: quarantine failed task from iteration $n" --quiet 2>/dev/null || true
+    fi
+
     log_fixed "$(date -u +%Y-%m-%dT%H:%M:%SZ) | $snap | REVERTED: iteration $n failed"
     CONSECUTIVE_FAILS=$(( CONSECUTIVE_FAILS + 1 ))
 
     # Circuit breaker: inject a recovery task if truly stuck
     if [[ $CONSECUTIVE_FAILS -ge $STUCK_THRESHOLD ]]; then
       inject_recovery_task "$snap" "$CONSECUTIVE_FAILS"
+      # Commit the recovery task injection so it survives the next reset
+      if ! git -C "$REPO" diff --quiet docs/loop-backlog.md 2>/dev/null; then
+        git -C "$REPO" add docs/loop-backlog.md
+        git -C "$REPO" commit -m "chore: inject recovery task after $CONSECUTIVE_FAILS consecutive fails" --quiet 2>/dev/null || true
+      fi
       CONSECUTIVE_FAILS=0
     fi
   fi
@@ -224,6 +277,7 @@ log "  stop file  = $STOP_FILE  (touch it to stop gracefully after current itera
 START_TS=$(date +%s)
 DEADLINE=$(( START_TS + MAX_TIME_HOURS * 3600 ))
 CONSECUTIVE_FAILS=0
+CONSECUTIVE_FAILS_TOTAL=0   # cumulative — used to rotate fallback tasks
 
 for ((i=1; i<=MAX_ITERS; i++)); do
   # Graceful stop: check for sentinel file before each iteration
