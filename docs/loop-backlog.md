@@ -82,8 +82,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Engine extensions
 
-- [ ] [S] Add `onMinionSold` hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions)
-- [ ] [S] Combat transcript: include attacker's and defender's instanceIds in every "attack" event (UI uses to highlight which minion is fighting)
+- [x] [S] Add `onMinionSold` hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions)
+- [x] [S] Combat transcript: include attacker's and defender's instanceIds in every "attack" event (UI uses to highlight which minion is fighting)
+- [x] [S] Make Mystery Shot and Poison Dart Shield use caster's board spellDamage — Arcane Tinker buffs spell damage, with unit tests
 - [x] [S] Add `onSpellCast` hook param including the cast spell's cardId so reactive minions can branch on spell type (Kalecgos already exists — verify it uses this)
 
 ### More minions for variety

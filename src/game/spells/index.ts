@@ -29,10 +29,11 @@ export const poisonDartShield: SpellCard = {
       const targetMinion = targetPlayer.board[target.boardIndex];
       if (!targetMinion) return ctx.state;
 
+      const baseDamage = 4 + (ctx.spellDamage as number);
       return updatePlayer(ctx.state, target.playerId, (p) => {
         const newBoard = [...p.board];
         const mi = newBoard[target.boardIndex]!;
-        newBoard[target.boardIndex] = { ...mi, hp: mi.hp - 4 };
+        newBoard[target.boardIndex] = { ...mi, hp: mi.hp - baseDamage };
         return { ...p, board: newBoard };
       });
     },
@@ -62,10 +63,11 @@ export const mysteryShot: SpellCard = {
       const targetMinion = targetPlayer.board[target.boardIndex];
       if (!targetMinion) return ctx.state;
 
+      const baseDamage = 2 + (ctx.spellDamage as number);
       return updatePlayer(ctx.state, target.playerId, (p) => {
         const newBoard = [...p.board];
         const mi = newBoard[target.boardIndex]!;
-        newBoard[target.boardIndex] = { ...mi, hp: mi.hp - 2 };
+        newBoard[target.boardIndex] = { ...mi, hp: mi.hp - baseDamage };
         return { ...p, board: newBoard };
       });
     },
