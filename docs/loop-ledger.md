@@ -1,3 +1,4 @@
+2026-05-03 | 9c18900 | FIXED: Add Alexstrasza (tier 5 dragon, 10/10 vanilla) — real Battlegrounds hero dragon with no keywords, distinct from existing Alexstrasza-Selfless-Dragon (tier 8), with unit tests
 2026-05-03 | e793b2b | FIXED: Add Boarlog Captain (tier 1 Quilboar, 2/2 vanilla) — fills the Quilboar tribe gap (tribe type existed but no minions used it), with unit tests
 2026-05-03 | ad8605a | FIXED: Add unit test verifying `applyDamageToPlayer` damage calculation matches spec — loser's tier + sum of winning minion tiers, armor absorbs first, Annihilan Battlemaster tracks total damage, with unit tests in tests/damage/damage-calc.test.ts
 2026-05-03 | 913d836 | FIXED: Make Mystery Shot and Poison Dart Shield spells use caster's board spellDamage — Arcane Tinker (spellDamage: 1) on caster's board increases spell damage by 1, with unit tests in tests/spells/spell-damage.test.ts

@@ -63,6 +63,7 @@ import oldMurkEye from "./tier4/old-murk-eye";
 import securityRover from "./tier4/security-rover";
 import toxfin from "./tier4/toxfin";
 import virmenSensei from "./tier4/virmen-sensei";
+import alexstrasza from "./tier5/alexstrasza";
 import baronRivendare from "./tier5/baron-rivendare";
 import bigfernal from "./tier5/bigfernal";
 import blingtron5000 from "./tier5/blingtron-5000";
@@ -151,6 +152,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [oldMurkEye.id]: oldMurkEye,
   [caveHydra.id]: caveHydra,
   [virmenSensei.id]: virmenSensei,
+  [alexstrasza.id]: alexstrasza,
   [blingtron5000.id]: blingtron5000,
   [bigfernal.id]: bigfernal,
   [baronRivendare.id]: baronRivendare,
