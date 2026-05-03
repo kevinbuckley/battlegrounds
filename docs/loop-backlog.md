@@ -34,66 +34,45 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 
 ### More heroes
 
-- [ ] [S] Add `Sindragosa` hero — passive `onTurnEnd`: frozen minions in your shop each gain +1/+1
-- [ ] [S] Add `Jaraxxus` hero — passive `onTurnStart`: demons in your shop get +1/+1 at start of recruit turn
-- [x] [S] Add `Trade Prince Gallywix` hero — active (2 gold): discover one minion from the opponent's last-seen board and add it to hand
-
-### Minions — Tier 6
-
-- [ ] [S] Add `Kalecgos, Arcane Aspect` (tier 6): dragon, after you cast a spell give all friendly minions +1/+1
-- [ ] [S] Add `Ghastcoiler` (tier 6): beast, deathrattle summon two random deathrattle minions
-- [ ] [S] Add `Mama Bear` (tier 6): beast, whenever a beast is summoned on your side give it +5/+5
-- [ ] [S] Add `Gentle Megasaur` (tier 6): beast, battlecry give all friendly murlocs a random keyword
+- [x] [S] Add `Sindragosa` hero — file exists at src/game/heroes/sindragosa.ts
+- [x] [S] Add `Jaraxxus` hero — file exists at src/game/heroes/jaraxxus.ts
+- [x] [S] Add `Trade Prince Gallywix` hero — done
+- [ ] [S] Add `Edwin VanCleef` hero passive: combo (every 2nd action this turn gives +1/+1 to a random friendly minion)
+- [ ] [S] Add `Reno Jackson` hero active (5 gold, once per game): make a friendly minion golden
+- [ ] [S] Add `Maiev Shadowsong` hero active (1 gold): give a shop minion "Dormant for 2 turns, awakens with +3/+3"
 
 ### AI opponents
 
 - [ ] [M] Greedy AI: upgrade tavern tier when it can afford it and board is strong enough — implement as a new `greedy` strategy in `src/ai/heuristics/greedy.ts`
 - [ ] [S] AI tier preference: basic AI prefers buying minions that match its existing tribe (first tribe on board) over cheapest minion
 - [ ] [M] AI combat board placement: AI orders board minions by ATK descending before combat (attackers positioned optimally)
+- [ ] [S] AI play order: AI plays battlecry minions before non-battlecry minions from hand each turn
 
 ---
 
-## Now (continued)
+## Soon
 
-### Game feel — Spells & discover polish
+### Game feel — UX polish (no browser needed — verifiable by reading code + bun test)
 
-- [ ] [S] Spell targeting UI: after clicking a spell in hand, highlight valid board targets and require a click to cast; currently spells fire immediately
-- [x] [S] Discover shows real next-tier minions: verify that when a triple fires, the discover overlay offers 3 minions from tier+1 (not from the pool at large) — verified, triples.ts correctly filters by tier+1
-- [x] [S] Game feel audit: onTurnEnd hooks and hero passives now fire for all players, not just player 0
-- [ ] [S] Add `Bananas` spell to shop rolls — verify it appears in the shop (it exists as `bananaSpell` in registry but may not be offered in shop rolls)
+- [ ] [S] Spell targeting UI: highlight valid board targets when a target-required spell is selected (already gated by NO_TARGET_SPELLS list in app/game/page.tsx)
+- [ ] [S] Combat result toast: persist "You took X damage from Y" banner for 3 seconds after combat ends (currently 1 second)
+- [ ] [S] Tier-up animation: show a brief flash on the tier indicator when player upgrades tavern tier
+- [ ] [S] Sell confirmation: require a second click on the sell button within 1.5s to actually sell (prevent misclicks)
 
-### More minions — Tier 1
+### Combat & engine fixes
 
-- [ ] [S] Add `Wrath Weaver` (tier 1): at end of turn, deal 1 damage to your hero and give all friendly demons +2/+2
-- [x] [S] Add `Scavenging Hyena` (tier 1): beast, whenever a friendly beast dies gain +2/+1
-- [ ] [S] Add `Murloc Tidecaller` (tier 1): murloc, whenever a murloc is summoned on either side gain +1 ATK
-- [ ] [S] Add `Murloc Tidehunter` (tier 1): murloc battlecry summon a 1/1 Murloc Scout
+- [ ] [S] Combat transcript: include the attacker's and defender's instanceIds in every "attack" event so the UI can highlight which minion is attacking
+- [ ] [S] Deathrattle ordering: verify deathrattles fire in left-to-right order on the board, not by death timestamp — add a unit test in tests/combat
+- [ ] [S] Cleave hits adjacent only: verify cleave damage hits exactly the two minions adjacent to the defender, not all friendlies — add a unit test
+- [ ] [S] Poisonous + Divine Shield interaction: poisonous hit on a divine-shielded minion should pop shield without killing — add a unit test
 
-### More minions — Tier 2
+### More minions (only those NOT yet on disk — verify with `ls src/game/minions/tierN/` first)
 
-- [ ] [S] Add `Glyph Guardian` (tier 2): dragon, whenever this minion attacks, give it +2 ATK
-- [ ] [S] Add `Unstable Ghoul` (tier 2): undead, taunt, deathrattle deal 1 damage to all minions
-
-### More minions — Tier 3
-
-- [ ] [S] Add `Arcane Tinker` (tier 3): elemental, battlecry add +1 spell damage to your hero power until end of turn
-- [ ] [S] Add `Coldlight Seer` (tier 3): murloc, battlecry give all friendly murlocs +2 HP
-- [x] [S] Add `Screwjank Clunker` (tier 3): mech, battlecry give a friendly mech +2/+2
-
-### More minions — Tier 4
-
-- [ ] [S] Add `Virmen Sensei` (tier 4): dragon, battlecry give a friendly dragon +2/+2
-- [x] [S] Add `Security Rover` (tier 4): mech, whenever this minion takes damage summon a 2/3 Bot with divine shield
-- [x] [S] Add `Annihilan Battlemaster` (tier 4): demon, gains +1 ATK for each damage your hero has taken
-
-### More minions — Tier 5
-
-- [ ] [S] Add `Murozond` (tier 5): dragon, battlecry add a copy of an enemy minion to your hand
-- [ ] [S] Add `Lightfang Enforcer` (tier 5): at end of turn, give a friendly minion of each tribe +2/+1
-
-### AI improvements
-
-- [ ] [M] AI combat board placement: AI orders board minions by ATK descending before combat (attackers positioned optimally)
+- [ ] [S] Add `Pack Leader` (tier 2): beast, whenever you summon a beast on your side give it +3 ATK
+- [ ] [S] Add `Old Murk-Eye` (tier 4): murloc, +1 ATK for each other murloc on the battlefield (both sides)
+- [ ] [S] Add `Drakonid Enforcer` (tier 4): dragon, whenever a friendly minion loses divine shield gain +2/+2
+- [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
+- [ ] [S] Add `Foe Reaper 4000` (tier 6): mech, cleave
 
 ---
 

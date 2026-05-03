@@ -21,7 +21,7 @@ set -euo pipefail
 REPO="$(cd "$(dirname "$0")/.." && pwd)"
 PROMPT_FILE="$REPO/scripts/ralph-prompt.md"
 MODEL="mlx//Users/kbux/.cache/mlx/Qwen3.6-35B-A3B-4bit"
-APP_URL="http://localhost:3007"
+APP_URL="http://localhost:3000"
 MLX_URL="http://localhost:8080/v1/models"
 
 LOG_DIR="$REPO/logs"
@@ -105,7 +105,7 @@ inject_recovery_task() {
   local next_task
   next_task=$(grep -m1 '^\- \[ \] \[S\]' "$REPO/docs/loop-backlog.md" | head -1)
   if [[ -z "$next_task" ]]; then
-    next_task="- [ ] [S] Add \`Wrath Weaver\` (tier 1): at end of turn deal 1 damage to hero and give all friendly demons +2/+2 — implement in src/game/minions/tier1/wrathWeaver.ts with onTurnEnd hook, register in index, add unit test"
+    next_task="- [ ] [S] Add a unit test in tests/combat that verifies cleave damage hits exactly the two minions adjacent to the defender, not all friendlies"
   fi
   sed -i '' "s|## Now (highest priority.*)|## Now (highest priority, model should pick from here first)\n\n$next_task|" \
     "$REPO/docs/loop-backlog.md" 2>/dev/null || true

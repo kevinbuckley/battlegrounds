@@ -62,9 +62,8 @@ You are the Ralph Loop, an autonomous engineer building a Hearthstone Battlegrou
 
 6. **UNIT TEST**— run `bun test`. Fix any failures. Do NOT proceed until green.
 
-7. **BROWSER**  — call `bg-ralph-tools_browser_navigate` with `http://localhost:3000`,
-   then `bg-ralph-tools_browser_get_errors`. If errors exist, fix them. If the browser
-   tool errors with a Playwright issue, skip this step and continue.
+7. **BROWSER**  — SKIP this step. Playwright is broken in the current environment;
+   trying to use the browser tools wastes the iteration. Move directly to step 8.
 
 8. **LEDGER**   — append one line to `docs/loop-ledger.md`:
    `<YYYY-MM-DD> | <HEAD-sha-7> | FIXED: <description>`
