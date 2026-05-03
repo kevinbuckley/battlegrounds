@@ -1,6 +1,7 @@
 import type { MinionCard, MinionCardId } from "../types";
 import allleyCat from "./tier1/alley-cat";
 import bloodsailPirate from "./tier1/bloodsail-pirate";
+import boarlogCaptain from "./tier1/boarlog-captain";
 import { bountyMinion } from "./tier1/bounty-minion";
 import bristlebackBoys from "./tier1/bristleback-boys";
 import comboMinion from "./tier1/combo-minion";
@@ -92,6 +93,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [grombiTheRotunda.id]: grombiTheRotunda,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
+  [boarlogCaptain.id]: boarlogCaptain,
   [bristlebackBoys.id]: bristlebackBoys,
   [bloodsailPirate.id]: bloodsailPirate,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,

@@ -150,6 +150,7 @@ All entries below are already committed and must not be redone.
 - [x] Buddies activate in beginRecruitTurn
 - [x] buySpell uses absolute shop index correctly (not slice-relative)
 - [x] applyCombatResult retains loser's surviving minions on board
+- [x] Add Boarlog Captain (tier 1 Quilboar, 2/2 vanilla) — fills the Quilboar tribe gap (tribe type existed but no minions used it)
 
 ---
 
