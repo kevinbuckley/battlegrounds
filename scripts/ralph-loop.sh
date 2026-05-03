@@ -103,12 +103,12 @@ inject_recovery_task() {
   # Cycle through a small bank of resilient, concrete fallback tasks so we don't
   # keep injecting the same one if it itself proves problematic.
   local fallbacks=(
-    "- [ ] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts"
-    "- [ ] [S] Add unit test verifying poisonous + divine shield interaction: poisonous hit pops shield without killing — tests/combat/poisonous-divine-shield.test.ts"
-    "- [ ] [S] Add \`Pack Leader\` (tier 2 beast): whenever you summon a beast on your side give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts"
-    "- [ ] [S] Add \`Foe Reaper 4000\` (tier 6 mech): cleave keyword on attack — src/game/minions/tier6/foe-reaper-4000.ts"
-    "- [ ] [S] Add \`Strongshell Scavenger\` (tier 5): battlecry give all friendly taunt minions +2/+2 — src/game/minions/tier5/strongshell-scavenger.ts"
-    "- [ ] [S] Add \`Old Murk-Eye\` (tier 4 murloc): +1 ATK per other murloc on the battlefield (both sides) — onStartOfCombat hook"
+    "- [ ] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed"
+    "- [ ] [S] Add \`Rat Pack\` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts"
+    "- [ ] [S] Add \`Imp Gang Boss\` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts"
+    "- [ ] [S] Add \`Zapp Slywick\` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts"
+    "- [ ] [S] Add \`Voidlord\` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts"
+    "- [ ] [S] Add \`onDamageTaken\` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution"
   )
   local idx=$(( CONSECUTIVE_FAILS_TOTAL % ${#fallbacks[@]} ))
   local next_task="${fallbacks[$idx]}"
@@ -196,8 +196,10 @@ run_iteration() {
 
     # Quarantine the task the model picked, if we can find it in the iter log.
     # The prompt instructs the model to emit "CHOSEN TASK: ..." on its own line.
+    # Use the LAST occurrence — models sometimes change task mid-iteration; the
+    # last CHOSEN TASK is the one that actually failed.
     local chosen_task
-    chosen_task=$(grep -m1 -oE 'CHOSEN TASK:.*' "$iter_log" | head -1 | sed 's/CHOSEN TASK: *//')
+    chosen_task=$(grep -oE 'CHOSEN TASK:.*' "$iter_log" | tail -1 | sed 's/CHOSEN TASK: *//')
     if [[ -n "$chosen_task" ]]; then
       # Find the matching backlog line (first ~30 chars of the task), move to quarantine.
       local task_key

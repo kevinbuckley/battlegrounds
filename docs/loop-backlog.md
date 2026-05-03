@@ -16,145 +16,111 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
-- [x] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts
+### Combat correctness tests
 
-### Combat correctness — high impact, easy to test
+- [ ] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, and that a 1/1 reborn that dies in combat re-enters board at 1/1 with no reborn flag
+- [ ] [S] Add tests/economy/upgrade-cost.test.ts — verify tier upgrade cost decreases by 1 each turn it isn't taken (beginRecruitTurn reduces upgradeCost), and resets to base on upgrade
+- [ ] [S] Add tests/shop/refresh.test.ts — verify shop refresh deducts 1 gold from player, and that refreshing costs exactly COST_REFRESH (currently 1g)
+- [ ] [S] Add tests/simulation/lifesteal.sim.test.ts — verify lifesteal keyword heals the attacking minion for damage dealt in combat, but NOT when damage is absorbed by divine shield
 
-- [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/
-- [x] [S] Add unit test verifying poisonous + divine shield interaction: verifies that poisonous is NOT consumed (only venomous is), shield pops without dealing damage to non-poisonous attackers, and poisonous kills shielded defenders without being consumed. Test in tests/combat/poisonous-shield.test.ts
-- [x] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
-- [x] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
-- [x] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
-- [x] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
-- [x] [S] Verify Brann + non-golden battlecry triggers 2x and Brann + golden triggers 4x — add unit test
-- [x] [S] Add unit test for combo keyword — verifies all friendly minions with combo gain +2/+2 when a card is played, stacking across multiple plays, tests/combat/combo.test.ts
+### New minions — Tier 1
 
-### New minions — Tier 2 (only those NOT yet on disk)
+- [ ] [S] Add `Fiendish Servant` (tier 1 demon, 2/1): deathrattle give its ATK to a random friendly minion — src/game/minions/tier1/fiendish-servant.ts
+- [ ] [S] Add `Righteous Protector` (tier 1 paladin, 1/1): divine shield + taunt — src/game/minions/tier1/righteous-protector.ts
 
-- [x] [S] Add `Pack Leader` (tier 2 beast): whenever a beast is summoned on your side, give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts
-- [x] [S] Add `Pogo-Hopper` (tier 2 mech): battlecry gain +1/+1 for each Pogo-Hopper you've played this game — uses player.history counter
+### New minions — Tier 2
 
-### New minions — Tier 4 (only those NOT yet on disk)
+- [ ] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon a number of 1/1 Rat tokens equal to this minion's ATK at time of death — src/game/minions/tier2/rat-pack.ts
+- [ ] [S] Add `Menagerie Magician` (tier 2 human, 2/4): battlecry give a random friendly Beast, Mech, and Murloc each +2/+2 — src/game/minions/tier2/menagerie-magician.ts
 
-- [x] [S] Add `Old Murk-Eye` (tier 4 murloc): +1 ATK for each other murloc on the battlefield (both sides) — onStartOfCombat aura recompute
-- [x] [S] Add `Drakonid Enforcer` (tier 4 dragon): whenever a friendly minion loses divine shield, gain +2/+2 — onDivineShieldPop hook
-- [x] [S] Add `Toxfin` (tier 4 murloc): battlecry give a friendly murloc poisonous
+### New minions — Tier 3
 
-### New minions — Tier 5 (only those NOT yet on disk)
+- [ ] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage, summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
+- [ ] [S] Add `Bloodsail Cannoneer` (tier 3 pirate, 2/3): battlecry give a friendly Pirate +3 ATK — src/game/minions/tier3/bloodsail-cannoneer.ts
 
-- [x] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
-- [x] [S] Add `Bigfernal` (tier 5 demon): whenever another friendly demon is summoned gain +2/+2
+### New minions — Tier 4
 
-### New minions — Tier 4 (only those NOT yet on disk)
+- [ ] [S] Add `Siegebreaker` (tier 4 demon, 5/8): taunt; your other Demons have +1 ATK — onStartOfCombat aura buff in src/game/minions/tier4/siegebreaker.ts
+- [ ] [S] Add `Floating Watcher` (tier 4 demon, 4/4): whenever your hero takes damage, gain +2/+2 — onHeroDamaged hook in src/game/minions/tier4/floating-watcher.ts
+- [ ] [S] Add `Ripsnarl Captain` (tier 4 pirate, 3/5): whenever a friendly Pirate attacks, give it +2/+2 — onAllyAttack hook in src/game/minions/tier4/ripsnarl-captain.ts
 
-- [x] [S] Add `Boulderfog Ogre` (tier 4 elemental, 10/2): vanilla high-attack minion filling the high-ATK gap
+### New minions — Tier 5
 
-### New minions — Tier 6 (only those NOT yet on disk)
+- [ ] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy minion instead of random — override target selection in src/game/minions/tier5/zapp-slywick.ts
+- [ ] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 Demons with taunt — src/game/minions/tier5/voidlord.ts
 
-- [x] [S] Add `Foe Reaper 4000` (tier 6 mech): cleave keyword (no other text)
-- [x] [S] Add `Sneed's Old Shredder` (tier 6 mech): deathrattle summon a random Legendary minion — src/game/minions/tier6/sneed-old-shredder.ts, tests/combat/sneed.test.ts
+### New minions — Tier 6
+
+- [ ] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
+- [ ] [S] Add `King of Beasts` (tier 6 beast, 2/6): taunt; battlecry gain +1 ATK for each other Beast on your board — src/game/minions/tier6/king-of-beasts.ts
 
 ### AI improvements
 
-- [ ] [M] Greedy AI: upgrade tavern tier when it can afford it AND has at least 4 minions on board — implement as `greedy` strategy in src/ai/heuristics/greedy.ts (file may already exist as stub — check first)
-- [ ] [S] AI tribe preference: basic AI prefers buying minions matching the most-frequent tribe on its current board over random
-- [ ] [M] AI combat board placement: AI sorts board minions by ATK descending before combat starts (use existing sortBoardByAttack util if present)
-- [ ] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — alters takeAITurn ordering
-- [x] [S] AI freezes shop when it has ≥1 minion it can't afford this turn — current AIs never freeze
+- [ ] [M] Greedy AI: add unit test verifying it actually upgrades tavern tier when it has ≥4 board minions and enough gold — tests/ai/greedy-upgrade.test.ts
+- [ ] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — modify takeAITurn ordering in all three AI strategies
+- [ ] [M] Greedy AI sell-to-upgrade: when board has 7 minions and gold is 1 short of upgrade, sell the weakest minion to afford the upgrade — greedy.ts
 
-### New heroes (only those NOT yet on disk)
+### UI polish (verifiable by reading code, no browser needed)
 
-- [x] [S] Add `Maiev Shadowsong` hero: active power (1g) — give a shop minion "Dormant for 2 turns, awakens with +3/+3" (file may exist — verify behavior)
-- [ ] [S] Add `Reno Jackson` hero: active power (5g, once per game) — make a friendly minion golden (file may exist — verify cost is 5)
-- [ ] [S] Add `Pyramad` hero: active power (1g) — give a random friendly minion +4 HP
+- [ ] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — store lastTierUpAt timestamp in component state, apply `.tier-up-pulse` CSS animation class, add keyframes to globals.css
+- [ ] [S] Sell undo: after selling a board or hand minion, show a 1.5s "Undo" floating button that restores the minion to hand at no cost — add sellHistory: MinionInstance | null state, show UndoSell button with setTimeout cleanup
 
-### UI polish (no browser needed — verifiable by reading code)
+### Game-rule completeness
 
-- [ ] [S] Combat result toast: persist "You took X damage from Y" banner for 5 seconds (currently 3) — tweak CombatResultToast component or app/game/page.tsx
-- [ ] [S] Tier-up animation: add a 500ms pulse on the Tavern Tier indicator when player upgrades (state: lastTierUpAt timestamp; CSS class on tier badge)
-- [ ] [S] Sell undo: after selling, show a 1.5s "Undo" button that restores the minion to hand (use sellHistory state)
+- [ ] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama, Floating Watcher); wire into combat.ts applyDamage after shield/poisonous resolution
+- [ ] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop before the attack loop
+- [ ] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat (for Floating Watcher and future hero-damage synergies)
 
 ---
 
 ## Soon
 
-### Game-rule fixes (verify spec in docs/game-rules/, then test)
-
-- [x] [S] Verify `applyDamageToPlayer` damage calculation matches spec in docs/game-rules/07-damage.md (1 base + 1 per surviving enemy minion + bonus for tier ≥4) — add unit test
-- [x] [S] Verify shop refresh cost is 1 gold (not 0) — add unit test in tests/shop/refresh.test.ts
-- [x] [S] Verify upgrade tier cost decreases by 1 each turn it isn't taken (tavern price reduction) — check src/game/economy.ts and add test
-
 ### Engine extensions
 
-- [x] [S] Add `onMinionSold` hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions)
-- [x] [S] Combat transcript: include attacker's and defender's instanceIds in every "attack" event (UI uses to highlight which minion is fighting)
-- [x] [S] Make Mystery Shot and Poison Dart Shield use caster's board spellDamage — Arcane Tinker buffs spell damage, with unit tests
-- [x] [S] Add `onSpellCast` hook param including the cast spell's cardId so reactive minions can branch on spell type (Kalecgos already exists — verify it uses this)
+- [ ] [S] Pool depletion: track removed minions in a global pool per cardId; rollShop should never offer more copies than remain in the pool — add `pool: Record<string, number>` to GameState, initialize from POOL_COUNTS, decrement on buy/roll, restore on sell/death
+- [ ] [S] Add `onSpellPlay` hook to RecruitCtx alongside onCast — fires when player plays any spell, so future minions can react to spell plays in the recruit phase (distinct from onCast which is combat-only)
+- [ ] [S] Validate board-size cap in combat deathrattle summoning: new tokens should not push either board past 7 minions — add guard in the deathrattle summon path in combat.ts
 
-### More minions for variety
+### More minions
 
-- [x] [S] Add `Murloc Tinyfin` (tier 1): vanilla 1/1 murloc (cheap warm-body)
-- [x] [S] Add `Dragonspawn Lieutenant` golden test: verify golden version has correct stats (4/6 if base is 2/3) — tests/minions/
-- [x] [S] Add `Tortollan Shellraiser` (tier 3 elemental): taunt; deathrattle give a random friendly minion +1/+3
-- [x] [S] Add `Tide-Razor` (tier 5 murloc): deathrattle summon three random murlocs
+- [ ] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
+- [ ] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
+- [ ] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
+
+### Hero completeness
+
+- [ ] [S] Add `Millificent Manastorm` hero test — verify hero power buffs ALL friendly Mechs +1/+1 when a Mech is bought from the shop, and that golden Mechs also get buffed
+- [ ] [S] Add `King Mukla` hero test — verify that using the hero power gives the opponent 2 Bananas in their hand, and that playing a Banana on a minion gives +1/+1
 
 ---
 
-## Done (mirror of `loop-ledger.md` for human readability)
+## Done (completed items — do NOT redo)
 
-All entries below are already committed and must not be redone.
-
-- [x] All keywords: taunt, divineShield, windfury, megaWindfury, poisonous, reborn, venomous, cleave, lifesteal, rush, freeze, collateralDamage, magnetic, combo, bounty, spellDamage — wired + tested
-- [x] Wire battlecry hook into playMinionToBoard
-- [x] Wire deathrattle hook (onDeath) into combat death resolution
-- [x] Wire start-of-combat hook (onStartOfCombat) before first attack
-- [x] Wire onDivineShieldPop hook into combat applyDamage
-- [x] Gold-per-turn ramp: 3 gold turn 1, +1/turn up to 10 (economy.ts `baseGoldForTurn`)
-- [x] Shop size scaling by tavern tier: 3/4/4/5/6/7
-- [x] Board size cap: max 7 minions enforced
-- [x] Reborn in combat: returns at 1 HP, reborn keyword removed
-- [x] Divine shield: first damage absorbed, shield removed, event logged
-- [x] Full UI: shop, board, hand, HUD, combat animation, leaderboard
-- [x] Combat state machine: pair, resolve, damage, eliminations, GameOver
-- [x] Triple detection + discover overlay; golden minion (battlecry/deathrattle 2x)
-- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov, Yogg-Saron, The Curator, King Mukla, George the Fallen, Ragnaros, Sir Finley, Scabbs Cutterbutter, AF Kay, Edwin Van Cleef, Millificent Manastorm, Trade Prince Gallywix, Sindragosa, Jaraxxus, Reno Jackson — with hero select + HP/armor tests
-- [x] Spells framework + Mystery Shot, Cauterizing Flame, Tavern Brawler, Brawl, Tavern Tipper, Bananas, Swat Team
-- [x] Anomalies framework + Golden Touch, Heavy Hitters, Double Down, Liquified, Armored Up
-- [x] Quest framework (Murloc Mania, Mech Mayhem, Demon Diplomacy)
-- [x] Buddy framework (Ymber, RoLo, Goblin Minion)
-- [x] Trinket framework + leaderboard display
-- [x] Bounty keyword: gold awarded to winner when bounty minion dies in combat
-- [x] Lifesteal does NOT trigger on divine-shield-absorbed hits
-- [x] Combat boards sorted by ATK descending before combat
-- [x] Bananas spell appears in tier 1 shops as no-target buff
-- [x] Combat alternation by turn number (not board size)
-- [x] Frozen shop stays frozen across turns; per-turn effects still fire
-- [x] Reborn resets ATK/spellDamage to base 1/0
-- [x] Magnetic stacks on rightmost same-tribe minion
-- [x] Combat animation RNG matches state machine
-- [x] Triples at tier 6 still create golden minions
-- [x] Shop UI shows actual buffed stats, not base card stats
-- [x] Sir Finley hero power swaps to another active hero
-- [x] All 3 AI strategies use hero powers during recruit
-- [x] Math.floor(rng.next() % n) replaced with rng.pick() across spells/minions/anomalies
-- [x] Sindragosa passive checks freeze keyword on individual shop minions
-- [x] Spell targeting UI requires player click (Banana, Brawl, Tavern Brawler)
-- [x] Armor resets to 0 at start of recruit turn
-- [x] Cauterizing Flame respects divine shield
-- [x] Annihilan Battlemaster tracks total damage including damage absorbed by armor
-- [x] Combat animation logs Lifesteal events (emerald color, bandage emoji)
-- [x] Freeze Shop costs 1 gold (was 0)
-- [x] Sindragosa/Jaraxxus passives read from newly rolled shop in beginRecruitTurn
-- [x] sort-based shuffle replaced with rng.shuffle (Fisher-Yates) in shop/triples
-- [x] Triples no longer fire mid-buy, only on EndTurn
-- [x] Leaderboard shows opponent boards during recruit phase
-- [x] Combat transcript emits Stat events after each attack cycle
-- [x] Combat damage recap toast persists 3 seconds
-- [x] Deathrattles fire left-to-right by board index
-- [x] Buddies activate in beginRecruitTurn
-- [x] buySpell uses absolute shop index correctly (not slice-relative)
-- [x] applyCombatResult retains loser's surviving minions on board
-- [x] Add Boarlog Captain (tier 1 Quilboar, 2/2 vanilla) — fills the Quilboar tribe gap (tribe type existed but no minions used it)
+- [x] All keywords: taunt, divineShield, windfury, megaWindfury, poisonous, reborn, venomous, cleave, lifesteal, rush, freeze, collateralDamage, magnetic, combo, bounty, spellDamage
+- [x] Wire battlecry / deathrattle / start-of-combat / onDivineShieldPop hooks
+- [x] Gold-per-turn ramp, shop size scaling, board size cap
+- [x] Reborn in combat (1 HP, keyword removed), Divine shield (absorb + remove)
+- [x] Full UI: shop, board, hand, HUD, combat animation, leaderboard, victory screen
+- [x] Combat state machine, triple detection, golden minions (battlecry/deathrattle 2x)
+- [x] Heroes: Rakanishu, Patchwerk, Lich Baz'hial, Ysera, Jandice Barov, Yogg-Saron, The Curator, King Mukla, George the Fallen, Ragnaros, Sir Finley, Scabbs Cutterbutter, AF Kay, Edwin Van Cleef, Millificent Manastorm, Trade Prince Gallywix, Sindragosa, Jaraxxus, Reno Jackson, Maiev Shadowsong, Pyramad
+- [x] Spells: Mystery Shot, Cauterizing Flame, Tavern Brawler, Brawl, Tavern Tipper, Bananas, Swat Team
+- [x] Anomalies: Golden Touch, Heavy Hitters, Double Down, Liquified, Armored Up, Tavern Discount, Big League, Extra Life
+- [x] Quests (Murloc Mania, Mech Mayhem, Demon Diplomacy), Buddies (Ymber, RoLo, Goblin Minion), Trinkets
+- [x] Bounty keyword (gold on death), Lifesteal no-trigger on divine shield, Frozen shop persistence
+- [x] Combat boards sorted ATK desc, combat alternation by turn, reborn resets stats
+- [x] Magnetic stacks on rightmost mech, golden + Brann 4x multiplicative battlecry
+- [x] rng.pick() replaces Math.floor(rng.next() * n) across all random selection
+- [x] Spell targeting UI, shop shows buffed stats, combat transcript Stat events
+- [x] Combat result toast (5s), AI uses hero powers, AI freezes shop, AI prefers tribe match
+- [x] Deathrattles fire left-to-right, deathrattle summons placed at dead minion's index
+- [x] onMinionSold hook, spellCardId on onCast, onShopSummon hook
+- [x] Minions: Alley-Cat, Bloodsail Pirate, Boarlog Captain, Bristleback Boys, Dragonspawn Lieutenant, Flame Imp, Gnoma Tinker, Murloc Tidecaller, Murloc Tidehunter, Murloc Tinyfin, Rockpool Hunter, Righteous Protector, Venomous Crasher, Windfury Minion, Wrath Weaver (tier 1)
+- [x] Minions: Annoy-o-Tron, Deflect-o-Bot, Glyph Guardian, Harvest Golem, Imprisoner, Kaboom Bot, Knife Juggler, Metaltooth Leaper, Murloc Warleader, Nightmare Amalgam, Pack Leader, Pogo-Hopper, Scavenging Hyena, Selfless Hero, Spawn of N'Zoth, Unstable Ghoul, Vulgar Homunculus (tier 2)
+- [x] Minions: Arcane Tinker, Cobalt Scalebane, Coldlight Seer, Imp Gang Boss (stub), Infested Wolf, Queen of Pain, Screwjank Clunker, Scurpus, Soul Juggler, Stonehill Defender, Tortollan Shellraiser (tier 3)
+- [x] Minions: Annihilan Battlemaster, Bolvar Fireblood, Boulderfog Ogre, Broodkin Zealot, Cave Hydra, Crystalweaver, Defender of Argus, Drakonid Enforcer, Naga Secret Guardian, Old Murk-Eye, Security Rover, Toxfin, Virmen Sensei (tier 4)
+- [x] Minions: Alexstrasza, Baron Rivendare, Bigfernal, Blingtron 5000, Brann Bronzebeard, Junkbot, Lightfang Enforcer, Mogor, Murozond, Strongshell Scavenger, Tide-Razor (tier 5)
+- [x] Minions: Foe Reaper 4000, Gentle Megasaur, Ghastcoiler, Kalecgos, Mama Bear, Sneed's Old Shredder, Ysera the Dreamer (tier 6)
+- [x] Tests: cleave, windfury/megaWindfury, deathrattle-position, golden, brann, combo, poisonous+divine-shield, sell-synergy, damage calculation
 
 ---
 

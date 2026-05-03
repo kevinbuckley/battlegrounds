@@ -48,12 +48,14 @@ If the only available tasks are vague, **add a concrete task to the backlog your
       - Other tasks → grep for a key identifier in the named file. If wired, mark `[x]` and skip.
 
    d. If every "Now" item is done, pick from "Soon" the same way.
-   e. If both are done, pick a SPECIFIC item from this list (do NOT do a "game feel audit"):
-      - "Add `Pack Leader` (tier 2): beast, summon-a-beast gives +3 ATK"
-      - "Add `Old Murk-Eye` (tier 4): murloc, +1 ATK per other murloc both sides"
-      - "Add `Foe Reaper 4000` (tier 6): mech, cleave"
-      - "Add `Strongshell Scavenger` (tier 5): battlecry +2/+2 to friendly taunts"
-      - "Add unit test verifying poisonous + divine shield interaction"
+   e. If both sections are empty/done, pick a SPECIFIC item from this list:
+      - "Add `Rat Pack` (tier 2 beast): deathrattle summon ATK-many 1/1 Rats"
+      - "Add `Imp Gang Boss` (tier 3 demon): whenever damaged, summon a 1/1 Imp"
+      - "Add `Zapp Slywick` (tier 5 mech): rush; always attacks lowest-ATK enemy"
+      - "Add `Voidlord` (tier 5 demon): taunt; deathrattle summon three 1/3 taunt demons"
+      - "Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage"
+   f. If EVEN THAT list is done, **add 3 new concrete tasks to docs/loop-backlog.md yourself**
+      from docs/game-rules/ (find something unimplemented), then immediately do the first one.
 
    **MANDATORY: emit this exact line before doing anything else:**
    `CHOSEN TASK: <one sentence>`
@@ -99,9 +101,9 @@ If the only available tasks are vague, **add a concrete task to the backlog your
 
 - **Never ask questions.** Never write "I need clarification". Decide and act.
 - **Never stop mid-task.** Run all 10 steps to completion.
-- **NEVER run `git push` for any reason.** The harness handles all remote operations. Running `git push` wastes iteration time and will fail with a permissions error anyway.
-- **Never run `git reset`, `git rebase`, `git stash`, or any command that rewrites or
-  discards local changes without explicit revert intent.** Only `git add` and `git commit` are allowed. To revert: use `git checkout -- . && git clean -fd src/ tests/` only.
+- **NEVER run `git push` for any reason.** The harness handles all remote operations. Running `git push` will always fail and wastes the iteration budget.
+- **NEVER run `git stash`.** Stashing leaves dirty state that confuses the harness verification (`dirty=1`). If you need to discard your work, use the explicit revert: `git checkout -- . && git clean -fd src/ tests/`
+- **Never run `git reset` or `git rebase`.** Only `git add` and `git commit` are allowed.
 - **If you cannot find a real bug or your tests fail twice, REVERT and exit cleanly.**
   Do not loop on analysis. The harness will pick another task on the next iteration.
 - **Don't expand scope.** If you find a second gap, add it to `docs/loop-backlog.md`
