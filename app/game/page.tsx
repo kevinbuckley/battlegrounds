@@ -61,6 +61,10 @@ function describeEvent(evt: CombatEvent, nameMap: Map<string, string>): string {
       const target = nameMap.get(evt.target) ?? "?";
       return `${target} — stats: ${evt.atk}/${evt.hp}`;
     }
+    case "Lifesteal": {
+      const target = nameMap.get(evt.target) ?? "?";
+      return `${target} heals for ${evt.amount}`;
+    }
     case "End": {
       return evt.winner === "draw" ? "Draw!" : `${evt.winner} wins`;
     }
@@ -85,6 +89,8 @@ function eventTypeColor(evt: CombatEvent): string {
       return "text-emerald-400";
     case "Stat":
       return "text-blue-300";
+    case "Lifesteal":
+      return "text-emerald-300";
     case "End":
       return "text-amber-400 text-lg font-bold";
     default:
@@ -108,6 +114,8 @@ function eventTypeEmoji(evt: CombatEvent): string {
       return "\u{2728}";
     case "Stat":
       return "\u{1F4CB}";
+    case "Lifesteal":
+      return "\u{1F5E8}";
     case "End":
       return "\u{1F3C6}";
     default:
