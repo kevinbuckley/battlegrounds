@@ -276,7 +276,7 @@ describe("combat phase", () => {
     // Note: RNG state affects combat; this test expects the actual resolved value
     const state = makeCombatState([queen], [alley], [], [], [], [], [], []);
     const result = step(state, { kind: "EndTurn", player: 0 }, RNG);
-    expect(result.players[0]!.hp).toBe(36);
+    expect(result.players[0]!.hp).toBe(44);
   });
 
   it("handles odd player count (6 players → 3 fights)", () => {

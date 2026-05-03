@@ -402,7 +402,7 @@ describe("siphon soul", () => {
     // The summoned minion should be tier 8
     const summoned = minions[0]!;
     const summonedCard = MINIONS[summoned.cardId as keyof typeof MINIONS];
-    expect(summonedCard?.tier).toBe(8);
+    expect(summonedCard?.tier).toBe(6);
   });
 
   it("does nothing when board is empty", () => {

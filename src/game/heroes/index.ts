@@ -9,6 +9,7 @@ import { lichBazHial } from "./lich-bazhial";
 import { maievShadowsong } from "./maiev-shadowsong";
 import { millificentManastorm } from "./millificent-manastorm";
 import { patchwerk } from "./patchwerk";
+import { pyramad } from "./pyramad";
 import { ragnaros } from "./ragnaros";
 import { rakanishu } from "./rakanishu";
 import { renoJackson } from "./reno-jackson";
@@ -37,6 +38,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [rakanishu.id]: rakanishu,
   [renoJackson.id]: renoJackson,
   [maievShadowsong.id]: maievShadowsong,
+  [pyramad.id]: pyramad,
   [theCurator.id]: theCurator,
   [yoggSaron.id]: yoggSaron,
   [kingMukla.id]: kingMukla,
