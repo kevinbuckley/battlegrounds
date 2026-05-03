@@ -201,6 +201,8 @@ export interface PlayerState {
   heroPowerUsed: boolean;
   eliminated: boolean;
   extraLifeUsed: boolean;
+  /** Whether Reno Jackson's once-per-game hero power has been used. */
+  renoJacksonUsed: boolean;
   placement: number | null;
   aiMemo: Record<string, unknown>;
   spells: SpellInstance[];

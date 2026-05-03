@@ -1005,6 +1005,7 @@ export function makeInitialState(seed: number): GameState {
     upgradedThisTurn: false,
     heroPowerUsed: false,
     extraLifeUsed: false,
+    renoJacksonUsed: false,
     eliminated: false,
     placement: null,
     aiMemo: {},

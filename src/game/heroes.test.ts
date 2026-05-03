@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 18 gameplay heroes (excluding stub)", () => {
+  it("contains all 19 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(18);
+    expect(ids).toHaveLength(19);
   });
 
   it("every hero has a description", () => {
@@ -587,5 +587,62 @@ describe("Trade Prince Gallywix hero power", () => {
     const handAfter = after.players[0]!.hand;
     expect(handAfter.length).toBe(1);
     expect(handAfter[0]!.cardId).toBe("flame_imp");
+  });
+});
+
+describe("Reno Jackson hero power", () => {
+  it("makes a friendly minion golden", () => {
+    const minion = instantiate(MINIONS["wrath_weaver"]!);
+    const state = makeStateWithHero("reno_jackson", [minion]);
+
+    const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    const golden = after.players[0]!.board[0]!;
+    expect(golden.golden).toBe(true);
+    expect(after.players[0]!.gold).toBe(5); // 10 - 5
+    expect(after.players[0]!.renoJacksonUsed).toBe(true);
+  });
+
+  it("preserves actual stats when making minion golden (not base * 2)", () => {
+    const minion = instantiate(MINIONS["wrath_weaver"]!);
+    // Give it buffs manually to simulate aura/buff effects
+    const buffed = { ...minion, atk: 5, hp: 4, maxHp: 4 };
+    const state = makeStateWithHero("reno_jackson", [buffed]);
+
+    const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    const golden = after.players[0]!.board[0]!;
+    // Should preserve the buffed stats, not do baseAtk * 2
+    expect(golden.atk).toBe(5);
+    expect(golden.hp).toBe(4);
+    expect(golden.maxHp).toBe(4);
+  });
+
+  it("can only be used once per game", () => {
+    const minion = instantiate(MINIONS["wrath_weaver"]!);
+    const state = makeStateWithHero("reno_jackson", [minion]);
+
+    const after1 = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    expect(after1.players[0]!.renoJacksonUsed).toBe(true);
+
+    // Second use should fail — hero power already used this turn
+    expect(() => step(after1, { kind: "HeroPower", player: 0, target: 0 }, RNG)).toThrow(
+      "Hero power already used this turn",
+    );
+  });
+
+  it("does nothing when no board minion exists", () => {
+    const state = makeStateWithHero("reno_jackson", []);
+
+    const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    // Should not error, just return unchanged state
+    expect(after.players[0]!.board.length).toBe(0);
+  });
+
+  it("has correct stats: 30 HP, 7 armor, 5 gold cost", () => {
+    const hero = HEROES["reno_jackson"];
+    expect(hero).toBeDefined();
+    expect(hero!.startHp).toBe(30);
+    expect(hero!.startArmor).toBe(7);
+    expect(hero!.power.kind).toBe("active");
+    expect((hero!.power as { kind: "active"; cost: number; usesPerTurn: number }).cost).toBe(5);
   });
 });
