@@ -18,7 +18,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Combat correctness — high impact, easy to test
 
-- [ ] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/
+- [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/ (already covered by existing test in keywords.sim.test.ts line 83-89)
 - [ ] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
 - [ ] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
 - [ ] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
@@ -36,7 +36,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Old Murk-Eye` (tier 4 murloc): +1 ATK for each other murloc on the battlefield (both sides) — onStartOfCombat aura recompute
 - [ ] [S] Add `Drakonid Enforcer` (tier 4 dragon): whenever a friendly minion loses divine shield, gain +2/+2 — onDivineShieldPop hook
-- [ ] [S] Add `Toxfin` (tier 4 murloc): battlecry give a friendly murloc poisonous
+- [x] [S] Add `Toxfin` (tier 4 murloc): battlecry give a friendly murloc poisonous
 
 ### New minions — Tier 5 (only those NOT yet on disk)
 
