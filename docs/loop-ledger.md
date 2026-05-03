@@ -253,3 +253,4 @@
 2026-05-03 | 193d8cc | FIXED: Add Pogo-Hopper (tier 2 mech) — battlecry gains +1/+1 for each Pogo-Hopper previously played this game, with unit tests
 2026-05-03 | ef8b499 | FIXED: Add Toxfin (tier 4 murloc) — battlecry gives a friendly murloc poisonous, with unit tests
 2026-05-03 | 7f22acd | FIXED: Add windfury unit test verifying windfury attacks exactly 2 times per turn and megaWindfury attacks exactly 4 times per turn, with edge case tests for killing multiple enemies
+2026-05-03 | e580977 | FIXED: Add Sneed's Old Shredder (tier 6 mech): deathrattle summons a random minion from the tier-6 legendary pool (Foe Reaper 4000, Ghastcoiler, Kalecgos, etc.) with correct board positioning and golden double-trigger, with unit tests
