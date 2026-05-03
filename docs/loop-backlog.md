@@ -16,7 +16,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
-- [ ] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts
+- [x] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts
 
 ### Combat correctness — high impact, easy to test
 
@@ -31,23 +31,23 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 2 (only those NOT yet on disk)
 
-- [ ] [S] Add `Pack Leader` (tier 2 beast): whenever a beast is summoned on your side, give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts
+- [x] [S] Add `Pack Leader` (tier 2 beast): whenever a beast is summoned on your side, give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts
 - [x] [S] Add `Pogo-Hopper` (tier 2 mech): battlecry gain +1/+1 for each Pogo-Hopper you've played this game — uses player.history counter
 
 ### New minions — Tier 4 (only those NOT yet on disk)
 
-- [ ] [S] Add `Old Murk-Eye` (tier 4 murloc): +1 ATK for each other murloc on the battlefield (both sides) — onStartOfCombat aura recompute
-- [ ] [S] Add `Drakonid Enforcer` (tier 4 dragon): whenever a friendly minion loses divine shield, gain +2/+2 — onDivineShieldPop hook
+- [x] [S] Add `Old Murk-Eye` (tier 4 murloc): +1 ATK for each other murloc on the battlefield (both sides) — onStartOfCombat aura recompute
+- [x] [S] Add `Drakonid Enforcer` (tier 4 dragon): whenever a friendly minion loses divine shield, gain +2/+2 — onDivineShieldPop hook
 - [x] [S] Add `Toxfin` (tier 4 murloc): battlecry give a friendly murloc poisonous
 
 ### New minions — Tier 5 (only those NOT yet on disk)
 
-- [ ] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
+- [x] [S] Add `Strongshell Scavenger` (tier 5): battlecry give all friendly taunt minions +2/+2
 - [x] [S] Add `Bigfernal` (tier 5 demon): whenever another friendly demon is summoned gain +2/+2
 
 ### New minions — Tier 6 (only those NOT yet on disk)
 
-- [ ] [S] Add `Foe Reaper 4000` (tier 6 mech): cleave keyword (no other text)
+- [x] [S] Add `Foe Reaper 4000` (tier 6 mech): cleave keyword (no other text)
 - [x] [S] Add `Sneed's Old Shredder` (tier 6 mech): deathrattle summon a random Legendary minion — src/game/minions/tier6/sneed-old-shredder.ts, tests/combat/sneed.test.ts
 
 ### AI improvements
@@ -60,7 +60,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New heroes (only those NOT yet on disk)
 
-- [ ] [S] Add `Maiev Shadowsong` hero: active power (1g) — give a shop minion "Dormant for 2 turns, awakens with +3/+3" (file may exist — verify behavior)
+- [x] [S] Add `Maiev Shadowsong` hero: active power (1g) — give a shop minion "Dormant for 2 turns, awakens with +3/+3" (file may exist — verify behavior)
 - [ ] [S] Add `Reno Jackson` hero: active power (5g, once per game) — make a friendly minion golden (file may exist — verify cost is 5)
 - [ ] [S] Add `Pyramad` hero: active power (1g) — give a random friendly minion +4 HP
 
@@ -76,9 +76,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Game-rule fixes (verify spec in docs/game-rules/, then test)
 
-- [ ] [S] Verify `applyDamageToPlayer` damage calculation matches spec in docs/game-rules/07-damage.md (1 base + 1 per surviving enemy minion + bonus for tier ≥4) — add unit test
-- [ ] [S] Verify shop refresh cost is 1 gold (not 0) — add unit test in tests/shop/refresh.test.ts
-- [ ] [S] Verify upgrade tier cost decreases by 1 each turn it isn't taken (tavern price reduction) — check src/game/economy.ts and add test
+- [x] [S] Verify `applyDamageToPlayer` damage calculation matches spec in docs/game-rules/07-damage.md (1 base + 1 per surviving enemy minion + bonus for tier ≥4) — add unit test
+- [x] [S] Verify shop refresh cost is 1 gold (not 0) — add unit test in tests/shop/refresh.test.ts
+- [x] [S] Verify upgrade tier cost decreases by 1 each turn it isn't taken (tavern price reduction) — check src/game/economy.ts and add test
 
 ### Engine extensions
 
@@ -89,10 +89,10 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### More minions for variety
 
-- [ ] [S] Add `Murloc Tinyfin` (tier 1): vanilla 1/1 murloc (cheap warm-body)
-- [ ] [S] Add `Dragonspawn Lieutenant` golden test: verify golden version has correct stats (4/6 if base is 2/3) — tests/minions/
+- [x] [S] Add `Murloc Tinyfin` (tier 1): vanilla 1/1 murloc (cheap warm-body)
+- [x] [S] Add `Dragonspawn Lieutenant` golden test: verify golden version has correct stats (4/6 if base is 2/3) — tests/minions/
 - [x] [S] Add `Tortollan Shellraiser` (tier 3 elemental): taunt; deathrattle give a random friendly minion +1/+3
-- [ ] [S] Add `Tide-Razor` (tier 5 murloc): deathrattle summon three random murlocs
+- [x] [S] Add `Tide-Razor` (tier 5 murloc): deathrattle summon three random murlocs
 
 ---
 

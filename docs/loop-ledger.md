@@ -1,3 +1,4 @@
+2026-05-03 | 5f89f8f | FIXED: Add unit test verifying calcDamage uses actual tier from registry — tests real minions (flame_imp tier1, murloc_warleader tier2, cave_hydra tier4, foe_reaper tier6) to confirm formula uses registry tier not default tier 1, with 5 test cases in tests/damage/calcDamage-registry.test.ts
 2026-05-03 | 9c18900 | FIXED: Add Alexstrasza (tier 5 dragon, 10/10 vanilla) — real Battlegrounds hero dragon with no keywords, distinct from existing Alexstrasza-Selfless-Dragon (tier 8), with unit tests
 2026-05-03 | e793b2b | FIXED: Add Boarlog Captain (tier 1 Quilboar, 2/2 vanilla) — fills the Quilboar tribe gap (tribe type existed but no minions used it), with unit tests
 2026-05-03 | ad8605a | FIXED: Add unit test verifying `applyDamageToPlayer` damage calculation matches spec — loser's tier + sum of winning minion tiers, armor absorbs first, Annihilan Battlemaster tracks total damage, with unit tests in tests/damage/damage-calc.test.ts
