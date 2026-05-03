@@ -365,7 +365,11 @@ export function playMinionToBoard(
   if (battlecry) {
     const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
     afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
-    if (hasBrann || isGolden) {
+    // In real Battlegrounds, golden and Brann stack multiplicatively:
+    // golden alone = 2 triggers, Brann alone = 2 triggers,
+    // both golden AND Brann = 4 triggers (2 × 2).
+    const multiplier = (hasBrann ? 2 : 1) * (isGolden ? 2 : 1);
+    for (let i = 1; i < multiplier; i++) {
       afterPlay = battlecry({ self: minion, playerId, state: afterPlay, rng, spellDamage });
     }
   }
