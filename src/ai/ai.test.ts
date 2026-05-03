@@ -340,6 +340,50 @@ describe("basic strategy", () => {
     // Should buy scavenging_hyena (index 1, beast matching board) not combo_minion (index 0, cheaper but no tribe)
     expect(buyAction.shopIndex).toBe(1);
   });
+
+  it("plays battlecry minions before non-battlecry minions from hand", () => {
+    // gnoma_tinker has battlecry (gains 1 gold), wrath_weaver does not.
+    // The AI should play gnoma_tinker first (hand index 0), then wrath_weaver
+    // (which shifts to hand index 0 after the first play).
+    const base = makeInitialState(1);
+    const gnomaTinker = instantiate(MINIONS["gnoma_tinker"]!); // 1/2, has battlecry
+    const wrathWeaver = instantiate(MINIONS["wrath_weaver"]!); // 2/2, no battlecry
+    const state: GameState = {
+      ...base,
+      phase: { kind: "Recruit", turn: 2 },
+      turn: 2,
+      pool: { gnoma_tinker: 50, wrath_weaver: 50 },
+      players: base.players.map((p, i) =>
+        i === 0
+          ? {
+              ...p,
+              heroId: "stub_hero",
+              hp: 40,
+              gold: 3,
+              tier: 1 as const,
+              upgradeCost: 5,
+              board: [],
+              hand: [gnomaTinker, wrathWeaver],
+              shop: [],
+              spells: [],
+              trinkets: [],
+              quests: [],
+              buddies: [],
+              discoverOffer: null,
+            }
+          : p,
+      ),
+    };
+    const view = makePlayerView(state, 0);
+    const actions = basic.decideRecruitActions(view, RNG);
+    const plays = actions.filter((a) => a.kind === "PlayMinion");
+    expect(plays.length).toBe(2);
+    // First play should be gnoma_tinker (handIndex 0, has battlecry)
+    expect((plays[0] as Extract<Action, { kind: "PlayMinion" }>).handIndex).toBe(0);
+    // Second play should be wrath_weaver — after the first play shifts the hand,
+    // it's now at index 0, so the AI plays index 0 again.
+    expect((plays[1] as Extract<Action, { kind: "PlayMinion" }>).handIndex).toBe(0);
+  });
 });
 
 // ---------------------------------------------------------------------------

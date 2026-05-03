@@ -1,4 +1,5 @@
 import { getHero } from "@/game/heroes/index";
+import { MINIONS } from "@/game/minions/index";
 import { buyMinion, playMinionToBoard, sellMinion, upgradeTier } from "@/game/shop";
 import { step } from "@/game/state";
 import type { Action, MinionInstance } from "@/game/types";
@@ -131,18 +132,30 @@ export const greedy: Strategy = {
       }
     }
 
-    // --- Play all hand minions to board ---
-    let playing = true;
-    while (playing) {
-      const player = sim.players[me]!;
-      if (player.hand.length === 0 || player.board.length >= 7) break;
+    // --- Play all hand minions to board, battlecry first ---
+    {
+      let playing = true;
+      while (playing) {
+        const player = sim.players[me]!;
+        if (player.hand.length === 0 || player.board.length >= 7) break;
 
-      const boardPos = player.board.length; // append to end
-      try {
-        sim = playMinionToBoard(sim, me, 0, boardPos, rng);
-        actions.push({ kind: "PlayMinion", player: me, handIndex: 0, boardIndex: boardPos });
-      } catch {
-        playing = false;
+        const handWithBattlecry = player.hand
+          .map((m, i) => ({ index: i, hasBattlecry: !!MINIONS[m.cardId]?.hooks?.onBattlecry }))
+          .sort((a, b) => (b.hasBattlecry ? 1 : 0) - (a.hasBattlecry ? 1 : 0));
+
+        const targetIndex = handWithBattlecry[0]!.index;
+        const boardPos = player.board.length;
+        try {
+          sim = playMinionToBoard(sim, me, targetIndex, boardPos, rng);
+          actions.push({
+            kind: "PlayMinion",
+            player: me,
+            handIndex: targetIndex,
+            boardIndex: boardPos,
+          });
+        } catch {
+          playing = false;
+        }
       }
     }
 
