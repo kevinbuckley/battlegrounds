@@ -663,3 +663,86 @@ describe("drakonid_enforcer", () => {
     expect(atkValues).toContain(7);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Deathrattle ordering (left-to-right on board)
+// ---------------------------------------------------------------------------
+
+describe("deathrattle ordering", () => {
+  it("fires deathrattles in left-to-right board order (index 0 first)", () => {
+    // Create three minions with deathrattles that record their firing order.
+    // Board: [dr1, dr2, dr3] — all die to a single killer.
+    // Deathrattles should fire in order: dr1, dr2, dr3 (left-to-right).
+    const order: string[] = [];
+
+    const dr1 = defineMinion({
+      id: "dr_order_1",
+      name: "DR Order 1",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onDeath: () => {
+          order.push("dr1");
+        },
+      },
+    });
+
+    const dr2 = defineMinion({
+      id: "dr_order_2",
+      name: "DR Order 2",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onDeath: () => {
+          order.push("dr2");
+        },
+      },
+    });
+
+    const dr3 = defineMinion({
+      id: "dr_order_3",
+      name: "DR Order 3",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onDeath: () => {
+          order.push("dr3");
+        },
+      },
+    });
+
+    const killer = defineMinion({
+      id: "big_killer",
+      name: "Big Killer",
+      tier: 1,
+      tribes: [],
+      baseAtk: 10,
+      baseHp: 100,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+
+    // Board: [dr1, dr2, dr3] vs [killer]
+    // Killer (10/100) kills all three one by one. Deathrattles should fire left-to-right.
+    simulateCombat(
+      [instantiate(dr1), instantiate(dr2), instantiate(dr3)],
+      [instantiate(killer)],
+      makeRng(0),
+    );
+
+    expect(order).toEqual(["dr1", "dr2", "dr3"]);
+  });
+});

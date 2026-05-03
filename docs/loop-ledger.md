@@ -228,3 +228,4 @@
 2026-05-02 | 9165ecb | FIXED: Replace Math.floor(rng.next() % n) with rng.pick() in Murozond, The Curator, Trade Prince Gallywix, and pickAnomaly — rng.next() returns [0,1) so Math.floor always returned 0, making all random selection deterministic and always picking the first item
 2026-05-02 | f855208 | FIXED: All three AI strategies (basic, greedy, heuristic) now use hero powers during the recruit phase when available — in real Battlegrounds AIs use their hero powers, previously all AIs skipped them entirely
 2026-05-03 | de8622b | FIXED: Persist combat result damage recap toast for 3 seconds instead of 2
+2026-05-03 | f09fd42 | FIXED: Deathrattle ordering — verify deathrattles fire in left-to-right board order (index 0 first) via unit test in keywords.sim.test.ts, matching real Battlegrounds where deathrattles resolve left-to-right
