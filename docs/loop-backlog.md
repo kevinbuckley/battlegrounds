@@ -37,7 +37,7 @@ Format: `- [ ] [TIER] <one-sentence task>` — `[TIER]` is `S` (small, <30 min),
 - [x] [S] Add `Sindragosa` hero — file exists at src/game/heroes/sindragosa.ts
 - [x] [S] Add `Jaraxxus` hero — file exists at src/game/heroes/jaraxxus.ts
 - [x] [S] Add `Trade Prince Gallywix` hero — done
-- [ ] [S] Add `Edwin VanCleef` hero passive: combo (every 2nd action this turn gives +1/+1 to a random friendly minion)
+- [x] [S] Add `Edwin VanCleef` hero passive: combo (every 2nd action this turn gives +1/+1 to a random friendly minion) — wired into state.ts incrementActionAndApply, with unit tests
 - [ ] [S] Add `Reno Jackson` hero active (5 gold, once per game): make a friendly minion golden
 - [x] [S] Add `Maiev Shadowsong` hero active (1 gold): give a shop minion "Dormant for 2 turns, awakens with +3/+3" — file exists at src/game/heroes/maiev-shadowsong.ts
 

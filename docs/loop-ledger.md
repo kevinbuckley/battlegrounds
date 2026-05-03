@@ -1,4 +1,5 @@
 2026-05-02 | 1fc1d87 | FIXED: Bananas now appear in tier 1 shops and are a no-target spell — clicking it directly buffs a random minion instead of requiring board targeting, matching real Battlegrounds where Bananas are a free, no-target shop item
+2026-05-03 | b9f078e | FIXED: Add Edwin Van Cleef hero passive — every 2nd action this turn gives all friendly minions +1/+1, with actionsThisTurn counter in PlayerState, unit tests
 2026-05-03 | c92601d | FIXED: Add Foe Reaper 4000 tier 6 mech (6/9, cleave keyword), with unit tests
 2026-05-03 | d42cd78 | FIXED: Add Reno Jackson hero — active power (5 gold, once per game): makes a friendly minion golden, with unit tests
 2026-05-02 | 7cb509a | FIXED: Cauterizing Flame spell now respects Divine Shield — pops shield first before dealing 3 damage to HP, matching real Battlegrounds where Cauterizing Flame pops divine shields before damaging minions

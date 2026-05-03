@@ -34,6 +34,7 @@ function makeGameState(): GameState {
         shopFrozen: false,
         upgradedThisTurn: false,
         heroPowerUsed: false,
+        actionsThisTurn: 0,
         extraLifeUsed: false,
         renoJacksonUsed: false,
         eliminated: false,

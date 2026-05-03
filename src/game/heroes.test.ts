@@ -5,6 +5,7 @@ import { instantiate } from "./minions/define";
 import { MINIONS } from "./minions/index";
 import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "./state";
 import type { Hero } from "./types";
+import { updatePlayer } from "./utils";
 
 const RNG = makeRng(1);
 
@@ -779,5 +780,86 @@ describe("Maiev Shadowsong hero", () => {
     const state = makeMaievState([]);
     const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
     expect(after.players[0]!.shop.length).toBe(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Edwin Van Cleef — passive: every 2nd action gives all friendly minions +1/+1
+// ---------------------------------------------------------------------------
+
+describe("Edwin Van Cleef passive", () => {
+  it("gives all friendly minions +1/+1 after 2 actions", () => {
+    let state = makeInitialState(1);
+    state = step(state, { kind: "SelectHero", player: 0, heroId: "edwin_van_cleef" }, RNG);
+    state = beginRecruitTurn(state, RNG);
+
+    const minion = instantiate(MINIONS["rockpool_hunter"]!);
+    state = updatePlayer(state, 0, (p) => ({ ...p, shop: [minion], gold: 3 }));
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(1);
+    expect(state.players[0]!.hand.length).toBe(1);
+
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 0 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(2);
+    expect(state.players[0]!.board[0]!.atk).toBe(minion.atk + 1);
+    expect(state.players[0]!.board[0]!.hp).toBe(minion.hp + 1);
+  });
+
+  it("gives +1/+1 again after 4th action", () => {
+    let state = makeInitialState(1);
+    state = step(state, { kind: "SelectHero", player: 0, heroId: "edwin_van_cleef" }, RNG);
+    state = beginRecruitTurn(state, RNG);
+
+    const m1 = instantiate(MINIONS["rockpool_hunter"]!);
+    const m2 = instantiate(MINIONS["murloc_tidehunter"]!);
+    state = updatePlayer(state, 0, (p) => ({ ...p, shop: [m1, m2], gold: 6 }));
+
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 0 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(2);
+
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(3);
+
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 1 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(4);
+    expect(state.players[0]!.board[0]!.atk).toBe(m1.atk + 2);
+    expect(state.players[0]!.board[1]!.atk).toBe(m2.atk + 1);
+  });
+
+  it("resets actionsThisTurn at start of each turn", () => {
+    let state = makeInitialState(1);
+    state = step(state, { kind: "SelectHero", player: 0, heroId: "edwin_van_cleef" }, RNG);
+    state = beginRecruitTurn(state, RNG);
+
+    const m1 = instantiate(MINIONS["rockpool_hunter"]!);
+    state = updatePlayer(state, 0, (p) => ({ ...p, shop: [m1], gold: 3 }));
+
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 0 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(2);
+
+    state = step(state, { kind: "EndTurn", player: 0 }, RNG);
+    if (state.phase.kind === "Recruit") {
+      expect(state.players[0]!.actionsThisTurn).toBe(0);
+    }
+  });
+
+  it("does not buff when not Edwin Van Cleef", () => {
+    let state = makeInitialState(1);
+    state = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, RNG);
+    state = beginRecruitTurn(state, RNG);
+
+    const m1 = instantiate(MINIONS["rockpool_hunter"]!);
+    const m2 = instantiate(MINIONS["murloc_tidehunter"]!);
+    state = updatePlayer(state, 0, (p) => ({ ...p, shop: [m1, m2], gold: 6 }));
+
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 0 }, RNG);
+    state = step(state, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    state = step(state, { kind: "PlayMinion", player: 0, handIndex: 0, boardIndex: 1 }, RNG);
+    expect(state.players[0]!.actionsThisTurn).toBe(4);
+    expect(state.players[0]!.board[0]!.atk).toBe(m1.atk);
+    expect(state.players[0]!.board[1]!.atk).toBe(m2.atk);
   });
 });

@@ -278,17 +278,27 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
 function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
   switch (action.kind) {
     case "BuyMinion":
-      return buyMinion(state, action.player, action.shopIndex);
+      return incrementActionAndApply(state, action.player, (s) =>
+        buyMinion(s, action.player, action.shopIndex),
+      );
     case "BuySpell":
-      return buySpell(state, action.player, action.shopIndex, rng);
+      return incrementActionAndApply(state, action.player, (s) =>
+        buySpell(s, action.player, action.shopIndex, rng),
+      );
     case "PlaySpell":
-      return playSpell(state, action.player, action.spellIndex, action.targetIndex, rng);
+      return incrementActionAndApply(state, action.player, (s) =>
+        playSpell(s, action.player, action.spellIndex, action.targetIndex, rng),
+      );
     case "SellMinion":
-      return "handIndex" in action
-        ? sellMinion(state, action.player, action.handIndex, true)
-        : sellMinion(state, action.player, action.boardIndex);
+      return incrementActionAndApply(state, action.player, (s) =>
+        "handIndex" in action
+          ? sellMinion(s, action.player, action.handIndex, true)
+          : sellMinion(s, action.player, action.boardIndex),
+      );
     case "PlayMinion":
-      return playMinionToBoard(state, action.player, action.handIndex, action.boardIndex, rng);
+      return incrementActionAndApply(state, action.player, (s) =>
+        playMinionToBoard(s, action.player, action.handIndex, action.boardIndex, rng),
+      );
     case "ReorderBoard":
       return reorderBoard(state, action.player, action.from, action.to);
     case "RefreshShop":
@@ -298,7 +308,9 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
     case "UpgradeTier":
       return upgradeTier(state, action.player);
     case "HeroPower":
-      return useHeroPower(state, action.player, action.target, rng);
+      return incrementActionAndApply(state, action.player, (s) =>
+        useHeroPower(s, action.player, action.target, rng),
+      );
     case "EndTurn":
       return endTurn(state, action.player, rng);
     case "PickDiscover":
@@ -308,6 +320,33 @@ function stepRecruit(state: GameState, action: Action, rng: Rng): GameState {
     default:
       return state;
   }
+}
+
+/** Increment the action counter for a player and apply a state transformation. */
+function incrementActionAndApply(
+  state: GameState,
+  playerId: number,
+  fn: (s: GameState) => GameState,
+): GameState {
+  const next = updatePlayer(state, playerId, (p) => ({
+    ...p,
+    actionsThisTurn: p.actionsThisTurn + 1,
+  }));
+  const afterAction = fn(next);
+  // Edwin Van Cleef passive: after every 2 actions, give all friendly minions +1/+1
+  const player = getPlayer(afterAction, playerId);
+  if (player.heroId === "edwin_van_cleef" && player.actionsThisTurn % 2 === 0) {
+    return updatePlayer(afterAction, playerId, (p) => {
+      const newBoard = p.board.map((m) => ({
+        ...m,
+        atk: m.atk + 1,
+        hp: m.hp + 1,
+        maxHp: m.maxHp + 1,
+      }));
+      return { ...p, board: newBoard };
+    });
+  }
+  return afterAction;
 }
 
 const AI_STRATEGIES: Array<import("@/ai/strategy").Strategy> = [basic, greedy, heuristic];
@@ -903,6 +942,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
       upgradeCost: discountedCost,
       upgradedThisTurn: false,
       heroPowerUsed: false,
+      actionsThisTurn: 0,
       armor: 0,
     }));
 
@@ -1035,6 +1075,7 @@ export function makeInitialState(seed: number): GameState {
     shopFrozen: false,
     upgradedThisTurn: false,
     heroPowerUsed: false,
+    actionsThisTurn: 0,
     extraLifeUsed: false,
     renoJacksonUsed: false,
     eliminated: false,

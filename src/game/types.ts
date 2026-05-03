@@ -200,6 +200,8 @@ export interface PlayerState {
   shopFrozen: boolean;
   upgradedThisTurn: boolean;
   heroPowerUsed: boolean;
+  /** Number of actions taken this turn (for Edwin Van Cleef passive). */
+  actionsThisTurn: number;
   eliminated: boolean;
   extraLifeUsed: boolean;
   /** Whether Reno Jackson's once-per-game hero power has been used. */
