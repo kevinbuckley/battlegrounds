@@ -393,6 +393,7 @@ export type CombatEvent =
   | { kind: "DivineShield"; target: MinionInstanceId }
   | { kind: "Lifesteal"; target: MinionInstanceId; amount: number }
   | { kind: "Death"; source: MinionInstanceId }
+  | { kind: "Bounty"; source: MinionInstanceId; amount: number }
   | { kind: "Summon"; card: MinionCardId; side: Side; position: number }
   | { kind: "Stat"; target: MinionInstanceId; atk: number; hp: number }
   | { kind: "End"; winner: Side | "draw" };
@@ -404,4 +405,6 @@ export interface CombatResult {
   winner: Side | "draw";
   /** Total lifesteal healing dealt during combat (applied to winner's hero). */
   lifestealHealing: number;
+  /** Total bounty gold awarded when bounty minions die (awarded to winner). */
+  bountyGold: number;
 }

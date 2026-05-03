@@ -1014,3 +1014,47 @@ describe("Annihilan Battlemaster", () => {
     expect(result.survivorsLeft[0]!.hp).toBeGreaterThan(0);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Bounty keyword in combat
+// ---------------------------------------------------------------------------
+
+describe("bounty in combat", () => {
+  it("awards bounty gold when a bounty minion dies", () => {
+    const bountyCard = getMinion("bounty_minion");
+    const bountyMinion = instantiate(bountyCard);
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([bountyMinion], enemy, makeRng(0));
+    // Enemy wins, bounty minion dies, bounty gold should be awarded
+    expect(result.winner).toBe("right");
+    expect(result.bountyGold).toBe(1); // bounty_minion has bountyCost: 1
+  });
+
+  it("awards correct bounty gold based on bountyCost", () => {
+    const bountyCard = getMinion("bounty_minion");
+    expect(bountyCard.bountyCost).toBe(1);
+    const bountyMinion = instantiate(bountyCard);
+    const enemy = [makeMinion(5, 5)];
+    const result = simulateCombat([bountyMinion], enemy, makeRng(0));
+    expect(result.winner).toBe("right");
+    expect(result.bountyGold).toBe(1);
+  });
+
+  it("emits a Bounty event for each dying bounty minion", () => {
+    const bountyCard = getMinion("bounty_minion");
+    const bountyMinion = instantiate(bountyCard);
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([bountyMinion], enemy, makeRng(0));
+    const bountyEvents = result.transcript.filter((e) => e.kind === "Bounty");
+    expect(bountyEvents.length).toBe(1);
+    expect(bountyEvents[0]!.kind).toBe("Bounty");
+    expect(bountyEvents[0]!.amount).toBe(1);
+  });
+
+  it("awards no bounty gold when non-bounty minion dies", () => {
+    const enemy = [makeMinion(3, 3)];
+    const result = simulateCombat([makeMinion(2, 2)], enemy, makeRng(0));
+    expect(result.winner).toBe("right");
+    expect(result.bountyGold).toBe(0);
+  });
+});

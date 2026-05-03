@@ -1,4 +1,5 @@
 import type { Rng } from "@/lib/rng";
+import { MINIONS } from "./minions/index";
 import type {
   AllyDeathCombatCtx,
   CombatCtx,
@@ -29,6 +30,7 @@ export function simulateCombat(
   const transcript: CombatEvent[] = [];
   const emit = (e: CombatEvent) => transcript.push(e);
   const lifestealAccum = { total: 0 };
+  let totalBountyGold = 0;
 
   const isBigLeague = anomaly === "big_league";
 
@@ -64,7 +66,9 @@ export function simulateCombat(
   fireStartOfCombat(left, right, startSide, emit, rng);
 
   // Fire rush attacks before the normal attack cycle
-  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight, lifestealAccum);
+  fireRushAttacks(left, right, startSide, emit, rng, baronOnLeft, baronOnRight, lifestealAccum, {
+    total: 0,
+  });
 
   let side: Side = startSide;
   let leftPtr = 0;
@@ -130,6 +134,7 @@ export function simulateCombat(
       const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
       left = result.left;
       right = result.right;
+      totalBountyGold += result.bountyGold;
     }
 
     if (isLeft) leftPtr++;
@@ -152,6 +157,7 @@ export function simulateCombat(
     survivorsRight: right,
     winner,
     lifestealHealing: lifestealAccum.total,
+    bountyGold: totalBountyGold,
   };
 }
 
@@ -165,9 +171,10 @@ function reapDeaths(
   rng: Rng,
   baronOnLeft: boolean,
   baronOnRight: boolean,
-): { left: MinionInstance[]; right: MinionInstance[] } {
+): { left: MinionInstance[]; right: MinionInstance[]; bountyGold: number } {
   let l = left;
   let r = right;
+  let totalBountyGold = 0;
 
   // Keep processing deaths until no new ones appear (handles deathrattle chains)
   // Baron Rivendare causes deathrattles to trigger twice for all deathrattles
@@ -183,6 +190,14 @@ function reapDeaths(
     for (const dead of [...deadLeft, ...deadRight]) {
       const deadSide: Side = deadLeft.includes(dead) ? "left" : "right";
       emit({ kind: "Death", source: dead.instanceId });
+
+      // Bounty: award gold to the opposing side when a bounty minion dies
+      const card = MINIONS[dead.cardId];
+      if (card && card.baseKeywords.includes("bounty" as import("./types").Keyword)) {
+        const bountyAmount = card.bountyCost ?? 1;
+        totalBountyGold += bountyAmount;
+        emit({ kind: "Bounty", source: dead.instanceId, amount: bountyAmount });
+      }
 
       // Deathrattle
       const deadCtx: CombatCtx = { self: dead, selfSide: deadSide, left: l, right: r, emit, rng };
@@ -229,7 +244,7 @@ function reapDeaths(
     }
   }
 
-  return { left: l, right: r };
+  return { left: l, right: r, bountyGold: totalBountyGold };
 }
 
 // ---------------------------------------------------------------------------
@@ -276,6 +291,7 @@ function fireRushAttacks(
   baronOnLeft: boolean,
   baronOnRight: boolean,
   lifestealAccum: { total: number },
+  bountyGoldAccum: { total: number },
 ): void {
   // Process ALL rush minions from both sides before the normal cycle.
   // In real Battlegrounds, every minion with Rush attacks before the normal
@@ -297,6 +313,7 @@ function fireRushAttacks(
     const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
+    bountyGoldAccum.total += result.bountyGold;
   }
 
   // Second loop: process rush minions from the OTHER side (defenders with rush).
@@ -314,6 +331,7 @@ function fireRushAttacks(
     const result = reapDeaths(left, right, emit, rng, baronOnLeft, baronOnRight);
     left = result.left;
     right = result.right;
+    bountyGoldAccum.total += result.bountyGold;
   }
 }
 
@@ -448,5 +466,6 @@ function resolved(
     survivorsRight: right,
     winner,
     lifestealHealing: 0,
+    bountyGold: 0,
   };
 }

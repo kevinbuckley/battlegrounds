@@ -645,6 +645,17 @@ function resolveCombat(state: GameState, rng: Rng): GameState {
       result = healHero(result, lifestealWinnerId, combatResult.lifestealHealing);
     }
 
+    // Apply bounty gold to the winner — in real Battlegrounds, killing a
+    // minion with the Bounty keyword awards gold equal to its bountyCost.
+    if (combatResult.bountyGold > 0 && combatResult.winner !== "draw") {
+      const isLeftWinner = combatResult.winner === "left";
+      const bountyWinnerId = isLeftWinner ? leftId : rightId;
+      result = updatePlayer(result, bountyWinnerId, (p) => ({
+        ...p,
+        gold: p.gold + combatResult.bountyGold,
+      }));
+    }
+
     result = applyCombatResult(result, leftId, rightId, combatResult);
   }
 

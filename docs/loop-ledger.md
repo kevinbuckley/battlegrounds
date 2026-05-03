@@ -237,3 +237,4 @@
 2026-05-02 | f855208 | FIXED: All three AI strategies (basic, greedy, heuristic) now use hero powers during the recruit phase when available — in real Battlegrounds AIs use their hero powers, previously all AIs skipped them entirely
 2026-05-03 | de8622b | FIXED: Persist combat result damage recap toast for 3 seconds instead of 2
 2026-05-03 | f09fd42 | FIXED: Deathrattle ordering — verify deathrattles fire in left-to-right board order (index 0 first) via unit test in keywords.sim.test.ts, matching real Battlegrounds where deathrattles resolve left-to-right
+2026-05-03 | 976e2d5 | FIXED: Bounty keyword now awards gold to the winning player when a bounty minion dies in combat — adds Bounty event type to CombatEvent, tracks bountyGold in CombatResult, wires into reapDeaths and state.ts EndTurn handler, with unit tests
