@@ -68,6 +68,10 @@ function describeEvent(evt: CombatEvent, nameMap: Map<string, string>): string {
     case "End": {
       return evt.winner === "draw" ? "Draw!" : `${evt.winner} wins`;
     }
+    case "Bounty": {
+      const source = nameMap.get(evt.source) ?? "?";
+      return `${source} — bounty: +${evt.amount}g to winner`;
+    }
     default:
       return "";
   }
@@ -91,6 +95,8 @@ function eventTypeColor(evt: CombatEvent): string {
       return "text-blue-300";
     case "Lifesteal":
       return "text-emerald-300";
+    case "Bounty":
+      return "text-amber-300";
     case "End":
       return "text-amber-400 text-lg font-bold";
     default:
@@ -116,6 +122,8 @@ function eventTypeEmoji(evt: CombatEvent): string {
       return "\u{1F4CB}";
     case "Lifesteal":
       return "\u{1F5E8}";
+    case "Bounty":
+      return "\u{1F4B0}";
     case "End":
       return "\u{1F3C6}";
     default:
