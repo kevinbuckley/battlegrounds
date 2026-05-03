@@ -1,7 +1,7 @@
 import { COST_BUY } from "@/game/economy";
 import { getHero } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
-import { buyMinion, playMinionToBoard, refreshShop } from "@/game/shop";
+import { buyMinion, freezeShop, playMinionToBoard, refreshShop } from "@/game/shop";
 import { step } from "@/game/state";
 import type { Action, MinionInstance } from "@/game/types";
 import type { Rng } from "@/lib/rng";
@@ -141,6 +141,29 @@ export const basic: Strategy = {
           actions.push({ kind: "HeroPower", player: me, target: null });
         } catch {
           // ignore hero power failure
+        }
+      }
+    }
+
+    // --- Freeze shop if AI has board minions it can't afford ---
+    {
+      const player = sim.players[me]!;
+      if (!player.shopFrozen && player.board.length > 0 && player.shop.length > 0) {
+        const hasUnaffordable = player.shop.some((m) => {
+          const card = MINIONS[m.cardId];
+          if (!card) return false;
+          const bountyCost = card.bountyCost ?? 0;
+          const baseCost = bountyCost > 0 ? bountyCost : COST_BUY;
+          const actualCost = Math.max(1, baseCost - (m.discount ?? 0));
+          return actualCost > player.gold;
+        });
+        if (hasUnaffordable) {
+          try {
+            sim = freezeShop(sim, me);
+            actions.push({ kind: "FreezeShop", player: me });
+          } catch {
+            // ignore freeze failure
+          }
         }
       }
     }

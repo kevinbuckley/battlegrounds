@@ -54,7 +54,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] AI tribe preference: basic AI prefers buying minions matching the most-frequent tribe on its current board over random
 - [ ] [M] AI combat board placement: AI sorts board minions by ATK descending before combat starts (use existing sortBoardByAttack util if present)
 - [ ] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — alters takeAITurn ordering
-- [ ] [S] AI freezes shop when it has ≥1 minion it can't afford this turn — current AIs never freeze
+- [x] [S] AI freezes shop when it has ≥1 minion it can't afford this turn — current AIs never freeze
 
 ### New heroes (only those NOT yet on disk)
 

@@ -1,3 +1,4 @@
+2026-05-03 | 723feb4 | FIXED: Add shop-freezing behavior to all AI strategies — when AI has board minions and shop contains unaffordable minions, freeze the shop to preserve it for future turns
 2026-05-03 | 5d1081b | FIXED: Add Siphon Soul (tier 5 spell, cost 3) — destroy a friendly minion, summon a random tier 6 minion to your board, with unit tests
 2026-05-03 | e09ab18 | FIXED: Cleave unit tests — fixed incorrect combat flow expectations in "cleave at edge" and "cleave does NOT damage all enemies" tests to match actual simulation (counterattack damage from surviving enemies after cleave kills)
 2026-05-03 | 079782f | FIXED: buySpell now looks up spells by absolute shop index instead of recalculating the spell boundary dynamically, preventing spells from becoming unbuyable when the shop shrinks below 4 items after buying minions
