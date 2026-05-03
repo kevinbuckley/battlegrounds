@@ -252,3 +252,4 @@
 2026-05-03 | a91aefb | FIXED: Combat transcript now emits "Stat" events after each attack cycle showing all surviving minions' current atk/hp, so the UI can display real-time stat updates during combat animation matching real Battlegrounds where minion health bars and stats update visually during combat
 2026-05-03 | 193d8cc | FIXED: Add Pogo-Hopper (tier 2 mech) — battlecry gains +1/+1 for each Pogo-Hopper previously played this game, with unit tests
 2026-05-03 | ef8b499 | FIXED: Add Toxfin (tier 4 murloc) — battlecry gives a friendly murloc poisonous, with unit tests
+2026-05-03 | 7f22acd | FIXED: Add windfury unit test verifying windfury attacks exactly 2 times per turn and megaWindfury attacks exactly 4 times per turn, with edge case tests for killing multiple enemies
