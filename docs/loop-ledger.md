@@ -282,3 +282,4 @@
 2026-05-03 | 94dcb16 | FIXED: Add Tortollan Shellraiser (tier 3 elemental, 2/3): taunt; deathrattle give a random friendly minion +1/+3, with unit tests
 2026-05-03 | 519ea80 | FIXED: Fix Pack Leader (tier 2 beast) — onShopSummon now buffs the summoned beast +3 ATK instead of buffing Pack Leader itself, matching test spec
 2026-05-03 | 0ded16f | FIXED: Add Nightmare Amalgam (tier 2, 2/4) — no tribe, counts as ALL tribes for tribe-buff effects, expand "All" to all concrete tribes at instantiation time in define.ts, with unit tests
+2026-05-03 | 9825300 | FIXED: Fix Ysera the Dreamer (tier 6 dragon) — transforms a random ENEMY minion into a 1/1 Dragon with Taunt at start of combat instead of transforming a friendly minion

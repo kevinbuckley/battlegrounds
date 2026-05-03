@@ -18,70 +18,51 @@ describe("ysera_the_dreamer", () => {
     expect(ysera.keywords.has("taunt")).toBe(true);
   });
 
-  it("transforms a random friendly minion into 0/5 with Taunt at start of combat", () => {
+  it("transforms a random enemy minion into 1/1 Dragon with Taunt at start of combat", () => {
     const ysera = instantiate(getMinion("ysera_the_dreamer"));
-    // Create a friendly minion that should be transformed
     const friendly = instantiate(getMinion("murloc_tidehunter")); // 2/1
-    // Enemy minion
     const enemy = instantiate(getMinion("rockpool_hunter")); // 2/1
     const r = simulateCombat([ysera, friendly], [enemy], makeRng(0));
-    // Check for a Transform event in the transcript
     const transformEvents = r.transcript.filter((e) => e.kind === "Transform");
     expect(transformEvents.length).toBe(1);
-    // The transformed minion should now be 0/5 with Taunt
     const transformed = r.transcript.find((e) => e.kind === "Transform") as {
       kind: "Transform";
       target: string;
       from: string;
     };
     expect(transformed.from).toBe(ysera.instanceId);
-    expect(transformed.target).toBe(friendly.instanceId);
+    expect(transformed.target).toBe(enemy.instanceId);
   });
 
-  it("does nothing if Ysera is the only friendly minion", () => {
+  it("transforms the only enemy minion when Ysera has no other friendlies", () => {
     const ysera = instantiate(getMinion("ysera_the_dreamer"));
     const enemy = instantiate(getMinion("rockpool_hunter"));
     const r = simulateCombat([ysera], [enemy], makeRng(0));
     const transformEvents = r.transcript.filter((e) => e.kind === "Transform");
-    expect(transformEvents.length).toBe(0);
+    expect(transformEvents.length).toBe(1);
   });
 
-  it("transforms a random minion when multiple friendly minions exist", () => {
+  it("transforms a random enemy minion when multiple enemy minions exist", () => {
     const ysera = instantiate(getMinion("ysera_the_dreamer"));
-    const friendly1 = instantiate(getMinion("murloc_tidehunter"));
-    const friendly2 = instantiate(getMinion("rockpool_hunter"));
-    const enemy = instantiate(getMinion("venomous_crasher"));
-    // Run multiple times with different seeds to verify randomness
+    const friendly = instantiate(getMinion("murloc_tidehunter"));
+    const enemy1 = instantiate(getMinion("rockpool_hunter"));
+    const enemy2 = instantiate(getMinion("venomous_crasher"));
     const targets = new Set<string>();
     for (let i = 0; i < 20; i++) {
-      const r = simulateCombat([ysera, friendly1, friendly2], [enemy], makeRng(i));
+      const r = simulateCombat([ysera, friendly], [enemy1, enemy2], makeRng(i));
       const transformEvents = r.transcript.filter((e) => e.kind === "Transform");
       expect(transformEvents.length).toBe(1);
       const target = (transformEvents[0] as { target: string }).target;
       targets.add(target);
     }
-    // Should have transformed different minions across runs
     expect(targets.size).toBeGreaterThan(1);
   });
 
-  it("transformed minion has 0 ATK and 5 HP with Taunt after combat", () => {
+  it("transformed enemy minion has 1 ATK and 1 HP with Taunt and Dragon tribe after combat", () => {
     const ysera = instantiate(getMinion("ysera_the_dreamer"));
-    // Use a high-HP friendly minion that will survive combat
     const friendly = defineMinion({
-      id: "test_friendly",
-      name: "Test Friendly",
-      tier: 1,
-      tribes: [],
-      baseAtk: 3,
-      baseHp: 3,
-      baseKeywords: [],
-      spellDamage: 0,
-      hooks: {},
-    });
-    // Enemy with 0 ATK so it can't deal damage back — ensures transformed minion survives
-    const enemy = defineMinion({
-      id: "weak_enemy",
-      name: "Weak Enemy",
+      id: "friendly",
+      name: "Friendly",
       tier: 1,
       tribes: [],
       baseAtk: 0,
@@ -90,17 +71,29 @@ describe("ysera_the_dreamer", () => {
       spellDamage: 0,
       hooks: {},
     });
+    const enemy = defineMinion({
+      id: "strong_enemy",
+      name: "Strong Enemy",
+      tier: 1,
+      tribes: [],
+      baseAtk: 3,
+      baseHp: 3,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
     const r = simulateCombat([ysera, instantiate(friendly)], [instantiate(enemy)], makeRng(0));
-    // Find the Transform event to get the target's instance ID
     const transformEvents = r.transcript.filter((e) => e.kind === "Transform");
     expect(transformEvents.length).toBe(1);
     const transformEvent = transformEvents[0] as { target: string };
-    // Check the survivors for the transformed minion's final state
-    const transformedSurvivor = r.survivorsLeft.find((m) => m.instanceId === transformEvent.target);
-    // The transformed minion should survive with full 5 HP (enemy has 0 ATK)
+    // The transformed minion was on the enemy side, so check survivorsRight
+    const transformedSurvivor = r.survivorsRight.find(
+      (m) => m.instanceId === transformEvent.target,
+    );
     expect(transformedSurvivor).toBeDefined();
-    expect(transformedSurvivor!.atk).toBe(0);
-    expect(transformedSurvivor!.hp).toBe(5);
+    expect(transformedSurvivor!.atk).toBe(1);
+    expect(transformedSurvivor!.hp).toBe(1);
     expect(transformedSurvivor!.keywords.has("taunt")).toBe(true);
+    expect(transformedSurvivor!.tribes).toContain("Dragon");
   });
 });
