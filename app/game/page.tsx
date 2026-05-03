@@ -1098,6 +1098,9 @@ export default function GamePage() {
                     const handFull = handMinions.length >= 10;
                     const tierColor = TIER_COLORS[minionCard.tier] ?? "bg-gray-600";
                     const isFrozen = gameState?.players[0]?.shopFrozen ?? false;
+                    const isDormant =
+                      shopItem.keywords &&
+                      shopItem.keywords.has("dormant" as import("@/game/types").Keyword);
                     return (
                       <button
                         key={shopItem.instanceId}
@@ -1108,6 +1111,7 @@ export default function GamePage() {
                           ${canBuy && !handFull ? "cursor-pointer hover:border-amber-400 active:scale-95" : "cursor-not-allowed opacity-50"}
                           ${shopItem.golden ? "border-amber-400 ring-2 ring-amber-400/30" : "border-slate-600"}
                           ${isFrozen ? "border-sky-400/70 bg-sky-950/40 ring-2 ring-sky-400/20" : ""}
+                          ${isDormant ? "border-slate-700 bg-slate-900/80 opacity-40" : ""}
                         `}
                       >
                         <div className="flex items-center gap-1.5">
