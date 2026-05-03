@@ -275,3 +275,4 @@
 2026-05-03 | 826d3ed | FIXED: Add Scurpus (tier 3 beast) — battlecry summons a 1/1 Beast for each other minion with a Battlecry on your board, with unit tests
 2026-05-03 | 94dcb16 | FIXED: Add Tortollan Shellraiser (tier 3 elemental, 2/3): taunt; deathrattle give a random friendly minion +1/+3, with unit tests
 2026-05-03 | 519ea80 | FIXED: Fix Pack Leader (tier 2 beast) — onShopSummon now buffs the summoned beast +3 ATK instead of buffing Pack Leader itself, matching test spec
+2026-05-03 | 0ded16f | FIXED: Add Nightmare Amalgam (tier 2, 2/4) — no tribe, counts as ALL tribes for tribe-buff effects, expand "All" to all concrete tribes at instantiation time in define.ts, with unit tests

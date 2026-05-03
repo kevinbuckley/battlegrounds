@@ -26,6 +26,7 @@ import kaboomBot from "./tier2/kaboom-bot";
 import knifeJuggler from "./tier2/knife-juggler";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
+import nightmareAmalgam from "./tier2/nightmare-amalgam";
 import packLeader from "./tier2/pack-leader";
 import pogoHopper from "./tier2/pogo-hopper";
 import rebornMinion from "./tier2/reborn-minion";
@@ -115,6 +116,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
   [packLeader.id]: packLeader,
+  [nightmareAmalgam.id]: nightmareAmalgam,
   [pogoHopper.id]: pogoHopper,
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
