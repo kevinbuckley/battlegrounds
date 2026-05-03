@@ -30,7 +30,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Pack Leader` (tier 2 beast): whenever a beast is summoned on your side, give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts
 - [ ] [S] Add `Pogo-Hopper` (tier 2 mech): battlecry gain +1/+1 for each Pogo-Hopper you've played this game — uses player.history counter
-- [ ] [S] Add `Nightmare Amalgam` (tier 2): no tribe, +0/+0 vanilla 2/4, but counts as ALL tribes for tribe-buff effects
+- [x] [S] Add `Nightmare Amalgam` (tier 2): no tribe, +0/+0 vanilla 2/4, but counts as ALL tribes for tribe-buff effects
 
 ### New minions — Tier 4 (only those NOT yet on disk)
 

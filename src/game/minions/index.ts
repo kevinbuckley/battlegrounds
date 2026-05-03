@@ -25,6 +25,7 @@ import kaboomBot from "./tier2/kaboom-bot";
 import knifeJuggler from "./tier2/knife-juggler";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
 import murlocWarleader from "./tier2/murloc-warleader";
+import nightmareAmalgam from "./tier2/nightmare-amalgam";
 import packLeader from "./tier2/pack-leader";
 import pogoHopper from "./tier2/pogo-hopper";
 import rebornMinion from "./tier2/reborn-minion";
@@ -59,6 +60,7 @@ import securityRover from "./tier4/security-rover";
 import toxfin from "./tier4/toxfin";
 import virmenSensei from "./tier4/virmen-sensei";
 import baronRivendare from "./tier5/baron-rivendare";
+import bigFernal from "./tier5/big-fernal";
 import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
 import junkbot from "./tier5/junkbot";
@@ -104,6 +106,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [scavengingHyena.id]: scavengingHyena,
   [selflessHero.id]: selflessHero,
   [packLeader.id]: packLeader,
+  [nightmareAmalgam.id]: nightmareAmalgam,
   [pogoHopper.id]: pogoHopper,
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
@@ -134,6 +137,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [oldMurkEye.id]: oldMurkEye,
   [caveHydra.id]: caveHydra,
   [virmenSensei.id]: virmenSensei,
+  [bigFernal.id]: bigFernal,
   [blingtron5000.id]: blingtron5000,
   [baronRivendare.id]: baronRivendare,
   [brannBronzebeard.id]: brannBronzebeard,

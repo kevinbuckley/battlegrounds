@@ -1,4 +1,4 @@
-import type { MinionCard, MinionHooks, MinionInstance } from "../types";
+import type { MinionCard, MinionHooks, MinionInstance, Tribe } from "../types";
 
 export function defineMinion(card: MinionCard): MinionCard {
   return card;
@@ -10,6 +10,20 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
   const hp = golden ? card.baseHp * 2 : card.baseHp;
   const spellDamage = golden ? card.spellDamage * 2 : card.spellDamage;
   nextInstanceIdCounter += 1;
+  const tribes = card.tribes.includes("All")
+    ? ([
+        "Beast",
+        "Murloc",
+        "Demon",
+        "Mech",
+        "Elemental",
+        "Pirate",
+        "Dragon",
+        "Naga",
+        "Quilboar",
+        "Undead",
+      ] as Tribe[])
+    : card.tribes;
   return {
     instanceId: `m${nextInstanceIdCounter}`,
     cardId: card.id,
@@ -17,7 +31,7 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
     hp,
     maxHp: hp,
     keywords: new Set(card.baseKeywords),
-    tribes: card.tribes,
+    tribes,
     golden,
     spellDamage,
     magnetic: card.magnetic ?? card.baseKeywords.includes("magnetic"),
