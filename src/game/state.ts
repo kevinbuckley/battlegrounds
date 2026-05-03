@@ -957,6 +957,37 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
       }
     }
 
+    // Maiev Shadowsong: awaken dormant shop minions — if dormant turns reach 0,
+    // remove the dormant keyword and add +3/+3.
+    if (player.heroId === "maiev_shadowsong") {
+      const shop = next.players[player.id]?.shop ?? [];
+      if (shop.length > 0) {
+        const awakenedShop = shop.map((m) => {
+          if (m.keywords && m.keywords.has("dormant" as import("./types").Keyword)) {
+            const turnsLeft = (m.attachments.dormantTurnsLeft as number) ?? 1;
+            if (turnsLeft <= 1) {
+              const newKeywords = new Set(m.keywords);
+              newKeywords.delete("dormant" as import("./types").Keyword);
+              return {
+                ...m,
+                keywords: newKeywords,
+                atk: m.atk + 3,
+                hp: m.hp + 3,
+                maxHp: m.maxHp + 3,
+                attachments: { ...m.attachments, dormantTurnsLeft: undefined },
+              };
+            }
+            return {
+              ...m,
+              attachments: { ...m.attachments, dormantTurnsLeft: turnsLeft - 1 },
+            };
+          }
+          return m;
+        });
+        next = updatePlayer(next, player.id, (p) => ({ ...p, shop: awakenedShop }));
+      }
+    }
+
     // Jaraxxus passive: demons in shop gain +1/+1 at start of turn
     if (player.heroId === "jaraxxus") {
       const shop = next.players[player.id]?.shop ?? [];

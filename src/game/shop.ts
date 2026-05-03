@@ -126,10 +126,24 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
   }
 
   const size = SHOP_SIZE_BY_TIER[player.tier];
-  // Return current shop to pool
-  const poolAfterReturn = returnToPool(state.pool, player.shop);
-  // Draw fresh shop
-  const { instances, pool } = drawFromPool(poolAfterReturn, player.tier, size, rng);
+  // Separate dormant minions (preserve them) from regular shop items.
+  const dormantMinions = player.shop.filter(
+    (m) => m.keywords && m.keywords.has("dormant" as import("./types").Keyword),
+  );
+  const regularShop = player.shop.filter(
+    (m) => !(m.keywords && m.keywords.has("dormant" as import("./types").Keyword)),
+  );
+
+  // Return current shop to pool (only non-dormant items).
+  const poolAfterReturn = returnToPool(state.pool, regularShop);
+  // Draw fresh shop (fill remaining slots after dormant minions).
+  const remainingSlots = size - dormantMinions.length;
+  const { instances, pool } = drawFromPool(
+    poolAfterReturn,
+    player.tier,
+    Math.max(0, remainingSlots),
+    rng,
+  );
 
   // Apply Tavern Discount anomaly: all shop minions cost 1 less (min 1).
   const isTavernDiscount = state.modifierState.anomaly === "tavern_discount";
@@ -137,9 +151,11 @@ export function rollShopForPlayer(state: GameState, playerId: PlayerId, rng: Rng
     ? instances.map((m) => ({ ...m, discount: 1 }))
     : instances;
 
+  // Combine dormant minions with the newly drawn shop.
+  const finalShop = [...dormantMinions, ...shopWithDiscount];
+
   // Roll spells into the last 1/4 of shop slots (starting at tier 2).
-  const spellSlotCount = Math.floor(shopWithDiscount.length * 0.25);
-  const finalShop = [...shopWithDiscount];
+  const spellSlotCount = Math.floor(finalShop.length * 0.25);
 
   if (spellSlotCount > 0) {
     // Filter spells available at the player's tier
@@ -184,6 +200,11 @@ export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: numbe
 
   // Skip spell items in the shop — they are handled by buySpell instead.
   if (SPELLS[minion.cardId as keyof typeof SPELLS]) {
+    return state;
+  }
+
+  // Skip dormant minions — they cannot be bought until they awaken.
+  if (minion.keywords && minion.keywords.has("dormant" as import("./types").Keyword)) {
     return state;
   }
 

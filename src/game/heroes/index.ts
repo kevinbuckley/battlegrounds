@@ -6,6 +6,7 @@ import { jandiceBarov } from "./jandice-barov";
 import { jaraxxus } from "./jaraxxus";
 import { kingMukla } from "./king-mukla";
 import { lichBazHial } from "./lich-bazhial";
+import { maievShadowsong } from "./maiev-shadowsong";
 import { millificentManastorm } from "./millificent-manastorm";
 import { patchwerk } from "./patchwerk";
 import { ragnaros } from "./ragnaros";
@@ -35,6 +36,7 @@ export const HEROES: Record<HeroId, Hero> = {
   [lichBazHial.id]: lichBazHial,
   [rakanishu.id]: rakanishu,
   [renoJackson.id]: renoJackson,
+  [maievShadowsong.id]: maievShadowsong,
   [theCurator.id]: theCurator,
   [yoggSaron.id]: yoggSaron,
   [kingMukla.id]: kingMukla,

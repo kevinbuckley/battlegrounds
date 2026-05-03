@@ -13,9 +13,9 @@ const RNG = makeRng(1);
 // ---------------------------------------------------------------------------
 
 describe("HEROES registry", () => {
-  it("contains all 19 gameplay heroes (excluding stub)", () => {
+  it("contains all 20 gameplay heroes (excluding stub)", () => {
     const ids = getAllHeroIds();
-    expect(ids).toHaveLength(19);
+    expect(ids).toHaveLength(20);
   });
 
   it("every hero has a description", () => {
@@ -644,5 +644,140 @@ describe("Reno Jackson hero power", () => {
     expect(hero!.startArmor).toBe(7);
     expect(hero!.power.kind).toBe("active");
     expect((hero!.power as { kind: "active"; cost: number; usesPerTurn: number }).cost).toBe(5);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Maiev Shadowsong
+// ---------------------------------------------------------------------------
+
+function makeMaievState(shopMinions: ReturnType<typeof instantiate>[]) {
+  const state = makeInitialState(99);
+  const hero = HEROES["maiev_shadowsong"]!;
+  return {
+    ...state,
+    phase: { kind: "Recruit" as const, turn: 1 },
+    turn: 1,
+    players: state.players.map((p, i) =>
+      i === 0
+        ? {
+            ...p,
+            heroId: "maiev_shadowsong",
+            hp: hero.startHp,
+            armor: hero.startArmor,
+            gold: 10,
+            board: [],
+            shop: shopMinions,
+            heroPowerUsed: false,
+          }
+        : p,
+    ),
+  } as import("./types").GameState;
+}
+
+describe("Maiev Shadowsong hero", () => {
+  it("exists in the heroes registry", () => {
+    expect(HEROES["maiev_shadowsong"]).toBeDefined();
+  });
+
+  it("has correct stats: 40 HP, 0 armor, 1 gold cost", () => {
+    const hero = HEROES["maiev_shadowsong"];
+    expect(hero).toBeDefined();
+    expect(hero!.startHp).toBe(40);
+    expect(hero!.startArmor).toBe(0);
+    expect(hero!.power.kind).toBe("active");
+    expect((hero!.power as { kind: "active"; cost: number; usesPerTurn: number }).cost).toBe(1);
+  });
+
+  it("puts a shop minion to dormant with turnsLeft=2", () => {
+    const minion = instantiate(MINIONS["flame_imp"]!);
+    const state = makeMaievState([minion]);
+
+    const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    const shopMinion = after.players[0]!.shop[0]!;
+    expect(shopMinion.keywords.has("dormant" as import("./types").Keyword)).toBe(true);
+    expect(shopMinion.attachments.dormantTurnsLeft).toBe(2);
+  });
+
+  it("dormant minions cannot be bought", () => {
+    const minion = instantiate(MINIONS["flame_imp"]!);
+    const state = makeMaievState([minion]);
+    const withDormant = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+
+    // Trying to buy a dormant minion should return unchanged state
+    const bought = step(withDormant, { kind: "BuyMinion", player: 0, shopIndex: 0 }, RNG);
+    expect(bought.players[0]!.shop.length).toBe(1);
+    expect(bought.players[0]!.hand.length).toBe(0);
+  });
+
+  it("dormant minions awaken after 2 turns with +3/+3", () => {
+    const minion = instantiate(MINIONS["flame_imp"]!);
+    const baseAtk = minion.atk;
+    const baseHp = minion.hp;
+    const state = makeMaievState([minion]);
+    const withDormant = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+
+    // Turn 1: minion is dormant with turnsLeft=2
+    let shopMinion = withDormant.players[0]!.shop[0]!;
+    expect(shopMinion.attachments.dormantTurnsLeft).toBe(2);
+    expect(shopMinion.keywords.has("dormant" as import("./types").Keyword)).toBe(true);
+
+    // Turn 2: awaken decrements to 1
+    const state2 = beginRecruitTurn(withDormant, RNG);
+    shopMinion = state2.players[0]!.shop[0]!;
+    expect(shopMinion.attachments.dormantTurnsLeft).toBe(1);
+    expect(shopMinion.keywords.has("dormant" as import("./types").Keyword)).toBe(true);
+
+    // Turn 3: awaken removes dormant keyword and adds +3/+3
+    const state3 = beginRecruitTurn(state2, RNG);
+    shopMinion = state3.players[0]!.shop[0]!;
+    expect(shopMinion.keywords.has("dormant" as import("./types").Keyword)).toBe(false);
+    expect(shopMinion.atk).toBe(baseAtk + 3);
+    expect(shopMinion.hp).toBe(baseHp + 3);
+    expect(shopMinion.maxHp).toBe(baseHp + 3);
+  });
+
+  it("dormant turns decrement each turn until awakening", () => {
+    const minion = instantiate(MINIONS["flame_imp"]!);
+    const state = makeMaievState([minion]);
+    const withDormant = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+
+    // Start: turnsLeft=2
+    expect(withDormant.players[0]!.shop[0]!.attachments.dormantTurnsLeft).toBe(2);
+
+    // After 1st beginRecruitTurn: turnsLeft=1
+    const state2 = beginRecruitTurn(withDormant, RNG);
+    expect(state2.players[0]!.shop[0]!.attachments.dormantTurnsLeft).toBe(1);
+
+    // After 2nd beginRecruitTurn: dormant removed, +3/+3 applied
+    const state3 = beginRecruitTurn(state2, RNG);
+    expect(state3.players[0]!.shop[0]!.keywords.has("dormant" as import("./types").Keyword)).toBe(
+      false,
+    );
+  });
+
+  it("deducts 1 gold when using hero power", () => {
+    const minion = instantiate(MINIONS["flame_imp"]!);
+    const state = makeMaievState([minion]);
+    // Override gold to 3 to verify deduction
+    const withGold = {
+      ...state,
+      players: state.players.map((p, i) => (i === 0 ? { ...p, gold: 3 } : p)),
+    };
+
+    const after = step(withGold, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    expect(after.players[0]!.gold).toBe(2);
+  });
+
+  it("has correct description", () => {
+    const hero = HEROES["maiev_shadowsong"];
+    expect(hero!.description).toContain("Dormant");
+    expect(hero!.description).toContain("+3/+3");
+  });
+
+  it("does nothing when targeting non-existent shop index", () => {
+    const state = makeMaievState([]);
+    const after = step(state, { kind: "HeroPower", player: 0, target: 0 }, RNG);
+    expect(after.players[0]!.shop.length).toBe(0);
   });
 });
