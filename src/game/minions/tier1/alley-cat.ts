@@ -22,8 +22,7 @@ export default defineMinion({
       );
       if (candidates.length === 0 || player.board.length >= 7) return state;
 
-      const idx = Math.floor(rng.next() * candidates.length);
-      const chosen = candidates[idx]!;
+      const chosen = rng.pick(candidates);
       const newBoard = [...player.board, chosen];
       const newHand = player.hand.filter((m: MinionInstance) => m.instanceId !== chosen.instanceId);
 

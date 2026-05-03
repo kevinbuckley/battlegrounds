@@ -47,9 +47,7 @@ export function getAllBuddyIds(): string[] {
 }
 
 export function pickBuddy(rng: Rng): BuddyCard {
-  const ids = getAllBuddyIds();
-  const idx = Math.floor(rng.next() * ids.length);
-  return getBuddy(ids[idx]!);
+  return rng.pick(getAllBuddyIds().map(getBuddy));
 }
 
 export function createBuddyInstance(
@@ -120,6 +118,5 @@ export function pickBuddyForPlayer(
       BUDDIES[id as keyof typeof BUDDIES]?.heroId === player.heroId,
   );
   if (eligible.length === 0) return null;
-  const idx = Math.floor(rng.next() * eligible.length);
-  return getBuddy(eligible[idx]!);
+  return rng.pick(eligible.map(getBuddy));
 }

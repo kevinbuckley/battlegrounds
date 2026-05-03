@@ -41,17 +41,19 @@ export const rallyingBanner: TrinketCard = {
     const player = state.players[playerId];
     if (!player || player.board.length === 0) return state;
 
-    const idx = Math.floor(rng.next() * player.board.length);
-    const target = player.board[idx];
+    const target = rng.pick(player.board);
     if (!target) return state;
 
+    const idx = player.board.indexOf(target);
     const newBoard = [...player.board];
-    newBoard[idx] = {
-      ...target,
-      atk: target.atk + 3,
-      hp: target.hp + 3,
-      maxHp: target.maxHp + 3,
-    };
+    if (idx >= 0) {
+      newBoard[idx] = {
+        ...target,
+        atk: target.atk + 3,
+        hp: target.hp + 3,
+        maxHp: target.maxHp + 3,
+      };
+    }
     return {
       ...state,
       players: state.players.map((p) => (p.id === playerId ? { ...p, board: newBoard } : p)),
@@ -106,9 +108,7 @@ export function getAllTrinketIds(): string[] {
 }
 
 export function pickTrinket(rng: Rng): TrinketCard {
-  const ids = getAllTrinketIds();
-  const idx = Math.floor(rng.next() * ids.length);
-  return getTrinket(ids[idx]!);
+  return rng.pick(getAllTrinketIds().map(getTrinket));
 }
 
 export function pickTrinketForPlayer(
@@ -122,6 +122,5 @@ export function pickTrinketForPlayer(
     TRINKETS[id as keyof typeof TRINKETS]?.tiers.includes(player.tier),
   );
   if (eligible.length === 0) return null;
-  const idx = Math.floor(rng.next() * eligible.length);
-  return getTrinket(eligible[idx]!);
+  return rng.pick(eligible.map(getTrinket));
 }

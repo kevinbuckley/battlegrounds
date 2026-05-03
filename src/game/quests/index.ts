@@ -231,7 +231,5 @@ export function createQuestInstance(cardId: string, playerId: PlayerId, rng: Rng
 }
 
 export function pickQuest(rng: Rng): QuestCard {
-  const ids = getAllQuestIds();
-  const idx = Math.floor(rng.next() * ids.length);
-  return getQuest(ids[idx]!);
+  return rng.pick(getAllQuestIds().map(getQuest));
 }
