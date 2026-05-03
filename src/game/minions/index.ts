@@ -47,6 +47,7 @@ import screwjankClunker from "./tier3/screwjank-clunker";
 import scurpus from "./tier3/scurpus";
 import soulJuggler from "./tier3/soul-juggler";
 import stonehillDefender from "./tier3/stonehill-defender";
+import tortollanShellraiser from "./tier3/tortollan-shellraiser";
 import annihilanBattlemaster from "./tier4/annihilan-battlemaster";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import bolvarFireblood from "./tier4/bolvar-fireblood";
@@ -130,6 +131,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [soulJuggler.id]: soulJuggler,
   [stonehillDefender.id]: stonehillDefender,
   [scurpus.id]: scurpus,
+  [tortollanShellraiser.id]: tortollanShellraiser,
   [screwjankClunker.id]: screwjankClunker,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [annihilanBattlemaster.id]: annihilanBattlemaster,

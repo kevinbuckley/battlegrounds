@@ -262,3 +262,4 @@
 2026-05-03 | 75db9ea | FIXED: Add Sneed's Old Shredder (tier 6 mech, 5/5) — deathrattle summons a random tier 6 Legendary minion from the game, with unit tests verifying deathrattle behavior and board cap handling
 2026-05-03 | a47aed3 | FIXED: Add Pyramad hero — active power (1g) give a random friendly minion +4 HP
 2026-05-03 | 826d3ed | FIXED: Add Scurpus (tier 3 beast) — battlecry summons a 1/1 Beast for each other minion with a Battlecry on your board, with unit tests
+2026-05-03 | 94dcb16 | FIXED: Add Tortollan Shellraiser (tier 3 elemental, 2/3): taunt; deathrattle give a random friendly minion +1/+3, with unit tests

@@ -88,7 +88,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Murloc Tinyfin` (tier 1): vanilla 1/1 murloc (cheap warm-body)
 - [ ] [S] Add `Dragonspawn Lieutenant` golden test: verify golden version has correct stats (4/6 if base is 2/3) — tests/minions/
-- [ ] [S] Add `Tortollan Shellraiser` (tier 3 elemental): taunt; deathrattle give a random friendly minion +1/+3
+- [x] [S] Add `Tortollan Shellraiser` (tier 3 elemental): taunt; deathrattle give a random friendly minion +1/+3
 - [ ] [S] Add `Tide-Razor` (tier 5 murloc): deathrattle summon three random murlocs
 
 ---
