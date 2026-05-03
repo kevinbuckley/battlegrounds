@@ -1233,6 +1233,57 @@ describe("Brann Bronzebeard", () => {
     expect(callCount).toBe(2);
   });
 
+  it("Brann + non-golden battlecry fires twice (2 × 1)", () => {
+    let callCount = 0;
+    const battlecryMinion = defineMinion({
+      id: "brann_non_golden_test",
+      name: "Brann Non-Golden Test",
+      tier: 1,
+      tribes: [],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onBattlecry: ({ state }) => {
+          callCount++;
+          return {
+            ...state,
+            players: state.players.map((p, i) =>
+              i === 0 ? { ...p, hand: [...p.hand, instantiate(TEST_BATTLECRY_CARD)] } : p,
+            ),
+          };
+        },
+      },
+    });
+    MINIONS[battlecryMinion.id] = battlecryMinion;
+
+    const brann = instantiate(
+      defineMinion({
+        id: "brann_bronzebeard",
+        name: "Brann Bronzebeard",
+        tier: 5,
+        tribes: ["Murloc"],
+        baseAtk: 1,
+        baseHp: 3,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {},
+      }),
+    );
+
+    const toPlay = instantiate(battlecryMinion);
+    const state = makeTestState({ board: [brann], hand: [toPlay] });
+    const after = playMinionToBoard(state, 0, 0, 0, RNG);
+
+    // Brann + non-golden = 2 triggers (2 × 1)
+    expect(callCount).toBe(2);
+    expect(after.players[0]!.board).toHaveLength(2);
+    expect(after.players[0]!.hand).toHaveLength(2);
+    // Clean up dynamically registered minion to avoid affecting other test files
+    delete MINIONS[battlecryMinion.id];
+  });
+
   it("golden + Brann on board fires battlecry 4 times (2 × 2 multiplicative)", () => {
     let callCount = 0;
     const battlecryMinion = defineMinion({
