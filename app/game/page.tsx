@@ -1129,7 +1129,13 @@ export default function GamePage() {
                           <span className="text-orange-400">{shopItem.hp}</span>
                         </div>
                         <div className="flex items-center gap-0.5 text-[10px] font-semibold text-amber-400">
-                          <span>{COST_BUY}g</span>
+                          <span>
+                            {Math.max(
+                              1,
+                              (minionCard.bountyCost ?? COST_BUY) - (shopItem.discount ?? 0),
+                            )}
+                            g
+                          </span>
                         </div>
                         {minionCard.baseKeywords.length > 0 && (
                           <div className="flex flex-wrap gap-0.5">
