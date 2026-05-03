@@ -399,7 +399,12 @@ function applyDamage(
         rng,
       });
     }
-    return;
+    if (source.keywords.has("poisonous") || source.keywords.has("venomous")) {
+      target.hp = 0;
+      emit({ kind: "Damage", target: target.instanceId, amount: dmg });
+    } else {
+      return;
+    }
   }
 
   target.hp -= dmg;

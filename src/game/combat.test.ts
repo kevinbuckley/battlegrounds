@@ -366,6 +366,47 @@ describe("feature validation", () => {
     expect(divineShields).toHaveLength(1);
   });
 
+  it("poisonous kills a divine-shielded minion (pops shield AND kills)", () => {
+    const poisonousMinion = makeMinion(1, 11);
+    poisonousMinion.keywords.add("poisonous");
+    const shieldedMinion = makeMinion(10, 10);
+    shieldedMinion.keywords.add("divineShield");
+
+    const r = simulateCombat([poisonousMinion], [shieldedMinion], makeRng(0));
+    expect(r.winner).toBe("left");
+    expect(r.survivorsLeft).toHaveLength(1);
+    expect(r.survivorsRight).toHaveLength(0);
+
+    // Verify the divine shield was popped
+    const divineShields = r.transcript.filter((e) => e.kind === "DivineShield");
+    expect(divineShields).toHaveLength(1);
+
+    // Verify the poisonous minion dealt damage (killing the shielded minion)
+    const damages = r.transcript.filter((e) => e.kind === "Damage");
+    expect(damages).toHaveLength(3);
+    expect(damages[0]!.amount).toBe(1);
+  });
+
+  it("venomous kills a divine-shielded minion (pops shield AND kills)", () => {
+    const venomousMinion = makeMinion(1, 11);
+    venomousMinion.keywords.add("venomous");
+    const shieldedMinion = makeMinion(10, 10);
+    shieldedMinion.keywords.add("divineShield");
+
+    const r = simulateCombat([venomousMinion], [shieldedMinion], makeRng(0));
+    expect(r.winner).toBe("left");
+    expect(r.survivorsLeft).toHaveLength(1);
+    expect(r.survivorsRight).toHaveLength(0);
+
+    // Verify the divine shield was popped
+    const divineShields = r.transcript.filter((e) => e.kind === "DivineShield");
+    expect(divineShields).toHaveLength(1);
+
+    // Verify the venomous minion dealt damage (killing the shielded minion)
+    const damages = r.transcript.filter((e) => e.kind === "Damage");
+    expect(damages).toHaveLength(3);
+  });
+
   it("reborn keyword is properly handled", () => {
     // Just a smoke test - the keyword must be compatible with existing combat
     const minion = makeMinion(1, 1);

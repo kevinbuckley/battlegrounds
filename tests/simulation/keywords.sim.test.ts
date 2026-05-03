@@ -80,12 +80,12 @@ describe("divine shield", () => {
     expect(r.survivorsRight).toHaveLength(0);
   });
 
-  it("poisonous does not kill through divine shield", () => {
+  it("poisonous kills a divine-shielded minion (pops shield and kills)", () => {
     // ds has 2 atk → kills the 1/1 poisoner regardless of who attacks first
     const poisoner = make(1, 1, ["poisonous"]);
     const ds = make(2, 1, ["divineShield"]);
     const r = simulateCombat([poisoner], [ds], makeRng(0));
-    expect(r.survivorsRight).toHaveLength(1);
+    expect(r.survivorsRight).toHaveLength(0);
   });
 });
 
