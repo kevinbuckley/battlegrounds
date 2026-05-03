@@ -746,7 +746,7 @@ export default function GamePage() {
         if (player && combatResult.winner === "right") {
           const damage = calcDamage(player.tier, combatResult.survivorsRight);
           setDamageRecap({ damage, opponentHeroId });
-          setTimeout(() => setDamageRecap(null), 3000);
+          setTimeout(() => setDamageRecap(null), 5000);
         }
       }
     } else {

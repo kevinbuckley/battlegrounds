@@ -1,3 +1,4 @@
+2026-05-03 | 603d722 | FIXED: Update combat result toast persistence from 3 seconds to 5 seconds in app/game/page.tsx
 2026-05-03 | cefdb3c | FIXED: Add spellCardId parameter to onCast hook — fires when player sells a minion (used by future sell-synergy minions), wired into sellMinion in shop.ts for both board and hand paths, with unit tests
 2026-05-03 | 8c93738 | FIXED: Add onMinionSold hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions), wired into sellMinion in shop.ts for both board and hand paths, with unit tests
 2026-05-03 | 4972db9 | FIXED: Add Tide-Razor (tier 5 murloc, 3/4) — deathrattle summons three random murlocs from the registry, with unit tests
