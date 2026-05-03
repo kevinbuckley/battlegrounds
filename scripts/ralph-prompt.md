@@ -55,8 +55,9 @@ If the only available tasks are vague, **add a concrete task to the backlog your
       - "Add `Strongshell Scavenger` (tier 5): battlecry +2/+2 to friendly taunts"
       - "Add unit test verifying poisonous + divine shield interaction"
 
-   State your CHOSEN TASK in this exact format on its own line:
+   **MANDATORY: emit this exact line before doing anything else:**
    `CHOSEN TASK: <one sentence>`
+   The harness greps for this pattern to track and quarantine failed tasks. If it's missing, the iteration cannot be tracked and will be marked failed even if code is correct.
 
 2. **RESEARCH** — call `bg-ralph-tools_web_fetch` on the relevant
    `https://hearthstone.wiki.gg/wiki/...` page. Summarize the rule in one sentence.
@@ -87,7 +88,7 @@ If the only available tasks are vague, **add a concrete task to the backlog your
    Do this BEFORE the final commit so it's included.
 
 9. **COMMIT** — `git add -A && git commit -m "feat: <description>"` — one line, no
-   newlines. Must include the ledger update from step 8.
+   newlines. Must include the ledger update from step 8. The commit message description must match your CHOSEN TASK line from step 1.
 
 10. **END** — your very last output must be exactly this line (nothing after it):
     `FIXED: <one-line description matching what you built>`
@@ -98,8 +99,9 @@ If the only available tasks are vague, **add a concrete task to the backlog your
 
 - **Never ask questions.** Never write "I need clarification". Decide and act.
 - **Never stop mid-task.** Run all 10 steps to completion.
-- **Never run `git reset`, `git rebase`, `git push`, or any command that rewrites or
-  uploads history.** Only `git add` and `git commit` are allowed.
+- **NEVER run `git push` for any reason.** The harness handles all remote operations. Running `git push` wastes iteration time and will fail with a permissions error anyway.
+- **Never run `git reset`, `git rebase`, `git stash`, or any command that rewrites or
+  discards local changes without explicit revert intent.** Only `git add` and `git commit` are allowed. To revert: use `git checkout -- . && git clean -fd src/ tests/` only.
 - **If you cannot find a real bug or your tests fail twice, REVERT and exit cleanly.**
   Do not loop on analysis. The harness will pick another task on the next iteration.
 - **Don't expand scope.** If you find a second gap, add it to `docs/loop-backlog.md`

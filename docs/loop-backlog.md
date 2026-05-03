@@ -16,24 +16,21 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
-- [ ] [S] Add unit test verifying cleave damage hits exactly the two adjacent minions (left+right of defender), not all friendlies — tests/combat/cleave.test.ts
-
 ### Combat correctness — high impact, easy to test
 
-- [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/ (already covered by existing test in keywords.sim.test.ts line 83-89)
+- [x] [S] Add unit test verifying poisonous + divine shield interaction: poisonous attacker hits a divine-shielded defender → shield pops, defender survives at full HP, poisonous keyword lost (one-shot). Test in tests/combat/
 - [x] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right), not all friendlies — tests/combat/cleave.test.ts
-- [ ] [S] Add unit test verifying cleave damage hits exactly the two minions adjacent to the defender (left and right) — tests/combat/cleave.test.ts
-- [ ] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
+- [x] [S] Add unit test verifying windfury attacks twice per turn, megaWindfury attacks four times — tests/combat/windfury.test.ts
+- [x] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
 - [ ] [S] Add unit test verifying reborn minions return at 1 HP with reborn keyword removed — tests/combat/reborn.test.ts (extend existing if present)
-- [ ] [S] Add unit test verifying deathrattle of a minion that summons new minions: the summoned minions arrive at the dead minion's index (not appended) — tests/combat/deathrattle-position.test.ts
 - [ ] [S] Add unit test verifying golden minions trigger battlecry/deathrattle exactly twice — tests/combat/golden.test.ts
 - [ ] [S] Verify Brann + non-golden battlecry triggers 2x and Brann + golden triggers 4x — add unit test
 
 ### New minions — Tier 2 (only those NOT yet on disk)
 
 - [ ] [S] Add `Pack Leader` (tier 2 beast): whenever a beast is summoned on your side, give it +3 ATK — onSummonAlly hook in src/game/minions/tier2/pack-leader.ts
-- [ ] [S] Add `Pogo-Hopper` (tier 2 mech): battlecry gain +1/+1 for each Pogo-Hopper you've played this game — uses player.history counter
-- [ ] [S] Add `Nightmare Amalgam` (tier 2): no tribe, +0/+0 vanilla 2/4, but counts as ALL tribes for tribe-buff effects
+- [x] [S] Add `Pogo-Hopper` (tier 2 mech): battlecry gain +1/+1 for each Pogo-Hopper you've played this game — uses player.history counter
+- [x] [S] Add `Nightmare Amalgam` (tier 2): no tribe, +0/+0 vanilla 2/4, but counts as ALL tribes for tribe-buff effects
 
 ### New minions — Tier 4 (only those NOT yet on disk)
 
