@@ -1,4 +1,5 @@
 2026-05-03 | 8c93738 | FIXED: Add onMinionSold hook to effect hooks framework — fires when player sells a minion (used by future sell-synergy minions), wired into sellMinion in shop.ts for both board and hand paths, with unit tests
+2026-05-03 | 4972db9 | FIXED: Add Tide-Razor (tier 5 murloc, 3/4) — deathrattle summons three random murlocs from the registry, with unit tests
 2026-05-03 | 5eea451 | FIXED: Add golden.test.ts — unit tests verifying golden deathrattle fires twice (harvest golem, spawn of n'zoth, ghastcoiler), golden stats doubled, and golden is marked golden
 2026-05-03 | 8967f10 | FIXED: Add Bigfernal (tier 5 demon) — onShopSummon gives itself +2/+2 whenever another friendly demon is summoned to board, with unit tests
 2026-05-03 | a723cc9 | FIXED: Add Murloc Tinyfin (tier 1 murloc, vanilla 1/1) — cheapest warm-body murloc with no keywords
