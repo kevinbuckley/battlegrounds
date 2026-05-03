@@ -81,6 +81,7 @@ import gentleMegasaur from "./tier6/gentle-megasaur";
 import ghastcoiler from "./tier6/ghastcoiler";
 import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
 import mamaBear from "./tier6/mama-bear";
+import sneedOldShredder from "./tier6/sneed-old-shredder";
 import terestianManferris from "./tier6/terestian-manferris";
 import yseraTheDreamerT6 from "./tier6/ysera-the-dreamer";
 import zixorProjectHope from "./tier6/zixor-project-hope";
@@ -173,6 +174,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [zixorProjectHope.id]: zixorProjectHope,
   [mamaBear.id]: mamaBear,
   [foeReaper4000.id]: foeReaper4000,
+  [sneedOldShredder.id]: sneedOldShredder,
   [yseraTheDreamerT6.id]: yseraTheDreamerT6,
   [bountyMinion.id]: bountyMinion,
   [alexstraszaSelflessDragon.id]: alexstraszaSelflessDragon,

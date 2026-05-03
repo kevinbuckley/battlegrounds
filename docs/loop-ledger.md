@@ -1,3 +1,4 @@
+2026-05-03 | de2e6c8 | FIXED: Add Sneed's Old Shredder (tier 6 mech, 5/5) — deathrattle summons a random Legendary minion from tier 6+ on either board, with unit tests
 2026-05-03 | 52aac93 | FIXED: Add Boulderfog Ogre (tier 4 elemental, 10/2 vanilla) — fills the high-attack gap in tier 4, wired into minions index registry
 2026-05-03 | 5f89f8f | FIXED: Add unit test verifying calcDamage uses actual tier from registry — tests real minions (flame_imp tier1, murloc_warleader tier2, cave_hydra tier4, foe_reaper tier6) to confirm formula uses registry tier not default tier 1, with 5 test cases in tests/damage/calcDamage-registry.test.ts
 2026-05-03 | 9c18900 | FIXED: Add Alexstrasza (tier 5 dragon, 10/10 vanilla) — real Battlegrounds hero dragon with no keywords, distinct from existing Alexstrasza-Selfless-Dragon (tier 8), with unit tests
