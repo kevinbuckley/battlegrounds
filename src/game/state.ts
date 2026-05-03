@@ -86,18 +86,9 @@ function useHeroPower(state: GameState, playerId: number, target: unknown, rng: 
 
 function buySpell(state: GameState, playerId: number, shopIndex: number, rng: Rng): GameState {
   const player = getPlayer(state, playerId);
-  // Spells are in the shop slots after shop size
   const shopItems = player.shop;
-  const shopSize = Math.floor(shopItems.length * 0.25); // 1/4 of slots are spells
-  const spellSlots = shopItems.slice(-shopSize);
-
-  // shopIndex is the absolute index in the full shop; convert to relative index
-  const relativeIndex = shopIndex - (shopItems.length - shopSize);
-  if (relativeIndex < 0 || relativeIndex >= spellSlots.length) {
-    throw new Error(`No spell at shop index ${shopIndex}`);
-  }
-
-  const spellInstance = spellSlots[relativeIndex]!;
+  const spellInstance = shopItems[shopIndex];
+  if (!spellInstance) throw new Error(`No spell at shop index ${shopIndex}`);
   const spellCard = SPELLS[spellInstance.cardId];
   if (!spellCard) throw new Error(`Unknown spell: ${spellInstance.cardId}`);
 
