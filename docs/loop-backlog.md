@@ -53,23 +53,59 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
 - [ ] [S] Add `King of Beasts` (tier 6 beast, 2/6): taunt; battlecry gain +1 ATK for each other Beast on your board — src/game/minions/tier6/king-of-beasts.ts
+- [ ] [S] Add `Razorgore the Untamed` (tier 6 dragon, 2/4): at start of combat, gain +2/+2 for each friendly Dragon on your board — onStartOfCombat counting dragons in src/game/minions/tier6/razorgore.ts
+- [ ] [S] Add `Nadina the Red` (tier 6 human, 7/4): deathrattle give all friendly non-divine-shield Deathrattle minions divine shield — onDeath in src/game/minions/tier6/nadina.ts
+- [ ] [S] Add `Elistra the Immortal` (tier 6 dragon, 8/8): reborn — single keyword, no hooks needed, src/game/minions/tier6/elistra.ts
+
+### New minions — Tier 1 (additional)
+
+- [ ] [S] Add `Sellemental` (tier 1 elemental, 1/1): when you sell this minion, add a 1/1 Elemental to your hand — uses existing onMinionSold hook in src/game/minions/tier1/sellemental.ts
+- [ ] [S] Add `Deck Swabbie` (tier 1 pirate, 2/2): battlecry give a friendly Pirate +1/+1 — src/game/minions/tier1/deck-swabbie.ts
+
+### New minions — Tier 2 (additional)
+
+- [ ] [S] Add `Micro Machine` (tier 2 mech, 1/2): at the start of combat, gain +1 ATK — onStartOfCombat in src/game/minions/tier2/micro-machine.ts
+
+### New minions — Tier 3 (additional)
+
+- [ ] [S] Add `Bronze Warden` (tier 3 dragon, 2/1): divine shield + rush — no hooks needed, just keywords in src/game/minions/tier3/bronze-warden.ts
+- [ ] [S] Add `Houndmaster` (tier 3 human, 4/3): battlecry give a friendly Beast +2/+2 and Taunt — src/game/minions/tier3/houndmaster.ts
+- [ ] [S] Add `Soul Devourer` (tier 3 demon, 3/3): battlecry consume a friendly Demon (remove it from board), gain its ATK and HP — src/game/minions/tier3/soul-devourer.ts
+
+### New minions — Tier 5 (additional)
+
+- [ ] [S] Add `Mal'Ganis` (tier 5 demon, 9/7): at start of combat, give all other friendly Demons +2/+2 — onStartOfCombat aura in src/game/minions/tier5/malganis.ts
+- [ ] [S] Add `Goldrinn the Great Wolf` (tier 5 beast, 4/4): whenever a friendly Beast is played to board, give ALL friendly Beasts +5 ATK — onShopSummon tribe check in src/game/minions/tier5/goldrinn.ts
+- [ ] [S] Add `Lil' Rag` (tier 5 elemental, 1/1): when you play an Elemental in the tavern, give all other friendly Elementals +1/+1 — onShopSummon tribe=Elemental check in src/game/minions/tier5/lil-rag.ts
+
+### Simulation tests — existing minions need coverage
+
+- [ ] [S] Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron on left side causes deathrattles to fire 2x; golden Baron causes 4x; Baron on right side does not affect left deathrattles
+- [ ] [S] Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned (including tokens from deathrattles)
+- [ ] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
+- [ ] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
+- [ ] [S] Add tests/simulation/unstable-ghoul.sim.test.ts — verify Unstable Ghoul deathrattle deals 1 damage to ALL other minions on both sides
+- [ ] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
+- [ ] [S] Add tests/combat/lifesteal.test.ts — verify lifesteal heals attacking minion's HP equal to damage dealt; verify lifesteal does NOT trigger when damage is fully absorbed by divine shield
+- [ ] [S] Add tests/simulation/murloc-warleader-death.sim.test.ts — verify that when Murloc Warleader dies mid-combat, the +2 ATK aura is removed and buffed murlocs revert to base ATK immediately
 
 ### AI improvements
 
-- [ ] [M] Greedy AI: add unit test verifying it actually upgrades tavern tier when it has ≥4 board minions and enough gold — tests/ai/greedy-upgrade.test.ts
-- [ ] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — modify takeAITurn ordering in all three AI strategies
-- [ ] [M] Greedy AI sell-to-upgrade: when board has 7 minions and gold is 1 short of upgrade, sell the weakest minion to afford the upgrade — greedy.ts
+- [ ] [M] Greedy AI: add unit test verifying it upgrades tavern tier when board has ≥4 minions and gold ≥ upgradeCost — tests/ai/greedy-upgrade.test.ts
+- [ ] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — sort hand by hasBattlecry before play loop in all three AI strategies
+- [ ] [S] Heuristic AI: sell weakest board minion (lowest atk+hp) when hand is at capacity (≥10) to make room — add sell-to-make-room check in heuristic.ts before buy loop
 
 ### UI polish (verifiable by reading code, no browser needed)
 
-- [ ] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — store lastTierUpAt timestamp in component state, apply `.tier-up-pulse` CSS animation class, add keyframes to globals.css
+- [ ] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — store lastTierUpAt timestamp in component state, apply `.tier-up-pulse` CSS animation, add keyframes to globals.css
 - [ ] [S] Sell undo: after selling a board or hand minion, show a 1.5s "Undo" floating button that restores the minion to hand at no cost — add sellHistory: MinionInstance | null state, show UndoSell button with setTimeout cleanup
+- [ ] [S] Show turn number in HUD — display current turn as "Turn N" badge next to gold; read from gameState.turn in app/game/page.tsx
 
 ### Game-rule completeness
 
-- [ ] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama, Floating Watcher); wire into combat.ts applyDamage after shield/poisonous resolution
-- [ ] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop before the attack loop
-- [ ] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat (for Floating Watcher and future hero-damage synergies)
+- [ ] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama); wire into combat.ts applyDamage after divine-shield resolution, passing damage amount
+- [ ] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop just before applyDamage, passing attacker reference
+- [ ] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat; pass damage amount to all board minions
 
 ---
 
