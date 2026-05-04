@@ -29,6 +29,8 @@ export default defineMinion({
       const copy: MinionInstance = {
         instanceId: nextInstanceId(),
         cardId: source.cardId,
+        baseAtk: source.baseAtk,
+        baseHp: source.baseHp,
         atk: source.atk,
         hp: source.hp,
         maxHp: source.maxHp,

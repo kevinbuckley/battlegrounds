@@ -33,6 +33,8 @@ export default defineMinion({
         snakes.push({
           instanceId: `scurpus_snake_${playerId}_${nextInstanceId()}`,
           cardId: "scurpus_snake",
+          baseAtk: 1,
+          baseHp: 1,
           atk: 1,
           hp: 1,
           maxHp: 1,

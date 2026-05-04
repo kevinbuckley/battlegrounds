@@ -135,6 +135,8 @@ export const pancakeSpell: SpellCard = {
         const whelm: MinionInstance = {
           instanceId: nextInstanceId(),
           cardId: "dredgrot_whelp",
+          baseAtk: 1,
+          baseHp: 1,
           atk: 1,
           hp: 1,
           maxHp: 1,
@@ -399,6 +401,8 @@ export const swatTeam: SpellCard = {
         const recruit: MinionInstance = {
           instanceId: nextInstanceId(),
           cardId: "swat_recruit",
+          baseAtk: 1,
+          baseHp: 1,
           atk: 1,
           hp: 1,
           maxHp: 1,

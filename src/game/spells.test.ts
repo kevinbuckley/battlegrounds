@@ -222,6 +222,8 @@ describe("swat team", () => {
       boardMinions.push({
         instanceId: `board_minion_${i}`,
         cardId: "rush_minion",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 1,
         hp: 1,
         maxHp: 1,
@@ -268,6 +270,8 @@ describe("swat team", () => {
       boardMinions.push({
         instanceId: `board_minion_${i}`,
         cardId: "rush_minion",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 1,
         hp: 1,
         maxHp: 1,
@@ -312,6 +316,8 @@ describe("swat team", () => {
       boardMinions.push({
         instanceId: `board_minion_${i}`,
         cardId: "rush_minion",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 1,
         hp: 1,
         maxHp: 1,
@@ -365,6 +371,8 @@ describe("siphon soul", () => {
       {
         instanceId: "friendly_minion_1",
         cardId: "rush_minion",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 3,
         hp: 2,
         maxHp: 2,
@@ -435,6 +443,8 @@ describe("siphon soul", () => {
       boardMinions.push({
         instanceId: `board_minion_${i}`,
         cardId: "rush_minion",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 1,
         hp: 1,
         maxHp: 1,

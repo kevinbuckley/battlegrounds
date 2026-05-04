@@ -20,6 +20,8 @@ export default defineMinion({
       const whelp: MinionInstance = {
         instanceId: `tidehunter_whelp_${playerId}_${nextInstanceId()}`,
         cardId: "murloc_tidehunter_whelp",
+        baseAtk: 1,
+        baseHp: 1,
         atk: 1,
         hp: 1,
         maxHp: 1,
@@ -28,7 +30,7 @@ export default defineMinion({
         golden: false,
         attachments: {},
         spellDamage: 0,
-  hooks: {},
+        hooks: {},
       };
 
       return {

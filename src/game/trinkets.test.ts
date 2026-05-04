@@ -60,6 +60,8 @@ function makeMinion(atk: number, hp: number): MinionInstance {
   return {
     instanceId: `m${atk + hp}`,
     cardId: "test_minion",
+    baseAtk: atk,
+    baseHp: hp,
     atk,
     hp,
     maxHp: hp,

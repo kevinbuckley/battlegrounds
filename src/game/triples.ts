@@ -93,6 +93,8 @@ export function checkAndProcessTriples(
     const golden: MinionInstance = {
       instanceId: third.instanceId,
       cardId,
+      baseAtk: totalAtk,
+      baseHp: totalHp,
       golden: true,
       atk: totalAtk,
       hp: totalHp,

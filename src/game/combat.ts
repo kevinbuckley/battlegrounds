@@ -246,6 +246,19 @@ function reapDeaths(
         emit({ kind: "Bounty", source: dead.instanceId, amount: bountyAmount });
       }
 
+      // Reversed aura: when an aura-source minion (onStartOfCombat) dies,
+      // restore all minions' stats to their base values. This handles
+      // Murloc Warleader, Mal'Ganis, Siegebreaker, Old Murk-Eye, etc.
+      if (dead.hooks?.onStartOfCombat) {
+        const board = deadSide === "left" ? l : r;
+        for (const m of board) {
+          m.atk = m.baseAtk;
+          m.hp = m.hp <= m.baseHp ? m.hp : m.baseHp;
+          m.maxHp = m.baseHp;
+          emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+        }
+      }
+
       // Record array length before deathrattle fires, so we can detect
       // newly summoned minions and reposition them to the dead minion's index.
       const boardBefore = deadSide === "left" ? l.length : r.length;

@@ -27,6 +27,8 @@ export function instantiate(card: MinionCard, golden = false): MinionInstance {
   return {
     instanceId: `m${nextInstanceIdCounter}`,
     cardId: card.id,
+    baseAtk: atk,
+    baseHp: hp,
     atk,
     hp,
     maxHp: hp,

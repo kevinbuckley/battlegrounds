@@ -151,6 +151,8 @@ export interface HeroDamagedCtx {
 export interface MinionInstance {
   instanceId: MinionInstanceId;
   cardId: MinionCardId;
+  baseAtk: number;
+  baseHp: number;
   atk: number;
   hp: number;
   maxHp: number;
