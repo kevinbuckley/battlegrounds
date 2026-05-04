@@ -25,7 +25,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 1
 
-- [ ] [S] Add `Fiendish Servant` (tier 1 demon, 2/1): deathrattle give its ATK to a random friendly minion — src/game/minions/tier1/fiendish-servant.ts
+- [x] [S] Add `Fiendish Servant` (tier 1 demon, 2/1): deathrattle give its ATK to a random friendly minion — src/game/minions/tier1/fiendish-servant.ts
 - [ ] [S] Add `Righteous Protector` (tier 1 paladin, 1/1): divine shield + taunt — src/game/minions/tier1/righteous-protector.ts
 
 ### New minions — Tier 2
