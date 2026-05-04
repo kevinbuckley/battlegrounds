@@ -1,3 +1,4 @@
+2026-05-04 | 7c34ea9 | FIXED: Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, reborn 1/1 that dies re-enters at 1/1 with no reborn flag, and Elistra the Immortal reborn behavior
 2026-05-04 | 00ec947 | FIXED: Add Bronze Warden (tier 3 dragon, 2/1): divine shield + rush keywords
 2026-05-04 | 8f095c1 | FIXED: Add Nadina the Red (tier 6 demon, 7/4): deathrattle gives all friendly non-divine-shield Deathrattle minions divine shield
 2026-05-04 | 768bd6f | FIXED: Add lifesteal simulation tests — verify lifesteal healing accumulates during combat, does not trigger when damage is absorbed by divine shield, and is applied to winner's hero post-combat
