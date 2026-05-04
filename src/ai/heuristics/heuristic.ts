@@ -149,6 +149,20 @@ export const heuristic: Strategy = {
       }
     }
 
+    // --- Sell weakest board minion if hand is at capacity (≥10) to make room ---
+    {
+      const player = sim.players[me]!;
+      if (player.hand.length >= 10 && player.board.length > 0) {
+        const weakIdx = weakestBoardIndex(player.board);
+        try {
+          sim = sellMinion(sim, me, weakIdx);
+          actions.push({ kind: "SellMinion", player: me, boardIndex: weakIdx });
+        } catch {
+          // ignore
+        }
+      }
+    }
+
     // --- Sell weakest board minion if board is full and hand has better ---
     {
       const player = sim.players[me]!;
