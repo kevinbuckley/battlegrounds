@@ -32,6 +32,7 @@ import murlocWarleader from "./tier2/murloc-warleader";
 import nightmareAmalgam from "./tier2/nightmare-amalgam";
 import packLeader from "./tier2/pack-leader";
 import pogoHopper from "./tier2/pogo-hopper";
+import ratPack from "./tier2/rat-pack";
 import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
@@ -129,6 +130,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [packLeader.id]: packLeader,
   [nightmareAmalgam.id]: nightmareAmalgam,
   [pogoHopper.id]: pogoHopper,
+  [ratPack.id]: ratPack,
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,
