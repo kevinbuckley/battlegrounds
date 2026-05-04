@@ -1,3 +1,4 @@
+2026-05-04 | 88a735a | FIXED: Add tests/combat/imprisoner-golden.test.ts — verify golden Imprisoner (6/8) summons two 2/2 Imps on death while non-golden (3/4) summons one
 2026-05-04 | 141c1fb | FIXED: Add tests/shop/refresh.test.ts — verify shop refresh deducts 1 gold from player, and that refreshing costs exactly COST_REFRESH (currently 1g)
 
 2026-05-04 | ba120f8 | FIXED: Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned during combat, including tokens from deathrattles
