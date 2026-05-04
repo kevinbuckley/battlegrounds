@@ -30,6 +30,7 @@ import prisoner from "./tier2/imprisoner";
 import kaboomBot from "./tier2/kaboom-bot";
 import knifeJuggler from "./tier2/knife-juggler";
 import metaltoothLeaper from "./tier2/metaltooth-leaper";
+import microMachine from "./tier2/micro-machine";
 import murlocWarleader from "./tier2/murloc-warleader";
 import nightmareAmalgam from "./tier2/nightmare-amalgam";
 import packLeader from "./tier2/pack-leader";
@@ -135,6 +136,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [prisoner.id]: prisoner,
   [glyphGuardian.id]: glyphGuardian,
   [metaltoothLeaper.id]: metaltoothLeaper,
+  [microMachine.id]: microMachine,
   [deflectoBot.id]: deflectoBot,
   [murlocWarleader.id]: murlocWarleader,
   [rebornMinion.id]: rebornMinion,
