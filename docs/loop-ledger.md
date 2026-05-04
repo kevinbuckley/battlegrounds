@@ -1,3 +1,4 @@
+2026-05-04 | 351db08 | FIXED: Add Lil' Rag (tier 5 elemental, 1/1): onPlay gives all other friendly Elementals +1/+1
 2026-05-04 | 20e3360 | FIXED: Add Goldrinn the Great Wolf (tier 5 beast, 4/4): onShopSummon gives ALL friendly Beasts +5/+5 whenever a Beast is played
 2026-05-04 | fc6e47b | FIXED: Add Mal'Ganis (tier 5 demon, 9/7): at start of combat, give all other friendly Demons +2/+2
 2026-05-04 | 8880f51 | FIXED: Add Houndmaster (tier 3, 4/3): battlecry gives a friendly Beast +2/+2 and Taunt
