@@ -50,6 +50,7 @@ import cobaltScalebane from "./tier3/cobalt-scalebane";
 import coldlightSeer from "./tier3/coldlight-seer";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
+import grimspeaker from "./tier3/grimspeaker";
 import grombiTheRotundaElemental from "./tier3/grombi-the-rotunda";
 import gromsch from "./tier3/gromsch";
 import houndmaster from "./tier3/houndmaster";
@@ -163,6 +164,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [unstableGhoul.id]: unstableGhoul,
   [vulgarHomunculus.id]: vulgarHomunculus,
   [gazelle.id]: gazelle,
+  [grimspeaker.id]: grimspeaker,
   [gromsch.id]: gromsch,
   [frostboundGolem.id]: frostboundGolem,
   [grombiTheRotundaElemental.id]: grombiTheRotundaElemental,
