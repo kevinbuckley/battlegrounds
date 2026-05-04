@@ -16,6 +16,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
+- [ ] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts
+
 - [ ] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
 
 - [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
