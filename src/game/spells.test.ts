@@ -354,7 +354,7 @@ describe("siphon soul", () => {
     expect(siphonSoul.cost).toBe(3);
   });
 
-  it("destroys a friendly minion and summons a random tier 6 minion", () => {
+  it("destroys a friendly minion and summons a random tier 8 minion", () => {
     const state = makeInitialState(42);
     const rng = rngForTurn(state, "selectHero");
     let s = step(state, { kind: "SelectHero", player: 0, heroId: "patchwerk" }, rng);
@@ -402,7 +402,7 @@ describe("siphon soul", () => {
     // The summoned minion should be tier 8
     const summoned = minions[0]!;
     const summonedCard = MINIONS[summoned.cardId as keyof typeof MINIONS];
-    expect(summonedCard?.tier).toBe(6);
+    expect(summonedCard?.tier).toBe(8);
   });
 
   it("does nothing when board is empty", () => {

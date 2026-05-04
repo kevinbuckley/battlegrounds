@@ -459,7 +459,6 @@ export const siphonSoul: SpellCard = {
       // Summon a random tier 8 minion
       const TIER8_IDS = [
         "alexstrasza_selfless_dragon",
-        "ysera_the_dreamer",
         "deathwing_razes_to_bone",
         "old_murk_eye_t8",
       ] as const;
