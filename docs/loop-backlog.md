@@ -97,7 +97,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
 - [ ] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
 - [x] [S] Add tests/simulation/unstable-ghoul.sim.test.ts — verify Unstable Ghoul deathrattle deals 1 damage to ALL other minions on both sides
-- [ ] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
+- [x] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
 - [ ] [S] Add tests/combat/lifesteal.test.ts — verify lifesteal heals attacking minion's HP equal to damage dealt; verify lifesteal does NOT trigger when damage is fully absorbed by divine shield
 - [ ] [S] Add tests/simulation/murloc-warleader-death.sim.test.ts — verify that when Murloc Warleader dies mid-combat, the +2 ATK aura is removed and buffed murlocs revert to base ATK immediately
 

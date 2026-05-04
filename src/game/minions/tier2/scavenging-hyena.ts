@@ -12,8 +12,10 @@ export default defineMinion({
   hooks: {
     onAllyDeath: (ctx) => {
       if (!ctx.dead.tribes.includes("Beast")) return;
-      ctx.self.atk += 2;
-      ctx.self.hp += 1;
+      const atkGain = ctx.self.golden ? 4 : 2;
+      const hpGain = ctx.self.golden ? 2 : 1;
+      ctx.self.atk += atkGain;
+      ctx.self.hp += hpGain;
       ctx.self.maxHp = Math.max(ctx.self.maxHp, ctx.self.hp);
       ctx.emit({ kind: "Stat", target: ctx.self.instanceId, atk: ctx.self.atk, hp: ctx.self.hp });
     },
