@@ -318,3 +318,4 @@
 2026-05-04 | f815b0b | FIXED: Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron Rivendare causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles; fix combat.ts to stack golden×baron multiplicatively
 2026-05-04 | 555cc79 | FIXED: Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion without one, skips those that already have divine shield, and golden version gives 2 shields
 2026-05-04 | 80c917d | FIXED: Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech stats and keywords to rightmost friendly Mech on board, and the attached mech has combined stats
+2026-05-04 | d829e37 | FIXED: Fix Scavenging Hyena golden stat gains (+4/+2 per Beast death) and add 4 sim tests
