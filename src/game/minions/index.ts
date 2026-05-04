@@ -12,6 +12,7 @@ import gnomaTinker from "./tier1/gnoma-tinker";
 import murlocTidecaller from "./tier1/murloc-tidecaller";
 import murlocTidehunter from "./tier1/murloc-tidehunter";
 import murlocTinyfin from "./tier1/murloc-tinyfin";
+import righteousProtector from "./tier1/righteous-protector";
 import rockpoolHunter from "./tier1/rockpool-hunter";
 import rushMinion from "./tier1/rush-minion";
 import tauntMinion from "./tier1/taunt-minion";
@@ -105,6 +106,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
   [flameImp.id]: flameImp,
   [fiendishServant.id]: fiendishServant,
+  [righteousProtector.id]: righteousProtector,
   [venomousCrasher.id]: venomousCrasher,
   [murlocTidecaller.id]: murlocTidecaller,
   [murlocTidehunter.id]: murlocTidehunter,
