@@ -42,6 +42,7 @@ import coldlightSeer from "./tier3/coldlight-seer";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
 import gromsch from "./tier3/gromsch";
+import impGangBoss from "./tier3/imp-gang-boss";
 import infestedWolf from "./tier3/infested-wolf";
 import markku from "./tier3/markku";
 import queenOfPain from "./tier3/queen-of-pain";
@@ -79,6 +80,7 @@ import foeReaper4000 from "./tier6/foe-reaper-4000";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
 import gentleMegasaur from "./tier6/gentle-megasaur";
 import ghastcoiler from "./tier6/ghastcoiler";
+import impMama from "./tier6/imp-mama";
 import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
 import mamaBear from "./tier6/mama-bear";
 import sneedOldShredder from "./tier6/sneed-old-shredder";
@@ -139,6 +141,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [soulJuggler.id]: soulJuggler,
   [stonehillDefender.id]: stonehillDefender,
   [scurpus.id]: scurpus,
+  [impGangBoss.id]: impGangBoss,
   [tortollanShellraiser.id]: tortollanShellraiser,
   [screwjankClunker.id]: screwjankClunker,
   [bloodsailCorsair.id]: bloodsailCorsair,
@@ -172,6 +175,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [kalecgosArcaneAspect.id]: kalecgosArcaneAspect,
   [terestianManferris.id]: terestianManferris,
   [zixorProjectHope.id]: zixorProjectHope,
+  [impMama.id]: impMama,
   [mamaBear.id]: mamaBear,
   [foeReaper4000.id]: foeReaper4000,
   [sneedOldShredder.id]: sneedOldShredder,

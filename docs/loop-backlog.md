@@ -35,7 +35,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 3
 
-- [ ] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage, summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
+- [x] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage, summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
 - [ ] [S] Add `Bloodsail Cannoneer` (tier 3 pirate, 2/3): battlecry give a friendly Pirate +3 ATK — src/game/minions/tier3/bloodsail-cannoneer.ts
 
 ### New minions — Tier 4
@@ -51,7 +51,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 6
 
-- [ ] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
+- [x] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
 - [ ] [S] Add `King of Beasts` (tier 6 beast, 2/6): taunt; battlecry gain +1 ATK for each other Beast on your board — src/game/minions/tier6/king-of-beasts.ts
 - [ ] [S] Add `Razorgore the Untamed` (tier 6 dragon, 2/4): at start of combat, gain +2/+2 for each friendly Dragon on your board — onStartOfCombat counting dragons in src/game/minions/tier6/razorgore.ts
 - [ ] [S] Add `Nadina the Red` (tier 6 human, 7/4): deathrattle give all friendly non-divine-shield Deathrattle minions divine shield — onDeath in src/game/minions/tier6/nadina.ts
