@@ -16,6 +16,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
+- [ ] [S] Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution
+
 - [ ] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts
 
 - [ ] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts
