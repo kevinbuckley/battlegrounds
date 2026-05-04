@@ -16,7 +16,7 @@ import {
   upgradeTier,
 } from "./shop";
 import { SPELLS } from "./spells/index";
-import { beginRecruitTurn, makeInitialState } from "./state";
+import { beginRecruitTurn, makeInitialState, step } from "./state";
 import type { GameState, MinionInstance } from "./types";
 
 // Register a test minion into the global MINIONS registry
@@ -1994,5 +1994,139 @@ describe("refreshShop re-rolls spells", () => {
     // None of the original spell instance IDs should appear in the refreshed shop
     const hasOldSpell = refreshedShop.some((m) => initialSpellInstanceIds.has(m.instanceId));
     expect(hasOldSpell).toBe(false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// onSpellPlay hook
+// ---------------------------------------------------------------------------
+
+describe("onSpellPlay hook", () => {
+  it("is registered in MinionHooks interface", () => {
+    const testCard = defineMinion({
+      id: "test_spellplay",
+      name: "Test SpellPlay",
+      tier: 1,
+      tribes: ["Demon"],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onSpellPlay: (ctx) => {
+          return {
+            ...ctx.state,
+            players: ctx.state.players.map((p, i) =>
+              i === ctx.playerId ? { ...p, gold: p.gold - 1 } : p,
+            ),
+          };
+        },
+      },
+    });
+    const inst = instantiate(testCard);
+    expect(inst.hooks.onSpellPlay).toBeDefined();
+  });
+
+  it("onSpellPlay fires when a spell is played from hand", () => {
+    const testCard = defineMinion({
+      id: "test_spellplay_2",
+      name: "Test SpellPlay 2",
+      tier: 1,
+      tribes: ["Demon"],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onSpellPlay: (ctx) => {
+          return {
+            ...ctx.state,
+            players: ctx.state.players.map((p, i) =>
+              i === ctx.playerId ? { ...p, gold: p.gold - 1 } : p,
+            ),
+          };
+        },
+      },
+    });
+    const inst = instantiate(testCard);
+    const state = makeTestState({
+      board: [inst],
+      gold: 5,
+      spells: [
+        {
+          instanceId: "test_spell_inst",
+          cardId: "mystery_shot",
+        } as import("./types").SpellInstance,
+      ],
+    });
+
+    const result = step(state, { kind: "PlaySpell", player: 0, spellIndex: 0 }, makeRng(42));
+    // onSpellPlay should have fired, deducting 1 gold
+    expect(result.players[0]!.gold).toBe(4);
+  });
+
+  it("onSpellPlay receives the spellCardId", () => {
+    let receivedSpellId: string | undefined;
+    const testCard = defineMinion({
+      id: "test_spellplay_3",
+      name: "Test SpellPlay 3",
+      tier: 1,
+      tribes: ["Beast"],
+      baseAtk: 2,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onSpellPlay: (ctx) => {
+          receivedSpellId = ctx.spellCardId;
+          return ctx.state;
+        },
+      },
+    });
+    const inst = instantiate(testCard);
+    const state = makeTestState({
+      board: [inst],
+      spells: [
+        {
+          instanceId: "test_spell_inst",
+          cardId: "cauterizing_flame",
+        } as import("./types").SpellInstance,
+      ],
+    });
+
+    step(state, { kind: "PlaySpell", player: 0, spellIndex: 0 }, makeRng(42));
+    expect(receivedSpellId).toBe("cauterizing_flame");
+  });
+
+  it("onSpellPlay does not fire when board is empty", () => {
+    let fired = false;
+    const testCard = defineMinion({
+      id: "test_spellplay_4",
+      name: "Test SpellPlay 4",
+      tier: 1,
+      tribes: ["Mech"],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {
+        onSpellPlay: (ctx) => {
+          fired = true;
+          return ctx.state;
+        },
+      },
+    });
+    const state = makeTestState({
+      board: [],
+      spells: [
+        {
+          instanceId: "test_spell_inst",
+          cardId: "mystery_shot",
+        } as import("./types").SpellInstance,
+      ],
+    });
+
+    step(state, { kind: "PlaySpell", player: 0, spellIndex: 0 }, makeRng(42));
+    expect(fired).toBe(false);
   });
 });

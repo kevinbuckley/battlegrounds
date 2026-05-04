@@ -121,6 +121,8 @@ export interface MinionHooks {
   onDamageTaken?: (ctx: CombatCtx) => void;
   /** Fires when a spell is cast (recruit phase). */
   onCast?: (ctx: RecruitCtx & { spellCardId: string }) => GameState;
+  /** Fires when a spell is played from hand (recruit phase). */
+  onSpellPlay?: (ctx: RecruitCtx & { spellCardId: string }) => GameState;
   /** Fires when a minion is summoned to the player's board (recruit phase). */
   onShopSummon?: (ctx: RecruitCtx) => GameState;
   /** Fires when a friendly minion is summoned to the player's board (recruit phase). */
