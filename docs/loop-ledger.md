@@ -1,3 +1,4 @@
+2026-05-04 | 917abbb | FIXED: Add King of Beasts (tier 6 beast, 2/6): taunt; battlecry gains +1 ATK for each other Beast on your board, with unit tests
 2026-05-04 | 065d965 | FIXED: Add Siegebreaker (tier 4 demon, 5/8): taunt; your other Demons have +1 ATK at start of combat via onStartOfCombat aura
 2026-05-04 | f14b029 | FIXED: Add Bloodsail Cannoneer (tier 3 pirate, 2/3): battlecry gives a friendly Pirate +3 ATK, wired into minions index registry
 2026-05-04 | 422f52b | FIXED: Add Menagerie Magician (tier 4, 4/4): battlecry gives a random friendly Beast, Dragon, and Murloc each +2/+2, wired into shop.ts and minions index registry
