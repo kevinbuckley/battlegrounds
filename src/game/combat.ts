@@ -126,6 +126,22 @@ export function simulateCombat(
         target: currentTarget,
       });
 
+      // Fire onAllyAttack hook on all friendly minions
+      const allies = side === "left" ? left : right;
+      for (const ally of allies) {
+        if (ally.instanceId !== attacker.instanceId) {
+          ally.hooks?.onAllyAttack?.({
+            self: ally,
+            selfSide: side,
+            left,
+            right,
+            emit,
+            rng,
+            target: currentTarget,
+          });
+        }
+      }
+
       emit({ kind: "Attack", attacker: attacker.instanceId, target: currentTarget.instanceId });
 
       // Collect all targets this hit affects (main + adjacent if cleave)

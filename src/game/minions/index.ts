@@ -69,6 +69,7 @@ import floatingWatcher from "./tier4/floating-watcher";
 import menagerieMagician from "./tier4/menagerie-magician";
 import nagaSecretGuardian from "./tier4/naga-secret-guardian";
 import oldMurkEye from "./tier4/old-murk-eye";
+import ripsnarlCaptain from "./tier4/ripsnarl-captain";
 import securityRover from "./tier4/security-rover";
 import siegebreaker from "./tier4/siegebreaker";
 import toxfin from "./tier4/toxfin";
@@ -174,6 +175,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [menagerieMagician.id]: menagerieMagician,
   [virmenSensei.id]: virmenSensei,
   [siegebreaker.id]: siegebreaker,
+  [ripsnarlCaptain.id]: ripsnarlCaptain,
   [floatingWatcher.id]: floatingWatcher,
   [alexstrasza.id]: alexstrasza,
   [blingtron5000.id]: blingtron5000,
