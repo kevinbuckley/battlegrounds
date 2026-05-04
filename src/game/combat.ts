@@ -263,6 +263,19 @@ function reapDeaths(
       const deadSide: Side = deadLeft.includes(dead) ? "left" : "right";
       emit({ kind: "Death", source: dead.instanceId });
 
+      // Fire onBoardRemove hook on all surviving minions
+      const allBoard = [...l, ...r];
+      for (const m of allBoard) {
+        m.hooks?.onBoardRemove?.({
+          self: m,
+          selfSide: deadSide,
+          left: l,
+          right: r,
+          emit,
+          rng,
+        });
+      }
+
       // Fire onAllyKill on all friendly minions of the attacker
       if (attacker) {
         const attackerSide: Side = deadSide === "left" ? "right" : "left";

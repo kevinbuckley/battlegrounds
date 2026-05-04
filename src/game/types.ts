@@ -140,6 +140,8 @@ export interface MinionHooks {
   onAllyKill?: (ctx: AllyKillCtx) => void;
   /** Custom target selector for combat. Returns a target from defenders, or undefined for default behavior. */
   getTarget?: (ctx: CombatCtx) => MinionInstance | undefined;
+  /** Fires when a minion is removed from the board during combat (e.g., via deathrattle replacement). */
+  onBoardRemove?: (ctx: CombatCtx) => void;
 }
 
 // ---------------------------------------------------------------------------
