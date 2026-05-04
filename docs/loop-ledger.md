@@ -288,3 +288,4 @@
 2026-05-03 | 0ded16f | FIXED: Add Nightmare Amalgam (tier 2, 2/4) — no tribe, counts as ALL tribes for tribe-buff effects, expand "All" to all concrete tribes at instantiation time in define.ts, with unit tests
 2026-05-03 | 9825300 | FIXED: Fix Ysera the Dreamer (tier 6 dragon) — transforms a random ENEMY minion into a 1/1 Dragon with Taunt at start of combat instead of transforming a friendly minion
 2026-05-04 | 130a4a3 | FIXED: Add Imp Gang Boss (tier 3 demon, 2/4) and Imp Mama (tier 6 demon, 6/8) — both use onDamageTaken hook to summon 1/1 Imp tokens, with Imp Mama also gaining +1/+1 per hit
+2026-05-04 | b0d92b2 | FIXED: Add Sellemental (tier 1 elemental, 1/1) — onSell hook adds a 1/1 Elemental token to hand when sold
