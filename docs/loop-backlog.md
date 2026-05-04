@@ -149,6 +149,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `onAttacked` hook to MinionHooks and wire into combat.ts applyDamage — fires when a minion is the target of an attack (as defender), used by future minions that react to being attacked
 - [x] [S] Add `onAllyKill` hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill, used by future minions that react to kills
 - [x] [S] Add `onSell` hook to combat.ts — fires when a minion is sold during combat (e.g., from deathrattle summons), so minions can react to sell events in combat
+- [x] [S] Wire `onBuy` hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board)
+- [ ] [S] Add `onTurnStart` hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions, used by future minions that react to turn starts
 
 ---
 

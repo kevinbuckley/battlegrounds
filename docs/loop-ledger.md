@@ -1,3 +1,4 @@
+2026-05-04 | 2e03ca6 | FIXED: Wire onBuy hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board), with unit tests
 2026-05-04 | 5a319c5 | FIXED: Add onBoardRemove hook to MinionHooks and wire into combat.ts reapDeaths — fires on all surviving minions when any minion is removed from the board during combat, with unit tests
 2026-05-04 | af9bd55 | FIXED: Add sell undo — after selling a board or hand minion, show a 1.5s "Undo Sell" button that restores the minion to hand/board at no cost, with undo handler reversing gold and minion placement
 2026-05-04 | 53b98a0 | FIXED: Heuristic AI sells weakest board minion when hand is at capacity (≥10) to make room before buy loop
@@ -331,3 +332,4 @@
 2026-05-04 | b42adb6 | FIXED: Add tests/combat/lifesteal.test.ts — verify lifesteal heals winning hero by total lifesteal amount, does NOT trigger when damage is absorbed by divine shield, emits Lifesteal transcript events, and works with Queen of Pain
 2026-05-04 | ec09966 | FIXED: Add Deflect-o-Bot divine shield restoration test — verify that playing a Mech restores Deflect-o-Bot's divine shield, non-Mechs do not, and golden version also works
 2026-05-04 | deb0341 | FIXED: Add greedy AI tier upgrade test — verify it upgrades when board has ≥4 minions and gold ≥ upgradeCost, and skips upgrade when board is weak or gold is insufficient
+2026-05-04 | 2e03ca6 | FIXED: Add King Mukla hero power — gives opponent 2 Bananas when used, with hero power test

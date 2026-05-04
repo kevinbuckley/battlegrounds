@@ -238,6 +238,20 @@ export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: numbe
     shop: p.shop.filter((_, i) => i !== shopIndex),
   }));
 
+  // Fire onBuy hook — fires when a minion is bought from the shop (before
+  // it is played from hand to board).
+  const buyHook = boughtMinion.hooks?.onBuy;
+  if (buyHook) {
+    const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+    return buyHook({
+      self: boughtMinion,
+      playerId,
+      state: result,
+      rng: makeRng(0),
+      spellDamage,
+    });
+  }
+
   // Millificent Manastorm: when a Mech is bought, all friendly Mechs on the
   // player's board gain +1/+1.
   const boughtMech = card && card.tribes.includes("Mech");
