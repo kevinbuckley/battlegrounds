@@ -503,14 +503,70 @@ export default function GamePage() {
   const [sellConfirmType, setSellConfirmType] = useState<"board" | "hand" | null>(null);
   const sellTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Clear sell confirmation when phase changes
+  // Sell undo state — stores the sold minion so we can reverse the sell
+  const [sellUndoState, setSellUndoState] = useState<{
+    minion: MinionInstance;
+    type: "board" | "hand";
+    index: number;
+    goldRefund: number;
+  } | null>(null);
+  const sellUndoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleSellUndo = useCallback(() => {
+    if (!sellUndoState || !gameState) return;
+    const { minion, type, index, goldRefund } = sellUndoState;
+    const player = gameState.players[0];
+    if (!player) return;
+
+    // Reverse the sell: subtract gold, re-add minion
+    const newGold = Math.max(0, player.gold - goldRefund);
+    let newState: GameState;
+
+    if (type === "hand") {
+      // Re-add to hand at the original index
+      const newHand = [...player.hand];
+      const clampedIdx = Math.min(index, newHand.length);
+      newHand.splice(clampedIdx, 0, minion);
+      newState = {
+        ...gameState,
+        players: gameState.players.map((p, i) =>
+          i === 0 ? { ...p, gold: newGold, hand: newHand } : p,
+        ),
+      };
+    } else {
+      // Re-add to board at the original index
+      const newBoard = [...player.board];
+      const clampedIdx = Math.min(index, newBoard.length);
+      newBoard.splice(clampedIdx, 0, minion);
+      newState = {
+        ...gameState,
+        players: gameState.players.map((p, i) =>
+          i === 0 ? { ...p, gold: newGold, board: newBoard } : p,
+        ),
+      };
+    }
+
+    setGameState(newState);
+    setSellUndoState(null);
+    if (sellUndoTimerRef.current) {
+      clearTimeout(sellUndoTimerRef.current);
+      sellUndoTimerRef.current = null;
+    }
+  }, [sellUndoState, gameState]);
+
+  // Clear sell confirmation and undo when phase changes
   useEffect(() => {
     if (gameState?.phase.kind !== "Recruit") {
       setSellConfirmIdx(null);
       setSellConfirmType(null);
+      setSellUndoState(null);
       if (sellTimerRef.current) {
         clearTimeout(sellTimerRef.current);
         sellTimerRef.current = null;
+      }
+      if (sellUndoTimerRef.current) {
+        clearTimeout(sellUndoTimerRef.current);
+        sellUndoTimerRef.current = null;
       }
     }
   }, [gameState?.phase.kind]);
@@ -865,6 +921,15 @@ export default function GamePage() {
               <span className="text-[11px] text-slate-500 uppercase tracking-wider">
                 Turn {gameState.turn} — {gameState.phase.kind}
               </span>
+              {sellUndoState && (
+                <button
+                  type="button"
+                  onClick={handleSellUndo}
+                  className="rounded bg-amber-500/80 px-2 py-0.5 text-[10px] font-semibold text-slate-950 hover:bg-amber-400 transition"
+                >
+                  Undo Sell
+                </button>
+              )}
               <div className="h-px flex-1 bg-slate-700/60" />
             </div>
 
@@ -941,6 +1006,9 @@ export default function GamePage() {
                             if (!gameState) return;
                             const player = gameState.players[0];
                             if (!player) return;
+                            const minion = player.board[idx];
+                            if (!minion) return;
+                            const goldRefund = minion.golden ? 2 : 1;
                             const next = step(
                               gameState,
                               { kind: "SellMinion", player: 0, boardIndex: idx },
@@ -953,6 +1021,15 @@ export default function GamePage() {
                               clearTimeout(sellTimerRef.current);
                               sellTimerRef.current = null;
                             }
+                            // Set undo state for 1.5s
+                            setSellUndoState({ minion, type: "board", index: idx, goldRefund });
+                            if (sellUndoTimerRef.current) {
+                              clearTimeout(sellUndoTimerRef.current);
+                            }
+                            sellUndoTimerRef.current = setTimeout(() => {
+                              setSellUndoState(null);
+                              sellUndoTimerRef.current = null;
+                            }, 1500);
                             setError(null);
                           } else {
                             // First click — show confirmation
@@ -1069,6 +1146,11 @@ export default function GamePage() {
                         if (sellConfirmIdx === idx && sellConfirmType === "hand") {
                           // Second click — actually sell
                           if (!gameState) return;
+                          const player = gameState.players[0];
+                          if (!player) return;
+                          const minion = player.hand[idx];
+                          if (!minion) return;
+                          const goldRefund = minion.golden ? 2 : 1;
                           const next = step(
                             gameState,
                             { kind: "SellMinion", player: 0, handIndex: idx },
@@ -1081,6 +1163,15 @@ export default function GamePage() {
                             clearTimeout(sellTimerRef.current);
                             sellTimerRef.current = null;
                           }
+                          // Set undo state for 1.5s
+                          setSellUndoState({ minion, type: "hand", index: idx, goldRefund });
+                          if (sellUndoTimerRef.current) {
+                            clearTimeout(sellUndoTimerRef.current);
+                          }
+                          sellUndoTimerRef.current = setTimeout(() => {
+                            setSellUndoState(null);
+                            sellUndoTimerRef.current = null;
+                          }, 1500);
                           setError(null);
                         } else {
                           // First click — show confirmation

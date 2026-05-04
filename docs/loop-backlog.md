@@ -109,13 +109,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [M] Greedy AI: add unit test verifying it upgrades tavern tier when board has ≥4 minions and gold ≥ upgradeCost — tests/ai/greedy-upgrade.test.ts
 - [x] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — sort hand by hasBattlecry before play loop in all three AI strategies
-- [ ] [S] Heuristic AI: sell weakest board minion (lowest atk+hp) when hand is at capacity (≥10) to make room — add sell-to-make-room check in heuristic.ts before buy loop
+- [x] [S] Heuristic AI: sell weakest board minion (lowest atk+hp) when hand is at capacity (≥10) to make room — sell-to-make-room check already exists in heuristic.ts lines 152-164
 
 ### UI polish (verifiable by reading code, no browser needed)
 
-- [ ] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — store lastTierUpAt timestamp in component state, apply `.tier-up-pulse` CSS animation, add keyframes to globals.css
+- [x] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — tierFlashKey state + @keyframes tierFlash already implemented in app/game/page.tsx lines 499, 539, 827, 1546-1551
 - [ ] [S] Sell undo: after selling a board or hand minion, show a 1.5s "Undo" floating button that restores the minion to hand at no cost — add sellHistory: MinionInstance | null state, show UndoSell button with setTimeout cleanup
-- [ ] [S] Show turn number in HUD — display current turn as "Turn N" badge next to gold; read from gameState.turn in app/game/page.tsx
+- [x] [S] Show turn number in HUD — display current turn as "Turn N" badge next to gold; read from gameState.turn in app/game/page.tsx (already displayed at line 866)
 
 ### Game-rule completeness
 
@@ -129,7 +129,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Engine extensions
 
-- [ ] [S] Pool depletion: track removed minions in a global pool per cardId; rollShop should never offer more copies than remain in the pool — add `pool: Record<string, number>` to GameState, initialize from POOL_COUNTS, decrement on buy/roll, restore on sell/death
+- [x] [S] Pool depletion: track removed minions in a global pool per cardId; rollShop should never offer more copies than remain in the pool — pool tracking already implemented in shop.ts (buildPool, drawFromPool, returnToPool), GameState.pool, and pool.test.ts
 - [ ] [S] Add `onSpellPlay` hook to RecruitCtx alongside onCast — fires when player plays any spell, so future minions can react to spell plays in the recruit phase (distinct from onCast which is combat-only)
 - [ ] [S] Validate board-size cap in combat deathrattle summoning: new tokens should not push either board past 7 minions — add guard in the deathrattle summon path in combat.ts
 
