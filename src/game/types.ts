@@ -100,6 +100,11 @@ export interface SummonRecruitCtx extends RecruitCtx {
   summoned: MinionInstance;
 }
 
+export interface AllyKillCtx extends CombatCtx {
+  /** The minion that was killed by this attack. */
+  dead: MinionInstance;
+}
+
 export interface MinionHooks {
   onBattlecry?: (ctx: RecruitCtx) => GameState;
   onSell?: (ctx: RecruitCtx) => GameState;
@@ -131,6 +136,8 @@ export interface MinionHooks {
   onRecruitSummon?: (ctx: SummonRecruitCtx) => GameState;
   /** Fires when the owner's hero takes damage during combat (after armor/extra-life resolution). */
   onHeroDamaged?: (ctx: HeroDamagedCtx) => void;
+  /** Fires when a friendly minion scores a kill during combat (used by minions that react to kills). */
+  onAllyKill?: (ctx: AllyKillCtx) => void;
   /** Custom target selector for combat. Returns a target from defenders, or undefined for default behavior. */
   getTarget?: (ctx: CombatCtx) => MinionInstance | undefined;
 }

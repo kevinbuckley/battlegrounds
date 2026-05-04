@@ -2,6 +2,7 @@ import type { Rng } from "@/lib/rng";
 import { MINIONS } from "./minions/index";
 import type {
   AllyDeathCombatCtx,
+  AllyKillCtx,
   CombatCtx,
   CombatEvent,
   CombatResult,
@@ -173,7 +174,16 @@ export function simulateCombat(
       applyDamage(currentTarget, attacker, emit, left, right, rng, lifestealAccum);
 
       // Process deaths (including deathrattle chains)
-      const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
+      const result = reapDeaths(
+        left,
+        right,
+        transcript,
+        emit,
+        rng,
+        baronOnLeft,
+        baronOnRight,
+        attacker,
+      );
       left = result.left;
       right = result.right;
       totalBountyGold += result.bountyGold;
@@ -222,6 +232,7 @@ function reapDeaths(
   rng: Rng,
   baronOnLeft: boolean,
   baronOnRight: boolean,
+  attacker?: MinionInstance,
 ): { left: MinionInstance[]; right: MinionInstance[]; bountyGold: number } {
   let l = left;
   let r = right;
@@ -251,6 +262,24 @@ function reapDeaths(
     for (const dead of [...deadLeft, ...deadRight]) {
       const deadSide: Side = deadLeft.includes(dead) ? "left" : "right";
       emit({ kind: "Death", source: dead.instanceId });
+
+      // Fire onAllyKill on all friendly minions of the attacker
+      if (attacker) {
+        const attackerSide: Side = deadSide === "left" ? "right" : "left";
+        const allies = attackerSide === "left" ? l : r;
+        for (const ally of allies) {
+          const killCtx: AllyKillCtx = {
+            self: ally,
+            selfSide: attackerSide,
+            left: l,
+            right: r,
+            emit,
+            rng,
+            dead,
+          };
+          ally.hooks?.onAllyKill?.(killCtx);
+        }
+      }
 
       // Bounty: award gold to the opposing side when a bounty minion dies
       const card = MINIONS[dead.cardId];
@@ -422,7 +451,7 @@ function fireRushAttacks(
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng, lifestealAccum);
-    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
+    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight, m);
     left = result.left;
     right = result.right;
     bountyGoldAccum.total += result.bountyGold;
@@ -440,7 +469,7 @@ function fireRushAttacks(
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
     applyDamage(m, target, emit, left, right, rng, lifestealAccum);
-    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight);
+    const result = reapDeaths(left, right, transcript, emit, rng, baronOnLeft, baronOnRight, m);
     left = result.left;
     right = result.right;
     bountyGoldAccum.total += result.bountyGold;
