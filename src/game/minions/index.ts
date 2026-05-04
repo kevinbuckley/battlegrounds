@@ -50,6 +50,7 @@ import coldlightSeer from "./tier3/coldlight-seer";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
 import gromsch from "./tier3/gromsch";
+import houndmaster from "./tier3/houndmaster";
 import impGangBoss from "./tier3/imp-gang-boss";
 import infestedWolf from "./tier3/infested-wolf";
 import markku from "./tier3/markku";
@@ -161,6 +162,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [coldlightSeer.id]: coldlightSeer,
   [bronzeWarden.id]: bronzeWarden,
   [cobaltScalebane.id]: cobaltScalebane,
+  [houndmaster.id]: houndmaster,
   [infestedWolf.id]: infestedWolf,
   [queenOfPain.id]: queenOfPain,
   [soulJuggler.id]: soulJuggler,

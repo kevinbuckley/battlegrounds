@@ -1,3 +1,4 @@
+2026-05-04 | 8880f51 | FIXED: Add Houndmaster (tier 3, 4/3): battlecry gives a friendly Beast +2/+2 and Taunt
 2026-05-04 | 7c34ea9 | FIXED: Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, reborn 1/1 that dies re-enters at 1/1 with no reborn flag, and Elistra the Immortal reborn behavior
 2026-05-04 | 00ec947 | FIXED: Add Bronze Warden (tier 3 dragon, 2/1): divine shield + rush keywords
 2026-05-04 | 8f095c1 | FIXED: Add Nadina the Red (tier 6 demon, 7/4): deathrattle gives all friendly non-divine-shield Deathrattle minions divine shield
