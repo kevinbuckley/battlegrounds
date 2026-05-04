@@ -62,7 +62,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 1 (additional)
 
 - [ ] [S] Add `Sellemental` (tier 1 elemental, 1/1): when you sell this minion, add a 1/1 Elemental to your hand — uses existing onMinionSold hook in src/game/minions/tier1/sellemental.ts
-- [ ] [S] Add `Deck Swabbie` (tier 1 pirate, 2/2): battlecry give a friendly Pirate +1/+1 — src/game/minions/tier1/deck-swabbie.ts
+- [x] [S] Add `Deck Swabbie` (tier 1 pirate, 2/2): battlecry give a friendly Pirate +1/+1 — src/game/minions/tier1/deck-swabbie.ts
 
 ### New minions — Tier 2 (additional)
 

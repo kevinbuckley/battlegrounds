@@ -5,6 +5,7 @@ import boarlogCaptain from "./tier1/boarlog-captain";
 import { bountyMinion } from "./tier1/bounty-minion";
 import bristlebackBoys from "./tier1/bristleback-boys";
 import comboMinion from "./tier1/combo-minion";
+import deckSwabbie from "./tier1/deck-swabbie";
 import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
 import fiendishServant from "./tier1/fiendish-servant";
 import flameImp from "./tier1/flame-imp";
@@ -113,6 +114,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [boarlogCaptain.id]: boarlogCaptain,
   [bristlebackBoys.id]: bristlebackBoys,
   [bloodsailPirate.id]: bloodsailPirate,
+  [deckSwabbie.id]: deckSwabbie,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
   [flameImp.id]: flameImp,
   [fiendishServant.id]: fiendishServant,
