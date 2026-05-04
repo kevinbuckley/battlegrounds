@@ -16,7 +16,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
-- [ ] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
+- [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
 
 - [x] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed
 
@@ -107,7 +107,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### AI improvements
 
-- [ ] [M] Greedy AI: add unit test verifying it upgrades tavern tier when board has ≥4 minions and gold ≥ upgradeCost — tests/ai/greedy-upgrade.test.ts
+- [x] [M] Greedy AI: add unit test verifying it upgrades tavern tier when board has ≥4 minions and gold ≥ upgradeCost — tests/ai/greedy-upgrade.test.ts
 - [x] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — sort hand by hasBattlecry before play loop in all three AI strategies
 - [x] [S] Heuristic AI: sell weakest board minion (lowest atk+hp) when hand is at capacity (≥10) to make room — sell-to-make-room check already exists in heuristic.ts lines 152-164
 
