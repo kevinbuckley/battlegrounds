@@ -48,7 +48,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 5
 
-- [ ] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy minion instead of random — override target selection in src/game/minions/tier5/zapp-slywick.ts
+- [x] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy minion instead of random — src/game/minions/tier5/zapp-slywick.ts
 - [ ] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 Demons with taunt — src/game/minions/tier5/voidlord.ts
 
 ### New minions — Tier 6

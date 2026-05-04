@@ -98,7 +98,7 @@ export function simulateCombat(
     }
 
     // Pick primary target (taunt-aware)
-    const target = pickTarget(isLeft ? right : left, rng);
+    const target = pickTarget(isLeft ? right : left, rng, attacker, left, right);
 
     // How many times does this attacker attack this turn?
     // Windfury allows 2 attacks, megaWindfury allows 4.
@@ -112,7 +112,8 @@ export function simulateCombat(
       const currentDefenders = isLeft ? right : left;
 
       // Re-pick target for extra windfury attacks (first target chosen above)
-      const currentTarget = a === 0 ? target : pickTarget(currentDefenders, rng);
+      const currentTarget =
+        a === 0 ? target : pickTarget(currentDefenders, rng, attacker, left, right);
       if (!currentTarget) break;
 
       // Fire onAttack hook
@@ -375,7 +376,7 @@ function fireRushAttacks(
     const aliveDefenders = (isLeft ? right : left).filter((d) => d.hp > 0);
     if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
-    const target = pickTarget(aliveDefenders, rng);
+    const target = pickTarget(aliveDefenders, rng, m, left, right);
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
@@ -393,7 +394,7 @@ function fireRushAttacks(
     const aliveDefenders = (isLeft ? left : right).filter((d) => d.hp > 0);
     if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
-    const target = pickTarget(aliveDefenders, rng);
+    const target = pickTarget(aliveDefenders, rng, m, left, right);
     if (!target) continue;
 
     emit({ kind: "Attack", attacker: m.instanceId, target: target.instanceId });
@@ -444,7 +445,26 @@ function fireSummon(
 // Helpers
 // ---------------------------------------------------------------------------
 
-function pickTarget(defenders: MinionInstance[], rng: Rng): MinionInstance {
+function pickTarget(
+  defenders: MinionInstance[],
+  rng: Rng,
+  attacker: MinionInstance,
+  left: MinionInstance[],
+  right: MinionInstance[],
+): MinionInstance {
+  // Check for custom target selector (e.g. Zapp Slywick).
+  const customTarget = attacker.hooks.getTarget?.({
+    self: attacker,
+    selfSide: undefined as unknown as Side,
+    left,
+    right,
+    emit: () => {},
+    rng,
+  });
+  if (customTarget && defenders.includes(customTarget)) {
+    return customTarget;
+  }
+
   const tauntTargets = defenders.filter((m) => m.keywords.has("taunt"));
   const pool = tauntTargets.length > 0 ? tauntTargets : defenders;
   return rng.pick(pool);

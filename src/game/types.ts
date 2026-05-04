@@ -127,6 +127,8 @@ export interface MinionHooks {
   onRecruitSummon?: (ctx: SummonRecruitCtx) => GameState;
   /** Fires when the owner's hero takes damage during combat (after armor/extra-life resolution). */
   onHeroDamaged?: (ctx: HeroDamagedCtx) => void;
+  /** Custom target selector for combat. Returns a target from defenders, or undefined for default behavior. */
+  getTarget?: (ctx: CombatCtx) => MinionInstance | undefined;
 }
 
 // ---------------------------------------------------------------------------

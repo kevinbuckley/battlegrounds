@@ -293,3 +293,4 @@
 2026-05-04 | 130a4a3 | FIXED: Add Imp Gang Boss (tier 3 demon, 2/4) and Imp Mama (tier 6 demon, 6/8) — both use onDamageTaken hook to summon 1/1 Imp tokens, with Imp Mama also gaining +1/+1 per hit
 2026-05-04 | b0d92b2 | FIXED: Add Sellemental (tier 1 elemental, 1/1) — onSell hook adds a 1/1 Elemental token to hand when sold
 2026-05-04 | e09c7ec | FIXED: Add Floating Watcher (tier 4 demon, 4/4) — onHeroDamaged hook fires when player's hero takes combat damage, gaining +2/+2 per hit, plus wire onHeroDamaged into applyCombatResult in state.ts
+2026-05-04 | 123c74b | FIXED: Add Zapp Slywick (tier 5 mech, 7/10) — rush; always attacks the lowest-ATK enemy minion via new getTarget hook in MinionHooks, with unit tests
