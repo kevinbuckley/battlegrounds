@@ -320,3 +320,4 @@
 2026-05-04 | 555cc79 | FIXED: Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion without one, skips those that already have divine shield, and golden version gives 2 shields
 2026-05-04 | 80c917d | FIXED: Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech stats and keywords to rightmost friendly Mech on board, and the attached mech has combined stats
 2026-05-04 | d829e37 | FIXED: Fix Scavenging Hyena golden stat gains (+4/+2 per Beast death) and add 4 sim tests
+2026-05-04 | b42adb6 | FIXED: Add tests/combat/lifesteal.test.ts — verify lifesteal heals winning hero by total lifesteal amount, does NOT trigger when damage is absorbed by divine shield, emits Lifesteal transcript events, and works with Queen of Pain
