@@ -200,6 +200,18 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ---
 
+### New minions — Tier 1
+
+- [ ] [S] Add `Dredgrot Whelp` (tier 1 beast/elemental, 1/1): reborn — single keyword, no hooks needed, src/game/minions/tier1/dredgrot-whelp.ts
+
+### New minions — Tier 2
+
+- [ ] [S] Add `Swat Recruit` (tier 2 mech, 1/1): rush — single keyword, no hooks needed, src/game/minions/tier2/swat-recruit.ts
+
+### New minions — Tier 8
+
+- [ ] [S] Add `Dreadscale` (tier 8 dragon, 6/6): deathrattle deal 2 damage to all other minions — src/game/minions/tier8/dreadscale.ts
+
 ## Quarantined (failed multiple times — DO NOT pick)
 
 (Tasks added by the harness when an iteration's CHOSEN TASK fails go here.)

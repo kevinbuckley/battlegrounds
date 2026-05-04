@@ -1,3 +1,4 @@
+2026-05-04 | 90fe563 | FIXED: Add Dreadscale (tier 8 dragon, 6/6) — deathrattle deals 2 damage to all other minions
 2026-05-04 | 584ee26 | FIXED: Add Gnoma Tinker (tier 4 mech, 3/3) — battlecry summons a 1/1 Mech token, with unit tests
 2026-05-04 | 1d820ea | FIXED: Add Buccaneer (tier 3 pirate, 3/2) — battlecry gives a friendly Pirate +2/+2, with unit tests
 2026-05-04 | 653e7c9 | FIXED: Add Grombi the Rotunda tier 3 elemental (3/3) — onAllyKill hook gains +2/+2 per friendly minion kill during combat
