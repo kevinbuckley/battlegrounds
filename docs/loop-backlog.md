@@ -95,7 +95,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron on left side causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles
 - [x] [S] Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned (including tokens from deathrattles)
 - [x] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
-- [ ] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
+- [x] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
 - [x] [S] Add tests/simulation/unstable-ghoul.sim.test.ts — verify Unstable Ghoul deathrattle deals 1 damage to ALL other minions on both sides
 - [x] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
 - [ ] [S] Add tests/combat/lifesteal.test.ts — verify lifesteal heals attacking minion's HP equal to damage dealt; verify lifesteal does NOT trigger when damage is fully absorbed by divine shield
@@ -115,9 +115,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Game-rule completeness
 
-- [ ] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama); wire into combat.ts applyDamage after divine-shield resolution, passing damage amount
-- [ ] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop just before applyDamage, passing attacker reference
-- [ ] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat; pass damage amount to all board minions
+- [x] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama); wire into combat.ts applyDamage after divine-shield resolution, passing damage amount
+- [x] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop just before applyDamage, passing attacker reference
+- [x] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat; pass damage amount to all board minions
 
 ---
 
@@ -131,7 +131,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### More minions
 
-- [ ] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
+- [x] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
 - [ ] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
 - [ ] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
 
