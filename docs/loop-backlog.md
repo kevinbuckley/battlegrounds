@@ -31,7 +31,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 2
 
 - [ ] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon a number of 1/1 Rat tokens equal to this minion's ATK at time of death — src/game/minions/tier2/rat-pack.ts
-- [ ] [S] Add `Menagerie Magician` (tier 2 human, 2/4): battlecry give a random friendly Beast, Mech, and Murloc each +2/+2 — src/game/minions/tier2/menagerie-magician.ts
+- [x] [S] Add `Menagerie Magician` (tier 4, 4/4): battlecry give a random friendly Beast, Dragon, and Murloc each +2/+2 — src/game/minions/tier4/menagerie-magician.ts
 
 ### New minions — Tier 3
 

@@ -1,3 +1,4 @@
+2026-05-04 | 422f52b | FIXED: Add Menagerie Magician (tier 4, 4/4): battlecry gives a random friendly Beast, Dragon, and Murloc each +2/+2, wired into shop.ts and minions index registry
 2026-05-04 | 3fb501e | FIXED: Add Rat Pack (tier 2 beast, 2/2): deathrattle summons 1/1 Rat tokens equal to this minion's ATK, wired into minions index registry
 2026-05-04 | 62cf0af | FIXED: Add Righteous Protector (tier 1 paladin, 1/1): divine shield + taunt
 2026-05-03 | de2e6c8 | FIXED: Add Sneed's Old Shredder (tier 6 mech, 5/5) — deathrattle summons a random Legendary minion from tier 6+ on either board, with unit tests
