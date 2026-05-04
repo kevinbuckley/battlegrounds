@@ -1,6 +1,7 @@
 2026-05-04 | 584ee26 | FIXED: Add Gnoma Tinker (tier 4 mech, 3/3) — battlecry summons a 1/1 Mech token, with unit tests
 2026-05-04 | 1d820ea | FIXED: Add Buccaneer (tier 3 pirate, 3/2) — battlecry gives a friendly Pirate +2/+2, with unit tests
 2026-05-04 | 653e7c9 | FIXED: Add Grombi the Rotunda tier 3 elemental (3/3) — onAllyKill hook gains +2/+2 per friendly minion kill during combat
+2026-05-04 | a8e225c | FIXED: Add Blingtron 3000 (tier 5 mech, 3/8) — battlecry summons two 1/1 Robot Pups with Rush, with unit tests
 2026-05-04 | 6e2cb02 | FIXED: Add onTurnStart hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions
 2026-05-04 | 0c49a72 | FIXED: Add onDiscover hook to MinionHooks and wire into pickDiscover — fires when a minion is picked from a discover offer (triples, hero powers, Yogg-Saron), with unit tests
 2026-05-04 | 2e03ca6 | FIXED: Wire onBuy hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board), with unit tests

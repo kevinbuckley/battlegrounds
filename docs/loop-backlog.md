@@ -160,7 +160,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 3
 
-- [ ] [S] Add `Buccaneer` (tier 3 pirate, 3/2): battlecry give a friendly Pirate +2/+2 — src/game/minions/tier3/buccaneer.ts
+- [x] [S] Add `Buccaneer` (tier 3 pirate, 3/2): battlecry give a friendly Pirate +2/+2 — src/game/minions/tier3/buccaneer.ts
 
 ### New minions — Tier 4
 
@@ -168,7 +168,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 5
 
-- [ ] [S] Add `Blingtron 3000` (tier 5 mech, 3/8): battlecry summon two 1/1 Mechs with Rush — src/game/minions/tier5/blingtron-3000.ts
+- [x] [S] Add `Blingtron 3000` (tier 5 mech, 3/8): battlecry summon two 1/1 Mechs with Rush — src/game/minions/tier5/blingtron-3000.ts
 
 ## Done (completed items — do NOT redo)
 

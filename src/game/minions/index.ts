@@ -85,6 +85,7 @@ import virmenSensei from "./tier4/virmen-sensei";
 import alexstrasza from "./tier5/alexstrasza";
 import baronRivendare from "./tier5/baron-rivendare";
 import bigfernal from "./tier5/bigfernal";
+import blingtron3000 from "./tier5/blingtron-3000";
 import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
 import goldrinn from "./tier5/goldrinn";
@@ -202,6 +203,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [floatingWatcher.id]: floatingWatcher,
   [gnomaTinkerT4.id]: gnomaTinkerT4,
   [alexstrasza.id]: alexstrasza,
+  [blingtron3000.id]: blingtron3000,
   [blingtron5000.id]: blingtron5000,
   [bigfernal.id]: bigfernal,
   [baronRivendare.id]: baronRivendare,
