@@ -112,6 +112,8 @@ export interface MinionHooks {
   onAttack?: (ctx: AttackCombatCtx) => void;
   /** Fires when a friendly minion attacks (used by Ripsnarl Captain). */
   onAllyAttack?: (ctx: AttackCombatCtx) => void;
+  /** Fires when this minion is targeted by an enemy attack (as defender). */
+  onAttacked?: (ctx: AttackCombatCtx) => void;
   onDeath?: (ctx: CombatCtx) => void;
   onAllyDeath?: (ctx: AllyDeathCombatCtx) => void;
   onSummon?: (ctx: SummonCombatCtx) => void;

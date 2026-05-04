@@ -140,6 +140,12 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] Add `Millificent Manastorm` hero test — verify hero power buffs ALL friendly Mechs +1/+1 when a Mech is bought from the shop, and that golden Mechs also get buffed
 - [ ] [S] Add `King Mukla` hero test — verify that using the hero power gives the opponent 2 Bananas in their hand, and that playing a Banana on a minion gives +1/+1
 
+### Combat hook completeness
+
+- [ ] [S] Add `onAttacked` hook to MinionHooks and wire into combat.ts applyDamage — fires when a minion is the target of an attack (as defender), used by future minions that react to being attacked
+- [ ] [S] Add `onAllyKill` hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill, used by future minions that react to kills
+- [ ] [S] Add `onSell` hook to combat.ts — fires when a minion is sold during combat (e.g., from deathrattle summons), so minions can react to sell events in combat
+
 ---
 
 ## Done (completed items — do NOT redo)

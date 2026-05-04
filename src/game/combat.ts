@@ -150,6 +150,20 @@ export function simulateCombat(
         ? getWithAdjacent(currentDefenders, currentTarget)
         : [currentTarget];
 
+      // Fire onAttacked hook on all hit targets (defenders)
+      const targetSide = isLeft ? "right" : "left";
+      for (const t of hitTargets) {
+        t.hooks?.onAttacked?.({
+          self: t,
+          selfSide: targetSide,
+          left,
+          right,
+          emit,
+          rng,
+          target: attacker,
+        });
+      }
+
       // Apply damage from attacker to all hit targets
       for (const t of hitTargets) {
         applyDamage(attacker, t, emit, left, right, rng, lifestealAccum);
