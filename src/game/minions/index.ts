@@ -98,6 +98,7 @@ import impMama from "./tier6/imp-mama";
 import kalecgosArcaneAspect from "./tier6/kalecgos-arcane-aspect";
 import kingOfBeasts from "./tier6/king-of-beasts";
 import mamaBear from "./tier6/mama-bear";
+import nadina from "./tier6/nadina";
 import razorgoreTheUntamed from "./tier6/razorgore";
 import sneedOldShredder from "./tier6/sneed-old-shredder";
 import terestianManferris from "./tier6/terestian-manferris";
@@ -211,6 +212,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [yseraTheDreamerT6.id]: yseraTheDreamerT6,
   [kingOfBeasts.id]: kingOfBeasts,
   [elistra.id]: elistra,
+  [nadina.id]: nadina,
   [razorgoreTheUntamed.id]: razorgoreTheUntamed,
   [bountyMinion.id]: bountyMinion,
   [alexstraszaSelflessDragon.id]: alexstraszaSelflessDragon,

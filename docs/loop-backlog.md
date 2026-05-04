@@ -56,7 +56,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
 - [ ] [S] Add `King of Beasts` (tier 6 beast, 2/6): taunt; battlecry gain +1 ATK for each other Beast on your board — src/game/minions/tier6/king-of-beasts.ts
 - [x] [S] Add `Razorgore the Untamed` (tier 6 dragon, 2/4): at start of combat, gain +2/+2 for each friendly Dragon on your board — onStartOfCombat counting dragons in src/game/minions/tier6/razorgore.ts
-- [ ] [S] Add `Nadina the Red` (tier 6 human, 7/4): deathrattle give all friendly non-divine-shield Deathrattle minions divine shield — onDeath in src/game/minions/tier6/nadina.ts
+- [x] [S] Add `Nadina the Red` (tier 6 human, 7/4): deathrattle give all friendly non-divine-shield Deathrattle minions divine shield — onDeath in src/game/minions/tier6/nadina.ts
 - [ ] [S] Add `Elistra the Immortal` (tier 6 dragon, 8/8): reborn — single keyword, no hooks needed, src/game/minions/tier6/elistra.ts
 
 ### New minions — Tier 1 (additional)

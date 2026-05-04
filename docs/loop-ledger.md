@@ -1,3 +1,4 @@
+2026-05-04 | 8f095c1 | FIXED: Add Nadina the Red (tier 6 demon, 7/4): deathrattle gives all friendly non-divine-shield Deathrattle minions divine shield
 2026-05-04 | 768bd6f | FIXED: Add lifesteal simulation tests — verify lifesteal healing accumulates during combat, does not trigger when damage is absorbed by divine shield, and is applied to winner's hero post-combat
 2026-05-04 | 6f2d27d | FIXED: Add Elistra the Immortal (tier 6 dragon, 8/8): reborn keyword, wired into minions index registry
 2026-05-04 | 037a527 | FIXED: Add Micro Machine (tier 2 mech, 1/2): at start of combat, gain +1 ATK via onStartOfCombat hook
