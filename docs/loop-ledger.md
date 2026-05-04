@@ -327,3 +327,4 @@
 2026-05-04 | 80c917d | FIXED: Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech stats and keywords to rightmost friendly Mech on board, and the attached mech has combined stats
 2026-05-04 | d829e37 | FIXED: Fix Scavenging Hyena golden stat gains (+4/+2 per Beast death) and add 4 sim tests
 2026-05-04 | b42adb6 | FIXED: Add tests/combat/lifesteal.test.ts — verify lifesteal heals winning hero by total lifesteal amount, does NOT trigger when damage is absorbed by divine shield, emits Lifesteal transcript events, and works with Queen of Pain
+2026-05-04 | ec09966 | FIXED: Add Deflect-o-Bot divine shield restoration test — verify that playing a Mech restores Deflect-o-Bot's divine shield, non-Mechs do not, and golden version also works

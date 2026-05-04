@@ -10,7 +10,8 @@ export default defineMinion({
   baseKeywords: ["divineShield"],
   spellDamage: 0,
   hooks: {
-    // Whenever you play a Mech, gain +1 Attack
+    // Whenever you play a Mech, restore this minion's Divine Shield and
+    // give all other friendly Mechs +1 Attack.
     onPlay: ({ state, playerId, self }) => {
       return {
         ...state,
@@ -22,7 +23,9 @@ export default defineMinion({
                 board: p.board.map((m) =>
                   m.tribes.includes("Mech") && m.instanceId !== self.instanceId
                     ? { ...m, atk: m.atk + 1 }
-                    : m,
+                    : m.instanceId === self.instanceId
+                      ? { ...m, keywords: new Set([...m.keywords, "divineShield" as const]) }
+                      : m,
                 ),
               },
         ),

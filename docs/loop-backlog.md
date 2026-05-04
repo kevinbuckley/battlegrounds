@@ -137,7 +137,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
 - [ ] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
-- [ ] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
+- [x] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
 
 ### Hero completeness
 
