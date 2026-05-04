@@ -154,9 +154,21 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `onSell` hook to combat.ts — fires when a minion is sold during combat (e.g., from deathrattle summons), so minions can react to sell events in combat
 - [x] [S] Wire `onBuy` hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board)
 - [x] [S] Add `onTurnStart` hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions, used by future minions that react to turn starts (already implemented: types.ts:112, state.ts:1005-1016)
-- [ ] [S] Add `onDiscover` hook to MinionHooks — fires when a discover offer is presented (triples, hero powers, Yogg-Saron), wired into dismiss/pick discover in state.ts
+- [x] [S] Add `onDiscover` hook to MinionHooks — fires when a discover offer is presented (triples, hero powers, Yogg-Saron), wired into dismiss/pick discover in state.ts
 
 ---
+
+### New minions — Tier 3
+
+- [ ] [S] Add `Buccaneer` (tier 3 pirate, 3/2): battlecry give a friendly Pirate +2/+2 — src/game/minions/tier3/buccaneer.ts
+
+### New minions — Tier 4
+
+- [ ] [S] Add `Gnoma Tinker` (tier 4 mech, 3/3): battlecry summon a 1/1 Mech token — src/game/minions/tier4/gnoma-tinker.ts
+
+### New minions — Tier 5
+
+- [ ] [S] Add `Blingtron 3000` (tier 5 mech, 3/8): battlecry summon two 1/1 Mechs with Rush — src/game/minions/tier5/blingtron-3000.ts
 
 ## Done (completed items — do NOT redo)
 
