@@ -89,6 +89,7 @@ import strongshellScavenger from "./tier5/strongshell-scavenger";
 import tideRazor from "./tier5/tide-razor";
 import voidlord from "./tier5/voidlord";
 import zappSlywick from "./tier5/zapp-slywick";
+import elistra from "./tier6/elistra";
 import foeReaper4000 from "./tier6/foe-reaper-4000";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
 import gentleMegasaur from "./tier6/gentle-megasaur";
@@ -209,6 +210,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [sneedOldShredder.id]: sneedOldShredder,
   [yseraTheDreamerT6.id]: yseraTheDreamerT6,
   [kingOfBeasts.id]: kingOfBeasts,
+  [elistra.id]: elistra,
   [razorgoreTheUntamed.id]: razorgoreTheUntamed,
   [bountyMinion.id]: bountyMinion,
   [alexstraszaSelflessDragon.id]: alexstraszaSelflessDragon,
