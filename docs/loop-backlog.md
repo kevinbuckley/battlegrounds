@@ -16,6 +16,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
+- [ ] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
+
 - [x] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed
 
 - [x] [S] Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution
