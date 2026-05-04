@@ -1,3 +1,4 @@
+2026-05-04 | 0abd2dd | FIXED: Add Razorgore the Untamed (tier 6 dragon, 2/4): at start of combat, gains +2/+2 for each friendly Dragon on your board, with unit tests
 2026-05-04 | a3c1e47 | FIXED: Add Deck Swabbie (tier 1 pirate, 2/2): battlecry gives a friendly Pirate +1/+1, wired into minions index registry
 2026-05-04 | 917abbb | FIXED: Add King of Beasts (tier 6 beast, 2/6): taunt; battlecry gains +1 ATK for each other Beast on your board, with unit tests
 2026-05-04 | 065d965 | FIXED: Add Siegebreaker (tier 4 demon, 5/8): taunt; your other Demons have +1 ATK at start of combat via onStartOfCombat aura
