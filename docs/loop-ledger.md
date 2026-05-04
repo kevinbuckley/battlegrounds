@@ -1,3 +1,5 @@
+2026-05-04 | ba120f8 | FIXED: Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned during combat, including tokens from deathrattles
+
 2026-05-04 | 24e9913 | FIXED: Add tests/economy/upgrade-cost.test.ts — verify tier upgrade cost decreases by 1 each turn it isn't taken (beginRecruitTurn reduces upgradeCost), and resets to base on upgrade
 2026-05-04 | 351db08 | FIXED: Add Lil' Rag (tier 5 elemental, 1/1): onPlay gives all other friendly Elementals +1/+1
 2026-05-04 | 20e3360 | FIXED: Add Goldrinn the Great Wolf (tier 5 beast, 4/4): onShopSummon gives ALL friendly Beasts +5/+5 whenever a Beast is played
