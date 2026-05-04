@@ -41,6 +41,7 @@ import spawnOfNzoth from "./tier2/spawn-of-nzoth";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import arcaneTinker from "./tier3/arcane-tinker";
+import bloodsailCannoneer from "./tier3/bloodsail-cannoneer";
 import cobaltScalebane from "./tier3/cobalt-scalebane";
 import coldlightSeer from "./tier3/coldlight-seer";
 import frostboundGolem from "./tier3/frostbound-golem";
@@ -153,6 +154,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [impGangBoss.id]: impGangBoss,
   [tortollanShellraiser.id]: tortollanShellraiser,
   [screwjankClunker.id]: screwjankClunker,
+  [bloodsailCannoneer.id]: bloodsailCannoneer,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [annihilanBattlemaster.id]: annihilanBattlemaster,
   [bolvarFireblood.id]: bolvarFireblood,
