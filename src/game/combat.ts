@@ -254,7 +254,10 @@ function reapDeaths(
       const deadCtx: CombatCtx = { self: dead, selfSide: deadSide, left: l, right: r, emit, rng };
       const baronOnSide = deadSide === "left" ? baronOnLeft : baronOnRight;
       dead.hooks?.onDeath?.(deadCtx);
-      if (baronOnSide || dead.golden) {
+      const triggers = dead.golden ? 2 : 1;
+      const baronMult = baronOnSide ? 2 : 1;
+      const totalTriggers = triggers * baronMult;
+      for (let i = 1; i < totalTriggers; i++) {
         dead.hooks?.onDeath?.(deadCtx);
       }
 

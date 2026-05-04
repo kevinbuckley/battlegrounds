@@ -309,3 +309,4 @@
 2026-05-04 | e09c7ec | FIXED: Add Floating Watcher (tier 4 demon, 4/4) — onHeroDamaged hook fires when player's hero takes combat damage, gaining +2/+2 per hit, plus wire onHeroDamaged into applyCombatResult in state.ts
 2026-05-04 | 123c74b | FIXED: Add Zapp Slywick (tier 5 mech, 7/10) — rush; always attacks the lowest-ATK enemy minion via new getTarget hook in MinionHooks, with unit tests
 2026-05-04 | 9eb88d5 | FIXED: Add Voidlord (tier 5 demon, 3/9): taunt; deathrattle summons three 1/3 Demons with taunt
+2026-05-04 | f815b0b | FIXED: Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron Rivendare causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles; fix combat.ts to stack golden×baron multiplicatively
