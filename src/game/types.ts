@@ -123,6 +123,21 @@ export interface MinionHooks {
   onShopSummon?: (ctx: RecruitCtx) => GameState;
   /** Fires when a friendly minion is summoned to the player's board (recruit phase). */
   onRecruitSummon?: (ctx: SummonRecruitCtx) => GameState;
+  /** Fires when the owner's hero takes damage during combat (after armor/extra-life resolution). */
+  onHeroDamaged?: (ctx: HeroDamagedCtx) => void;
+}
+
+// ---------------------------------------------------------------------------
+// Hook contexts
+// ---------------------------------------------------------------------------
+
+export interface HeroDamagedCtx {
+  self: MinionInstance;
+  playerId: PlayerId;
+  /** The amount of damage the hero took (after armor was applied). */
+  damage: number;
+  emit: (event: CombatEvent) => void;
+  rng: Rng;
 }
 
 // ---------------------------------------------------------------------------

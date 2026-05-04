@@ -899,6 +899,18 @@ function applyCombatResult(
   // Apply damage to loser
   result = applyDamageToPlayer(result, loserId, damage);
 
+  // Fire onHeroDamaged on all of the loser's board minions
+  const loser = getPlayer(result, loserId);
+  for (const minion of loser.board) {
+    minion.hooks?.onHeroDamaged?.({
+      self: minion,
+      playerId: loserId,
+      damage,
+      emit: () => {},
+      rng: makeRng(0),
+    });
+  }
+
   // Update pairings history
   const newPairing: [import("./types").PlayerId, import("./types").PlayerId] = [
     leftId,

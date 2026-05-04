@@ -41,7 +41,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 4
 
 - [ ] [S] Add `Siegebreaker` (tier 4 demon, 5/8): taunt; your other Demons have +1 ATK — onStartOfCombat aura buff in src/game/minions/tier4/siegebreaker.ts
-- [ ] [S] Add `Floating Watcher` (tier 4 demon, 4/4): whenever your hero takes damage, gain +2/+2 — onHeroDamaged hook in src/game/minions/tier4/floating-watcher.ts
+- [x] [S] Add `Floating Watcher` (tier 4 demon, 4/4): whenever your hero takes damage, gain +2/+2 — onHeroDamaged hook in src/game/minions/tier4/floating-watcher.ts
 - [ ] [S] Add `Ripsnarl Captain` (tier 4 pirate, 3/5): whenever a friendly Pirate attacks, give it +2/+2 — onAllyAttack hook in src/game/minions/tier4/ripsnarl-captain.ts
 
 ### New minions — Tier 5
