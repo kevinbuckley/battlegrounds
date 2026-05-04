@@ -1,3 +1,4 @@
+2026-05-04 | fc6e47b | FIXED: Add Mal'Ganis (tier 5 demon, 9/7): at start of combat, give all other friendly Demons +2/+2
 2026-05-04 | 8880f51 | FIXED: Add Houndmaster (tier 3, 4/3): battlecry gives a friendly Beast +2/+2 and Taunt
 2026-05-04 | 543264c | FIXED: Add Soul Devourer (tier 3 demon, 3/3): battlecry consumes a friendly Demon from board, gains its ATK and HP
 2026-05-04 | 7c34ea9 | FIXED: Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, reborn 1/1 that dies re-enters at 1/1 with no reborn flag, and Elistra the Immortal reborn behavior

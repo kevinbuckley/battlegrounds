@@ -86,6 +86,7 @@ import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
 import junkbot from "./tier5/junkbot";
 import lightfangEnforcer from "./tier5/lightfang-enforcer";
+import malganis from "./tier5/malganis";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import murozond from "./tier5/murozond";
 import strongshellScavenger from "./tier5/strongshell-scavenger";
@@ -200,6 +201,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [junkbot.id]: junkbot,
   [mogorTheCurseGolem.id]: mogorTheCurseGolem,
   [lightfangEnforcer.id]: lightfangEnforcer,
+  [malganis.id]: malganis,
   [murozond.id]: murozond,
   [strongshellScavenger.id]: strongshellScavenger,
   [tideRazor.id]: tideRazor,
