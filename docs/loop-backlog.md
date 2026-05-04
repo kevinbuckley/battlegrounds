@@ -16,13 +16,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now (highest priority, model should pick from here first)
 
-- [ ] [S] Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution
+- [x] [S] Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution
 
-- [ ] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts
+- [x] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts
 
-- [ ] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts
+- [x] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts
 
-- [ ] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
+- [x] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
 
 - [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
 
@@ -94,7 +94,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron on left side causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles
 - [x] [S] Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned (including tokens from deathrattles)
-- [ ] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
+- [x] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
 - [ ] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
 - [x] [S] Add tests/simulation/unstable-ghoul.sim.test.ts — verify Unstable Ghoul deathrattle deals 1 damage to ALL other minions on both sides
 - [x] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
