@@ -1,3 +1,4 @@
+2026-05-04 | 653e7c9 | FIXED: Add Grombi the Rotunda tier 3 elemental (3/3) — onAllyKill hook gains +2/+2 per friendly minion kill during combat
 2026-05-04 | 6e2cb02 | FIXED: Add onTurnStart hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions
 2026-05-04 | 0c49a72 | FIXED: Add onDiscover hook to MinionHooks and wire into pickDiscover — fires when a minion is picked from a discover offer (triples, hero powers, Yogg-Saron), with unit tests
 2026-05-04 | 2e03ca6 | FIXED: Wire onBuy hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board), with unit tests

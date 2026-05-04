@@ -48,13 +48,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon a number of 1/1 Rat tokens equal to this minion's ATK at time of death — src/game/minions/tier2/rat-pack.ts
 - [x] [S] Add `Menagerie Magician` (tier 4, 4/4): battlecry give a random friendly Beast, Dragon, and Murloc each +2/+2 — src/game/minions/tier4/menagerie-magician.ts
-- [ ] [S] Add `Grombi the Rotunda` (tier 2 murloc, 2/3): magnetic; whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier2/grombi-the-rotunda.ts
+- [x] [S] Add `Grombi the Rotunda` (tier 2 murloc, 2/3): magnetic; whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier2/grombi-the-rotunda.ts
 
 ### New minions — Tier 3
 
 - [x] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage, summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
 - [x] [S] Add `Bloodsail Cannoneer` (tier 3 pirate, 2/3): battlecry give a friendly Pirate +3 ATK — src/game/minions/tier3/bloodsail-cannoneer.ts
-- [ ] [S] Add `Grombi the Rotunda` (tier 3 elemental, 3/3): whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier3/grombi-the-rotunda.ts
+- [x] [S] Add `Grombi the Rotunda` (tier 3 elemental, 3/3): whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier3/grombi-the-rotunda.ts
 
 ### New minions — Tier 4
 
