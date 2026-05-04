@@ -315,3 +315,4 @@
 2026-05-04 | 123c74b | FIXED: Add Zapp Slywick (tier 5 mech, 7/10) — rush; always attacks the lowest-ATK enemy minion via new getTarget hook in MinionHooks, with unit tests
 2026-05-04 | 9eb88d5 | FIXED: Add Voidlord (tier 5 demon, 3/9): taunt; deathrattle summons three 1/3 Demons with taunt
 2026-05-04 | f815b0b | FIXED: Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron Rivendare causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles; fix combat.ts to stack golden×baron multiplicatively
+2026-05-04 | 555cc79 | FIXED: Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion without one, skips those that already have divine shield, and golden version gives 2 shields

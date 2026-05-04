@@ -10,12 +10,13 @@ export default defineMinion({
   baseKeywords: [],
   spellDamage: 0,
   hooks: {
-    // Deathrattle: Give a random friendly minion Divine Shield
+    // Deathrattle: Give a random friendly minion Divine Shield (skips those that
+    // already have one; if all have divine shield, does nothing).
     onDeath: (ctx) => {
       const allies = ctx.selfSide === "left" ? ctx.left : ctx.right;
-      if (allies.length === 0) return;
-      const target = ctx.rng.pick(allies);
-      if (target.keywords.has("divineShield")) return; // already has one
+      const eligible = allies.filter((m) => !m.keywords.has("divineShield"));
+      if (eligible.length === 0) return;
+      const target = ctx.rng.pick(eligible);
       target.keywords.add("divineShield");
       ctx.emit({ kind: "Stat", target: target.instanceId, atk: target.atk, hp: target.hp });
     },
