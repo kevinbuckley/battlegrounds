@@ -77,7 +77,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### New minions — Tier 5 (additional)
 
 - [ ] [S] Add `Mal'Ganis` (tier 5 demon, 9/7): at start of combat, give all other friendly Demons +2/+2 — onStartOfCombat aura in src/game/minions/tier5/malganis.ts
-- [ ] [S] Add `Goldrinn the Great Wolf` (tier 5 beast, 4/4): whenever a friendly Beast is played to board, give ALL friendly Beasts +5 ATK — onShopSummon tribe check in src/game/minions/tier5/goldrinn.ts
+- [x] [S] Add `Goldrinn the Great Wolf` (tier 5 beast, 4/4): whenever a friendly Beast is played to board, give ALL friendly Beasts +5 ATK — onShopSummon tribe check in src/game/minions/tier5/goldrinn.ts
 - [ ] [S] Add `Lil' Rag` (tier 5 elemental, 1/1): when you play an Elemental in the tavern, give all other friendly Elementals +1/+1 — onShopSummon tribe=Elemental check in src/game/minions/tier5/lil-rag.ts
 
 ### Simulation tests — existing minions need coverage
