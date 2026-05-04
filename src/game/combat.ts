@@ -293,6 +293,17 @@ function reapDeaths(
         }
       }
 
+      // Enforce board cap of 7 minions. If deathrattle summons pushed the
+      // board beyond 7, remove excess minions from the end (they were
+      // summoned out of order of priority; trim the least valuable).
+      const board = deadSide === "left" ? l : r;
+      while (board.length > 7) {
+        const removed = board.pop();
+        if (removed) {
+          emit({ kind: "Summon", card: removed.cardId, side: deadSide, position: board.length });
+        }
+      }
+
       // Reborn
       if (dead.keywords.has("reborn") && !dead.attachments.rebornUsed) {
         const ghost: MinionInstance = {
