@@ -164,7 +164,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### New minions — Tier 4
 
-- [ ] [S] Add `Gnoma Tinker` (tier 4 mech, 3/3): battlecry summon a 1/1 Mech token — src/game/minions/tier4/gnoma-tinker.ts
+- [x] [S] Add `Gnoma Tinker` (tier 4 mech, 3/3): battlecry summon a 1/1 Mech token — src/game/minions/tier4/gnoma-tinker.ts
 
 ### New minions — Tier 5
 
