@@ -23,7 +23,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, and that a 1/1 reborn that dies in combat re-enters board at 1/1 with no reborn flag
 - [ ] [S] Add tests/economy/upgrade-cost.test.ts — verify tier upgrade cost decreases by 1 each turn it isn't taken (beginRecruitTurn reduces upgradeCost), and resets to base on upgrade
 - [ ] [S] Add tests/shop/refresh.test.ts — verify shop refresh deducts 1 gold from player, and that refreshing costs exactly COST_REFRESH (currently 1g)
-- [ ] [S] Add tests/simulation/lifesteal.sim.test.ts — verify lifesteal keyword heals the attacking minion for damage dealt in combat, but NOT when damage is absorbed by divine shield
+- [x] [S] Add tests/simulation/lifesteal.sim.test.ts — verify lifesteal keyword heals the attacking minion for damage dealt in combat, but NOT when damage is absorbed by divine shield
 
 ### New minions — Tier 1
 
