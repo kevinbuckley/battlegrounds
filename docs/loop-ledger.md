@@ -3,6 +3,7 @@
 2026-05-04 | 2e03ca6 | FIXED: Wire onBuy hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board), with unit tests
 2026-05-04 | 5a319c5 | FIXED: Add onBoardRemove hook to MinionHooks and wire into combat.ts reapDeaths — fires on all surviving minions when any minion is removed from the board during combat, with unit tests
 2026-05-04 | af9bd55 | FIXED: Add sell undo — after selling a board or hand minion, show a 1.5s "Undo Sell" button that restores the minion to hand/board at no cost, with undo handler reversing gold and minion placement
+2026-05-04 | f24c202 | FIXED: Add onAllyKill hook to Grombi the Rotunda (tier 2 murloc) — gains +2/+2 whenever a friendly minion scores a kill during combat
 2026-05-04 | 53b98a0 | FIXED: Heuristic AI sells weakest board minion when hand is at capacity (≥10) to make room before buy loop
 2026-05-04 | d893167 | FIXED: Add onAllyKill hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill during combat, with unit tests
 2026-05-04 | ff48424 | FIXED: Add onAttacked hook to MinionHooks and wire into combat.ts — fires when a minion is targeted by an enemy attack (as defender), with unit tests

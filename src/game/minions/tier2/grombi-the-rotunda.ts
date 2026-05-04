@@ -9,5 +9,13 @@ export default defineMinion({
   baseHp: 3,
   baseKeywords: ["magnetic"],
   spellDamage: 0,
-  hooks: {},
+  hooks: {
+    onAllyKill: ({ self, dead }) => {
+      const atkGain = 2;
+      const hpGain = 2;
+      self.atk += atkGain;
+      self.hp += hpGain;
+      self.maxHp += hpGain;
+    },
+  },
 });
