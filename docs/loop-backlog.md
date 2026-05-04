@@ -130,23 +130,23 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### Engine extensions
 
 - [x] [S] Pool depletion: track removed minions in a global pool per cardId; rollShop should never offer more copies than remain in the pool — pool tracking already implemented in shop.ts (buildPool, drawFromPool, returnToPool), GameState.pool, and pool.test.ts
-- [ ] [S] Add `onSpellPlay` hook to RecruitCtx alongside onCast — fires when player plays any spell, so future minions can react to spell plays in the recruit phase (distinct from onCast which is combat-only)
-- [ ] [S] Validate board-size cap in combat deathrattle summoning: new tokens should not push either board past 7 minions — add guard in the deathrattle summon path in combat.ts
+- [x] [S] Add `onSpellPlay` hook to RecruitCtx alongside onCast — fires when player plays any spell, so future minions can react to spell plays in the recruit phase (distinct from onCast which is combat-only)
+- [x] [S] Validate board-size cap in combat deathrattle summoning: new tokens should not push either board past 7 minions — add guard in the deathrattle summon path in combat.ts
 
 ### More minions
 
 - [x] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
-- [ ] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
+- [x] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
 - [x] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
 
 ### Hero completeness
 
-- [ ] [S] Add `Millificent Manastorm` hero test — verify hero power buffs ALL friendly Mechs +1/+1 when a Mech is bought from the shop, and that golden Mechs also get buffed
-- [ ] [S] Add `King Mukla` hero test — verify that using the hero power gives the opponent 2 Bananas in their hand, and that playing a Banana on a minion gives +1/+1
+- [x] [S] Add `Millificent Manastorm` hero test — verify hero power buffs ALL friendly Mechs +1/+1 when a Mech is bought from the shop, and that golden Mechs also get buffed
+- [x] [S] Add `King Mukla` hero test — verify hero power gives the opponent 2 Bananas in their hand, and that playing a Banana on a minion gives +1/+1
 
 ### Combat hook completeness
 
-- [ ] [S] Add `onAttacked` hook to MinionHooks and wire into combat.ts applyDamage — fires when a minion is the target of an attack (as defender), used by future minions that react to being attacked
+- [x] [S] Add `onAttacked` hook to MinionHooks and wire into combat.ts applyDamage — fires when a minion is the target of an attack (as defender), used by future minions that react to being attacked
 - [x] [S] Add `onAllyKill` hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill, used by future minions that react to kills
 - [x] [S] Add `onSell` hook to combat.ts — fires when a minion is sold during combat (e.g., from deathrattle summons), so minions can react to sell events in combat
 

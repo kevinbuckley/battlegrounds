@@ -326,6 +326,48 @@ describe("King Mukla", () => {
     const bananas = player.spells.filter((sp) => sp.cardId === "banana");
     expect(bananas).toHaveLength(2);
   });
+
+  it("hero power gives opponent 2 Bananas", () => {
+    const state = makeInitialState(42);
+    let s = step(state, { kind: "SelectHero", player: 0, heroId: "king_mukla" }, makeRng(42));
+    for (let i = 1; i < 8; i++) {
+      s = step(s, { kind: "SelectHero", player: i, heroId: "stub_hero" }, makeRng(42));
+    }
+
+    // End turn to create a pairing (combat phase sets up pairingsHistory)
+    s = step(s, { kind: "EndTurn", player: 0 }, makeRng(42));
+
+    // Find the pairing involving player 0
+    const pairing = s.pairingsHistory.find((p) => p[0] === 0 || p[1] === 0);
+    expect(pairing).toBeDefined();
+    const opponentId = pairing![0] === 0 ? pairing![1] : pairing![0];
+
+    // Use hero power — should give opponent 2 Bananas
+    const after = step(s, { kind: "HeroPower", player: 0, target: 0 }, makeRng(42));
+
+    const opponentBananas = after.players[opponentId]!.spells.filter(
+      (sp) => sp.cardId === "banana",
+    );
+    expect(opponentBananas).toHaveLength(2);
+
+    // Player's own bananas come from passive (1 per turn), not from hero power
+    const playerBananas = after.players[0]!.spells.filter((sp) => sp.cardId === "banana");
+    expect(playerBananas.length).toBeGreaterThan(0); // from passive, not from hero power
+  });
+
+  it("does nothing when there is no pairing yet", () => {
+    const state = makeInitialState(42);
+    const s = step(state, { kind: "SelectHero", player: 0, heroId: "king_mukla" }, makeRng(42));
+
+    // No combat has happened yet, so no pairings
+    const after = step(s, { kind: "HeroPower", player: 0, target: 0 }, makeRng(42));
+
+    // Opponent should have no bananas
+    for (let i = 1; i < 8; i++) {
+      const opponentBananas = after.players[i]!.spells.filter((sp) => sp.cardId === "banana");
+      expect(opponentBananas).toHaveLength(0);
+    }
+  });
 });
 
 // ---------------------------------------------------------------------------
