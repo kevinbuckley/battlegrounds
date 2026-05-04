@@ -1,3 +1,5 @@
+2026-05-04 | 141c1fb | FIXED: Add tests/shop/refresh.test.ts — verify shop refresh deducts 1 gold from player, and that refreshing costs exactly COST_REFRESH (currently 1g)
+
 2026-05-04 | ba120f8 | FIXED: Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned during combat, including tokens from deathrattles
 
 2026-05-04 | 24e9913 | FIXED: Add tests/economy/upgrade-cost.test.ts — verify tier upgrade cost decreases by 1 each turn it isn't taken (beginRecruitTurn reduces upgradeCost), and resets to base on upgrade
