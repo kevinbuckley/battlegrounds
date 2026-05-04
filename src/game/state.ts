@@ -1002,6 +1002,19 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
 
     next = rollShopForPlayer(next, player.id, rng.fork(`shop:${player.id}:${turn}`));
 
+    // Fire onTurnStart hooks for all minions on the player's board
+    for (const minion of next.players[player.id]?.board ?? []) {
+      if (minion.hooks?.onTurnStart) {
+        next = minion.hooks.onTurnStart({
+          self: minion,
+          playerId: player.id,
+          state: next,
+          rng,
+          spellDamage: totalSpellDamage(next.players[player.id]!),
+        });
+      }
+    }
+
     // Ysera passive: add a random Dragon from the current tier to the shop
     if (player.heroId === "ysera") {
       const allMinionCards = Object.values(MINIONS) as MinionCard[];
