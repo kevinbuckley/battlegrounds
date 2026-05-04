@@ -238,6 +238,24 @@ export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: numbe
     shop: p.shop.filter((_, i) => i !== shopIndex),
   }));
 
+  // Millificent Manastorm: when a Mech is bought, all friendly Mechs on the
+  // player's board gain +1/+1.
+  const boughtMech = card && card.tribes.includes("Mech");
+  if (boughtMech && player.heroId === "millificent_manastorm") {
+    const buffedBoard = (result.players[playerId] ?? player).board.map((m) => {
+      if (m.tribes && m.tribes.includes("Mech")) {
+        return {
+          ...m,
+          atk: m.atk + 1,
+          hp: m.hp + 1,
+          maxHp: m.maxHp + 1,
+        };
+      }
+      return m;
+    });
+    return updatePlayer(result, playerId, (p) => ({ ...p, board: buffedBoard }));
+  }
+
   return result;
 }
 

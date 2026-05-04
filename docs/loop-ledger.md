@@ -3,6 +3,7 @@
 2026-05-04 | d893167 | FIXED: Add onAllyKill hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill during combat, with unit tests
 2026-05-04 | ff48424 | FIXED: Add onAttacked hook to MinionHooks and wire into combat.ts — fires when a minion is targeted by an enemy attack (as defender), with unit tests
 2026-05-04 | 99196e6 | FIXED: Add board-size cap guard in combat.ts reapDeaths — new tokens from deathrattles should not push either board past 7 minions, enforced as general safety net in deathrattle summon path
+2026-05-04 | d46464b | FIXED: Wire Millificent Manastorm passive into buyMinion — when a Mech is bought, all friendly Mechs on the player's board gain +1/+1, with unit tests
 2026-05-04 | 8a43c9e | FIXED: Add tests/simulation/murloc-warleader-death.sim.test.ts — verify that when Murloc Warleader dies mid-combat, the +2 ATK aura is removed and buffed murlocs revert to base ATK immediately
 2026-05-04 | 88a735a | FIXED: Add tests/combat/imprisoner-golden.test.ts — verify golden Imprisoner (6/8) summons two 2/2 Imps on death while non-golden (3/4) summons one
 2026-05-04 | 0fab067 | FIXED: Add tests/simulation/unstable-ghoul.sim.test.ts — verify deathrattle deals 1 damage to all other minions (not itself), golden deals 2 damage per fire, fix implementation to skip self
