@@ -491,11 +491,30 @@ function pickDiscover(state: GameState, playerId: number, index: number): GameSt
   const offer = player.discoverOffer?.offers[index];
   if (!offer) return state;
 
-  return updatePlayer(state, playerId, (p) => ({
+  let result = updatePlayer(state, playerId, (p) => ({
     ...p,
     hand: [...p.hand, offer.minion],
     discoverOffer: null,
   }));
+
+  // Fire onDiscover hooks for all minions on the player's board
+  const board = result.players[playerId]?.board ?? [];
+  const spellDamage = board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+  for (const m of board) {
+    const hook = m.hooks?.onDiscover;
+    if (!hook) continue;
+    result = hook({
+      self: m,
+      playerId,
+      state: result,
+      offers: player.discoverOffer?.offers ?? [offer],
+      chosenIndex: index,
+      rng: makeRng(0),
+      spellDamage,
+    });
+  }
+
+  return result;
 }
 
 function dismissDiscover(state: GameState, playerId: number): GameState {

@@ -1,4 +1,5 @@
 2026-05-04 | 6e2cb02 | FIXED: Add onTurnStart hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions
+2026-05-04 | 0c49a72 | FIXED: Add onDiscover hook to MinionHooks and wire into pickDiscover — fires when a minion is picked from a discover offer (triples, hero powers, Yogg-Saron), with unit tests
 2026-05-04 | 2e03ca6 | FIXED: Wire onBuy hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board), with unit tests
 2026-05-04 | 5a319c5 | FIXED: Add onBoardRemove hook to MinionHooks and wire into combat.ts reapDeaths — fires on all surviving minions when any minion is removed from the board during combat, with unit tests
 2026-05-04 | af9bd55 | FIXED: Add sell undo — after selling a board or hand minion, show a 1.5s "Undo Sell" button that restores the minion to hand/board at no cost, with undo handler reversing gold and minion placement

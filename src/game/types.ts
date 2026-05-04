@@ -142,6 +142,25 @@ export interface MinionHooks {
   getTarget?: (ctx: CombatCtx) => MinionInstance | undefined;
   /** Fires when a minion is removed from the board during combat (e.g., via deathrattle replacement). */
   onBoardRemove?: (ctx: CombatCtx) => void;
+  /** Fires when a minion is picked from a discover offer (triples, hero powers, Yogg-Saron). */
+  onDiscover?: (ctx: DiscoverCtx) => GameState;
+}
+
+// ---------------------------------------------------------------------------
+// Hook contexts
+// ---------------------------------------------------------------------------
+
+export interface DiscoverCtx {
+  self: MinionInstance;
+  playerId: PlayerId;
+  state: GameState;
+  /** All available discover offers (including the chosen one). */
+  offers: Array<{ minion: MinionInstance; offerId: string }>;
+  /** The index of the chosen offer (0-based). */
+  chosenIndex: number;
+  rng: Rng;
+  /** Total spell damage from all board minions. */
+  spellDamage: number;
 }
 
 // ---------------------------------------------------------------------------
