@@ -233,6 +233,12 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] Add `Lil' Exorcist` (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards — src/game/minions/tier3/lil-exorcist.ts
 - [ ] [S] Add `Coldlight Oracle` (tier 3 murloc, 2/3): battlecry draw 2 cards (add 2 random minions to hand) — onBattlecry in src/game/minions/tier3/coldlight-oracle.ts
 
+### New minions — Tier 5 (additional)
+
+- [ ] [S] Add `Mecharoo` (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot — src/game/minions/tier1/mecharoo.ts
+- [ ] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
+- [ ] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
+
 ## Quarantined (failed multiple times — DO NOT pick)
 
 (Tasks added by the harness when an iteration's CHOSEN TASK fails go here.)

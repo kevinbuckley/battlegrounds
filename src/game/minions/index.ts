@@ -91,6 +91,7 @@ import siegebreaker from "./tier4/siegebreaker";
 import toxfin from "./tier4/toxfin";
 import virmenSensei from "./tier4/virmen-sensei";
 import alexstrasza from "./tier5/alexstrasza";
+import baelgun from "./tier5/baelgun";
 import baronRivendare from "./tier5/baron-rivendare";
 import bigfernal from "./tier5/bigfernal";
 import blingtron3000 from "./tier5/blingtron-3000";
@@ -241,6 +242,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [tideRazor.id]: tideRazor,
   [zappSlywick.id]: zappSlywick,
   [voidlord.id]: voidlord,
+  [baelgun.id]: baelgun,
   [mechanoEgg.id]: mechanoEgg,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [ghastcoiler.id]: ghastcoiler,
