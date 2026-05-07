@@ -76,6 +76,7 @@ import soulDevourer from "./tier3/soul-devourer";
 import soulJuggler from "./tier3/soul-juggler";
 import southseaStrongarm from "./tier3/southsea-strongarm";
 import stonehillDefender from "./tier3/stonehill-defender";
+import tideRazorT3 from "./tier3/tide-razor";
 import tortollanShellraiser from "./tier3/tortollan-shellraiser";
 import whelpSmuggler from "./tier3/whelp-smuggler";
 import annihilanBattlemaster from "./tier4/annihilan-battlemaster";
@@ -204,6 +205,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [armOfTheEmpire.id]: armOfTheEmpire,
   [coldlightSeer.id]: coldlightSeer,
   [coldlightOracle.id]: coldlightOracle,
+  [tideRazorT3.id]: tideRazorT3,
   [bronzeWarden.id]: bronzeWarden,
   [cobaltScalebane.id]: cobaltScalebane,
   [houndmaster.id]: houndmaster,

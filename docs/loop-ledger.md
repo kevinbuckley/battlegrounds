@@ -1,7 +1,9 @@
+2026-05-07 | 15c9b69 | FIXED: Fix Lil' Exorcist battlecry to buff ALL Deathrattle minions on both boards instead of only buffing itself
 2026-05-07 | 83ec4b0 | FIXED: Add Bristleback Boys onDamageTaken hook — whenever any Bristleback Boy takes damage, ALL Bristleback Boys gain +1/+1
 2026-05-07 | 3eef3fa | FIXED: Add simulation test for Bristleback Boys — verify deathrattle summons a 1/1 Bristleback Whelp when it dies in combat, including golden version summoning two
 2026-05-07 | a677906 | FIXED: Add Lil' Exorcist (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards
 2026-05-07 | 07fed35 | FIXED: Add Coldlight Oracle (tier 3 murloc, 2/3): battlecry draw 2 random minions from shop pool to hand
+2026-05-07 | 15c9b69 | FIXED: Add Tide-Razor (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush
 2026-05-07 | 69587ab | FIXED: Add Shifter Zerus (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook
 2026-05-07 | e17ef88 | FIXED: Add Murloc Scout (tier 1 murloc, 1/1): vanilla — no keywords or hooks
 2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot
