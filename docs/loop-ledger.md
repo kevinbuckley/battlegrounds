@@ -1,6 +1,7 @@
 2026-05-07 | e17ef88 | FIXED: Add Murloc Scout (tier 1 murloc, 1/1): vanilla — no keywords or hooks
 2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot
 2026-05-07 | c5c7d2f | FIXED: Add Baelgun, Equipment Maker (tier 5, 4/5): battlecry gives a friendly Mech +2/+2 and Magnetic
+2026-05-07 | 8514157 | FIXED: Add Hangry Dragon (tier 2 dragon, 2/3): at start of your turn, if you have more HP than opponent, gain +2/+2
 2026-05-07 | bbd944f | FIXED: Add Gazelle (tier 1 beast, 1/1): rush keyword
 2026-05-07 | 846b307 | FIXED: Add Frost Elemental (tier 3 elemental, 3/4): freeze keyword
 2026-05-07 | 4a2bd6c | FIXED: Add Amalgadon (tier 6, 6/6): battlecry gains a random keyword for each different tribe among your other minions

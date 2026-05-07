@@ -29,6 +29,7 @@ import annoyoTron from "./tier2/annoy-o-tron";
 import deflectoBot from "./tier2/deflect-o-bot";
 import glyphGuardian from "./tier2/glyph-guardian";
 import grombiTheRotunda from "./tier2/grombi-the-rotunda";
+import hangryDragon from "./tier2/hangry-dragon";
 import harvestGolem from "./tier2/harvest-golem";
 import prisoner from "./tier2/imprisoner";
 import kaboomBot from "./tier2/kaboom-bot";
@@ -180,6 +181,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [ratPack.id]: ratPack,
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
+  [hangryDragon.id]: hangryDragon,
   [unstableGhoul.id]: unstableGhoul,
   [swatRecruit.id]: swatRecruit,
   [vulgarHomunculus.id]: vulgarHomunculus,
