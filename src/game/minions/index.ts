@@ -45,6 +45,7 @@ import swatRecruit from "./tier2/swat-recruit";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import arcaneTinker from "./tier3/arcane-tinker";
+import armOfTheEmpire from "./tier3/arm-of-the-empire";
 import bloodsailCannoneer from "./tier3/bloodsail-cannoneer";
 import bronzeWarden from "./tier3/bronze-warden";
 import buccaneer from "./tier3/buccaneer";
@@ -178,6 +179,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [grombiTheRotundaElemental.id]: grombiTheRotundaElemental,
   [markku.id]: markku,
   [arcaneTinker.id]: arcaneTinker,
+  [armOfTheEmpire.id]: armOfTheEmpire,
   [coldlightSeer.id]: coldlightSeer,
   [bronzeWarden.id]: bronzeWarden,
   [cobaltScalebane.id]: cobaltScalebane,

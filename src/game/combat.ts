@@ -3,6 +3,7 @@ import { MINIONS } from "./minions/index";
 import type {
   AllyDeathCombatCtx,
   AllyKillCtx,
+  AttackCombatCtx,
   CombatCtx,
   CombatEvent,
   CombatResult,
@@ -163,6 +164,23 @@ export function simulateCombat(
           rng,
           target: attacker,
         });
+      }
+
+      // Fire onAllyAttacked on friendly Taunt minions when a Taunt is being attacked
+      const friendlyBoard = isLeft ? right : left;
+      for (const friendly of friendlyBoard) {
+        if (friendly.keywords.has("taunt")) {
+          const attackCtx: AttackCombatCtx = {
+            self: friendly,
+            selfSide: targetSide,
+            left,
+            right,
+            emit,
+            rng,
+            target: attacker,
+          };
+          friendly.hooks?.onAllyAttacked?.(attackCtx);
+        }
       }
 
       // Apply damage from attacker to all hit targets

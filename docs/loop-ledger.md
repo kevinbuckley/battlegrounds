@@ -1,3 +1,4 @@
+2026-05-07 | 196ff79 | FIXED: Add Arm of the Empire (tier 3 dragon, 4/5): onAllyAttacked hook gives +3/+2 to friendly Taunt minions when attacked
 2026-05-07 | 6f1b542 | FIXED: Add The Lich King (tier 7 undead, 10/10): taunt; at start of combat, gain +1/+1 for each other minion on your board, with unit tests
 2026-05-07 | 42be082 | FIXED: Add Swat Recruit (tier 2 mech, 1/1): rush — single keyword, no hooks needed
 2026-05-07 | 4eca1de | FIXED: Add Dredgrot Whelp (tier 1 beast/elemental, 1/1): reborn — single keyword, no hooks needed

@@ -138,6 +138,8 @@ export interface MinionHooks {
   onHeroDamaged?: (ctx: HeroDamagedCtx) => void;
   /** Fires when a friendly minion scores a kill during combat (used by minions that react to kills). */
   onAllyKill?: (ctx: AllyKillCtx) => void;
+  /** Fires when a friendly Taunt minion is targeted by an enemy attack (used by Arm of the Empire). */
+  onAllyAttacked?: (ctx: AttackCombatCtx) => void;
   /** Custom target selector for combat. Returns a target from defenders, or undefined for default behavior. */
   getTarget?: (ctx: CombatCtx) => MinionInstance | undefined;
   /** Fires when a minion is removed from the board during combat (e.g., via deathrattle replacement). */
