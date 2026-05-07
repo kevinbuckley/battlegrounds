@@ -230,6 +230,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Shifter Zerus` (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook in src/game/minions/tier1/shifter-zerus.ts
 - [x] [S] Add `Houndmaster Shaw` (tier 4 beast, 3/6): at start of combat, give your other minions Rush — onStartOfCombat hook in src/game/minions/tier4/houndmaster-shaw.ts
 - [x] [S] Add `Yo-Ho-Ogre` (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — onAttack hook in src/game/minions/tier4/yo-ho-ogre.ts
+- [x] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
 - [ ] [S] Add `Lil' Exorcist` (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards — src/game/minions/tier3/lil-exorcist.ts
 - [ ] [S] Add `Coldlight Oracle` (tier 3 murloc, 2/3): battlecry draw 2 cards (add 2 random minions to hand) — onBattlecry in src/game/minions/tier3/coldlight-oracle.ts
 
@@ -238,6 +239,30 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Mecharoo` (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot — src/game/minions/tier1/mecharoo.ts
 - [x] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
 - [x] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
+
+### New minions — Tier 1
+
+- [ ] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
+
+### New minions — Tier 2
+
+- [ ] [S] Add `Bristleback Boys` interaction test — verify that when any Bristleback Boy takes damage, ALL Bristleback Boys gain +1 ATK — src/game/minions/tier2/bristleback-boys.ts (already exists, add sim test)
+
+### New minions — Tier 3
+
+- [ ] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier5/tide-razor.ts (already exists, add unit test)
+
+### New minions — Tier 4
+
+- [ ] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts (already exists, add unit test)
+
+### New minions — Tier 5
+
+- [ ] [S] Add `Junkbot` (tier 5 mech, 1/1): deathrattle summon a random Mech from your hand — src/game/minions/tier5/junkbot.ts (already exists, add unit test)
+
+### Engine hooks — unused hooks
+
+- [ ] [S] Add `Trade Prince Gallywix` interaction test — verify that when a minion is bought, Gallywix gives 1 gold back — src/game/heroes/trade-prince-gallywix.ts (already exists, add unit test)
 
 ## Quarantined (failed multiple times — DO NOT pick)
 

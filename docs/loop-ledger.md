@@ -3,6 +3,7 @@
 2026-05-07 | 69587ab | FIXED: Add Shifter Zerus (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook
 2026-05-07 | e17ef88 | FIXED: Add Murloc Scout (tier 1 murloc, 1/1): vanilla — no keywords or hooks
 2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot
+2026-05-07 | 8fe61e2 | FIXED: Add Murloc Knight (tier 1 murloc, 1/1): battlecry summons a 1/1 Murloc token
 2026-05-07 | c5c7d2f | FIXED: Add Baelgun, Equipment Maker (tier 5, 4/5): battlecry gives a friendly Mech +2/+2 and Magnetic
 2026-05-07 | 8514157 | FIXED: Add Hangry Dragon (tier 2 dragon, 2/3): at start of your turn, if you have more HP than opponent, gain +2/+2
 2026-05-07 | 9e95b65 | FIXED: Add Houndmaster Shaw (tier 4 beast, 3/6): at start of combat, give your other minions Rush

@@ -1,0 +1,44 @@
+import type { MinionInstance, Tribe } from "../../types";
+import { defineMinion, nextInstanceId } from "../define";
+
+export default defineMinion({
+  id: "murloc_knight",
+  name: "Murloc Knight",
+  tier: 1,
+  tribes: ["Murloc"],
+  baseAtk: 1,
+  baseHp: 1,
+  baseKeywords: [],
+  spellDamage: 0,
+  hooks: {
+    onBattlecry: ({ state, playerId, rng }) => {
+      const player = state.players[playerId];
+      if (!player) return state;
+      const availableSlots = 7 - player.board.length;
+      if (availableSlots <= 0) return state;
+
+      const whelp: MinionInstance = {
+        instanceId: `murloc_knight_whelp_${playerId}_${nextInstanceId()}`,
+        cardId: "murloc_knight_whelp",
+        baseAtk: 1,
+        baseHp: 1,
+        atk: 1,
+        hp: 1,
+        maxHp: 1,
+        keywords: new Set(),
+        tribes: ["Murloc"] as Tribe[],
+        golden: false,
+        attachments: {},
+        spellDamage: 0,
+        hooks: {},
+      };
+
+      return {
+        ...state,
+        players: state.players.map((p, i) =>
+          i !== playerId ? p : { ...p, board: [...p.board, whelp] },
+        ),
+      };
+    },
+  },
+});
