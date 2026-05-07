@@ -21,6 +21,7 @@ import righteousProtector from "./tier1/righteous-protector";
 import rockpoolHunter from "./tier1/rockpool-hunter";
 import rushMinion from "./tier1/rush-minion";
 import sellemental from "./tier1/sellemental";
+import shifterZerus from "./tier1/shifter-zerus";
 import tauntMinion from "./tier1/taunt-minion";
 import venomousCrasher from "./tier1/venomous-crasher";
 import { WindfuryMinion } from "./tier1/windfury-minion";
@@ -161,6 +162,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [murlocTinyfin.id]: murlocTinyfin,
   [gnomaTinker.id]: gnomaTinker,
   [mecharoo.id]: mecharoo,
+  [shifterZerus.id]: shifterZerus,
   [rockpoolHunter.id]: rockpoolHunter,
   [comboMinion.id]: comboMinion,
   [WindfuryMinion.id]: WindfuryMinion,

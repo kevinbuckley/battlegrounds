@@ -1,3 +1,4 @@
+2026-05-07 | 69587ab | FIXED: Add Shifter Zerus (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook
 2026-05-07 | e17ef88 | FIXED: Add Murloc Scout (tier 1 murloc, 1/1): vanilla — no keywords or hooks
 2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot
 2026-05-07 | c5c7d2f | FIXED: Add Baelgun, Equipment Maker (tier 5, 4/5): battlecry gives a friendly Mech +2/+2 and Magnetic
