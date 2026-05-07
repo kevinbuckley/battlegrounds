@@ -345,3 +345,4 @@
 2026-05-04 | ec09966 | FIXED: Add Deflect-o-Bot divine shield restoration test — verify that playing a Mech restores Deflect-o-Bot's divine shield, non-Mechs do not, and golden version also works
 2026-05-04 | deb0341 | FIXED: Add greedy AI tier upgrade test — verify it upgrades when board has ≥4 minions and gold ≥ upgradeCost, and skips upgrade when board is weak or gold is insufficient
 2026-05-04 | 2e03ca6 | FIXED: Add King Mukla hero power — gives opponent 2 Bananas when used, with hero power test
+2026-05-07 | 77fddba | FIXED: Add Maexxna (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed
