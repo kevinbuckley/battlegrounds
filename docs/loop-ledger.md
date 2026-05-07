@@ -1,4 +1,5 @@
 2026-05-07 | a677906 | FIXED: Add Lil' Exorcist (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards
+2026-05-07 | 07fed35 | FIXED: Add Coldlight Oracle (tier 3 murloc, 2/3): battlecry draw 2 random minions from shop pool to hand
 2026-05-07 | 69587ab | FIXED: Add Shifter Zerus (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook
 2026-05-07 | e17ef88 | FIXED: Add Murloc Scout (tier 1 murloc, 1/1): vanilla — no keywords or hooks
 2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot

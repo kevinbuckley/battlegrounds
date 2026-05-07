@@ -55,6 +55,7 @@ import bloodsailCannoneer from "./tier3/bloodsail-cannoneer";
 import bronzeWarden from "./tier3/bronze-warden";
 import buccaneer from "./tier3/buccaneer";
 import cobaltScalebane from "./tier3/cobalt-scalebane";
+import coldlightOracle from "./tier3/coldlight-oracle";
 import coldlightSeer from "./tier3/coldlight-seer";
 import frostElemental from "./tier3/frost-elemental";
 import frostboundGolem from "./tier3/frostbound-golem";
@@ -200,6 +201,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [arcaneTinker.id]: arcaneTinker,
   [armOfTheEmpire.id]: armOfTheEmpire,
   [coldlightSeer.id]: coldlightSeer,
+  [coldlightOracle.id]: coldlightOracle,
   [bronzeWarden.id]: bronzeWarden,
   [cobaltScalebane.id]: cobaltScalebane,
   [houndmaster.id]: houndmaster,
