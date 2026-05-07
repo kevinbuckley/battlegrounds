@@ -12,6 +12,7 @@ import fiendishServant from "./tier1/fiendish-servant";
 import flameImp from "./tier1/flame-imp";
 import gazelleT1 from "./tier1/gazelle";
 import gnomaTinker from "./tier1/gnoma-tinker";
+import mecharoo from "./tier1/mecharoo";
 import murlocTidecaller from "./tier1/murloc-tidecaller";
 import murlocTidehunter from "./tier1/murloc-tidehunter";
 import murlocTinyfin from "./tier1/murloc-tinyfin";
@@ -156,6 +157,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [wrathWeaver.id]: wrathWeaver,
   [murlocTinyfin.id]: murlocTinyfin,
   [gnomaTinker.id]: gnomaTinker,
+  [mecharoo.id]: mecharoo,
   [rockpoolHunter.id]: rockpoolHunter,
   [comboMinion.id]: comboMinion,
   [WindfuryMinion.id]: WindfuryMinion,

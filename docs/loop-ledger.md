@@ -1,3 +1,4 @@
+2026-05-07 | ebc9853 | FIXED: Add Mecharoo (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot
 2026-05-07 | c5c7d2f | FIXED: Add Baelgun, Equipment Maker (tier 5, 4/5): battlecry gives a friendly Mech +2/+2 and Magnetic
 2026-05-07 | bbd944f | FIXED: Add Gazelle (tier 1 beast, 1/1): rush keyword
 2026-05-07 | 846b307 | FIXED: Add Frost Elemental (tier 3 elemental, 3/4): freeze keyword
