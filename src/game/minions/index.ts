@@ -41,6 +41,7 @@ import rebornMinion from "./tier2/reborn-minion";
 import scavengingHyena from "./tier2/scavenging-hyena";
 import selflessHero from "./tier2/selfless-hero";
 import spawnOfNzoth from "./tier2/spawn-of-nzoth";
+import swatRecruit from "./tier2/swat-recruit";
 import unstableGhoul from "./tier2/unstable-ghoul";
 import vulgarHomunculus from "./tier2/vulgar-homunculus";
 import arcaneTinker from "./tier3/arcane-tinker";
@@ -165,6 +166,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [spawnOfNzoth.id]: spawnOfNzoth,
   [harvestGolem.id]: harvestGolem,
   [unstableGhoul.id]: unstableGhoul,
+  [swatRecruit.id]: swatRecruit,
   [vulgarHomunculus.id]: vulgarHomunculus,
   [gazelle.id]: gazelle,
   [grimspeaker.id]: grimspeaker,
