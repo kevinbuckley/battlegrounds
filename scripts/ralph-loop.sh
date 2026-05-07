@@ -103,12 +103,12 @@ inject_recovery_task() {
   # Cycle through a small bank of resilient, concrete fallback tasks so we don't
   # keep injecting the same one if it itself proves problematic.
   local fallbacks=(
-    "- [ ] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed"
-    "- [ ] [S] Add \`Rat Pack\` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts"
-    "- [ ] [S] Add \`Imp Gang Boss\` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts"
-    "- [ ] [S] Add \`Zapp Slywick\` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts"
-    "- [ ] [S] Add \`Voidlord\` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts"
-    "- [ ] [S] Add \`onDamageTaken\` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution"
+    "- [ ] [S] Add \`King Mukla\` hero test — verify hero power gives opponent 2 Bananas; playing a Banana on a minion gives it +1/+1 — tests/heroes/king-mukla.test.ts"
+    "- [ ] [S] Add \`Khadgar\` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts"
+    "- [ ] [S] Add \`Junkbot\` simulation test — verify that when a Mech dies with Junkbot on board, Junkbot gains +2/+2 — tests/simulation/junkbot.sim.test.ts"
+    "- [ ] [S] Add \`Cobalt Scalebane\` simulation test — verify at start of combat gives a random friendly non-Dragon +3 ATK — tests/simulation/cobalt-scalebane.sim.test.ts"
+    "- [ ] [S] Add \`Deflect-o-Bot\` divine-shield test — verify every odd-cost Mech played restores Deflect-o-Bot divine shield — tests/simulation/deflect-o-bot.sim.test.ts"
+    "- [ ] [S] Add \`Southsea Strongarm\` sim test — verify battlecry gives a Pirate +1/+1 for each Pirate bought this turn — tests/simulation/southsea-strongarm.sim.test.ts"
   )
   local idx=$(( CONSECUTIVE_FAILS_TOTAL % ${#fallbacks[@]} ))
   local next_task="${fallbacks[$idx]}"
@@ -194,14 +194,18 @@ run_iteration() {
   else
     log "  ✗ iteration failed (typecheck=$typecheck_ok tests=$tests_ok real_diff=$real_diff new_commit=$([[ "$current" != "$snap" ]] && echo 1 || echo 0) dirty=$has_dirty) — reverting"
 
+    git -C "$REPO" reset --hard "$snap" >/dev/null
+    git -C "$REPO" clean -fd src/ app/ tests/ 2>/dev/null || true
+
     # Quarantine the task the model picked, if we can find it in the iter log.
+    # IMPORTANT: do this AFTER git reset so the backlog edit isn't reverted by the reset.
     # The prompt instructs the model to emit "CHOSEN TASK: ..." on its own line.
     # Use the LAST occurrence — models sometimes change task mid-iteration; the
     # last CHOSEN TASK is the one that actually failed.
     local chosen_task
     chosen_task=$(grep -oE 'CHOSEN TASK:.*' "$iter_log" | tail -1 | sed 's/CHOSEN TASK: *//')
     if [[ -n "$chosen_task" ]]; then
-      # Find the matching backlog line (first ~30 chars of the task), move to quarantine.
+      # Find the matching backlog line (first ~50 chars of the task), move to quarantine.
       local task_key
       task_key=$(echo "$chosen_task" | head -c 50 | sed 's/[][().*+?^$\\/]/\\&/g')
       if grep -qF "$task_key" "$REPO/docs/loop-backlog.md" 2>/dev/null; then
@@ -227,10 +231,7 @@ run_iteration() {
       fi
     fi
 
-    git -C "$REPO" reset --hard "$snap" >/dev/null
-    git -C "$REPO" clean -fd src/ app/ tests/ 2>/dev/null || true
-    # NOTE: do NOT clean docs/ — we want our backlog quarantine edits to persist.
-    # Commit the quarantine edit so it survives the next iteration's pull/reset.
+    # Commit any backlog edits (quarantine) so they survive the next iteration.
     if ! git -C "$REPO" diff --quiet docs/loop-backlog.md 2>/dev/null; then
       git -C "$REPO" add docs/loop-backlog.md
       git -C "$REPO" commit -m "chore: quarantine failed task from iteration $n" --quiet 2>/dev/null || true

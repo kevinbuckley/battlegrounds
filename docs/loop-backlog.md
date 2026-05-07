@@ -248,7 +248,6 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Bristleback Boys` onDamageTaken hook — ALL Bristleback Boys on board gain +1/+1 when any one takes damage — src/game/minions/tier1/bristleback-boys.ts
 - [x] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier3/tide-razor.ts
 - [x] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts
-- [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts
 - [ ] [S] Add `King Mukla` hero test — verify hero power gives opponent 2 Bananas; playing a Banana on a minion gives it +1/+1 — tests/heroes/king-mukla.test.ts
 - [ ] [S] Add `Junkbot` simulation test — verify on-death of a Mech triggers Junkbot's stat gain — tests/simulation/junkbot.sim.test.ts
 - [ ] [S] Add `Deflect-o-Bot` divine-shield restoration test — verify every odd-cost Mech played to board restores divine shield on Deflect-o-Bot — tests/simulation/deflect-o-bot.sim.test.ts
@@ -258,4 +257,4 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Quarantined (failed multiple times — DO NOT pick)
 
-(Tasks added by the harness when an iteration's CHOSEN TASK fails go here.)
+- [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts  <!-- failed iterations 7, 8, 9, 10 -->
