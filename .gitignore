@@ -15,4 +15,5 @@ coverage/
 logs/
 tsconfig.tsbuildinfo
 .claude/scheduled_tasks.lock
+.ralph-stop
 
