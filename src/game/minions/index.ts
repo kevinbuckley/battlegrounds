@@ -117,6 +117,7 @@ import sneedOldShredder from "./tier6/sneed-old-shredder";
 import terestianManferris from "./tier6/terestian-manferris";
 import yseraTheDreamerT6 from "./tier6/ysera-the-dreamer";
 import zixorProjectHope from "./tier6/zixor-project-hope";
+import lichKing from "./tier7/lich-king";
 import alexstraszaSelflessDragon from "./tier8/alexstrasza-selfless-dragon";
 import deathwingRazeToBone from "./tier8/deathwing-raze-to-bone";
 import dreadscale from "./tier8/dreadscale";
@@ -247,6 +248,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [oldMurkEyeTier8.id]: oldMurkEyeTier8,
   [yseraTheDreamer.id]: yseraTheDreamer,
   [dreadscale.id]: dreadscale,
+  [lichKing.id]: lichKing,
 };
 
 export function getMinion(id: MinionCardId): MinionCard {

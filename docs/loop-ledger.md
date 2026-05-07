@@ -1,3 +1,4 @@
+2026-05-07 | 6f1b542 | FIXED: Add The Lich King (tier 7 undead, 10/10): taunt; at start of combat, gain +1/+1 for each other minion on your board, with unit tests
 2026-05-07 | 42be082 | FIXED: Add Swat Recruit (tier 2 mech, 1/1): rush — single keyword, no hooks needed
 2026-05-07 | 4eca1de | FIXED: Add Dredgrot Whelp (tier 1 beast/elemental, 1/1): reborn — single keyword, no hooks needed
 2026-05-04 | 90fe563 | FIXED: Add Dreadscale (tier 8 dragon, 6/6) — deathrattle deals 2 damage to all other minions
