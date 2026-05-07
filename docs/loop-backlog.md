@@ -240,49 +240,19 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
 - [x] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
 
-### New minions — Tier 1
+### New minions — batch 4 (hero tests + sim tests)
 
-- [ ] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
-
-### New minions — Tier 2
-
-- [ ] [S] Add `Bristleback Boys` interaction test — verify that when any Bristleback Boy takes damage, ALL Bristleback Boys gain +1 ATK — src/game/minions/tier2/bristleback-boys.ts (already exists, add sim test)
-
-### New minions — Tier 3
-
-- [ ] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier5/tide-razor.ts (already exists, add unit test)
-
-### New minions — Tier 4
-
-- [ ] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts (already exists, add unit test)
-
-### New minions — Tier 5
-
-- [ ] [S] Add `Junkbot` (tier 5 mech, 1/1): deathrattle summon a random Mech from your hand — src/game/minions/tier5/junkbot.ts (already exists, add unit test)
-
-### Engine hooks — unused hooks
-
-- [ ] [S] Add `Trade Prince Gallywix` interaction test — verify that when a minion is bought, Gallywix gives 1 gold back — src/game/heroes/trade-prince-gallywix.ts (already exists, add unit test)
-
-### New minions — Tier 1
-
-- [ ] [S] Add `Bristleback Boy` (tier 1 beast, 1/2): whenever this minion takes damage, ALL Bristleback Boys gain +1 ATK — onDamageTaken hook in src/game/minions/tier1/bristleback-boys.ts
-
-### New minions — Tier 3
-
+- [x] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
+- [x] [S] Add `Bristleback Boys` onDamageTaken hook — ALL Bristleback Boys on board gain +1/+1 when any one takes damage — src/game/minions/tier1/bristleback-boys.ts
 - [x] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier3/tide-razor.ts
-
-### New minions — Tier 4
-
-- [ ] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts
-
-### New minions — Tier 5
-
-- [ ] [S] Add `Junkbot` (tier 5 mech, 1/1): deathrattle summon a random Mech from your hand — src/game/minions/tier5/junkbot.ts
-
-### Hero interaction tests
-
-- [ ] [S] Add `Trade Prince Gallywix` interaction test — verify that when a minion is bought, Gallywix gives 1 gold back — src/game/heroes/trade-prince-gallywix.ts (already exists, add unit test)
+- [x] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts
+- [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts
+- [ ] [S] Add `King Mukla` hero test — verify hero power gives opponent 2 Bananas; playing a Banana on a minion gives it +1/+1 — tests/heroes/king-mukla.test.ts
+- [ ] [S] Add `Junkbot` simulation test — verify on-death of a Mech triggers Junkbot's stat gain — tests/simulation/junkbot.sim.test.ts
+- [ ] [S] Add `Deflect-o-Bot` divine-shield restoration test — verify every odd-cost Mech played to board restores divine shield on Deflect-o-Bot — tests/simulation/deflect-o-bot.sim.test.ts
+- [ ] [S] Add `Cobalt Scalebane` simulation test — verify at start of combat Cobalt Scalebane gives a random friendly non-Dragon minion +3 ATK — tests/simulation/cobalt-scalebane.sim.test.ts
+- [ ] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
+- [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
 
 ## Quarantined (failed multiple times — DO NOT pick)
 
