@@ -274,6 +274,8 @@ export interface PlayerState {
   buddies: BuddyInstance[];
   /** Number of Pogo-Hoppers played this game (for Pogo-Hopper battlecry scaling). */
   pogoHoppersPlayed: number;
+  /** Number of Pirates bought from the shop this turn (for Southsea Strongarm). */
+  piratesBoughtThisTurn: number;
 }
 
 export type Phase =

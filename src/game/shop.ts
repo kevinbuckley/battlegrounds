@@ -231,11 +231,13 @@ export function buyMinion(state: GameState, playerId: PlayerId, shopIndex: numbe
     }
   }
 
+  const isPirate = boughtMinion.tribes.includes("Pirate");
   const result = updatePlayer(state, playerId, (p) => ({
     ...p,
     gold: p.gold - buyCost,
     hand: [...p.hand, boughtMinion],
     shop: p.shop.filter((_, i) => i !== shopIndex),
+    piratesBoughtThisTurn: p.piratesBoughtThisTurn + (isPirate ? 1 : 0),
   }));
 
   // Fire onBuy hook — fires when a minion is bought from the shop (before

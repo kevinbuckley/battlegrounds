@@ -1016,6 +1016,7 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
       upgradedThisTurn: false,
       heroPowerUsed: false,
       actionsThisTurn: 0,
+      piratesBoughtThisTurn: 0,
       armor: 0,
     }));
 
@@ -1173,6 +1174,7 @@ export function makeInitialState(seed: number): GameState {
     quests: [],
     buddies: [],
     pogoHoppersPlayed: 0,
+    piratesBoughtThisTurn: 0,
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec

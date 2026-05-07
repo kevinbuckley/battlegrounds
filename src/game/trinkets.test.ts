@@ -46,6 +46,7 @@ function makeGameState(): GameState {
         quests: [],
         buddies: [],
         pogoHoppersPlayed: 0,
+        piratesBoughtThisTurn: 0,
       },
     ],
     tribesInLobby: ["Murloc", "Beast", "Demon", "Mech", "Elemental"],
