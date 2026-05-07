@@ -346,3 +346,4 @@
 2026-05-04 | deb0341 | FIXED: Add greedy AI tier upgrade test — verify it upgrades when board has ≥4 minions and gold ≥ upgradeCost, and skips upgrade when board is weak or gold is insufficient
 2026-05-04 | 2e03ca6 | FIXED: Add King Mukla hero power — gives opponent 2 Bananas when used, with hero power test
 2026-05-07 | 77fddba | FIXED: Add Maexxna (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed
+2026-05-07 | 37247f8 | FIXED: Add Mechano-Egg (tier 5 mech, 0/5): deathrattle summons an 8/8 Robosaur token

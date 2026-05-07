@@ -97,6 +97,7 @@ import lightfangEnforcer from "./tier5/lightfang-enforcer";
 import lilRag from "./tier5/lil-rag";
 import maexxna from "./tier5/maexxna";
 import malganis from "./tier5/malganis";
+import mechanoEgg from "./tier5/mechano-egg";
 import mogorTheCurseGolem from "./tier5/mogor-the-curse-golem";
 import murozond from "./tier5/murozond";
 import strongshellScavenger from "./tier5/strongshell-scavenger";
@@ -229,6 +230,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [tideRazor.id]: tideRazor,
   [zappSlywick.id]: zappSlywick,
   [voidlord.id]: voidlord,
+  [mechanoEgg.id]: mechanoEgg,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [ghastcoiler.id]: ghastcoiler,
   [gentleMegasaur.id]: gentleMegasaur,
