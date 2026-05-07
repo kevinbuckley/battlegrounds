@@ -1,3 +1,4 @@
+2026-05-07 | 83ec4b0 | FIXED: Add Bristleback Boys onDamageTaken hook — whenever any Bristleback Boy takes damage, ALL Bristleback Boys gain +1/+1
 2026-05-07 | 3eef3fa | FIXED: Add simulation test for Bristleback Boys — verify deathrattle summons a 1/1 Bristleback Whelp when it dies in combat, including golden version summoning two
 2026-05-07 | a677906 | FIXED: Add Lil' Exorcist (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards
 2026-05-07 | 07fed35 | FIXED: Add Coldlight Oracle (tier 3 murloc, 2/3): battlecry draw 2 random minions from shop pool to hand

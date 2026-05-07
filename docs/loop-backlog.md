@@ -264,6 +264,26 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Trade Prince Gallywix` interaction test — verify that when a minion is bought, Gallywix gives 1 gold back — src/game/heroes/trade-prince-gallywix.ts (already exists, add unit test)
 
+### New minions — Tier 1
+
+- [ ] [S] Add `Bristleback Boy` (tier 1 beast, 1/2): whenever this minion takes damage, ALL Bristleback Boys gain +1 ATK — onDamageTaken hook in src/game/minions/tier1/bristleback-boys.ts
+
+### New minions — Tier 3
+
+- [ ] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier3/tide-razor.ts
+
+### New minions — Tier 4
+
+- [ ] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts
+
+### New minions — Tier 5
+
+- [ ] [S] Add `Junkbot` (tier 5 mech, 1/1): deathrattle summon a random Mech from your hand — src/game/minions/tier5/junkbot.ts
+
+### Hero interaction tests
+
+- [ ] [S] Add `Trade Prince Gallywix` interaction test — verify that when a minion is bought, Gallywix gives 1 gold back — src/game/heroes/trade-prince-gallywix.ts (already exists, add unit test)
+
 ## Quarantined (failed multiple times — DO NOT pick)
 
 (Tasks added by the harness when an iteration's CHOSEN TASK fails go here.)
