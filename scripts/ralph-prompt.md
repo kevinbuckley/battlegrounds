@@ -48,18 +48,25 @@ If the only available tasks are vague, **add a concrete task to the backlog your
       - Other tasks → grep for a key identifier in the named file. If wired, mark `[x]` and skip.
 
    d. If every "Now" item is done, pick from "Soon" the same way.
-   e. If both sections are empty/done, pick a SPECIFIC item from this list:
-      - "Add `Rat Pack` (tier 2 beast): deathrattle summon ATK-many 1/1 Rats"
-      - "Add `Imp Gang Boss` (tier 3 demon): whenever damaged, summon a 1/1 Imp"
-      - "Add `Zapp Slywick` (tier 5 mech): rush; always attacks lowest-ATK enemy"
-      - "Add `Voidlord` (tier 5 demon): taunt; deathrattle summon three 1/3 taunt demons"
-      - "Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage"
+   e. If both sections are empty/done, pick a SPECIFIC item from this list (pre-check each
+      with `ls` before picking — skip any whose file already exists):
+      - "Add `Maexxna` (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed"
+      - "Add `Mechano-Egg` (tier 5 mech, 0/5): deathrattle summon an 8/8 Robosaur — src/game/minions/tier5/mechano-egg.ts"
+      - "Add `Whelp Smuggler` (tier 3 dragon, 3/6): after you play a Dragon on your board, give it +2/+2 — onPlay hook in src/game/minions/tier3/whelp-smuggler.ts"
+      - "Add `Southsea Strongarm` (tier 3 pirate, 5/4): battlecry give a friendly Pirate +1/+1 for each Pirate you bought this turn — src/game/minions/tier3/southsea-strongarm.ts"
+      - "Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts"
+      - "Add `Arm of the Empire` (tier 3 dragon, 4/5): whenever a friendly Taunt minion is attacked, give it +3/+2 — onAllyAttacked hook in src/game/minions/tier3/arm-of-the-empire.ts"
    f. If EVEN THAT list is done, **add 3 new concrete tasks to docs/loop-backlog.md yourself**
       from docs/game-rules/ (find something unimplemented), then immediately do the first one.
 
    **MANDATORY: emit this exact line before doing anything else:**
    `CHOSEN TASK: <one sentence>`
    The harness greps for this pattern to track and quarantine failed tasks. If it's missing, the iteration cannot be tracked and will be marked failed even if code is correct.
+
+   **MANDATORY on task switch**: If your pre-check finds a task is already done and you switch
+   to a different task, you MUST emit a NEW `CHOSEN TASK: <new task>` line immediately before
+   any implementation work on the replacement task. The harness uses the LAST occurrence in the
+   log — a stale CHOSEN TASK from an abandoned task will quarantine the wrong item.
 
 2. **RESEARCH** — call `bg-ralph-tools_web_fetch` on the relevant
    `https://hearthstone.wiki.gg/wiki/...` page. Summarize the rule in one sentence.
@@ -71,6 +78,12 @@ If the only available tasks are vague, **add a concrete task to the backlog your
 4. **IMPLEMENT** — write TypeScript. Small, focused change. Default to the `write` tool
    with the entire new file contents — it's more reliable than `edit`. Only use `edit`
    for a literal 1–2 line change you've just `read`.
+
+   **Engine refactor trap**: If during RESEARCH you discover an unimplemented mechanic that
+   requires modifying 3+ existing functions OR adding new fields to shared types like
+   `CombatResult` — **do NOT attempt it now**. Add it to `docs/loop-backlog.md` as a new
+   `[M]` task, then pick a simpler task from the list above. Complex wiring changes across
+   combat.ts cause cascading type errors that waste the full iteration budget.
 
 5. **TYPECHECK** — run `bun typecheck`. If errors, fix them and re-run. If you can't
    fix in 2 attempts, REVERT with `git checkout -- . && git clean -fd src/ tests/` and
