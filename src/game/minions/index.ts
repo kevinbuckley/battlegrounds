@@ -95,6 +95,7 @@ import securityRover from "./tier4/security-rover";
 import siegebreaker from "./tier4/siegebreaker";
 import toxfin from "./tier4/toxfin";
 import virmenSensei from "./tier4/virmen-sensei";
+import yoHoOgre from "./tier4/yo-ho-ogre";
 import alexstrasza from "./tier5/alexstrasza";
 import baelgun from "./tier5/baelgun";
 import baronRivendare from "./tier5/baron-rivendare";
@@ -233,6 +234,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [ripsnarlCaptain.id]: ripsnarlCaptain,
   [floatingWatcher.id]: floatingWatcher,
   [houndmasterShaw.id]: houndmasterShaw,
+  [yoHoOgre.id]: yoHoOgre,
   [gnomaTinkerT4.id]: gnomaTinkerT4,
   [alexstrasza.id]: alexstrasza,
   [blingtron3000.id]: blingtron3000,

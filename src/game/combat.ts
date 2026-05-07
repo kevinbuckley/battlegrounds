@@ -215,6 +215,53 @@ export function simulateCombat(
       }
     }
 
+    // Yo-Ho-Ogre: after normal attacks, attack one more time targeting a random enemy
+    if (attacker.keywords.has("yoHoOgre") && left.length > 0 && right.length > 0) {
+      const yoDefenders = isLeft ? right : left;
+      const yoTarget = pickTarget(yoDefenders, rng, attacker, left, right);
+      if (yoTarget) {
+        emit({ kind: "Attack", attacker: attacker.instanceId, target: yoTarget.instanceId });
+        const yoHitTargets = attacker.keywords.has("cleave")
+          ? getWithAdjacent(yoDefenders, yoTarget)
+          : [yoTarget];
+        const yoTargetSide = isLeft ? "right" : "left";
+        for (const t of yoHitTargets) {
+          t.hooks?.onAttacked?.({
+            self: t,
+            selfSide: yoTargetSide,
+            left,
+            right,
+            emit,
+            rng,
+            target: attacker,
+          });
+        }
+        for (const t of yoHitTargets) {
+          applyDamage(attacker, t, emit, left, right, rng, lifestealAccum);
+        }
+        applyDamage(yoTarget, attacker, emit, left, right, rng, lifestealAccum);
+        const yoResult = reapDeaths(
+          left,
+          right,
+          transcript,
+          emit,
+          rng,
+          baronOnLeft,
+          baronOnRight,
+          attacker,
+        );
+        left = yoResult.left;
+        right = yoResult.right;
+        totalBountyGold += yoResult.bountyGold;
+        for (const m of left) {
+          emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+        }
+        for (const m of right) {
+          emit({ kind: "Stat", target: m.instanceId, atk: m.atk, hp: m.hp });
+        }
+      }
+    }
+
     if (isLeft) leftPtr++;
     else rightPtr++;
 

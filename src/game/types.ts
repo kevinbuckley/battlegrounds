@@ -31,7 +31,8 @@ export type Keyword =
   | "magnetic"
   | "combo"
   | "bounty"
-  | "dormant";
+  | "dormant"
+  | "yoHoOgre";
 
 export type MinionCardId = string;
 export type MinionInstanceId = string;

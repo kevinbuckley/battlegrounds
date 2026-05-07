@@ -228,8 +228,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
 - [x] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
 - [x] [S] Add `Shifter Zerus` (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook in src/game/minions/tier1/shifter-zerus.ts
-- [ ] [S] Add `Houndmaster Shaw` (tier 4 beast, 3/6): at start of combat, give your other minions Rush — onStartOfCombat hook in src/game/minions/tier4/houndmaster-shaw.ts
-- [ ] [S] Add `Yo-Ho-Ogre` (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — onAttack hook in src/game/minions/tier4/yo-ho-ogre.ts
+- [x] [S] Add `Houndmaster Shaw` (tier 4 beast, 3/6): at start of combat, give your other minions Rush — onStartOfCombat hook in src/game/minions/tier4/houndmaster-shaw.ts
+- [x] [S] Add `Yo-Ho-Ogre` (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — onAttack hook in src/game/minions/tier4/yo-ho-ogre.ts
 - [ ] [S] Add `Lil' Exorcist` (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards — src/game/minions/tier3/lil-exorcist.ts
 - [ ] [S] Add `Coldlight Oracle` (tier 3 murloc, 2/3): battlecry draw 2 cards (add 2 random minions to hand) — onBattlecry in src/game/minions/tier3/coldlight-oracle.ts
 

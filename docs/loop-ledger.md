@@ -359,3 +359,4 @@
 2026-05-04 | 2e03ca6 | FIXED: Add King Mukla hero power — gives opponent 2 Bananas when used, with hero power test
 2026-05-07 | 77fddba | FIXED: Add Maexxna (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed
 2026-05-07 | 37247f8 | FIXED: Add Mechano-Egg (tier 5 mech, 0/5): deathrattle summons an 8/8 Robosaur token
+2026-05-07 | b9d269c | FIXED: Add Yo-Ho-Ogre (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — new yoHoOgre keyword in types.ts, extra attack logic in combat.ts, minion definition in tier4/yo-ho-ogre.ts
