@@ -1,3 +1,4 @@
+2026-05-07 | 3eef3fa | FIXED: Add simulation test for Bristleback Boys — verify deathrattle summons a 1/1 Bristleback Whelp when it dies in combat, including golden version summoning two
 2026-05-07 | a677906 | FIXED: Add Lil' Exorcist (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards
 2026-05-07 | 07fed35 | FIXED: Add Coldlight Oracle (tier 3 murloc, 2/3): battlecry draw 2 random minions from shop pool to hand
 2026-05-07 | 69587ab | FIXED: Add Shifter Zerus (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook
