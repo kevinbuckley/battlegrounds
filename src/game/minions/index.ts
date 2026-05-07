@@ -7,6 +7,7 @@ import bristlebackBoys from "./tier1/bristleback-boys";
 import comboMinion from "./tier1/combo-minion";
 import deckSwabbie from "./tier1/deck-swabbie";
 import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
+import dredgrotWhelp from "./tier1/dredgrot-whelp";
 import fiendishServant from "./tier1/fiendish-servant";
 import flameImp from "./tier1/flame-imp";
 import gnomaTinker from "./tier1/gnoma-tinker";
@@ -127,6 +128,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [grombiTheRotunda.id]: grombiTheRotunda,
   [annoyoTron.id]: annoyoTron,
   [allleyCat.id]: allleyCat,
+  [dredgrotWhelp.id]: dredgrotWhelp,
   [boarlogCaptain.id]: boarlogCaptain,
   [bristlebackBoys.id]: bristlebackBoys,
   [bloodsailPirate.id]: bloodsailPirate,
