@@ -10,6 +10,7 @@ import dragonspawnLieutenant from "./tier1/dragonspawn-lieutenant";
 import dredgrotWhelp from "./tier1/dredgrot-whelp";
 import fiendishServant from "./tier1/fiendish-servant";
 import flameImp from "./tier1/flame-imp";
+import gazelleT1 from "./tier1/gazelle";
 import gnomaTinker from "./tier1/gnoma-tinker";
 import murlocTidecaller from "./tier1/murloc-tidecaller";
 import murlocTidehunter from "./tier1/murloc-tidehunter";
@@ -144,6 +145,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [deckSwabbie.id]: deckSwabbie,
   [dragonspawnLieutenant.id]: dragonspawnLieutenant,
   [flameImp.id]: flameImp,
+  [gazelleT1.id]: gazelleT1,
   [fiendishServant.id]: fiendishServant,
   [righteousProtector.id]: righteousProtector,
   [sellemental.id]: sellemental,

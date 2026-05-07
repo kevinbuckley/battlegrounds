@@ -1,3 +1,4 @@
+2026-05-07 | bbd944f | FIXED: Add Gazelle (tier 1 beast, 1/1): rush keyword
 2026-05-07 | 846b307 | FIXED: Add Frost Elemental (tier 3 elemental, 3/4): freeze keyword
 2026-05-07 | 4a2bd6c | FIXED: Add Amalgadon (tier 6, 6/6): battlecry gains a random keyword for each different tribe among your other minions
 2026-05-07 | d01be55 | FIXED: Add Whelp Smuggler (tier 3 dragon, 3/6): onShopSummon gives the summoned Dragon +2/+2
