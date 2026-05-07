@@ -65,6 +65,7 @@ import gromsch from "./tier3/gromsch";
 import houndmaster from "./tier3/houndmaster";
 import impGangBoss from "./tier3/imp-gang-boss";
 import infestedWolf from "./tier3/infested-wolf";
+import lilExorcist from "./tier3/lil-exorcist";
 import markku from "./tier3/markku";
 import queenOfPain from "./tier3/queen-of-pain";
 import screwjankClunker from "./tier3/screwjank-clunker";
@@ -210,6 +211,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [scurpus.id]: scurpus,
   [whelpSmuggler.id]: whelpSmuggler,
   [impGangBoss.id]: impGangBoss,
+  [lilExorcist.id]: lilExorcist,
   [tortollanShellraiser.id]: tortollanShellraiser,
   [screwjankClunker.id]: screwjankClunker,
   [buccaneer.id]: buccaneer,
