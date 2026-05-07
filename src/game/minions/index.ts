@@ -74,6 +74,7 @@ import screwjankClunker from "./tier3/screwjank-clunker";
 import scurpus from "./tier3/scurpus";
 import soulDevourer from "./tier3/soul-devourer";
 import soulJuggler from "./tier3/soul-juggler";
+import southseaCaptain from "./tier3/southsea-captain";
 import southseaStrongarm from "./tier3/southsea-strongarm";
 import stonehillDefender from "./tier3/stonehill-defender";
 import tideRazorT3 from "./tier3/tide-razor";
@@ -222,6 +223,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [screwjankClunker.id]: screwjankClunker,
   [buccaneer.id]: buccaneer,
   [southseaStrongarm.id]: southseaStrongarm,
+  [southseaCaptain.id]: southseaCaptain,
   [bloodsailCannoneer.id]: bloodsailCannoneer,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [annihilanBattlemaster.id]: annihilanBattlemaster,

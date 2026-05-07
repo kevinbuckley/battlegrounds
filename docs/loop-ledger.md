@@ -1,3 +1,4 @@
+2026-05-07 | a1ab2e1 | FIXED: Add Southsea Captain (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura in onStartOfCombat
 2026-05-07 | 5c541d3 | FIXED: Add Bristleback Boys interaction test — verify that when any Bristleback Boy takes damage, ALL Bristleback Boys gain +1/+1 via onDamageTaken hook, including golden copies
 2026-05-07 | 15c9b69 | FIXED: Fix Lil' Exorcist battlecry to buff ALL Deathrattle minions on both boards instead of only buffing itself
 2026-05-07 | 83ec4b0 | FIXED: Add Bristleback Boys onDamageTaken hook — whenever any Bristleback Boy takes damage, ALL Bristleback Boys gain +1/+1
