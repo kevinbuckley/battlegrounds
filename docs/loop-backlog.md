@@ -216,6 +216,12 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add `Dreadscale` (tier 8 dragon, 6/6): deathrattle deal 2 damage to all other minions — src/game/minions/tier8/dreadscale.ts
 
+### New minions — Tier 3 (additional)
+
+- [ ] [S] Add `Frost Elemental` (tier 3 elemental, 3/4): freeze — single keyword, no hooks needed, src/game/minions/tier3/frost-elemental.ts
+- [ ] [S] Add `Gazelle` (tier 1 beast, 1/1): rush — single keyword, no hooks needed, src/game/minions/tier1/gazelle.ts
+- [ ] [S] Add `Grimspeaker` (tier 3 murloc, 3/3): battlecry give a friendly Murloc +2/+2 — src/game/minions/tier3/grimspeaker.ts
+
 ## Quarantined (failed multiple times — DO NOT pick)
 
 (Tasks added by the harness when an iteration's CHOSEN TASK fails go here.)

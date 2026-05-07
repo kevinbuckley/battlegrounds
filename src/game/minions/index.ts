@@ -51,6 +51,7 @@ import bronzeWarden from "./tier3/bronze-warden";
 import buccaneer from "./tier3/buccaneer";
 import cobaltScalebane from "./tier3/cobalt-scalebane";
 import coldlightSeer from "./tier3/coldlight-seer";
+import frostElemental from "./tier3/frost-elemental";
 import frostboundGolem from "./tier3/frostbound-golem";
 import gazelle from "./tier3/gazelle";
 import grimspeaker from "./tier3/grimspeaker";
@@ -179,6 +180,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [grimspeaker.id]: grimspeaker,
   [gromsch.id]: gromsch,
   [frostboundGolem.id]: frostboundGolem,
+  [frostElemental.id]: frostElemental,
   [grombiTheRotundaElemental.id]: grombiTheRotundaElemental,
   [markku.id]: markku,
   [arcaneTinker.id]: arcaneTinker,
