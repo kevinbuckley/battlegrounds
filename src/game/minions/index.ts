@@ -107,6 +107,7 @@ import strongshellScavenger from "./tier5/strongshell-scavenger";
 import tideRazor from "./tier5/tide-razor";
 import voidlord from "./tier5/voidlord";
 import zappSlywick from "./tier5/zapp-slywick";
+import amalgadon from "./tier6/amalgadon";
 import elistra from "./tier6/elistra";
 import foeReaper4000 from "./tier6/foe-reaper-4000";
 import friggentNorthvalley from "./tier6/friggent-northvalley";
@@ -239,6 +240,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [mechanoEgg.id]: mechanoEgg,
   [friggentNorthvalley.id]: friggentNorthvalley,
   [ghastcoiler.id]: ghastcoiler,
+  [amalgadon.id]: amalgadon,
   [gentleMegasaur.id]: gentleMegasaur,
   [kalecgosArcaneAspect.id]: kalecgosArcaneAspect,
   [terestianManferris.id]: terestianManferris,
