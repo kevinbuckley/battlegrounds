@@ -1732,11 +1732,20 @@ export default function GamePage() {
             </div>
 
             {/* Footer */}
-            {seenEvents.length > 0 && (
-              <p className="mt-2 text-center text-xs text-slate-500">
-                {tickRef.current + 1} / {combatResult.transcript.length} events
-              </p>
-            )}
+            <div className="mt-2 flex items-center justify-between">
+              {seenEvents.length > 0 && (
+                <p className="text-center text-xs text-slate-500">
+                  {tickRef.current + 1} / {combatResult.transcript.length} events
+                </p>
+              )}
+              <button
+                type="button"
+                className="rounded px-3 py-1 text-xs font-bold text-amber-400 hover:bg-amber-500/10 active:bg-amber-500/20"
+                onClick={() => setCombatTick(combatResult.transcript.length - 1)}
+              >
+                Skip →
+              </button>
+            </div>
           </div>
         </div>
       )}
