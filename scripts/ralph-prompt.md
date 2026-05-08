@@ -48,14 +48,13 @@ If the only available tasks are vague, **add a concrete task to the backlog your
       - Other tasks → grep for a key identifier in the named file. If wired, mark `[x]` and skip.
 
    d. If every "Now" item is done, pick from "Soon" the same way.
-   e. If both sections are empty/done, pick a SPECIFIC item from this list (pre-check each
-      with `ls` before picking — skip any whose file already exists):
-      - "Add `Maexxna` (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed"
-      - "Add `Mechano-Egg` (tier 5 mech, 0/5): deathrattle summon an 8/8 Robosaur — src/game/minions/tier5/mechano-egg.ts"
-      - "Add `Whelp Smuggler` (tier 3 dragon, 3/6): after you play a Dragon on your board, give it +2/+2 — onPlay hook in src/game/minions/tier3/whelp-smuggler.ts"
-      - "Add `Southsea Strongarm` (tier 3 pirate, 5/4): battlecry give a friendly Pirate +1/+1 for each Pirate you bought this turn — src/game/minions/tier3/southsea-strongarm.ts"
-      - "Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts"
-      - "Add `Arm of the Empire` (tier 3 dragon, 4/5): whenever a friendly Taunt minion is attacked, give it +3/+2 — onAllyAttacked hook in src/game/minions/tier3/arm-of-the-empire.ts"
+   e. If both sections are empty/done, pick a SPECIFIC item from this list:
+      - "Skip combat button — add a 'Skip →' button to the combat overlay footer in app/game/page.tsx; clicking it calls setCombatTick(combatResult.transcript.length - 1)"
+      - "Victory banner — add a green 'You won! ⚔️' banner using combatOutcome state in app/game/page.tsx, mirroring the existing damageRecap pattern, shown for 3s after combat closes when player won"
+      - "Ghost fight label — check if opponent player has placement !== null and show '👻 Ghost fight vs.' in the combat overlay pairing banner (~line 1693 app/game/page.tsx)"
+      - "Space bar to end turn — useEffect in app/game/page.tsx listening for keydown ' ' that calls handleEndTurn when phase is Recruit and no overlays active"
+      - "Add description?: string to MinCard in src/game/types.ts; populate for Baron Rivendare, Murloc Warleader, Knife Juggler, Rat Pack, Zapp Slywick; add title={card.description} to MinionCard component"
+      - "Combat speed toggle — add '⚡ 2×' button to combat overlay header; combatSpeed: 1 | 2 state; halve tick interval at 2×"
    f. If EVEN THAT list is done, **add 3 new concrete tasks to docs/loop-backlog.md yourself**
       from docs/game-rules/ (find something unimplemented), then immediately do the first one.
 

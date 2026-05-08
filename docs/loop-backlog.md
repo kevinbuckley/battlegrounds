@@ -14,163 +14,44 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ---
 
-## Now (highest priority, model should pick from here first)
+## Now — Gameplay & UI (highest priority)
 
-- [ ] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed
+- [ ] [S] Skip combat button — add a "Skip →" button inside the combat overlay footer in app/game/page.tsx; clicking it calls `setCombatTick(combatResult.transcript.length - 1)` to jump immediately to the last event; verify with bun typecheck
 
-- [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
+- [ ] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
 
-- [x] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed
+- [ ] [S] Ghost fight label — in the combat overlay pairing banner (~line 1693 of app/game/page.tsx), check if the opponent player object has `placement !== null`; if so change the label from "You're fighting:" to "👻 Ghost fight vs." so the player knows they're facing a dead player's board
 
-- [x] [S] Add `onDamageTaken` hook to MinionHooks and wire into combat.ts applyDamage after shield resolution
+- [ ] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
-- [x] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 demons with taunt — src/game/minions/tier5/voidlord.ts
+- [ ] [S] Space bar to end turn — add a useEffect that listens for keydown event with key === ' '; call handleEndTurn when `gameState?.phase.kind === 'Recruit'` and no overlays are active (no discoverOffer, not displayingCombat, phase not GameOver); cleanup the listener on unmount
 
-- [x] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy — src/game/minions/tier5/zapp-slywick.ts
+- [ ] [S] Hero power description text — in the HUD section of app/game/page.tsx, below the hero power button, add a `<p className="text-[10px] text-slate-400 text-center max-w-[120px]">{hero.heroPower.description}</p>` so players can see what the power does without guessing; verify with bun typecheck
 
-- [x] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
+- [ ] [S] Add `description` field to MinCard and show it in MinionCard — add `description?: string` to MinCard in src/game/types.ts; populate it for at least 8 key cards (Baron Rivendare, Murloc Warleader, Knife Juggler, Scavenging Hyena, Rat Pack, Imp Gang Boss, Zapp Slywick, Cave Hydra); in MinionCard component add a `title={card.description}` HTML attribute for browser-native tooltip on hover; bun typecheck verifies
 
-- [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon ATK-many 1/1 Rat tokens — src/game/minions/tier2/rat-pack.ts
-
-- [x] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed
-
-### Combat correctness tests
-
-- [x] [S] Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, and that a 1/1 reborn that dies in combat re-enters board at 1/1 with no reborn flag
-- [x] [S] Add tests/economy/upgrade-cost.test.ts — verify tier upgrade cost decreases by 1 each turn it isn't taken (beginRecruitTurn reduces upgradeCost), and resets to base on upgrade
-- [x] [S] Add tests/shop/refresh.test.ts — verify shop refresh deducts 1 gold from player, and that refreshing costs exactly COST_REFRESH (currently 1g)
-- [x] [S] Add tests/simulation/lifesteal.sim.test.ts — verify lifesteal keyword heals the attacking minion for damage dealt in combat, but NOT when damage is absorbed by divine shield
-
-### New minions — Tier 1
-
-- [x] [S] Add `Fiendish Servant` (tier 1 demon, 2/1): deathrattle give its ATK to a random friendly minion — src/game/minions/tier1/fiendish-servant.ts
-- [x] [S] Add `Righteous Protector` (tier 1 paladin, 1/1): divine shield + taunt — src/game/minions/tier1/righteous-protector.ts
-
-### New minions — Tier 2
-
-- [x] [S] Add `Rat Pack` (tier 2 beast, 2/2): deathrattle summon a number of 1/1 Rat tokens equal to this minion's ATK at time of death — src/game/minions/tier2/rat-pack.ts
-- [x] [S] Add `Menagerie Magician` (tier 4, 4/4): battlecry give a random friendly Beast, Dragon, and Murloc each +2/+2 — src/game/minions/tier4/menagerie-magician.ts
-- [x] [S] Add `Grombi the Rotunda` (tier 2 murloc, 2/3): magnetic; whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier2/grombi-the-rotunda.ts
-
-### New minions — Tier 3
-
-- [x] [S] Add `Imp Gang Boss` (tier 3 demon, 2/4): whenever this minion takes damage, summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier3/imp-gang-boss.ts
-- [x] [S] Add `Bloodsail Cannoneer` (tier 3 pirate, 2/3): battlecry give a friendly Pirate +3 ATK — src/game/minions/tier3/bloodsail-cannoneer.ts
-- [x] [S] Add `Grombi the Rotunda` (tier 3 elemental, 3/3): whenever a friendly minion scores a kill during combat, gain +2/+2 — onAllyKill hook in src/game/minions/tier3/grombi-the-rotunda.ts
-
-### New minions — Tier 4
-
-- [x] [S] Add `Siegebreaker` (tier 4 demon, 5/8): taunt; your other Demons have +1 ATK — onStartOfCombat aura buff in src/game/minions/tier4/siegebreaker.ts
-- [x] [S] Add `Floating Watcher` (tier 4 demon, 4/4): whenever your hero takes damage, gain +2/+2 — onHeroDamaged hook in src/game/minions/tier4/floating-watcher.ts
-- [x] [S] Add `Ripsnarl Captain` (tier 4 pirate, 3/5): whenever a friendly Pirate attacks, give it +2/+2 — onAllyAttack hook in src/game/minions/tier4/ripsnarl-captain.ts
-
-### New minions — Tier 5
-
-- [x] [S] Add `Zapp Slywick` (tier 5 mech, 7/10): rush; always attacks the lowest-ATK enemy minion instead of random — src/game/minions/tier5/zapp-slywick.ts
-- [x] [S] Add `Voidlord` (tier 5 demon, 3/9): taunt; deathrattle summon three 1/3 Demons with taunt — src/game/minions/tier5/voidlord.ts
-
-### New minions — Tier 6
-
-- [x] [S] Add `Imp Mama` (tier 6 demon, 6/8): whenever this minion takes non-zero damage, gain +1/+1 and summon a 1/1 Imp — onDamageTaken hook in src/game/minions/tier6/imp-mama.ts
-- [x] [S] Add `King of Beasts` (tier 6 beast, 2/6): taunt; battlecry gain +1 ATK for each other Beast on your board — src/game/minions/tier6/king-of-beasts.ts
-- [x] [S] Add `Razorgore the Untamed` (tier 6 dragon, 2/4): at start of combat, gain +2/+2 for each friendly Dragon on your board — onStartOfCombat counting dragons in src/game/minions/tier6/razorgore.ts
-- [x] [S] Add `Nadina the Red` (tier 6 human, 7/4): deathrattle give all friendly non-divine-shield Deathrattle minions divine shield — onDeath in src/game/minions/tier6/nadina.ts
-- [x] [S] Add `Elistra the Immortal` (tier 6 dragon, 8/8): reborn — single keyword, no hooks needed, src/game/minions/tier6/elistra.ts
-
-### New minions — Tier 1 (additional)
-
-- [x] [S] Add `Sellemental` (tier 1 elemental, 1/1): when you sell this minion, add a 1/1 Elemental to your hand — uses existing onMinionSold hook in src/game/minions/tier1/sellemental.ts
-- [x] [S] Add `Deck Swabbie` (tier 1 pirate, 2/2): battlecry give a friendly Pirate +1/+1 — src/game/minions/tier1/deck-swabbie.ts
-
-### New minions — Tier 2 (additional)
-
-- [x] [S] Add `Micro Machine` (tier 2 mech, 1/2): at the start of combat, gain +1 ATK — onStartOfCombat in src/game/minions/tier2/micro-machine.ts
-
-### New minions — Tier 3 (additional)
-
-- [x] [S] Add `Bronze Warden` (tier 3 dragon, 2/1): divine shield + rush — no hooks needed, just keywords in src/game/minions/tier3/bronze-warden.ts
-- [x] [S] Add `Houndmaster` (tier 3 human, 4/3): battlecry give a friendly Beast +2/+2 and Taunt — src/game/minions/tier3/houndmaster.ts
-- [x] [S] Add `Soul Devourer` (tier 3 demon, 3/3): battlecry consume a friendly Demon (remove it from board), gain its ATK and HP — src/game/minions/tier3/soul-devourer.ts
-
-### New minions — Tier 5 (additional)
-
-- [x] [S] Add `Mal'Ganis` (tier 5 demon, 9/7): at start of combat, give all other friendly Demons +2/+2 — onStartOfCombat aura in src/game/minions/tier5/malganis.ts
-- [x] [S] Add `Goldrinn the Great Wolf` (tier 5 beast, 4/4): whenever a friendly Beast is played to board, give ALL friendly Beasts +5 ATK — onShopSummon tribe check in src/game/minions/tier5/goldrinn.ts
-- [x] [S] Add `Lil' Rag` (tier 5 elemental, 1/1): when you play an Elemental in the tavern, give all other friendly Elementals +1/+1 — onShopSummon tribe=Elemental check in src/game/minions/tier5/lil-rag.ts
-
-### Simulation tests — existing minions need coverage
-
-- [x] [S] Add tests/simulation/baron-rivendare.sim.test.ts — verify Baron on left side causes deathrattles to fire 2x; golden+baron stacks multiplicatively; Baron on right side does not affect left deathrattles
-- [x] [S] Add tests/simulation/knife-juggler.sim.test.ts — verify Knife Juggler fires 1 damage to a random enemy whenever a friendly minion is summoned (including tokens from deathrattles)
-- [x] [S] Add tests/simulation/scavenging-hyena.sim.test.ts — verify Scavenging Hyena gains +2/+1 each time a friendly Beast dies in combat; golden Hyena gains double
-- [x] [S] Add tests/simulation/selfless-hero.sim.test.ts — verify Selfless Hero deathrattle gives divine shield to a random friendly minion that doesn't already have one
-- [x] [S] Add tests/simulation/unstable-ghoul.sim.test.ts — verify Unstable Ghoul deathrattle deals 1 damage to ALL other minions on both sides
-- [x] [S] Add tests/combat/magnetic.test.ts — verify Magnetic keyword attaches mech's stats and keywords to the rightmost friendly Mech on board, and the attached mech has combined stats
-- [x] [S] Add tests/combat/lifesteal.test.ts — verify lifesteal heals attacking minion's HP equal to damage dealt; verify lifesteal does NOT trigger when damage is fully absorbed by divine shield
-- [x] [S] Add tests/simulation/murloc-warleader-death.sim.test.ts — verify that when Murloc Warleader dies mid-combat, the +2 ATK aura is removed and buffed murlocs revert to base ATK immediately
-
-### AI improvements
-
-- [x] [M] Greedy AI: add unit test verifying it upgrades tavern tier when board has ≥4 minions and gold ≥ upgradeCost — tests/ai/greedy-upgrade.test.ts
-- [x] [S] AI plays battlecry minions before non-battlecry minions from hand each turn — sort hand by hasBattlecry before play loop in all three AI strategies
-- [x] [S] Heuristic AI: sell weakest board minion (lowest atk+hp) when hand is at capacity (≥10) to make room — sell-to-make-room check already exists in heuristic.ts lines 152-164
-
-### UI polish (verifiable by reading code, no browser needed)
-
-- [x] [S] Tier-up animation: add a 500ms CSS pulse class on the Tavern Tier badge when player upgrades — tierFlashKey state + @keyframes tierFlash already implemented in app/game/page.tsx lines 499, 539, 827, 1546-1551
-- [x] [S] Sell undo: after selling a board or hand minion, show a 1.5s "Undo" floating button that restores the minion to hand at no cost — add sellHistory: MinionInstance | null state, show UndoSell button with setTimeout cleanup (already implemented in app/game/page.tsx lines 506-555, 924-930)
-- [x] [S] Show turn number in HUD — display current turn as "Turn N" badge next to gold; read from gameState.turn in app/game/page.tsx (already displayed at line 866)
-
-### Game-rule completeness
-
-- [x] [S] Add `onDamageTaken` hook to MinionHooks — fires when a minion takes damage (used by Imp Gang Boss, Imp Mama); wire into combat.ts applyDamage after divine-shield resolution, passing damage amount
-- [x] [S] Add `onAllyAttack` hook to MinionHooks — fires when a friendly minion attacks (used by Ripsnarl Captain); wire into main combat loop just before applyDamage, passing attacker reference
-- [x] [S] Add `onHeroDamaged` hook to RecruitCtx and wire into applyCombatResult — fires when the player's hero takes damage from combat; pass damage amount to all board minions
-- [x] [S] Add `onDiscover` hook to MinionHooks — fires when a discover offer is presented (triples, hero powers, Yogg-Saron), wired into dismiss/pick discover in state.ts
+- [ ] [S] Combat animation speed toggle — add a "⚡ 2×" speed button to the combat overlay header in app/game/page.tsx; track `combatSpeed: 1 | 2` state; use it to halve the tick interval from ~350ms to ~175ms at 2×; verify with bun typecheck
 
 ---
 
 ## Soon
 
-### Engine extensions
+### Engine correctness
 
-- [x] [S] Pool depletion: track removed minions in a global pool per cardId; rollShop should never offer more copies than remain in the pool — pool tracking already implemented in shop.ts (buildPool, drawFromPool, returnToPool), GameState.pool, and pool.test.ts
-- [x] [S] Add `onSpellPlay` hook to RecruitCtx alongside onCast — fires when player plays any spell, so future minions can react to spell plays in the recruit phase (distinct from onCast which is combat-only)
-- [x] [S] Validate board-size cap in combat deathrattle summoning: new tokens should not push either board past 7 minions — add guard in the deathrattle summon path in combat.ts
+- [ ] [S] Add tests/simulation/junkbot.sim.test.ts — verify Junkbot gains +2/+2 each time a Mech dies in combat; board: [Junkbot, Annoy-o-Tron] vs [3/3 vanilla]; Annoy-o-Tron's divine shield pops then it dies, Junkbot gains +2/+2 then finishes the fight
+- [ ] [S] Add tests/simulation/deflect-o-bot.sim.test.ts — verify Deflect-o-Bot regains divine shield when an odd-cost Mech is played to the board; verify it does NOT regain on even-cost Mech play
+- [ ] [S] Add tests/simulation/cobalt-scalebane.sim.test.ts — verify at start of combat Cobalt Scalebane gives a random friendly non-Dragon +3 ATK; board: [Cobalt Scalebane, 1/1 murloc] vs [10/10]; murloc gets +3 ATK and wins
+- [ ] [S] Add King Mukla hero test — verify hero power gives opponent 2 Bananas in their hand and playing a Banana on a minion gives +1/+1 — tests/heroes/king-mukla.test.ts
 
-### More minions
+### Later — Cards (deprioritized)
 
-- [x] [S] Add `Imprisoner` golden test — verify golden Imprisoner (2/6) summons two 2/2 Imps on death (deathrattle fires 2x for golden)
-- [x] [S] Add `Murloc Warleader` interaction test — verify that when Murloc Warleader dies mid-combat, the aura is removed and previously-buffed murlocs revert to their base ATK
-- [x] [S] Add `Deflect-o-Bot` divine-shield test — verify that every odd-cost mech played to board restores divine shield on Deflect-o-Bot
-
-### Hero completeness
-
-- [x] [S] Add `Millificent Manastorm` hero test — verify hero power buffs ALL friendly Mechs +1/+1 when a Mech is bought from the shop, and that golden Mechs also get buffed
-- [x] [S] Add `King Mukla` hero test — verify hero power gives the opponent 2 Bananas in their hand, and that playing a Banana on a minion gives +1/+1
-
-### Combat hook completeness
-
-- [x] [S] Add `onAttacked` hook to MinionHooks and wire into combat.ts applyDamage — fires when a minion is the target of an attack (as defender), used by future minions that react to being attacked
-- [x] [S] Add `onAllyKill` hook to MinionHooks and wire into combat.ts death handling — fires when a friendly minion scores a kill, used by future minions that react to kills
-- [x] [S] Add `onSell` hook to combat.ts — fires when a minion is sold during combat (e.g., from deathrattle summons), so minions can react to sell events in combat
-- [x] [S] Wire `onBuy` hook into buyMinion in shop.ts — fires when a minion is bought from the shop (before it is played from hand to board)
-- [x] [S] Add `onTurnStart` hook to MinionHooks and wire into beginRecruitTurn — fires at start of each recruit phase for all board minions, used by future minions that react to turn starts (already implemented: types.ts:112, state.ts:1005-1016)
-- [x] [S] Add `onDiscover` hook to MinionHooks — fires when a discover offer is presented (triples, hero powers, Yogg-Saron), wired into dismiss/pick discover in state.ts
+- [ ] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
+- [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
+- [ ] [S] Add `Maexxna` (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed — src/game/minions/tier5/maexxna.ts
+- [ ] [S] Add `Mechano-Egg` (tier 5 mech, 0/5): deathrattle summon an 8/8 Robosaur — src/game/minions/tier5/mechano-egg.ts
+- [ ] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
 
 ---
-
-### New minions — Tier 3
-
-- [x] [S] Add `Buccaneer` (tier 3 pirate, 3/2): battlecry give a friendly Pirate +2/+2 — src/game/minions/tier3/buccaneer.ts
-
-### New minions — Tier 4
-
-- [x] [S] Add `Gnoma Tinker` (tier 4 mech, 3/3): battlecry summon a 1/1 Mech token — src/game/minions/tier4/gnoma-tinker.ts
-
-### New minions — Tier 5
-
-- [x] [S] Add `Blingtron 3000` (tier 5 mech, 3/8): battlecry summon two 1/1 Mechs with Rush — src/game/minions/tier5/blingtron-3000.ts
 
 ## Done (completed items — do NOT redo)
 
@@ -192,68 +73,19 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] Combat result toast (5s), AI uses hero powers, AI freezes shop, AI prefers tribe match
 - [x] Deathrattles fire left-to-right, deathrattle summons placed at dead minion's index
 - [x] onMinionSold hook, spellCardId on onCast, onShopSummon hook
-- [x] Minions: Alley-Cat, Bloodsail Pirate, Boarlog Captain, Bristleback Boys, Dragonspawn Lieutenant, Flame Imp, Gnoma Tinker, Murloc Tidecaller, Murloc Tidehunter, Murloc Tinyfin, Rockpool Hunter, Righteous Protector, Venomous Crasher, Windfury Minion, Wrath Weaver (tier 1)
-- [x] Minions: Annoy-o-Tron, Deflect-o-Bot, Glyph Guardian, Harvest Golem, Imprisoner, Kaboom Bot, Knife Juggler, Metaltooth Leaper, Murloc Warleader, Nightmare Amalgam, Pack Leader, Pogo-Hopper, Scavenging Hyena, Selfless Hero, Spawn of N'Zoth, Unstable Ghoul, Vulgar Homunculus (tier 2)
-- [x] Minions: Arcane Tinker, Cobalt Scalebane, Coldlight Seer, Imp Gang Boss (stub), Infested Wolf, Queen of Pain, Screwjank Clunker, Scurpus, Soul Juggler, Stonehill Defender, Tortollan Shellraiser (tier 3)
-- [x] Minions: Annihilan Battlemaster, Bolvar Fireblood, Boulderfog Ogre, Broodkin Zealot, Cave Hydra, Crystalweaver, Defender of Argus, Drakonid Enforcer, Naga Secret Guardian, Old Murk-Eye, Security Rover, Toxfin, Virmen Sensei (tier 4)
-- [x] Minions: Alexstrasza, Baron Rivendare, Bigfernal, Blingtron 5000, Brann Bronzebeard, Junkbot, Lightfang Enforcer, Mogor, Murozond, Strongshell Scavenger, Tide-Razor (tier 5)
-- [x] Minions: Foe Reaper 4000, Gentle Megasaur, Ghastcoiler, Kalecgos, Mama Bear, Sneed's Old Shredder, Ysera the Dreamer (tier 6)
-- [x] Tests: cleave, windfury/megaWindfury, deathrattle-position, golden, brann, combo, poisonous+divine-shield, sell-synergy, damage calculation
+- [x] onDamageTaken, onAllyAttack, onHeroDamaged, onAllyKill, onAttacked hooks wired
+- [x] Pool depletion tracking, board-size cap in deathrattle summons, onSpellPlay hook
+- [x] Tier-up animation (tierFlashKey), sell undo (sellUndoState), turn number in HUD
+- [x] AI: battlecry-first play order, greedy upgrade test, sell-to-make-room heuristic
+- [x] Tests: cleave, windfury/megaWindfury, deathrattle-position, golden, brann, combo, poisonous+divine-shield, sell-synergy, damage calculation, reborn, lifesteal, magnetic, economy, shop-refresh, baron-rivendare, knife-juggler, scavenging-hyena, selfless-hero, unstable-ghoul, murloc-warleader-death
+- [x] Minions (tier 1): Alley-Cat, Bloodsail Pirate, Boarlog Captain, Bristleback Boys, Deck Swabbie, Dragonspawn Lieutenant, Dredgrot Whelp, Fiendish Servant, Flame Imp, Gazelle, Gnoma Tinker, Mecharoo, Micro Machine, Murloc Knight, Murloc Scout, Murloc Tidecaller, Murloc Tidehunter, Murloc Tinyfin, Righteous Protector, Rockpool Hunter, Sellemental, Shifter Zerus, Venomous Crasher, Windfury Minion, Wrath Weaver
+- [x] Minions (tier 2): Annoy-o-Tron, Deflect-o-Bot, Glyph Guardian, Hangry Dragon, Harvest Golem, Imprisoner, Kaboom Bot, Knife Juggler, Metaltooth Leaper, Murloc Warleader, Nightmare Amalgam, Pack Leader, Pogo-Hopper, Rat Pack, Scavenging Hyena, Selfless Hero, Spawn of N'Zoth, Swat Recruit, Unstable Ghoul, Vulgar Homunculus
+- [x] Minions (tier 3): Arcane Tinker, Bronze Warden, Cobalt Scalebane, Coldlight Oracle, Coldlight Seer, Frost Elemental, Grimspeaker, Houndmaster, Imp Gang Boss, Infested Wolf, Lil' Exorcist, Queen of Pain, Screwjank Clunker, Scurpus, Soul Devourer, Soul Juggler, Stonehill Defender, Tide-Razor, Tortollan Shellraiser
+- [x] Minions (tier 4): Annihilan Battlemaster, Bloodsail Corsair, Bolvar Fireblood, Boulderfog Ogre, Broodkin Zealot, Cave Hydra, Crystalweaver, Defender of Argus, Drakonid Enforcer, Floating Watcher, Houndmaster Shaw, Naga Secret Guardian, Old Murk-Eye, Ripsnarl Captain, Security Rover, Siegebreaker, Toxfin, Virmen Sensei, Yo-Ho-Ogre
+- [x] Minions (tier 5): Alexstrasza, Baron Rivendare, Bigfernal, Blingtron 5000, Brann Bronzebeard, Goldrinn, Junkbot, Lil' Rag, Lightfang Enforcer, Malganis, Mogor, Murozond, Strongshell Scavenger, Tide-Razor, Zapp Slywick, Voidlord
+- [x] Minions (tier 6): Elistra, Foe Reaper 4000, Gentle Megasaur, Ghastcoiler, Imp Mama, Kalecgos, King of Beasts, Mama Bear, Nadina, Razorgore, Sneed's Old Shredder, Ysera the Dreamer
 
 ---
-
-### New minions — Tier 1
-
-- [x] [S] Add `Dredgrot Whelp` (tier 1 beast/elemental, 1/1): reborn — single keyword, no hooks needed, src/game/minions/tier1/dredgrot-whelp.ts
-
-### New minions — Tier 2
-
-- [x] [S] Add `Swat Recruit` (tier 2 mech, 1/1): rush — single keyword, no hooks needed, src/game/minions/tier2/swat-recruit.ts
-
-### New minions — Tier 7
-
-- [x] [S] Add `The Lich King` (tier 7 undead, 10/10): taunt; at start of combat, gain +1/+1 for each other minion on your board — src/game/minions/tier7/lich-king.ts
-
-### New minions — Tier 8
-
-- [x] [S] Add `Dreadscale` (tier 8 dragon, 6/6): deathrattle deal 2 damage to all other minions — src/game/minions/tier8/dreadscale.ts
-
-### New minions — Tier 3 (additional)
-
-- [x] [S] Add `Frost Elemental` (tier 3 elemental, 3/4): freeze — single keyword, no hooks needed, src/game/minions/tier3/frost-elemental.ts
-- [x] [S] Add `Gazelle` (tier 1 beast, 1/1): rush — single keyword, no hooks needed, src/game/minions/tier1/gazelle.ts
-- [x] [S] Add `Grimspeaker` (tier 3 murloc, 3/3): battlecry give a friendly Murloc +2/+2 — src/game/minions/tier3/grimspeaker.ts
-
-### New minions — batch 3
-
-- [x] [S] Add `Mecharoo` (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot — src/game/minions/tier1/mecharoo.ts
-- [x] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
-- [x] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
-- [x] [S] Add `Shifter Zerus` (tier 1 beast, 1/1): at the start of each recruit turn, transform into a random minion from the tavern — onTurnStart hook in src/game/minions/tier1/shifter-zerus.ts
-- [x] [S] Add `Houndmaster Shaw` (tier 4 beast, 3/6): at start of combat, give your other minions Rush — onStartOfCombat hook in src/game/minions/tier4/houndmaster-shaw.ts
-- [x] [S] Add `Yo-Ho-Ogre` (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — onAttack hook in src/game/minions/tier4/yo-ho-ogre.ts
-- [x] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
-- [x] [S] Add `Lil' Exorcist` (tier 3 paladin, 2/2): taunt; battlecry give +1/+1 for each Deathrattle minion among both boards — src/game/minions/tier3/lil-exorcist.ts
-- [x] [S] Add `Coldlight Oracle` (tier 3 murloc, 2/3): battlecry draw 2 cards (add 2 random minions to hand) — onBattlecry in src/game/minions/tier3/coldlight-oracle.ts
-
-### New minions — Tier 5 (additional)
-
-- [x] [S] Add `Mecharoo` (tier 1 mech, 1/1): deathrattle summon a 1/1 Jo-E Bot — src/game/minions/tier1/mecharoo.ts
-- [x] [S] Add `Murloc Scout` (tier 1 murloc, 1/1): vanilla — no keywords or hooks, src/game/minions/tier1/murloc-scout.ts
-- [x] [S] Add `Hangry Dragon` (tier 2 dragon, 2/3): at the start of your turn, if you have more HP than your opponent, gain +2/+2 — onTurnStart hook in src/game/minions/tier2/hangry-dragon.ts
-
-### New minions — batch 4 (hero tests + sim tests)
-
-- [x] [S] Add `Murloc Knight` (tier 1 murloc, 1/1): battlecry summon a 1/1 Murloc token — src/game/minions/tier1/murloc-knight.ts
-- [x] [S] Add `Bristleback Boys` onDamageTaken hook — ALL Bristleback Boys on board gain +1/+1 when any one takes damage — src/game/minions/tier1/bristleback-boys.ts
-- [x] [S] Add `Tide-Razor` (tier 3 murloc, 3/4): battlecry give a friendly Murloc +1/+1 and Rush — src/game/minions/tier3/tide-razor.ts
-- [x] [S] Add `Bloodsail Corsair` (tier 4 pirate, 4/4): battlecry give a friendly Pirate +1/+1 and Rush — src/game/minions/tier4/bloodsail-corsair.ts
-- [ ] [S] Add `King Mukla` hero test — verify hero power gives opponent 2 Bananas; playing a Banana on a minion gives it +1/+1 — tests/heroes/king-mukla.test.ts
-- [ ] [S] Add `Junkbot` simulation test — verify on-death of a Mech triggers Junkbot's stat gain — tests/simulation/junkbot.sim.test.ts
-- [ ] [S] Add `Deflect-o-Bot` divine-shield restoration test — verify every odd-cost Mech played to board restores divine shield on Deflect-o-Bot — tests/simulation/deflect-o-bot.sim.test.ts
-- [ ] [S] Add `Cobalt Scalebane` simulation test — verify at start of combat Cobalt Scalebane gives a random friendly non-Dragon minion +3 ATK — tests/simulation/cobalt-scalebane.sim.test.ts
-- [ ] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
-- [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
 
 ## Quarantined (failed multiple times — DO NOT pick)
 
