@@ -1,16 +1,15 @@
 import { defineMinion, instantiate } from "../define";
 import { MINIONS } from "../index";
 
-const LEGENDARY_TIER6: string[] = [
+// Fixed pool of legendary card IDs Sneed can summon. Only IDs that exist in
+// the registry are eligible — others are filtered out at runtime.
+const LEGENDARY_POOL: string[] = [
   "foe_reaper_4000",
-  "friggent_northvalley",
   "gentle_megasaur",
   "ghastcoiler",
   "kalecgos_arcane_aspect",
   "mama_bear",
-  "terestian_manferris",
   "ysera_the_dreamer",
-  "zixor_project_hope",
   "murozond",
   "alexstrasza",
   "blingtron_5000",
@@ -29,43 +28,32 @@ export default defineMinion({
   name: "Sneed's Old Shredder",
   tier: 6,
   tribes: ["Mech"],
-  baseAtk: 5,
-  baseHp: 5,
+  baseAtk: 1,
+  baseHp: 7,
   baseKeywords: [],
   spellDamage: 0,
   hooks: {
     onDeath: (ctx) => {
       const side = ctx.selfSide;
       const allies = side === "left" ? ctx.left : ctx.right;
+      if (allies.length >= 7) return;
 
-      // Collect all legendary tier 6+ minions from both boards
-      const legendaryCandidates: string[] = [];
-      for (const board of [ctx.left, ctx.right]) {
-        for (const m of board) {
-          const card = MINIONS[m.cardId];
-          if (card && card.tier >= 6 && LEGENDARY_TIER6.includes(m.cardId)) {
-            if (!legendaryCandidates.includes(m.cardId)) {
-              legendaryCandidates.push(m.cardId);
-            }
-          }
-        }
-      }
+      // Pick from the fixed legendary pool, filtering to only registered cards.
+      const eligible = LEGENDARY_POOL.filter((id) => id in MINIONS);
+      if (eligible.length === 0) return;
 
-      if (legendaryCandidates.length === 0) return;
-
-      const chosenId = ctx.rng.pick(legendaryCandidates) as string;
+      const chosenId = ctx.rng.pick(eligible) as string;
       const card = MINIONS[chosenId];
       if (!card) return;
 
       const spawned = instantiate(card);
-      if (allies.length >= 7) return;
-
+      const position = allies.length;
       allies.push(spawned);
       ctx.emit({
         kind: "Summon",
         card: spawned.cardId,
         side,
-        position: allies.length - 1,
+        position,
       });
     },
   },

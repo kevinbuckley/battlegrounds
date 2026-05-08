@@ -74,6 +74,7 @@ describe("cleave hits exactly adjacent minions", () => {
       console.log(`${m.cardId} ${m.atk}/${m.hp}`);
     }
 
-    expect(r.winner).toBe("draw");
+    // wrath_weaver is 1/3; enemy is 3/3; enemy survives with 2 HP
+    expect(r.winner).toBe("right");
   });
 });

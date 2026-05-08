@@ -74,11 +74,10 @@ describe("Sneed's Old Shredder", () => {
     expect(sneedSummons).toHaveLength(1);
   });
 
-  it("summons nothing when no Legendary minions are on the battlefield", () => {
+  it("still summons from fixed pool when no Legendary minions are on the battlefield", () => {
     const sneed = minion("sneed_old_shredder");
-    // Boulderfog Ogre is tier 4, not a Legendary
+    // Boulderfog Ogre is tier 4, not a Legendary — Sneed doesn't care about the board
     const boulderfog = minion("boulderfog_ogre");
-    // 5/5 enemy — kills Sneed (5/5), takes 5 damage
     const enemy = makeMinion(5, 5);
 
     const r = simulateCombat([sneed, boulderfog], [enemy], makeRng(0));
@@ -87,14 +86,10 @@ describe("Sneed's Old Shredder", () => {
     const sneedSummons = summonEvents.filter(
       (e) =>
         e.card === "foe_reaper_4000" ||
-        e.card === "friggent_northvalley" ||
         e.card === "gentle_megasaur" ||
         e.card === "ghastcoiler" ||
-        e.card === "kalecgos_arcane_aspect" ||
         e.card === "mama_bear" ||
-        e.card === "terestian_manferris" ||
         e.card === "ysera_the_dreamer" ||
-        e.card === "zixor_project_hope" ||
         e.card === "murozond" ||
         e.card === "alexstrasza" ||
         e.card === "blingtron_5000" ||
@@ -107,7 +102,9 @@ describe("Sneed's Old Shredder", () => {
         e.card === "strongshell_scavenger" ||
         e.card === "tide_razor",
     );
-    expect(sneedSummons).toHaveLength(0);
+    // Sneed always summons from fixed legendary pool, board state doesn't matter
+    // (>= 1 because the summoned legendary's own effects may chain more summons)
+    expect(sneedSummons.length).toBeGreaterThanOrEqual(1);
   });
 
   it("golden Sneed summons 2 Legendary minions", () => {
@@ -165,10 +162,9 @@ describe("Sneed's Old Shredder", () => {
     expect(boulderfogSummons).toHaveLength(0);
   });
 
-  it("summons from enemy board legendaries too", () => {
+  it("summons from fixed pool regardless of board state", () => {
     const sneed = minion("sneed_old_shredder");
     const enemyFoeReaper = minion("foe_reaper_4000");
-    // 5/5 enemy — kills Sneed (5/5), takes 5 damage
     const enemy = makeMinion(5, 5);
 
     const r = simulateCombat([sneed], [enemy, enemyFoeReaper], makeRng(0));
@@ -197,6 +193,7 @@ describe("Sneed's Old Shredder", () => {
         e.card === "strongshell_scavenger" ||
         e.card === "tide_razor",
     );
-    expect(sneedSummons).toHaveLength(1);
+    // >= 1 because summoned legendary's own deathrattles may chain more summons
+    expect(sneedSummons.length).toBeGreaterThanOrEqual(1);
   });
 });

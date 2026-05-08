@@ -105,6 +105,7 @@ import alexstrasza from "./tier5/alexstrasza";
 import baelgun from "./tier5/baelgun";
 import baronRivendare from "./tier5/baron-rivendare";
 import bigfernal from "./tier5/bigfernal";
+import bigFernal from "./tier5/big-fernal";
 import blingtron3000 from "./tier5/blingtron-3000";
 import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
@@ -250,6 +251,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [blingtron3000.id]: blingtron3000,
   [blingtron5000.id]: blingtron5000,
   [bigfernal.id]: bigfernal,
+  [bigFernal.id]: bigFernal,
   [baronRivendare.id]: baronRivendare,
   [goldrinn.id]: goldrinn,
   [brannBronzebeard.id]: brannBronzebeard,

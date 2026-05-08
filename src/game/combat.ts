@@ -412,6 +412,11 @@ function reapDeaths(
             (lastSummon as { position: number }).position = insertPos;
           }
         }
+        // Fire onSummon hooks for each newly spawned token so minions like
+        // Bigfernal react to deathrattle-summoned demons.
+        for (const spawned of newMinions) {
+          fireSummon(spawned, deadSide, l, r, emit, rng);
+        }
       }
 
       // Enforce board cap of 7 minions. If deathrattle summons pushed the

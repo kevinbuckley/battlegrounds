@@ -48,13 +48,22 @@ describe("sneed_old_shredder", () => {
     const cardId = summonEvents[0]?.card;
     const legendaryPool = [
       "foe_reaper_4000",
-      "friggent_northvalley",
       "gentle_megasaur",
       "ghastcoiler",
       "kalecgos_arcane_aspect",
       "mama_bear",
-      "terestian_manferris",
-      "zixor_project_hope",
+      "ysera_the_dreamer",
+      "murozond",
+      "alexstrasza",
+      "blingtron_5000",
+      "bigfernal",
+      "baron_rivendare",
+      "brann_bronzebeard",
+      "junkbot",
+      "lightfang_enforcer",
+      "mogor_the_curse_golem",
+      "strongshell_scavenger",
+      "tide_razor",
     ];
     expect(legendaryPool).toContain(cardId);
   });
