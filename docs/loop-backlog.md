@@ -16,7 +16,6 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Gameplay & UI (highest priority)
 
-- [ ] [S] Skip combat button — add a "Skip →" button inside the combat overlay footer in app/game/page.tsx; clicking it calls `setCombatTick(combatResult.transcript.length - 1)` to jump immediately to the last event; verify with bun typecheck
 
 - [ ] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
 
@@ -90,3 +89,4 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ## Quarantined (failed multiple times — DO NOT pick)
 
 - [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts  <!-- failed iterations 7, 8, 9, 10 -->
+- [ ] [S] Skip combat button — add a "Skip →" button inside the combat overlay footer in app/game/page.tsx; clicking it calls `setCombatTick(combatResult.transcript.length - 1)` to jump immediately to the last event; verify with bun typecheck  <!-- failed iteration 1 -->
