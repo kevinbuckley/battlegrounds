@@ -24,13 +24,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/imp-gang-boss.sim.test.ts — verify Imp Gang Boss (tier 3 demon, 2/4) onDamageTaken summons a 1/1 Imp Demon each time it takes damage; board: [Imp Gang Boss 2/4] vs [2/1, 2/1]; first 2/1 attacks Boss → 1/1 Imp appears; second 2/1 attacks → another Imp; verify survivorsLeft grows; Imps are Demons; board cap of 7 respected — tests/simulation/imp-gang-boss.sim.test.ts
 
-- [ ] [S] Add tests/simulation/yo-ho-ogre.sim.test.ts — verify Yo-Ho-Ogre (tier 4 pirate, 2/8) attacks twice in a single turn via the yoHoOgre keyword (wired in combat.ts line 220); board: [Yo-Ho-Ogre] vs [1/1, 1/1]; Ogre's attack turn: kills first 1/1, then immediately attacks again and kills second 1/1; both enemies dead; verify Ogre does NOT double-attack if only 1 enemy remains — tests/simulation/yo-ho-ogre.sim.test.ts
+- [x] [S] Add tests/simulation/yo-ho-ogre.sim.test.ts — verify Yo-Ho-Ogre (tier 4 pirate, 2/8) attacks twice in a single turn via the yoHoOgre keyword (wired in combat.ts line 220); board: [Yo-Ho-Ogre] vs [1/1, 1/1]; Ogre's attack turn: kills first 1/1, then immediately attacks again and kills second 1/1; both enemies dead; verify Ogre does NOT double-attack if only 1 enemy remains — tests/simulation/yo-ho-ogre.sim.test.ts
 
-- [ ] [S] Add tests/shop/wrath-weaver.test.ts — verify Wrath Weaver (tier 1, 1/3) onTurnEnd deals 1 damage to hero and gives all friendly Demons +2/+2; build state with [Wrath Weaver, Vulgar Homunculus 2/4 Demon] on board; end turn → hero loses 1 HP, Demon becomes 4/6; non-Demons NOT buffed; no Demons on board → only hero takes 1 dmg — tests/shop/wrath-weaver.test.ts
+- [x] [S] Add tests/shop/wrath-weaver.test.ts — verify Wrath Weaver (tier 1, 1/3) onTurnEnd deals 1 damage to hero and gives all friendly Demons +2/+2; build state with [Wrath Weaver, Vulgar Homunculus 2/4 Demon] on board; end turn → hero loses 1 HP, Demon becomes 4/6; non-Demons NOT buffed; no Demons on board → only hero takes 1 dmg — tests/shop/wrath-weaver.test.ts
 
-- [ ] [S] Add tests/shop/alley-cat.test.ts — verify Alley Cat (tier 1 beast, 1/1) battlecry summons a random minion from your hand to board; play Alley Cat with hand containing minions → random one moves to board; empty hand → no summon; board at 6 minions before play → respects cap 7 — tests/shop/alley-cat.test.ts
+- [x] [S] Add tests/shop/alley-cat.test.ts — verify Alley Cat (tier 1 beast, 1/1) battlecry summons a random minion from your hand to board; play Alley Cat with hand containing minions → random one moves to board; empty hand → no summon; board at 6 minions before play → respects cap 7 — tests/shop/alley-cat.test.ts
 
-- [ ] [S] Add tests/shop/hangry-dragon.test.ts — verify Hangry Dragon (tier 2 dragon, 4/4) onTurnStart gives itself +2/+2 if the player won last combat; read hangry-dragon.ts to find exactly which state field tracks win/loss; set that field to indicate win, start next turn → Dragon becomes 6/6; indicate loss → no buff — tests/shop/hangry-dragon.test.ts
+- [x] [S] Add tests/shop/hangry-dragon.test.ts — verify Hangry Dragon (tier 2 dragon, 4/4) onTurnStart gives itself +2/+2 if the player won last combat; read hangry-dragon.ts to find exactly which state field tracks win/loss; set that field to indicate win, start next turn → Dragon becomes 6/6; indicate loss → no buff — tests/shop/hangry-dragon.test.ts
 
 - [ ] [S] Add tests/shop/menagerie-magician.test.ts — verify Menagerie Magician (tier 4, 4/4) battlecry gives +2/+2 to one Beast, one Dragon, and one Murloc on board; board: [Beast 1/1, Dragon 2/2, Murloc 1/1, Demon 3/3]; play Magician → Beast 3/3, Dragon 4/4, Murloc 3/3; Demon unchanged; board missing a tribe → skips gracefully — tests/shop/menagerie-magician.test.ts
 
@@ -40,7 +40,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 3/3) battlecry gives a friendly Mech +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Screwjank → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/screwjank-clunker.test.ts
 
-- [ ] [S] Add tests/shop/buccaneer.test.ts — verify Buccaneer (tier 3 pirate, 5/3) battlecry gives +1 ATK to a random friendly Pirate; board: [Pirate 2/2, non-Pirate 3/3]; play Buccaneer → Pirate becomes 3/2; non-Pirate unchanged; no other Pirates → no buff; 3 tests — tests/shop/buccaneer.test.ts
+- [x] [S] Add tests/shop/buccaneer.test.ts — verify Buccaneer (tier 3 pirate, 5/3) battlecry gives +1 ATK to a random friendly Pirate; board: [Pirate 2/2, non-Pirate 3/3]; play Buccaneer → Pirate becomes 3/2; non-Pirate unchanged; no other Pirates → no buff; 3 tests — tests/shop/buccaneer.test.ts
 
 - [ ] [S] Add tests/shop/coldlight-oracle.test.ts — verify Coldlight Oracle (tier 3 murloc, 2/3) battlecry draws 2 random minions from pool into hand; build state with Oracle in hand and pool seeded at player tier; play Oracle → hand.length increases by 2; each drawn item is a MinionInstance; pool count decreases by 2 — tests/shop/coldlight-oracle.test.ts
 
