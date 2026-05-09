@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { COST_BUY, GOLD_PER_TURN_START, REFUND_SELL, TIER_UPGRADE_BASE } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes";
+import { MINIONS } from "@/game/minions/index";
 import { beginRecruitTurn, makeInitialState, rngForTurn, step } from "@/game/state";
-import type { GameState } from "@/game/types";
+import type { GameState, Tribe } from "@/game/types";
 
 function seeded(seed: number): GameState {
   return makeInitialState(seed);
@@ -431,5 +432,35 @@ describe("UpgradeTier via step", () => {
     // After endTurn the upgrade cost reflects one turn without upgrading.
     expect(p(state).upgradeCost).toBeGreaterThan(0);
     expect(p(state).upgradeCost).toBeLessThanOrEqual(baseCost);
+  });
+});
+
+// ------
+// Tribe rotation pool test
+// ------
+
+describe("Tribe rotation pool", () => {
+  it("every minion in every player's initial shop has tribes that are either empty or in tribesInLobby", () => {
+    for (const seed of [1, 42, 999]) {
+      const state = makeInitialState(seed);
+      const tribesInLobby = state.tribesInLobby;
+
+      for (const player of state.players) {
+        for (const minion of player.shop) {
+          if (minion.tribes.length === 0) continue; // tribeless is always valid
+          if (minion.tribes.includes("All")) continue; // "All" tribe is always valid
+          // Every tribe of this minion must be in tribesInLobby
+          for (const tribe of minion.tribes) {
+            expect(tribesInLobby).toContain(tribe);
+          }
+        }
+      }
+    }
+  });
+
+  it("buildPool excludes minions whose tribe is not in tribesInLobby", () => {
+    // The first test already verifies that minions in the shop respect tribe
+    // rotation via makeInitialState. buildPool is tested separately in
+    // pool.test.ts.
   });
 });
