@@ -20,7 +20,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Ghost fight label — in the combat overlay pairing banner (~line 1693 of app/game/page.tsx), check if the opponent player object has `placement !== null`; if so change the label from "You're fighting:" to "👻 Ghost fight vs." so the player knows they're facing a dead player's board
 
-- [ ] [S] Add tests/simulation/soul-juggler.sim.test.ts — verify Soul Juggler (tier 3 demon) deals exactly 3 damage to a random enemy minion each time a friendly Demon dies in combat; board: [Soul Juggler, Imp token] vs [two 3/3 vanillas]; Imp dies, Soul Juggler zaps 3 damage to a random enemy, then finishes fight — tests/simulation/soul-juggler.sim.test.ts
+- [x] [S] Add tests/simulation/soul-juggler.sim.test.ts — verify Soul Juggler (tier 3 demon) deals exactly 3 damage to a random enemy minion each time a friendly Demon dies in combat; board: [Soul Juggler, Imp token] vs [two 3/3 vanillas]; Imp dies, Soul Juggler zaps 3 damage to a random enemy, then finishes fight — tests/simulation/soul-juggler.sim.test.ts
 - [ ] [S] Add tests/simulation/lightfang-enforcer.sim.test.ts — verify Lightfang Enforcer (tier 5) gives all friendly minions of each tribe +2/+1 at end of turn; board: [Lightfang, 1/1 Murloc, 1/1 Beast, 1/1 Mech] vs [10/10]; after onStartOfCombat fires all three receive +2/+1 and the fight resolves — tests/simulation/lightfang-enforcer.sim.test.ts
 - [ ] [S] Add tests/simulation/rat-pack.sim.test.ts — verify Rat Pack (tier 2 beast, 2/2) deathrattle summons a number of 1/1 Rats equal to Rat Pack's current ATK; use a 4/2 Rat Pack (buffed) to verify it summons 4 rats; also verify a golden Rat Pack (4/4) summons 4 rats — tests/simulation/rat-pack.sim.test.ts
 - [ ] [S] Add tests/heroes/george-the-fallen.test.ts — verify George the Fallen hero power (2g) gives a friendly minion divine shield; verify using it on a minion that already has divine shield has no effect; use the heroPower function directly on a test GameState — tests/heroes/george-the-fallen.test.ts
@@ -50,7 +50,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Later — Cards (deprioritized)
 
-- [ ] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
+- [x] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
 - [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
 - [ ] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
 
