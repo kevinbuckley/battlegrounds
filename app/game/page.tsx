@@ -10,9 +10,16 @@ import { calcDamage } from "@/game/damage";
 import { COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
+import { getQuest, QUESTS } from "@/game/quests/index";
 import { SPELLS } from "@/game/spells/index";
 import { deserializeReplay, makeInitialState, rngForTurn, step } from "@/game/state";
-import type { CombatEvent, CombatResult, GameState, MinionInstance } from "@/game/types";
+import type {
+  CombatEvent,
+  CombatResult,
+  GameState,
+  MinionInstance,
+  QuestInstance,
+} from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
 // ------------------------------------->-----
@@ -1778,6 +1785,36 @@ export default function GamePage() {
                   >
                     {anomaly.name}
                   </span>
+                </div>
+              );
+            })()}
+
+            {/* Quest Progress */}
+            {(() => {
+              const player = gameState.players[0];
+              if (!player) return null;
+              const quest = player.quests[0];
+              if (!quest) return null;
+              const questCard = QUESTS[quest.cardId];
+              if (!questCard) return null;
+              const progressPct = Math.min((quest.progress / quest.target) * 100, 100);
+              return (
+                <div className="rounded-lg border border-amber-700/50 bg-amber-900/30 p-3 flex flex-col gap-1">
+                  <span className="text-[10px] uppercase tracking-wider text-amber-500">Quest</span>
+                  <span className="text-sm font-semibold text-amber-300">
+                    {questCard.name} {quest.progress}/{quest.target}
+                  </span>
+                  <div className="h-2 w-full overflow-hidden rounded-full bg-slate-700">
+                    <div
+                      className={`h-full rounded-full transition-all ${
+                        quest.completed ? "bg-green-500" : "bg-amber-500"
+                      }`}
+                      style={{ width: `${progressPct}%` }}
+                    />
+                  </div>
+                  {quest.completed && (
+                    <span className="text-xs font-bold text-green-400">✓ Done</span>
+                  )}
                 </div>
               );
             })()}
