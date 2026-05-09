@@ -27,6 +27,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add tests/heroes/ragnaros.test.ts — verify Ragnaros hero power fires at end of turn (passive) dealing 3 damage to a random enemy minion in combat when Ragnaros's side hasn't attacked yet this combat; set up a fixture board, run simulateCombat, confirm a Fireball event appears in the transcript — tests/heroes/ragnaros.test.ts (SKIP - Ragnaros has no active hero power, only passive start-of-combat 8-damage effect already tested in state.test.ts)
 - [x] [S] Add tests/heroes/edwin-van-cleef.test.ts — verify Edwin Van Cleef hero power (passive): Van Cleef gains +1/+1 for each card in the opponent's hand at the start of each recruit turn; build a GameState with opponent hand size 3, call the onTurnStart hook, verify Van Cleef is 4/4 (base 1/1 + 3 stacks) — tests/heroes/edwin-van-cleef.test.ts
 
+- [ ] [S] Add tests/simulation/junkbot.sim.test.ts — verify Junkbot (tier 5 mech) gains +2/+2 each time a Mech dies in combat; board: [Junkbot 1/1, Annoy-o-Tron 1/2 divineShield] vs [3/3 vanilla]; divine shield pops, Annoy-o-Tron dies, Junkbot becomes 3/3, then wins — tests/simulation/junkbot.sim.test.ts
+- [ ] [S] Add tests/simulation/cobalt-scalebane.sim.test.ts — verify Cobalt Scalebane (tier 3 dragon) gives a random friendly non-Dragon +3 ATK at start of combat; board: [Cobalt Scalebane 5/5, 1/1 murloc] vs [10/10]; murloc gets +3 ATK (4/1) and the fight resolves correctly — tests/simulation/cobalt-scalebane.sim.test.ts
+- [ ] [S] Add tests/heroes/king-mukla.test.ts — verify King Mukla hero power (1g active): opponent receives 2 Banana cards in their hand; playing a Banana on a board minion gives it +1/+1; call heroPower() on a test GameState and inspect opponent hand — tests/heroes/king-mukla.test.ts
+- [ ] [S] Add tests/heroes/jaraxxus.test.ts — verify Jaraxxus hero power (active, 0g): replaces the shop with Demons only; after heroPower() fires, all shop minions have tribe === 'Demon'; verify golden Demons appear at appropriate tier — tests/heroes/jaraxxus.test.ts
+- [ ] [S] Add tests/simulation/pack-leader.sim.test.ts — verify Pack Leader (tier 2 beast, 3/3) gives a random friendly Beast +3 ATK each time a Beast is summoned; board: [Pack Leader, Alley Cat] vs [10/10]; Alley Cat summons a Tabby Cat token on entry, Pack Leader buffs it +3 ATK — tests/simulation/pack-leader.sim.test.ts
+- [ ] [S] Add tests/simulation/infested-wolf.sim.test.ts — verify Infested Wolf (tier 2 beast, 3/3) deathrattle summons two 1/1 Wolves when it dies; board: [Infested Wolf] vs [5/1]; Wolf dies, two 1/1 tokens appear, they finish the fight — tests/simulation/infested-wolf.sim.test.ts
+
 - [ ] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
 - [x] [S] Space bar to end turn — add a useEffect that listens for keydown event with key === ' '; call handleEndTurn when `gameState?.phase.kind === 'Recruit'` and no overlays are active (no discoverOffer, not displayingCombat, phase not GameOver); cleanup the listener on unmount
@@ -43,10 +50,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Engine correctness
 
-- [ ] [S] Add tests/simulation/junkbot.sim.test.ts — verify Junkbot gains +2/+2 each time a Mech dies in combat; board: [Junkbot, Annoy-o-Tron] vs [3/3 vanilla]; Annoy-o-Tron's divine shield pops then it dies, Junkbot gains +2/+2 then finishes the fight
 - [x] [S] Add tests/simulation/deflect-o-bot.sim.test.ts — verify Deflect-o-Bot regains divine shield when an odd-cost Mech is played to the board; verify it does NOT regain on even-cost Mech play
-- [ ] [S] Add tests/simulation/cobalt-scalebane.sim.test.ts — verify at start of combat Cobalt Scalebane gives a random friendly non-Dragon +3 ATK; board: [Cobalt Scalebane, 1/1 murloc] vs [10/10]; murloc gets +3 ATK and wins
-- [ ] [S] Add King Mukla hero test — verify hero power gives opponent 2 Bananas in their hand and playing a Banana on a minion gives +1/+1 — tests/heroes/king-mukla.test.ts
 
 ### Later — Cards (deprioritized)
 
