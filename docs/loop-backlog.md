@@ -46,8 +46,6 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
 - [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
-- [ ] [S] Add `Maexxna` (tier 5 beast, 2/12): poisonous — single keyword, no hooks needed — src/game/minions/tier5/maexxna.ts
-- [ ] [S] Add `Mechano-Egg` (tier 5 mech, 0/5): deathrattle summon an 8/8 Robosaur — src/game/minions/tier5/mechano-egg.ts
 - [ ] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
 
 ---
@@ -89,4 +87,3 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ## Quarantined (failed multiple times — DO NOT pick)
 
 - [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts  <!-- failed iterations 7, 8, 9, 10 -->
-- [ ] [S] Skip combat button — add a "Skip →" button inside the combat overlay footer in app/game/page.tsx; clicking it calls `setCombatTick(combatResult.transcript.length - 1)` to jump immediately to the last event; verify with bun typecheck  <!-- failed iteration 1 -->
