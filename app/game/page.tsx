@@ -487,6 +487,11 @@ export default function GamePage() {
     opponentHeroId: string;
   } | null>(null);
 
+  // Combat outcome — victory banner shown briefly after combat ends
+  const [combatOutcome, setCombatOutcome] = useState<{
+    opponentName: string;
+  } | null>(null);
+
   // Triple merge animation state
   const [tripleAnimMinions, setTripleAnimMinions] = useState<Set<string>>(new Set());
   const [showingGolden, setShowingGolden] = useState(false);
@@ -803,6 +808,10 @@ export default function GamePage() {
           const damage = calcDamage(player.tier, combatResult.survivorsRight);
           setDamageRecap({ damage, opponentHeroId });
           setTimeout(() => setDamageRecap(null), 5000);
+        } else if (player && combatResult.winner === "left") {
+          const hero = HEROES[opponentHeroId];
+          setCombatOutcome({ opponentName: hero?.name ?? "unknown" });
+          setTimeout(() => setCombatOutcome(null), 3000);
         }
       }
     } else {
@@ -1766,6 +1775,18 @@ export default function GamePage() {
             </div>
           );
         })()}
+
+      {/* Victory banner — shown briefly after combat win */}
+      {combatOutcome && (
+        <div className="fixed inset-x-0 top-24 z-40 flex justify-center pointer-events-none">
+          <div className="rounded-xl border border-emerald-500/50 bg-emerald-950/80 px-6 py-3 shadow-lg shadow-emerald-900/30">
+            <span className="text-sm text-emerald-300">
+              You won! <span className="font-bold text-emerald-400">⚔️</span>{" "}
+              <span className="font-bold text-emerald-400">{combatOutcome.opponentName}</span>
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Discover overlay */}
       {gameState?.players[0]?.discoverOffer && (

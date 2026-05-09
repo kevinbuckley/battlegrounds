@@ -371,3 +371,4 @@
 2026-05-07 | b9d269c | FIXED: Add Yo-Ho-Ogre (tier 4 pirate, 2/8): after this minion attacks, it attacks again targeting a random enemy — new yoHoOgre keyword in types.ts, extra attack logic in combat.ts, minion definition in tier4/yo-ho-ogre.ts
 2026-05-07 | afc18f2 | FIXED: Add tests/combat/reborn.test.ts — verify reborn minion returns at 1 HP with reborn keyword removed, and that a 1/1 reborn that dies in combat re-enters board at 1/1 with no reborn flag
 2026-05-08 | a253d34 | FIXED: Add "Skip →" button to combat overlay footer in app/game/page.tsx; clicking it calls setCombatTick(combatResult.transcript.length - 1) to jump immediately to the last event
+2026-05-09 | 0076187 | FIXED: Add victory banner after combat win — green "You won! ⚔️" banner using combatOutcome state in app/game/page.tsx, mirroring the existing damageRecap pattern, shown for 3s after combat closes when player won
