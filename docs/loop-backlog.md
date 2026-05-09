@@ -32,11 +32,21 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/hangry-dragon.test.ts — verify Hangry Dragon (tier 2 dragon, 4/4) onTurnStart gives itself +2/+2 if the player won last combat; read hangry-dragon.ts to find exactly which state field tracks win/loss; set that field to indicate win, start next turn → Dragon becomes 6/6; indicate loss → no buff — tests/shop/hangry-dragon.test.ts
 
-- [ ] [S] Add tests/shop/menagerie-magician.test.ts — verify Menagerie Magician (tier 4, 4/4) battlecry gives +2/+2 to one Beast, one Dragon, and one Murloc on board; board: [Beast 1/1, Dragon 2/2, Murloc 1/1, Demon 3/3]; play Magician → Beast 3/3, Dragon 4/4, Murloc 3/3; Demon unchanged; board missing a tribe → skips gracefully — tests/shop/menagerie-magician.test.ts
+- [x] [S] Add tests/shop/menagerie-magician.test.ts — verify Menagerie Magician (tier 4, 4/4) battlecry gives +2/+2 to one Beast, one Dragon, and one Murloc on board; board: [Beast 1/1, Dragon 2/2, Murloc 1/1, Demon 3/3]; play Magician → Beast 3/3, Dragon 4/4, Murloc 3/3; Demon unchanged; board missing a tribe → skips gracefully — tests/shop/menagerie-magician.test.ts
 
 ---
 
 ## Now — Simulation tests for implemented effects
+
+- [ ] [S] Add tests/shop/lightfang-enforcer.test.ts — verify Lightfang Enforcer (tier 5 beast, 4/5) onTurnEnd gives one friendly minion of each distinct tribe +2/+1; board: [Lightfang, Beast 1/1, Mech 2/2, Murloc 1/1]; end turn → Beast 3/2, Mech 4/3, Murloc 3/2; tribeless minion NOT buffed; board with 2 Beasts and 1 Mech → exactly 1 Beast and 1 Mech are buffed — tests/shop/lightfang-enforcer.test.ts
+
+- [ ] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event in transcript shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
+
+- [ ] [S] Add tests/heroes/reno-jackson.test.ts — verify Reno Jackson hero power (5g): call onHeroPower targeting board index 0; board[0] becomes golden (m.golden === true); m.atk and m.hp unchanged; use heroPower helper with state having ≥5 gold and ≥1 board minion — tests/heroes/reno-jackson.test.ts
+
+- [ ] [S] Tribe rotation pool test — add describe block in tests/state-machine.test.ts: for seeds 1, 42, 999, call makeInitialState, then verify every minion in every player's initial shop has tribes that are either empty OR have at least one tribe in gameState.tribesInLobby (import MINIONS to look up card tribes from cardId) — tests/state-machine.test.ts
+
+- [ ] [S] AI sell-weakest test — add test in tests/ai/greedy-upgrade.test.ts: build a state where AI player has 7 minions (atk+hp ranging 2–10) and gold to buy a new minion; run one AI turn; verify the sold minion is the one with lowest (atk+hp) score, ties broken by highest board index — tests/ai/greedy-upgrade.test.ts
 
 - [x] [S] Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 3/3) battlecry gives a friendly Mech +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Screwjank → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/screwjank-clunker.test.ts
 
