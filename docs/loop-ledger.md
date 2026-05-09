@@ -1,4 +1,5 @@
 2026-05-09 | ed9ae98 | FIXED: Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1 when played to board, does nothing when no friendly Murlocs exist, does NOT buff non-Murloc minions, stacks across multiple Rockpool Hunters, 4 tests pass
+2026-05-09 | 81c7bc5 | FIXED: Add tests/shop/kalecgos.test.ts — verify Kalecgos, Arcane Aspect (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast, stacks across multiple spell casts, does not buff enemy board minions, 4 tests pass
 
 2026-05-09 | 29eaf51 | FIXED: Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total, 3 tests pass
 
