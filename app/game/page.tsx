@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DiscoverOverlay } from "@/components/DiscoverOverlay";
 import { GameOverOverlay } from "@/components/GameOverOverlay";
+import { getAnomaly } from "@/game/anomalies/index";
 import { simulateCombat } from "@/game/combat";
 import { calcDamage } from "@/game/damage";
 import { COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
@@ -1757,6 +1758,26 @@ export default function GamePage() {
                       </span>
                     ))}
                   </div>
+                </div>
+              );
+            })()}
+
+            {/* Active Anomaly */}
+            {(() => {
+              const anomalyId = gameState.modifierState.anomaly;
+              if (!anomalyId) return null;
+              const anomaly = getAnomaly(anomalyId);
+              return (
+                <div className="rounded-lg border border-amber-700/50 bg-amber-900/30 p-3 flex flex-col gap-1">
+                  <span className="text-[10px] uppercase tracking-wider text-amber-500">
+                    Anomaly
+                  </span>
+                  <span
+                    className="text-sm font-semibold text-amber-300"
+                    title={anomaly.description}
+                  >
+                    {anomaly.name}
+                  </span>
                 </div>
               );
             })()}
