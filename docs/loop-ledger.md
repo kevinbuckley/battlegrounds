@@ -1,3 +1,5 @@
+2026-05-09 | 289113f | FIXED: Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK, does not buff itself, does not buff non-Demons, stacks across multiple Demons, 4 tests pass
+
 2026-05-09 | 0cf2cd5 | FIXED: Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous, does NOT give itself poisonous, does nothing when no friendly Murlocs on board, stacks across multiple Toxfins (first Toxfin gets poisonous from second's battlecry), 4 tests pass
 2026-05-09 | a59f687 | FIXED: Add replay URL sharing — add 'Share Replay' button to GameOverOverlay that serializes the game state and copies a URL with the serialized replay as a base64 hash fragment; app/game/page.tsx parses #replay/<base64> hash on mount and restores the game state via deserializeReplay
 2026-05-09 | 5073ba4 | FIXED: Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2, does NOT buff non-Dragons, does nothing when no Dragons on board, stacks across multiple Virmen Senseis, 4 tests pass
