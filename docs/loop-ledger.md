@@ -485,3 +485,4 @@
 2026-05-09 | 69567b3 | FIXED: Fix greedy AI weakestBoardIndex to break ties by highest board index, break circular dependency between state.ts and greedy.ts, add sell-weakest tests verifying lowest (atk+hp) sold and highest index on tie
 2026-05-09 | f969e3e | FIXED: Add tests/shop/tide-razor.test.ts — verify Tide-Razor (tier 3 murloc) onBattlecry gives +1/+1 and Rush to a random friendly Murloc
 2026-05-09 | ef023e9 | FIXED: Add 3 new trinkets — golden_scales (random friendly minion +3/+3 and divineShield), demonic_pact (all friendly Demons +1 ATK), beastly_tooth (all friendly Beasts +2 ATK); update registry and add 9 verification tests
+2026-05-09 | 28d410d | FIXED: Add tests/heroes/yogg-saron.test.ts — verify Yogg-Saron hero power (2g): with seeded RNG, board minions all gain the same randomly chosen keyword after onHeroPower; board with 2 minions → both have identical new keyword; empty board → state unchanged; stacks across uses
