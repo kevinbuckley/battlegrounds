@@ -79,7 +79,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
 
-- [ ] [S] Add tests/simulation/queen-of-pain-lifesteal.sim.test.ts — verify Queen of Pain (tier 3 demon, 4/4, lifesteal) heals the winning hero by total lifesteal amount post-combat, does NOT heal when damage is absorbed by divine shield, and stacks across multiple Queen of Pain instances — tests/simulation/queen-of-pain-lifesteal.sim.test.ts
+- [x] [S] Add tests/simulation/queen-of-pain-lifesteal.sim.test.ts — DONE (already covered by tests/simulation/lifesteal.sim.test.ts with 8 tests covering lifesteal healing, divine shield interaction, and Queen of Pain)
 
 - [ ] [S] Add `Deathwing` (tier 8 dragon, 10/10): deathrattle destroys ALL other minions on both boards — onDeath hook in src/game/minions/tier8/deathwing.ts, requires modifying combat.ts reapDeaths to clear both boards, with 4 simulation tests — tests/simulation/deathwing.sim.test.ts
 
@@ -93,7 +93,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/simulation/righteous-protector.sim.test.ts — verify Righteous Protector (tier 1, 1/1, taunt+divineShield) forces enemies to target it first (taunt) and absorbs the first hit with its divine shield; board: [Righteous Protector, 3/3] vs [2/4]; enemy must attack the Protector (taunt), divine shield pops (Protector stays alive at 1/1), then next enemy attack kills Protector; the 3/3 ally survives — tests/simulation/righteous-protector.sim.test.ts
 
-- [ ] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — verify Scabbs Cutterbutter hero power (passive): at the start of the first recruit phase, give the player a random Mech; verify that makeInitialState with scabbs_cutterbutter heroId results in 1 Mech minion in the shop or hand on turn 1; check the hero definition has the correct id and power kind — tests/heroes/scabbs-cutterbutter.test.ts
+- [x] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — DONE (4 tests: gives friendly board minion +1/+1, does nothing with empty board, stacks across uses, does not affect shop minions)
 
 - [ ] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (active, 1g): make a shop minion dormant (gains the dormant keyword, stats doubled, removed from shop until next turn); verify heroPower() on a GameState with a shop minion makes it dormant; verify a dormant minion returns with doubled stats next turn via onTurnStart — tests/heroes/maiev-shadowsong.test.ts
 
