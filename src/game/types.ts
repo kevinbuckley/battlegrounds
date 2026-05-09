@@ -348,6 +348,8 @@ export interface QuestInstance {
   target: number;
   /** Whether the quest has been completed and reward claimed. */
   completed: boolean;
+  /** Optional per-quest attachment data (e.g. beastsSold for Beast Mastery). */
+  attachments?: Record<string, unknown>;
 }
 
 // ---------------------------------------------------------------------------

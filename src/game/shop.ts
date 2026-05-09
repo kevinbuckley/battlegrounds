@@ -347,6 +347,21 @@ export function sellMinion(
     });
   }
 
+  // Track Beast sales for Beast Mastery quest.
+  const isBeast = minion.tribes.includes("Beast");
+  if (isBeast) {
+    result = updatePlayer(result, playerId, (p) => {
+      const quest = p.quests[0];
+      if (!quest || quest.completed) return p;
+      const currentBeastsSold = (quest.attachments as { beastsSold?: number })?.beastsSold ?? 0;
+      const updatedQuest: import("./types").QuestInstance = {
+        ...quest,
+        attachments: { beastsSold: currentBeastsSold + 1 },
+      };
+      return { ...p, quests: [updatedQuest] };
+    });
+  }
+
   return { ...result, pool: newPool };
 }
 

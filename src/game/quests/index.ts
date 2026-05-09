@@ -342,12 +342,56 @@ export const petrifiedImps: QuestCard = {
   },
 };
 
+/** Sell 4 Beasts from board — reward: all friendly Beasts +2/+2. */
+export const beastMastery: QuestCard = {
+  id: "beast_mastery",
+  name: "Beast Mastery Quest",
+  description: "Sell 4 Beasts from board. Reward: all friendly Beasts +2/+2.",
+  onProgress: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = getPlayer(state, playerId);
+    if (player.eliminated) return state;
+
+    const quest = player.quests[0];
+    if (!quest || quest.completed) return state;
+
+    // Check if player sold any Beasts this turn (tracked via onSell hook)
+    const beastsSold = (quest.attachments as { beastsSold?: number })?.beastsSold ?? 0;
+    if (beastsSold === 0) return state;
+
+    const updatedQuest: QuestInstance = {
+      ...quest,
+      progress: quest.progress + beastsSold,
+      attachments: { beastsSold: 0 },
+    };
+    return updatePlayer(state, playerId, (p) => ({
+      ...p,
+      quests: [updatedQuest],
+    }));
+  },
+  isComplete: (state: GameState, playerId: PlayerId): boolean => {
+    const player = getPlayer(state, playerId);
+    const quest = player.quests[0];
+    if (!quest) return false;
+    return quest.progress >= quest.target;
+  },
+  onReward: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = getPlayer(state, playerId);
+    return updatePlayer(state, playerId, (p) => ({
+      ...p,
+      board: p.board.map((m) =>
+        m.tribes.includes("Beast") ? { ...m, atk: m.atk + 2, hp: m.hp + 2, maxHp: m.maxHp + 2 } : m,
+      ),
+    }));
+  },
+};
+
 export const QUESTS: Record<string, QuestCard> = {
   [murlocMania.id]: murlocMania,
   [mechMayhem.id]: mechMayhem,
   [demonDiplomacy.id]: demonDiplomacy,
   [dragonDiplomacy.id]: dragonDiplomacy,
   [petrifiedImps.id]: petrifiedImps,
+  [beastMastery.id]: beastMastery,
 };
 
 export function getQuest(id: string): QuestCard {

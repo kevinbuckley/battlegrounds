@@ -20,7 +20,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/heroes/yogg-saron.test.ts — verify Yogg-Saron hero power (2g): with seeded RNG, board minions all gain the same randomly chosen keyword after onHeroPower; board with 2 minions → both have identical new keyword; empty board → state unchanged; use heroPower helper and makeRng(42) — tests/heroes/yogg-saron.test.ts
 
-- [ ] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (1g): targeting shop index 0 adds "dormant" to shop[0].keywords and sets shop[0].attachments.dormantTurnsLeft = 2; targeting out-of-range index is a no-op; other shop slots unaffected — tests/heroes/maiev-shadowsong.test.ts
+- [x] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (1g): targeting shop index 0 adds "dormant" to shop[0].keywords and sets shop[0].attachments.dormantTurnsLeft = 2; targeting out-of-range index is a no-op; other shop slots unaffected — tests/heroes/maiev-shadowsong.test.ts  (ALREADY COVERED in src/game/heroes.test.ts lines 770-835)
 
 - [ ] [S] Add tests/shop/gentle-megasaur.test.ts — verify Gentle Megasaur (tier 6 beast, 5/4) battlecry gives all friendly Murlocs a random keyword (seeded RNG); board: [Murloc Scout 1/1, Beast 2/2]; play Megasaur → Scout.keywords has 1 new keyword, Beast unchanged; empty board (no Murlocs) → no keyword added — tests/shop/gentle-megasaur.test.ts
 
