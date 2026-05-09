@@ -104,13 +104,14 @@ import yoHoOgre from "./tier4/yo-ho-ogre";
 import alexstrasza from "./tier5/alexstrasza";
 import baelgun from "./tier5/baelgun";
 import baronRivendare from "./tier5/baron-rivendare";
-import bigfernal from "./tier5/bigfernal";
 import bigFernal from "./tier5/big-fernal";
+import bigfernal from "./tier5/bigfernal";
 import blingtron3000 from "./tier5/blingtron-3000";
 import blingtron5000 from "./tier5/blingtron-5000";
 import brannBronzebeard from "./tier5/brann-bronzebeard";
 import goldrinn from "./tier5/goldrinn";
 import junkbot from "./tier5/junkbot";
+import khadgar from "./tier5/khadgar";
 import lightfangEnforcer from "./tier5/lightfang-enforcer";
 import lilRag from "./tier5/lil-rag";
 import maexxna from "./tier5/maexxna";
@@ -248,6 +249,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [yoHoOgre.id]: yoHoOgre,
   [gnomaTinkerT4.id]: gnomaTinkerT4,
   [alexstrasza.id]: alexstrasza,
+  [khadgar.id]: khadgar,
   [blingtron3000.id]: blingtron3000,
   [blingtron5000.id]: blingtron5000,
   [bigfernal.id]: bigfernal,

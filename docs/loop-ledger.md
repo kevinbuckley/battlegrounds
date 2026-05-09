@@ -3,6 +3,8 @@
 2026-05-09 | cf93b2e | FIXED: Junkbot simulation tests — verify onAllyDeath gains +2/+2 each time a friendly Mech dies in combat, does not fire for non-Mechs or enemy Mechs, and golden version also works; 5 tests via transcript Stat event verification
 2026-05-09 | 308ea60 | FIXED: Hero power description text — add description field to HeroPower type's active variant, populate for all 12 active heroes, display below hero power button in HUD
 2026-05-09 | 85eec00 | FIXED: Space bar to end turn — add a useEffect in app/game/page.tsx listening for keydown ' ' that calls handleEndTurn when phase is Recruit and no overlays active
+
+2026-05-09 | 1dd66eb | FIXED: Add Khadgar (tier 5 mech, 2/2) — onSummon hook summons a copy of a random friendly minion when any minion is summoned in combat; adds summonedSide field to SummonCombatCtx in types.ts and wires it in fireSummon in combat.ts, with 7 simulation tests
 2026-05-09 | af18646 | FIXED: Khadgar (tier 5 mech) requires combat.ts fireSummon modification to iterate over dead minions — added to backlog as quarantined [M] task with technical details for future implementation
 2026-05-09 | 8c16031 | FIXED: Add George the Fallen hero power test — verify onHeroPower gives divine shield to target minion, skips minions that already have it, does nothing on empty board, and targets correct board index
 2026-05-09 | 87f4203 | FIXED: Add Rat Pack simulation tests — verify deathrattle summons 1/1 Rats equal to current ATK (2/2→2 rats, 4/2→4 rats, golden 4/4→4 rats with board cap of 7)

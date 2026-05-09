@@ -97,6 +97,7 @@ export interface AllyDeathCombatCtx extends CombatCtx {
 
 export interface SummonCombatCtx extends CombatCtx {
   summoned: MinionInstance;
+  summonedSide: Side;
 }
 
 export interface SummonRecruitCtx extends RecruitCtx {

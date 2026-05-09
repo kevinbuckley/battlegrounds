@@ -587,8 +587,8 @@ function fireSummon(
         emit,
         rng,
         summoned,
+        summonedSide,
       };
-      void summonedSide; // available for future filtering (friendly-only checks)
       hook(ctx);
     }
   }
