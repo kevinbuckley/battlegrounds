@@ -69,7 +69,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total — tests/shop/murloc-tidecaller.test.ts
 
-- [ ] [S] Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1; board: [Murloc Scout 1/1]; play Rockpool Hunter → Murloc Scout becomes 2/2; board with no Murlocs → no buff; board with two Murlocs → one of them gains +1/+1 — tests/shop/rockpool-hunter.test.ts
+- [x] [S] Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1; board: [Murloc Scout 1/1]; play Rockpool Hunter → Murloc Scout becomes 2/2; board with no Murlocs → no buff; board with two Murlocs → one of them gains +1/+1 — tests/shop/rockpool-hunter.test.ts
 
 - [x] [S] Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently — tests/simulation/micro-machine.sim.test.ts
 
@@ -77,7 +77,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
 
-- [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
+- [x] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
 
 - [x] [S] Add tests/simulation/queen-of-pain-lifesteal.sim.test.ts — DONE (already covered by tests/simulation/lifesteal.sim.test.ts with 8 tests covering lifesteal healing, divine shield interaction, and Queen of Pain)
 
