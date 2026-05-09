@@ -1738,6 +1738,29 @@ export default function GamePage() {
               </span>
             </div>
 
+            {/* Active Tribes */}
+            {(() => {
+              const tribes = gameState.tribesInLobby;
+              if (tribes.length === 0) return null;
+              return (
+                <div className="flex flex-col gap-1">
+                  <span className="text-[10px] uppercase tracking-wider text-slate-500">
+                    Active Tribes
+                  </span>
+                  <div className="flex flex-wrap gap-1">
+                    {tribes.map((tribe) => (
+                      <span
+                        key={tribe}
+                        className="rounded-full bg-slate-700 px-2 py-0.5 text-[10px] font-medium text-slate-300"
+                      >
+                        {tribe}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* Turn */}
             <div className="rounded-lg border border-slate-700 bg-slate-800/60 p-3 flex flex-col gap-1">
               <span className="text-[10px] uppercase tracking-wider text-slate-500">Turn</span>
