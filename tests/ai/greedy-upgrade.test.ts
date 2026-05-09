@@ -216,9 +216,16 @@ describe("greedy AI — sell weakest when board full", () => {
     });
     MINIONS[card3.id] = card3;
 
-    // Board: [3/3 (score 6), 1/1 (score 2), 2/2 (score 4)]
-    // Weakest is 1/1 at index 1
-    const boardMinions = [instantiate(card2), instantiate(card1), instantiate(card3)];
+    // Board: [3/3, 1/1, 2/2, 3/3, 3/3, 3/3, 3/3] — 7 minions, weakest is 1/1 at index 1
+    const boardMinions = [
+      instantiate(card2), // index 0: score 6
+      instantiate(card1), // index 1: score 2 (weakest)
+      instantiate(card3), // index 2: score 4
+      instantiate(card2), // index 3: score 6
+      instantiate(card2), // index 4: score 6
+      instantiate(card2), // index 5: score 6
+      instantiate(card2), // index 6: score 6
+    ];
     const handCard = defineMinion({
       id: "test_sell_weakest_hand",
       name: "Hand Minion",
@@ -263,8 +270,8 @@ describe("greedy AI — sell weakest when board full", () => {
     });
     MINIONS[card.id] = card;
 
-    // All minions have score 4 (2+2), highest index (3) should be sold
-    const boardMinions = [0, 1, 2, 3].map(() => instantiate(card));
+    // All 7 minions have score 4 (2+2), highest index (6) should be sold
+    const boardMinions = [0, 1, 2, 3, 4, 5, 6].map(() => instantiate(card));
     const handCard = defineMinion({
       id: "test_sell_tie_hand",
       name: "Hand Minion",
@@ -291,7 +298,7 @@ describe("greedy AI — sell weakest when board full", () => {
 
     const sellAction = actions.find((a) => a.kind === "SellMinion" && "boardIndex" in a);
     expect(sellAction).toBeDefined();
-    // Highest index (3) should be sold when all scores tie
-    expect((sellAction as { boardIndex: number }).boardIndex).toBe(3);
+    // Highest index (6) should be sold when all scores tie
+    expect((sellAction as { boardIndex: number }).boardIndex).toBe(6);
   });
 });

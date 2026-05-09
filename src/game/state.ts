@@ -1,5 +1,4 @@
 import { basic } from "@/ai/heuristics/basic";
-import { greedy } from "@/ai/heuristics/greedy";
 import { heuristic } from "@/ai/heuristics/heuristic";
 import { makeRng, type Rng } from "@/lib/rng";
 import { extraLife, goldenTouch, pickAnomaly } from "./anomalies";
@@ -394,7 +393,10 @@ function incrementActionAndApply(
   return afterAction;
 }
 
-const AI_STRATEGIES: Array<import("@/ai/strategy").Strategy> = [basic, greedy, heuristic];
+const getAiStrategies = (): Array<import("@/ai/strategy").Strategy> => {
+  const { greedy } = require("@/ai/heuristics/greedy");
+  return [basic, greedy, heuristic];
+};
 
 /** Execute AI recruit actions for all non-player-0 players before combat. */
 function executeAiRecruitActions(state: GameState, nextTurn: number, rng: Rng): GameState {
@@ -404,7 +406,7 @@ function executeAiRecruitActions(state: GameState, nextTurn: number, rng: Rng): 
     const aiPlayer = result.players[i];
     if (!aiPlayer || aiPlayer.eliminated) continue;
 
-    const strategy = AI_STRATEGIES[i % AI_STRATEGIES.length]!;
+    const strategy = getAiStrategies()[i % getAiStrategies().length]!;
     const aiRng = rng.fork(`ai:recruit:${i}:${nextTurn}`);
 
     const aiView: import("@/ai/strategy").PlayerView = {
