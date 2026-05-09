@@ -18,23 +18,40 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/cave-hydra.sim.test.ts — verify Cave Hydra (tier 4 beast, 2/4, cleave) damages the attacked target AND its two adjacent enemies; board: [Cave Hydra] vs [3/3, 3/3, 3/3]; Cave Hydra attacks, all 3 enemies take damage; verify transcript has 3 Damage events; also verify a 2-minion board correctly damages just 1 adjacent — tests/simulation/cave-hydra.sim.test.ts
 
-- [ ] [S] Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board: [Voidlord] vs [4/1 attacker]; Voidlord dies → deathrattle fires → three 1/3 Demon taunts appear; verify survivorsLeft.length ≥ 1 and all new Demons have taunt — tests/simulation/voidlord.sim.test.ts
+- [x] [S] Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board: [Voidlord] vs [4/1 attacker]; Voidlord dies → deathrattle fires → three 1/3 Demon taunts appear; verify survivorsLeft.length ≥ 1 and all new Demons have taunt — tests/simulation/voidlord.sim.test.ts
 
-- [ ] [S] Add tests/simulation/mechano-egg.sim.test.ts — verify Mechano-Egg (tier 5 mech, 0/5) deathrattle summons an 8/8 Robosaur; board: [Mechano-Egg] vs [6/1]; Egg takes a hit and dies → deathrattle fires → 8/8 Robosaur appears and wins; verify survivorsLeft includes the Robosaur — tests/simulation/mechano-egg.sim.test.ts
+- [x] [S] Add tests/simulation/mechano-egg.sim.test.ts — verify Mechano-Egg (tier 5 mech, 0/5) deathrattle summons an 8/8 Robosaur; board: [Mechano-Egg] vs [6/1]; Egg takes a hit and dies → deathrattle fires → 8/8 Robosaur appears and wins; verify survivorsLeft includes the Robosaur — tests/simulation/mechano-egg.sim.test.ts
 
-- [ ] [S] Add tests/simulation/zapp-slywick.sim.test.ts — verify Zapp Slywick (tier 5 mech, 7/10) always attacks the lowest-ATK enemy minion regardless of position; board: [Zapp] vs [1/1 murloc (position 1), 5/5 beast (position 0)]; verify the 1/1 dies first (Zapp targeted it) despite being at index 1; check transcript Attack events (kind: "Attack") for target ordering — tests/simulation/zapp-slywick.sim.test.ts
+- [x] [S] Add tests/simulation/zapp-slywick.sim.test.ts — verify Zapp Slywick (tier 5 mech, 7/10) always attacks the lowest-ATK enemy minion regardless of position; board: [Zapp] vs [1/1 murloc (position 1), 5/5 beast (position 0)]; verify the 1/1 dies first (Zapp targeted it) despite being at index 1; check transcript Attack events (kind: "Attack") for target ordering — tests/simulation/zapp-slywick.sim.test.ts
+
+- [x] [S] Add tests/simulation/petrified-imp-quest.test.ts — verify Petrified Imps Quest gives 3x 1/1 Demons with Rush on first completion, stacks to 6x at progress=2, 9x at progress=3 (capped at board 7), all with Demon tribe and Rush keyword — tests/simulation/petrified-imp-quest.test.ts
 
 - [x] [S] Add tests/simulation/bolvar-fireblood.sim.test.ts — verify Bolvar Fireblood (tier 4 mech, 1/4 divineShield) gains +2 ATK each time a friendly divine shield is lost; board: [Bolvar] vs [3/3 enemy]; Bolvar attacks, enemy counterattacks popping Bolvar's shield, Bolvar gains +2 ATK → now 3 ATK; verify the Stat event in transcript shows atk=3; then verify Bolvar eventually wins (3 ATK vs remaining enemy HP); also add a test with [Bolvar, Annoy-o-Tron] vs [3/20] where the enemy lives long enough for both shields to pop — tests/simulation/bolvar-fireblood.sim.test.ts
 
 - [x] [S] Add tests/simulation/southsea-captain.sim.test.ts — verify Southsea Captain (tier 3 pirate, 3/3) aura gives all other friendly Pirates +1/+1 at start of combat; board: [Southsea Captain, Bloodsail Pirate 2/3] vs [10/10]; verify Bloodsail Pirate has 3 ATK and 4 HP before first attack; also verify non-Pirates are NOT buffed — tests/simulation/southsea-captain.sim.test.ts
 
-- [ ] [S] Add tests/simulation/imp-mama.sim.test.ts — verify Imp Mama (tier 6 demon, 6/8) gains +1/+1 and spawns a 1/1 Imp each time it takes damage; board: [Imp Mama] vs [3/3, 3/3]; after the first attack hits Imp Mama, verify survivorsLeft grows (Imp appeared) and Imp Mama's stats increased; also verify multiple hits spawn multiple Imps — tests/simulation/imp-mama.sim.test.ts
+- [x] [S] Add tests/simulation/imp-mama.sim.test.ts — done
+- [x] [S] Add tests/shop/amalgadon.test.ts — done
+- [x] [S] Add tests/shop/murozond.test.ts — done
+- [x] [S] Add tests/heroes/jandice-barov.test.ts — done
 
-- [ ] [S] Add tests/shop/amalgadon.test.ts — verify Amalgadon (tier 6, 6/6) battlecry gains a random keyword for each distinct tribe among OTHER friendly minions; build a GameState with Amalgadon in hand and board [Murloc, Beast, Demon]; play Amalgadon → gains 3 keywords; board with [Murloc, Murloc] → gains 1 keyword (one tribe); no other minions → 0 keywords added — tests/shop/amalgadon.test.ts
+- [ ] [S] Add tests/simulation/ghastcoiler.sim.test.ts — verify Ghastcoiler (tier 6 beast, 7/7) deathrattle summons 2 minions from its hardcoded pool (friggent_northvalley, terestian_manferris); board: [Ghastcoiler] vs [8/1]; Ghastcoiler dies → 2 new minions appear on left board; verify survivorsLeft.length ≥ 2 after deathrattle resolves — tests/simulation/ghastcoiler.sim.test.ts
 
-- [ ] [S] Add tests/shop/murozond.test.ts — verify Murozond (tier 5 dragon) battlecry copies a random enemy minion's card from an opponent's board into your own board; build a GameState with Murozond in hand and a known enemy minion on an opponent's board; play Murozond → a copy of the enemy minion appears on your board; verify it has the correct cardId and stats — tests/shop/murozond.test.ts
+- [ ] [S] Add tests/simulation/malganis.sim.test.ts — verify Mal'Ganis (tier 5 demon, 9/7) onStartOfCombat gives all OTHER friendly Demons +2/+2; board: [Malganis, 1/1 Imp Demon] vs [10/10]; verify Imp has 3/3 before first attack; Malganis itself NOT buffed; non-Demon allies also NOT buffed — tests/simulation/malganis.sim.test.ts
 
-- [ ] [S] Add tests/heroes/jandice-barov.test.ts — verify Jandice Barov passive: after selling a minion, a random minion of the same Tavern Tier is added to the shop; build a GameState with Jandice Barov and a tier-2 minion on board; sell the minion; verify shop size increased by 1 and the new shop minion has tier ≤ 2 — tests/heroes/jandice-barov.test.ts
+- [ ] [S] Add tests/simulation/kaboom-bot.sim.test.ts — verify Kaboom Bot (tier 2 mech, 3/2) deathrattle deals 4 damage to a random enemy; board: [Kaboom Bot] vs [1/6 enemy]; Kaboom Bot dies → 4 damage to the enemy → 1/2 remains; also verify 4 damage kills a 1/4 enemy (right board empty) — tests/simulation/kaboom-bot.sim.test.ts
+
+- [ ] [S] Add tests/simulation/glyph-guardian.sim.test.ts — verify Glyph Guardian (tier 2 dragon, 2/4) doubles its own ATK each time IT attacks; board: [Glyph Guardian] vs [1/1, 1/1, 1/1]; after first attack ATK becomes 4, after second 8; verify Stat events in transcript show the ATK doubling — tests/simulation/glyph-guardian.sim.test.ts
+
+- [ ] [S] Add tests/simulation/drakonid-enforcer.sim.test.ts — verify Drakonid Enforcer (tier 4 dragon, 3/6) gains +2/+2 when a FRIENDLY divine shield pops; board: [Drakonid, Annoy-o-Tron 1/2 divineShield] vs [3/3]; after Annoy-o-Tron's shield pops, Drakonid becomes 5/8; verify enemy divine shields do NOT buff Drakonid — tests/simulation/drakonid-enforcer.sim.test.ts
+
+- [ ] [S] Add tests/simulation/nadina.sim.test.ts — verify Nadina the Red (tier 6 demon, 7/4) deathrattle gives divine shield to allies that have an onDeath hook; board: [Nadina, Harvest Golem (has deathrattle), 2/2 vanilla] vs [10/10]; Nadina dies → Harvest Golem gains divine shield; vanilla minion does NOT get a shield (no onDeath hook) — tests/simulation/nadina.sim.test.ts
+
+- [ ] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
+
+- [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
+
+- [ ] [S] Add tests/shop/metaltooth-leaper.test.ts — verify Metaltooth Leaper (tier 2 mech, 3/3) battlecry gives ALL friendly Mechs +2 ATK; board: [Mech 1/1, Mech 2/2, non-Mech 1/1]; play Metaltooth → only Mechs gain +2 ATK; golden version gives +4 ATK — tests/shop/metaltooth-leaper.test.ts
 
 - [x] [S] Add tests/heroes/ysera.test.ts — verify Ysera passive: at start of each turn, a random Dragon at your current Tavern Tier is added to the shop; build a GameState with Ysera at tier 3, advance a turn (beginRecruitTurn), verify shop contains at least one Dragon minion it didn't have before — tests/heroes/ysera.test.ts
 
