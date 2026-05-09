@@ -494,6 +494,7 @@ export default function GamePage() {
   // Combat animation state
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
   const [combatTick, setCombatTick] = useState(-1);
+  const [combatSpeed, setCombatSpeed] = useState<1 | 2>(1);
   const [displayingCombat, setDisplayingCombat] = useState(false);
   const [opponentHeroId, setOpponentHeroId] = useState<string>("");
   const tickRef = useRef(combatTick);
@@ -833,10 +834,10 @@ export default function GamePage() {
         }
       }
     } else {
-      const timer = setTimeout(() => setCombatTick((t) => t + 1), 180);
+      const timer = setTimeout(() => setCombatTick((t) => t + 1), 180 / combatSpeed);
       return () => clearTimeout(timer);
     }
-  }, [displayingCombat, combatTick, combatResult, gameState, opponentHeroId]);
+  }, [displayingCombat, combatTick, combatResult, gameState, opponentHeroId, combatSpeed]);
 
   // Build card name lookup for event descriptions
   const nameMap = useRef<Map<string, string>>(new Map());
@@ -1712,9 +1713,24 @@ export default function GamePage() {
             </div>
 
             {/* Header */}
-            <h2 className="mb-2 text-center text-2xl font-bold text-amber-400">
-              {eventTypeEmoji({ kind: "End", winner: "left" })} Combat Round
-            </h2>
+            <div className="mb-2 flex items-center justify-center gap-4">
+              <h2 className="text-center text-2xl font-bold text-amber-400">
+                {eventTypeEmoji({ kind: "End", winner: "left" })} Combat Round
+              </h2>
+              {displayingCombat && (
+                <button
+                  type="button"
+                  onClick={() => setCombatSpeed((s) => (s === 1 ? 2 : 1))}
+                  className={`rounded px-2 py-0.5 text-xs font-bold transition-colors ${
+                    combatSpeed === 2
+                      ? "bg-amber-500/30 text-amber-300"
+                      : "bg-slate-800 text-slate-400 hover:bg-slate-700"
+                  }`}
+                >
+                  ⚡ {combatSpeed}×
+                </button>
+              )}
+            </div>
 
             {/* Pairing banner */}
             {opponentHeroId &&

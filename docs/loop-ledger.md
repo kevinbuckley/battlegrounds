@@ -373,3 +373,4 @@
 2026-05-08 | a253d34 | FIXED: Add "Skip →" button to combat overlay footer in app/game/page.tsx; clicking it calls setCombatTick(combatResult.transcript.length - 1) to jump immediately to the last event
 2026-05-09 | 0076187 | FIXED: Add victory banner after combat win — green "You won! ⚔️" banner using combatOutcome state in app/game/page.tsx, mirroring the existing damageRecap pattern, shown for 3s after combat closes when player won
 2026-05-09 | b878f7b | FIXED: Ghost fight label — show "Ghost fight vs." in combat overlay pairing banner when opponent has placement !== null
+2026-05-09 | 1fdee9b | FIXED: Combat animation speed toggle — add "⚡ 2×" button to combat overlay header; track combatSpeed: 1 | 2 state; halve tick interval from 180ms to 90ms at 2×
