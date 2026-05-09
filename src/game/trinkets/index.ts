@@ -91,10 +91,99 @@ export const scalingSoul: TrinketCard = {
   },
 };
 
+/** Grants +3/+3 to a random friendly minion and divineShield. */
+export const goldenScales: TrinketCard = {
+  id: "golden_scales",
+  name: "Golden Scales",
+  description: "Give a random friendly minion +3/+3 and Divine Shield.",
+  cost: 0,
+  tiers: [2, 3, 4, 5, 6],
+  onApply: (state: GameState, playerId: PlayerId, rng: Rng): GameState => {
+    const player = state.players[playerId];
+    if (!player || player.board.length === 0) return state;
+
+    const target = rng.pick(player.board);
+    if (!target) return state;
+
+    const idx = player.board.indexOf(target);
+    const newBoard = [...player.board];
+    if (idx >= 0) {
+      newBoard[idx] = {
+        ...target,
+        atk: target.atk + 3,
+        hp: target.hp + 3,
+        maxHp: target.maxHp + 3,
+        keywords: new Set(target.keywords).add("divineShield"),
+      };
+    }
+    return {
+      ...state,
+      players: state.players.map((p) => (p.id === playerId ? { ...p, board: newBoard } : p)),
+    };
+  },
+};
+
+/** Grants +1 ATK to all friendly Demons. */
+export const demonicPact: TrinketCard = {
+  id: "demonic_pact",
+  name: "Demonic Pact",
+  description: "Your Demons have +1 ATK.",
+  cost: 0,
+  tiers: [3, 4, 5, 6],
+  onApply: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = state.players[playerId];
+    if (!player) return state;
+
+    return {
+      ...state,
+      players: state.players.map((p) =>
+        p.id === playerId
+          ? {
+              ...p,
+              board: p.board.map((m) =>
+                m.tribes.includes("Demon") ? { ...m, atk: m.atk + 1 } : m,
+              ),
+            }
+          : p,
+      ),
+    };
+  },
+};
+
+/** Grants +2 ATK to all friendly Beasts. */
+export const beastlyTooth: TrinketCard = {
+  id: "beastly_tooth",
+  name: "Beastly Tooth",
+  description: "Your Beasts have +2 ATK.",
+  cost: 0,
+  tiers: [2, 3, 4, 5, 6],
+  onApply: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = state.players[playerId];
+    if (!player) return state;
+
+    return {
+      ...state,
+      players: state.players.map((p) =>
+        p.id === playerId
+          ? {
+              ...p,
+              board: p.board.map((m) =>
+                m.tribes.includes("Beast") ? { ...m, atk: m.atk + 2 } : m,
+              ),
+            }
+          : p,
+      ),
+    };
+  },
+};
+
 export const TRINKETS: Record<string, TrinketCard> = {
   [ironCladdagh.id]: ironCladdagh,
   [rallyingBanner.id]: rallyingBanner,
   [scalingSoul.id]: scalingSoul,
+  [goldenScales.id]: goldenScales,
+  [demonicPact.id]: demonicPact,
+  [beastlyTooth.id]: beastlyTooth,
 };
 
 export function getTrinket(id: string): TrinketCard {

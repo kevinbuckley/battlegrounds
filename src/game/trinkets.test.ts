@@ -1,7 +1,10 @@
 import { describe, expect, it } from "vitest";
 import {
+  beastlyTooth,
+  demonicPact,
   getAllTrinketIds,
   getTrinket,
+  goldenScales,
   ironCladdagh,
   pickTrinket,
   rallyingBanner,
@@ -77,8 +80,8 @@ function makeMinion(atk: number, hp: number): MinionInstance {
 }
 
 describe("trinket registry", () => {
-  it("exports exactly 3 trinkets", () => {
-    expect(getAllTrinketIds()).toHaveLength(3);
+  it("exports exactly 6 trinkets", () => {
+    expect(getAllTrinketIds()).toHaveLength(6);
   });
 
   it("TRINKETS keys match getAllTrinketIds", () => {
@@ -242,5 +245,163 @@ describe("pickTrinket", () => {
       const picked = pickTrinket(makeRng(42 + i));
       expect(getAllTrinketIds()).toContain(picked.id);
     }
+  });
+});
+
+describe("goldenScales", () => {
+  it("grants +3/+3 and divineShield to a random friendly minion", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [makeMinion(2, 3), makeMinion(4, 5)],
+        },
+      ],
+    };
+
+    const rng = makeRng(42);
+    const after = goldenScales.onApply(state, 0, rng);
+    const target = after.players[0]?.board.find((m) => m.atk > 2 || m.hp > 3);
+    expect(target).toBeDefined();
+    expect(target!.atk).toBe(target!.baseAtk + 3);
+    expect(target!.hp).toBe(target!.baseHp + 3);
+    expect(target!.maxHp).toBe(target!.baseHp + 3);
+    expect(target!.keywords.has("divineShield")).toBe(true);
+  });
+
+  it("does not duplicate divineShield if already present", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [
+            {
+              ...makeMinion(2, 3),
+              keywords: new Set(["divineShield"]),
+            },
+          ],
+        },
+      ],
+    };
+
+    const after = goldenScales.onApply(state, 0, makeRng(42));
+    const minion = after.players[0]?.board[0];
+    expect(minion!.atk).toBe(5);
+    expect(minion!.hp).toBe(6);
+    expect(minion!.keywords.has("divineShield")).toBe(true);
+  });
+
+  it("returns unchanged state when player has no minions", () => {
+    const state = makeGameState();
+    const after = goldenScales.onApply(state, 0, makeRng(42));
+    expect(after.players[0]?.board).toHaveLength(0);
+  });
+});
+
+describe("demonicPact", () => {
+  it("grants +1 ATK to all friendly Demons", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [
+            { ...makeMinion(3, 4), tribes: ["Demon"] },
+            { ...makeMinion(2, 3), tribes: ["Mech"] },
+            { ...makeMinion(1, 2), tribes: ["Demon"] },
+          ],
+        },
+      ],
+    };
+
+    const after = demonicPact.onApply(state, 0, makeRng(42));
+    const minions = after.players[0]?.board;
+    expect(minions![0]!.atk).toBe(4);
+    expect(minions![0]!.hp).toBe(4);
+    expect(minions![1]!.atk).toBe(2);
+    expect(minions![1]!.hp).toBe(3);
+    expect(minions![2]!.atk).toBe(2);
+    expect(minions![2]!.hp).toBe(2);
+  });
+
+  it("leaves non-Demons unchanged", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [
+            { ...makeMinion(3, 4), tribes: ["Mech"] },
+            { ...makeMinion(2, 3), tribes: ["Elemental"] },
+          ],
+        },
+      ],
+    };
+
+    const after = demonicPact.onApply(state, 0, makeRng(42));
+    const minions = after.players[0]?.board;
+    expect(minions![0]!.atk).toBe(3);
+    expect(minions![1]!.atk).toBe(2);
+  });
+
+  it("returns unchanged state when player has no minions", () => {
+    const state = makeGameState();
+    const after = demonicPact.onApply(state, 0, makeRng(42));
+    expect(after.players[0]?.board).toHaveLength(0);
+  });
+});
+
+describe("beastlyTooth", () => {
+  it("grants +2 ATK to all friendly Beasts", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [
+            { ...makeMinion(3, 4), tribes: ["Beast"] },
+            { ...makeMinion(2, 3), tribes: ["Mech"] },
+            { ...makeMinion(1, 2), tribes: ["Beast"] },
+          ],
+        },
+      ],
+    };
+
+    const after = beastlyTooth.onApply(state, 0, makeRng(42));
+    const minions = after.players[0]?.board;
+    expect(minions![0]!.atk).toBe(5);
+    expect(minions![0]!.hp).toBe(4);
+    expect(minions![1]!.atk).toBe(2);
+    expect(minions![1]!.hp).toBe(3);
+    expect(minions![2]!.atk).toBe(3);
+    expect(minions![2]!.hp).toBe(2);
+  });
+
+  it("leaves non-Beasts unchanged", () => {
+    const state: GameState = {
+      ...makeGameState(),
+      players: [
+        {
+          ...makeGameState().players[0]!,
+          board: [
+            { ...makeMinion(3, 4), tribes: ["Demon"] },
+            { ...makeMinion(2, 3), tribes: ["Elemental"] },
+          ],
+        },
+      ],
+    };
+
+    const after = beastlyTooth.onApply(state, 0, makeRng(42));
+    const minions = after.players[0]?.board;
+    expect(minions![0]!.atk).toBe(3);
+    expect(minions![1]!.atk).toBe(2);
+  });
+
+  it("returns unchanged state when player has no minions", () => {
+    const state = makeGameState();
+    const after = beastlyTooth.onApply(state, 0, makeRng(42));
+    expect(after.players[0]?.board).toHaveLength(0);
   });
 });
