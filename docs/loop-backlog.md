@@ -43,7 +43,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/glyph-guardian.sim.test.ts — verify Glyph Guardian (tier 2 dragon, 2/4) doubles its own ATK each time IT attacks; board: [Glyph Guardian] vs [1/1, 1/1, 1/1]; after first attack ATK becomes 4, after second 8; verify Stat events in transcript show the ATK doubling — tests/simulation/glyph-guardian.sim.test.ts
 
-- [ ] [S] Add tests/simulation/drakonid-enforcer.sim.test.ts — verify Drakonid Enforcer (tier 4 dragon, 3/6) gains +2/+2 when a FRIENDLY divine shield pops; board: [Drakonid, Annoy-o-Tron (has taunt+divineShield)] vs [3/10 enemy]; enemy targets Annoy-o-Tron (taunt), shield pops → Drakonid gains +2/+2 → 5/8; also verify a second test: [Drakonid] vs [Annoy-o-Tron] where the enemy's shield pops but Drakonid does NOT gain stats — tests/simulation/drakonid-enforcer.sim.test.ts
+- [x] [S] Add tests/simulation/drakonid-enforcer.sim.test.ts — verify Drakonid Enforcer (tier 4 dragon, 3/6) gains +2/+2 when a FRIENDLY divine shield pops; board: [Drakonid, Annoy-o-Tron (has taunt+divineShield)] vs [3/10 enemy]; enemy targets Annoy-o-Tron (taunt), shield pops → Drakonid gains +2/+2 → 5/8; also verify a second test: [Drakonid] vs [Annoy-o-Tron] where the enemy's shield pops but Drakonid does NOT gain stats — tests/simulation/drakonid-enforcer.sim.test.ts
 
 - [ ] [S] Add tests/simulation/nadina.sim.test.ts — verify Nadina the Red (tier 6 demon, 7/4) deathrattle gives divine shield to allies that have an onDeath hook; board: [Nadina, Harvest Golem (has deathrattle), 2/2 vanilla] vs [10/10]; Nadina dies → Harvest Golem gains divine shield; vanilla minion does NOT get a shield (no onDeath hook) — tests/simulation/nadina.sim.test.ts
 

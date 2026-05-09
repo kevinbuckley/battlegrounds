@@ -12,18 +12,20 @@ export default defineMinion({
   hooks: {
     // Whenever a friendly minion loses its divine shield, gain +2/+2.
     onDivineShieldPop: (ctx) => {
-      const poppedSide = ctx.left.includes(ctx.self) ? "left" : "right";
-      if (poppedSide !== ctx.selfSide) return;
-
-      ctx.self.atk += 2;
-      ctx.self.hp += 2;
-      ctx.self.maxHp += 2;
-      ctx.emit({
-        kind: "Stat",
-        target: ctx.self.instanceId,
-        atk: ctx.self.atk,
-        hp: ctx.self.hp,
-      });
+      const board = ctx.selfSide === "left" ? ctx.left : ctx.right;
+      for (const m of board) {
+        if (m.cardId === "drakonid_enforcer") {
+          m.atk += 2;
+          m.hp += 2;
+          m.maxHp += 2;
+          ctx.emit({
+            kind: "Stat",
+            target: m.instanceId,
+            atk: m.atk,
+            hp: m.hp,
+          });
+        }
+      }
     },
   },
 });
