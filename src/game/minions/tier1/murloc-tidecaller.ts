@@ -19,8 +19,19 @@ export default defineMinion({
     // Gains +1 ATK whenever any Murloc is summoned during the recruit phase.
     onRecruitSummon: (ctx) => {
       if (!ctx.summoned.tribes.includes("Murloc")) return ctx.state;
-      ctx.self.atk += 1;
-      return ctx.state;
+      return {
+        ...ctx.state,
+        players: ctx.state.players.map((p, i) =>
+          i !== ctx.playerId
+            ? p
+            : {
+                ...p,
+                board: p.board.map((m) =>
+                  m.instanceId === ctx.self.instanceId ? { ...m, atk: m.atk + 1 } : m,
+                ),
+              },
+        ),
+      };
     },
   },
 });

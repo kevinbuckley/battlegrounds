@@ -49,15 +49,15 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/ripsnarl-captain.sim.test.ts — verify Ripsnarl Captain (tier 4 pirate, 3/5) onAllyAttack gains +2/+2 when a friendly Pirate attacks; board: [Ripsnarl Captain, Bloodsail Pirate 2/3] vs [1/1, 1/1, 1/1]; each time Bloodsail Pirate attacks, Ripsnarl gains +2/+2; verify Stat events show ATK/HP growing — tests/simulation/ripsnarl-captain.sim.test.ts
 
-- [ ] [S] Add tests/simulation/security-rover.sim.test.ts — verify Security Rover (tier 4 mech, 1/4) spawns a 2/3 Mech with divine shield each time IT takes damage; board: [Security Rover] vs [3/3, 3/3]; first hit on Rover spawns a divine-shield bot; verify survivorsLeft grows after each hit on Rover — tests/simulation/security-rover.sim.test.ts
+- [x] [S] Add tests/simulation/security-rover.sim.test.ts — verify Security Rover (tier 4 mech, 1/4) spawns a 2/3 Mech with divine shield each time IT takes damage; board: [Security Rover] vs [3/3, 3/3]; first hit on Rover spawns a divine-shield bot; verify survivorsLeft grows after each hit on Rover — tests/simulation/security-rover.sim.test.ts
 
-- [ ] [S] Add tests/shop/defender-of-argus.test.ts — verify Defender of Argus (tier 4, 1/3) battlecry gives adjacent friendly minions +1/+1 and taunt; board: [minion A, Defender, minion B] at indices 0,1,2; play Defender at index 1 → minion A and B both gain +1/+1 and taunt; test with Defender at board edge (index 0) → only right neighbor gets buff — tests/shop/defender-of-argus.test.ts
+- [x] [S] Add tests/shop/defender-of-argus.test.ts — verify Defender of Argus (tier 4, 1/3) battlecry gives adjacent friendly minions +1/+1 and taunt; board: [minion A, Defender, minion B] at indices 0,1,2; play Defender at index 1 → minion A and B both gain +1/+1 and taunt; test with Defender at board edge (index 0) → only right neighbor gets buff — tests/shop/defender-of-argus.test.ts
 
-- [ ] [S] Add tests/shop/coldlight-seer.test.ts — verify Coldlight Seer (tier 3 murloc, 2/3) battlecry gives all friendly Murlocs +2 HP; board: [Murloc 1/1, Murloc 2/2, non-Murloc 3/3]; play Coldlight Seer → both Murlocs gain +2 HP (1/3 and 2/4); non-Murloc unchanged; Coldlight itself unchanged — tests/shop/coldlight-seer.test.ts
+- [x] [S] Add tests/shop/coldlight-seer.test.ts — verify Coldlight Seer (tier 3 murloc, 2/3) battlecry gives all friendly Murlocs +2 HP; board: [Murloc 1/1, Murloc 2/2, non-Murloc 3/3]; play Coldlight Seer → both Murlocs gain +2 HP (1/3 and 2/4); non-Murloc unchanged; Coldlight itself unchanged — tests/shop/coldlight-seer.test.ts
 
 - [x] [S] Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt; board with [Beast 1/1, non-Beast 2/2]; play Houndmaster → Beast becomes 3/3 with taunt; non-Beast unchanged; board with no Beasts → no buff applied — tests/shop/houndmaster.test.ts
 
-- [ ] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2; board: [Taunt-minion 1/1, non-Taunt 2/2, Taunt-minion2 3/3]; play Strongshell → only taunt minions gain +2/+2 (3/3 and 5/5); non-taunt unchanged — tests/shop/strongshell-scavenger.test.ts
+- [x] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2; board: [Taunt-minion 1/1, non-Taunt 2/2, Taunt-minion2 3/3]; play Strongshell → only taunt minions gain +2/+2 (3/3 and 5/5); non-taunt unchanged — tests/shop/strongshell-scavenger.test.ts
 
 - [ ] [S] Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2; board: [Dragon 1/1, non-Dragon 2/2]; play Virmen Sensei → Dragon gains +2/+2 (3/3); non-Dragon unchanged; board with no Dragons → no buff — tests/shop/virmen-sensei.test.ts
 
@@ -65,7 +65,17 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/sellemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand; build GameState with Sellemental on board; dispatch("sell") → hand grows by 1; new card is an Elemental with tribe=["Elemental"] and atk=1/hp=1; selling a non-Sellemental does NOT add a token — tests/shop/sellemental.test.ts
 
-- [ ] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
+- [ ] [S] Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK; board: [Siegebreaker, Imp 2/2 Demon] vs [10/10]; after onStartOfCombat the Imp should have 3 ATK (2+1 from Siegebreaker); Siegebreaker itself is NOT buffed; also verify non-Demons are NOT buffed — tests/simulation/siegebreaker.sim.test.ts
+
+- [ ] [S] Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total — tests/shop/murloc-tidecaller.test.ts
+
+- [ ] [S] Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1; board: [Murloc Scout 1/1]; play Rockpool Hunter → Murloc Scout becomes 2/2; board with no Murlocs → no buff; board with two Murlocs → one of them gains +1/+1 — tests/shop/rockpool-hunter.test.ts
+
+- [ ] [S] Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently — tests/simulation/micro-machine.sim.test.ts
+
+- [ ] [S] Add tests/simulation/old-murk-eye.sim.test.ts — verify Old Murk-Eye (tier 4 murloc, 2/4) gains +1 ATK at start of combat for each other Murloc on the battlefield (both sides); board: [Old Murk-Eye, Murloc Scout 1/1] vs [Murloc Tidehunter 2/1, vanilla 3/3]; Murk-Eye should gain +3 ATK (3 other Murlocs) → 5 ATK total; verify via Stat events; also verify with no other Murlocs → no buff — tests/simulation/old-murk-eye.sim.test.ts
+
+- [x] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
 
 - [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
 
@@ -99,7 +109,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/heroes/af-kay.test.ts — verify A.F. Kay hero definition: id=af_kay, startHp=40, startArmor=3, power kind=start_of_game, exists in HEROES registry — tests/heroes/af-kay.test.ts
 
-- [ ] [M] Wire A.F. Kay start_of_game power in makeInitialState — when player's heroId is 'af_kay', set player.tier=3, set player.shopRefreshesLeft=0 (shop already full), skip turns 1-2 (do not give gold, do not roll shop), apply on turn 3: roll full tier-3+ shop, set shopRefreshesLeft=2 — src/game/state.ts + tests/heroes/af-kay.test.ts
+- [x] [M] Wire A.F. Kay start_of_game power in makeInitialState — when player's heroId is 'af_kay', set player.tier=3, set player.shopRefreshesLeft=0 (shop already full), skip turns 1-2 (do not give gold, do not roll shop), apply on turn 3: roll full tier-3+ shop, set shopRefreshesLeft=2 — src/game/state.ts + tests/heroes/af-kay.test.ts
 
 - [x] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
@@ -111,7 +121,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Combat animation speed toggle — add a "⚡ 2×" speed button to the combat overlay header in app/game/page.tsx; track `combatSpeed: 1 | 2` state; use it to halve the tick interval from ~350ms to ~175ms at 2×; verify with bun typecheck
 
-- [ ] [S] Add serializeReplay + deserializeReplay functions in src/game/state.ts — serializeReplay takes a GameState and returns a JSON string containing {seed, turn, players: [{id, heroId, hp, armor, tier, board: [{cardId, atk, hp, keywords, golden}], gold}], phase}; deserializeReplay takes the string and returns a GameState with the same state; verify with 3 tests: round-trip through makeInitialState, preserves board state, preserves gold/tier
+- [x] [S] Add serializeReplay + deserializeReplay functions in src/game/state.ts — serializeReplay takes a GameState and returns a JSON string containing {seed, turn, players: [{id, heroId, hp, armor, tier, board: [{cardId, atk, hp, keywords, golden}], gold}], phase}; deserializeReplay takes the string and returns a GameState with the same state; verify with 3 tests: round-trip through makeInitialState, preserves board state, preserves gold/tier
 
 ---
 
