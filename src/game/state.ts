@@ -266,12 +266,27 @@ function stepHeroSelection(state: GameState, action: Action, rng: Rng): GameStat
   const hero = HEROES[action.heroId];
   if (!hero) throw new Error(`Unknown hero: ${action.heroId}`);
 
-  const afterSelect = updatePlayer(state, action.player, (p) => ({
-    ...p,
-    heroId: action.heroId,
-    hp: hero.startHp,
-    armor: hero.startArmor,
-  }));
+  const afterSelect = updatePlayer(state, action.player, (p) => {
+    const base: Partial<PlayerState> = {
+      heroId: action.heroId,
+      hp: hero.startHp,
+      armor: hero.startArmor,
+    };
+    if (action.heroId === "af_kay") {
+      return {
+        ...p,
+        ...base,
+        tier: 3,
+        upgradeCost: TIER_UPGRADE_BASE[3],
+        turnsSkipped: 2,
+        gold: 0,
+        shop: [],
+        hand: [],
+        board: [],
+      } as PlayerState;
+    }
+    return { ...p, ...base };
+  });
 
   // Auto-assign random heroes to AI players who don't have one yet.
   let stateWithAI = afterSelect;
@@ -1006,6 +1021,38 @@ export function beginRecruitTurn(state: GameState, rng: Rng): GameState {
   for (const player of state.players) {
     if (player.eliminated) continue;
 
+    // A.F. Kay: skip first N turns (turnsSkipped > 0 means still skipping)
+    // Only apply during actual game turns, not during hero selection.
+    // During hero selection, prevent shop roll by checking turnsSkipped > 0.
+    if (player.heroId === "af_kay" && player.turnsSkipped > 0) {
+      if (state.phase.kind === "HeroSelection") {
+        // During hero selection, just ensure the A.F. Kay player has no shop/board.
+        next = updatePlayer(next, player.id, (p) => ({
+          ...p,
+          gold: 0,
+          shop: [],
+          hand: [],
+          board: [],
+        }));
+        continue;
+      }
+      // During actual gameplay, skip the turn entirely.
+      next = updatePlayer(next, player.id, (p) => ({
+        ...p,
+        turnsSkipped: p.turnsSkipped - 1,
+        gold: 0,
+        shop: [],
+        hand: [],
+        board: [],
+        actionsThisTurn: 0,
+        heroPowerUsed: false,
+        upgradedThisTurn: false,
+        piratesBoughtThisTurn: 0,
+        armor: 0,
+      }));
+      continue;
+    }
+
     const discountedCost =
       !player.upgradedThisTurn && player.tier < 6
         ? Math.max(0, player.upgradeCost - 1)
@@ -1180,6 +1227,7 @@ export function makeInitialState(seed: number): GameState {
     buddies: [],
     pogoHoppersPlayed: 0,
     piratesBoughtThisTurn: 0,
+    turnsSkipped: 0,
   }));
 
   // Roll for modifiers per 10-lobby-modifiers.md spec
@@ -1523,6 +1571,7 @@ export function deserializeReplay(json: string): GameState {
     trinkets: [],
     quests: [],
     buddies: [],
+    turnsSkipped: 0,
   }));
 
   return {

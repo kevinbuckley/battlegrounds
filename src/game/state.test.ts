@@ -4,6 +4,7 @@ import { instantiate } from "./minions/define";
 import { getMinion, MINIONS } from "./minions/index";
 import { makeInitialState, step } from "./state";
 import type { GameState, MinionInstance } from "./types";
+import { updatePlayer } from "./utils";
 
 const RNG = makeRng(1);
 
@@ -11,6 +12,7 @@ function selectAllHeroes(state: ReturnType<typeof makeInitialState>) {
   let s = state;
   for (const p of s.players) {
     s = step(s, { kind: "SelectHero", player: p.id, heroId: "stub_hero" }, RNG);
+    s = updatePlayer(s, p.id, (pl) => ({ ...pl, turnsSkipped: 0 }));
   }
   return s;
 }
@@ -22,6 +24,7 @@ function selectAllHeroesWithRng(
   let s = state;
   for (const p of s.players) {
     s = step(s, { kind: "SelectHero", player: p.id, heroId: "stub_hero" }, testRng);
+    s = updatePlayer(s, p.id, (pl) => ({ ...pl, turnsSkipped: 0 }));
   }
   return s;
 }

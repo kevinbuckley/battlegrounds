@@ -282,6 +282,8 @@ export interface PlayerState {
   pogoHoppersPlayed: number;
   /** Number of Pirates bought from the shop this turn (for Southsea Strongarm). */
   piratesBoughtThisTurn: number;
+  /** Turns remaining to skip for A.F. Kay's start_of_game power. */
+  turnsSkipped: number;
 }
 
 export type Phase =
