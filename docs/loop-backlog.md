@@ -65,7 +65,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/sellemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand; build GameState with Sellemental on board; dispatch("sell") → hand grows by 1; new card is an Elemental with tribe=["Elemental"] and atk=1/hp=1; selling a non-Sellemental does NOT add a token — tests/shop/sellemental.test.ts
 
-- [ ] [S] Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK; board: [Siegebreaker, Imp 2/2 Demon] vs [10/10]; after onStartOfCombat the Imp should have 3 ATK (2+1 from Siegebreaker); Siegebreaker itself is NOT buffed; also verify non-Demons are NOT buffed — tests/simulation/siegebreaker.sim.test.ts
+- [x] [S] Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK; board: [Siegebreaker, Imp 2/2 Demon] vs [10/10]; after onStartOfCombat the Imp should have 3 ATK (2+1 from Siegebreaker); Siegebreaker itself is NOT buffed; also verify non-Demons are NOT buffed — tests/simulation/siegebreaker.sim.test.ts  <!-- DONE: 4 tests pass -->
 
 - [ ] [S] Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total — tests/shop/murloc-tidecaller.test.ts
 
@@ -73,7 +73,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently — tests/simulation/micro-machine.sim.test.ts
 
-- [ ] [S] Add tests/simulation/old-murk-eye.sim.test.ts — verify Old Murk-Eye (tier 4 murloc, 2/4) gains +1 ATK at start of combat for each other Murloc on the battlefield (both sides); board: [Old Murk-Eye, Murloc Scout 1/1] vs [Murloc Tidehunter 2/1, vanilla 3/3]; Murk-Eye should gain +3 ATK (3 other Murlocs) → 5 ATK total; verify via Stat events; also verify with no other Murlocs → no buff — tests/simulation/old-murk-eye.sim.test.ts
+- [x] [S] Add tests/simulation/old-murk-eye.sim.test.ts — verify Old Murk-Eye (tier 4 murloc, 2/4) gains +1 ATK at start of combat for each other Murloc on the battlefield (both sides); board: [Old Murk-Eye, Murloc Scout 1/1] vs [Murloc Tidehunter 2/1, vanilla 3/3]; Murk-Eye should gain +3 ATK (3 other Murlocs) → 5 ATK total; verify via Stat events; also verify with no other Murlocs → no buff — tests/simulation/old-murk-eye.sim.test.ts  <!-- DONE: 5 tests pass -->
 
 - [x] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
 
