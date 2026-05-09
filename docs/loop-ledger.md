@@ -1,3 +1,5 @@
+2026-05-09 | 87f4203 | FIXED: Add Rat Pack simulation tests — verify deathrattle summons 1/1 Rats equal to current ATK (2/2→2 rats, 4/2→4 rats, golden 4/4→4 rats with board cap of 7)
+2026-05-09 | 86c55f1 | FIXED: Add Soul Juggler simulation tests — verify onAllyDeath deals 3 damage to random enemy when friendly Demons die in combat
 2026-05-07 | a1ab2e1 | FIXED: Add Southsea Captain (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura in onStartOfCombat
 2026-05-07 | 5c541d3 | FIXED: Add Bristleback Boys interaction test — verify that when any Bristleback Boy takes damage, ALL Bristleback Boys gain +1/+1 via onDamageTaken hook, including golden copies
 2026-05-07 | 15c9b69 | FIXED: Fix Lil' Exorcist battlecry to buff ALL Deathrattle minions on both boards instead of only buffing itself
