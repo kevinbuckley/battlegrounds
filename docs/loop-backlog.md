@@ -36,7 +36,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/heroes/jandice-barov.test.ts — verify Jandice Barov passive: after selling a minion, a random minion of the same Tavern Tier is added to the shop; build a GameState with Jandice Barov and a tier-2 minion on board; sell the minion; verify shop size increased by 1 and the new shop minion has tier ≤ 2 — tests/heroes/jandice-barov.test.ts
 
-- [ ] [S] Add tests/heroes/ysera.test.ts — verify Ysera passive: at start of each turn, a random Dragon at your current Tavern Tier is added to the shop; build a GameState with Ysera at tier 3, advance a turn (beginRecruitTurn), verify shop contains at least one Dragon minion it didn't have before — tests/heroes/ysera.test.ts
+- [x] [S] Add tests/heroes/ysera.test.ts — verify Ysera passive: at start of each turn, a random Dragon at your current Tavern Tier is added to the shop; build a GameState with Ysera at tier 3, advance a turn (beginRecruitTurn), verify shop contains at least one Dragon minion it didn't have before — tests/heroes/ysera.test.ts
 
 - [x] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
 
