@@ -97,3 +97,5 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ## Quarantined (failed multiple times — DO NOT pick)
 
 - [ ] [S] Add `Trade Prince Gallywix` hero test — verify hero power gives 1 gold back when a minion is bought from the shop — tests/heroes/trade-prince-gallywix.test.ts  <!-- failed iterations 7, 8, 9, 10 -->
+
+- [ ] [M] Add `Khadgar` (tier 5 mech, 2/2) — onSummon hook summons a copy of a random friendly minion when any minion is summoned in combat. Requires modifying `fireSummon` in combat.ts to also iterate over dead minions (currently filtered out before deathrattles fire), or adding a new field to `SummonCombatCtx` to pass side information. — tests/simulation/khadgar.sim.test.ts  <!-- failed iteration 11 -->
