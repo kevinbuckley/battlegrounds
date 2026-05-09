@@ -100,7 +100,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/heroes/pyramad.test.ts — verify Pyramad hero power (2g): calling onHeroPower gives a random friendly board minion +4 HP; board with 1 minion → that minion gains +4 HP; board with 3 minions → exactly 1 gains +4 HP (seeded RNG); empty board → state unchanged — tests/heroes/pyramad.test.ts
 
-- [ ] [S] Add tests/simulation/razorgore.sim.test.ts — verify Razorgore the Untamed (tier 6 dragon, 2/4) onStartOfCombat gains +1/+1 for each Dragon on board (including itself); board: [Razorgore, Dragon 2/2, Dragon 3/3] vs [10/10]; Razorgore gains +3/+3 → 5/7; solo Razorgore gains +1/+1 → 3/5; non-Dragon allies NOT counted — tests/simulation/razorgore.sim.test.ts
+- [x] [S] Add tests/simulation/razorgore.sim.test.ts — verify Razorgore the Untamed (tier 6 dragon, 2/4) onStartOfCombat gains +1/+1 for each Dragon on board (including itself); board: [Razorgore, Dragon 2/2, Dragon 3/3] vs [10/10]; Razorgore gains +3/+3 → 5/7; solo Razorgore gains +1/+1 → 3/5; non-Dragon allies NOT counted — tests/simulation/razorgore.sim.test.ts
 
 - [ ] [S] Add tests/heroes/rakanishu.test.ts — verify Rakanishu hero power (2g): each Elemental in the shop gives a random friendly minion +2 ATK; build state with Rakanishu hero, 2 Elementals in shop, 1 board minion; fire heroPower → that minion gains +4 ATK (2×2); no Elementals in shop → no buff; empty board → no buff — tests/heroes/rakanishu.test.ts
 
