@@ -79,6 +79,10 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
 
+- [ ] [S] Add tests/simulation/queen-of-pain-lifesteal.sim.test.ts — verify Queen of Pain (tier 3 demon, 4/4, lifesteal) heals the winning hero by total lifesteal amount post-combat, does NOT heal when damage is absorbed by divine shield, and stacks across multiple Queen of Pain instances — tests/simulation/queen-of-pain-lifesteal.sim.test.ts
+
+- [ ] [S] Add `Deathwing` (tier 8 dragon, 10/10): deathrattle destroys ALL other minions on both boards — onDeath hook in src/game/minions/tier8/deathwing.ts, requires modifying combat.ts reapDeaths to clear both boards, with 4 simulation tests — tests/simulation/deathwing.sim.test.ts
+
 - [ ] [S] Add tests/shop/metaltooth-leaper.test.ts — verify Metaltooth Leaper (tier 2 mech, 3/3) battlecry gives ALL friendly Mechs +2 ATK; board: [Mech 1/1, Mech 2/2, non-Mech 1/1]; play Metaltooth → only Mechs gain +2 ATK; golden version gives +4 ATK — tests/shop/metaltooth-leaper.test.ts
 
 - [ ] [S] Add tests/simulation/houndmaster-shaw.sim.test.ts — verify Houndmaster Shaw (tier 4 beast, 3/6) onStartOfCombat gives ALL other friendly minions the Rush keyword; board: [Shaw, vanilla 1/1, vanilla 2/2] vs [taunt 5/5]; verify both vanillas gain Rush (can attack any target), Shaw itself does NOT gain Rush; also verify a solo Shaw board gives no Rush to anyone — tests/simulation/houndmaster-shaw.sim.test.ts

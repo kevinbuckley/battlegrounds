@@ -142,6 +142,7 @@ import yseraTheDreamerT6 from "./tier6/ysera-the-dreamer";
 import zixorProjectHope from "./tier6/zixor-project-hope";
 import lichKing from "./tier7/lich-king";
 import alexstraszaSelflessDragon from "./tier8/alexstrasza-selfless-dragon";
+import deathwing from "./tier8/deathwing";
 import deathwingRazeToBone from "./tier8/deathwing-raze-to-bone";
 import dreadscale from "./tier8/dreadscale";
 import oldMurkEyeTier8 from "./tier8/old-murk-eye";
@@ -291,6 +292,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [bountyMinion.id]: bountyMinion,
   [alexstraszaSelflessDragon.id]: alexstraszaSelflessDragon,
   [deathwingRazeToBone.id]: deathwingRazeToBone,
+  [deathwing.id]: deathwing,
   [oldMurkEyeTier8.id]: oldMurkEyeTier8,
   [yseraTheDreamer.id]: yseraTheDreamer,
   [dreadscale.id]: dreadscale,
