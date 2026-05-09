@@ -110,7 +110,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/heroes/ragnaros.test.ts — verify Ragnaros passive: start of combat, deal 8 damage to lowest-ATK enemy minion; build state with Ragnaros hero and 1 board minion; run combat; verify that minion's attack contribution matches the +6 bonus from ragnaros — tests/heroes/ragnaros.test.ts
 
-- [ ] [S] Add tests/simulation/amalgadon.sim.test.ts — verify Amalgadon (tier 6, 0/0) battlecry gains a random keyword for each different tribe among friendly board minions; board: [Beast 1/1, Mech 2/2, Murloc 1/1]; play Amalgadon → gains 3 keywords (one per tribe); board with 2 Beasts → only 1 tribe → gains 1 keyword; empty board → no keywords — tests/simulation/amalgadon.sim.test.ts
+- [x] [S] Add tests/simulation/amalgadon.sim.test.ts — verify Amalgadon (tier 6, 0/0) battlecry gains a random keyword for each different tribe among friendly board minions; board: [Beast 1/1, Mech 2/2, Murloc 1/1]; play Amalgadon → gains 3 keywords (one per tribe); board with 2 Beasts → only 1 tribe → gains 1 keyword; empty board → no keywords — tests/simulation/amalgadon.sim.test.ts  (ALREADY COVERED by tests/shop/amalgadon.test.ts — 6 passing tests, battlecry fires during shop play)
 
 - [ ] [S] Add tests/simulation/elistra.sim.test.ts — verify Elistra the Immortal (tier 6 dragon) deathrattle: when Elistra dies, a copy is added to the board; board: [Elistra 7/5] vs [10/10]; Elistra dies → new 7/5 Elistra appears (without deathrattle keyword to prevent infinite loop); survivorsLeft contains a Dragon after combat — tests/simulation/elistra.sim.test.ts
 
