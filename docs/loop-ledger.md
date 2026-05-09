@@ -395,3 +395,4 @@
 2026-05-09 | 9411771 | FIXED: Infested Wolf deathrattle — verify tier 3 beast summons two 1/1 Spiders on death, respects board cap, and works against weak enemies; minion definition at tier3/infested-wolf.ts with onDeath hook, 4 passing simulation tests
 2026-05-09 | 8361729 | FIXED: Goldrinn deathrattle — fix goldrinn.ts from onShopSummon to onDeath giving friendly Beasts +5/+5, add 5 simulation tests
 2026-05-09 | 8361729 | FIXED: Fix Mama Bear (tier 6 beast) — changed from broken onShopSummon self-buff to correct onSummon hook that gives newly summoned friendly Beasts +5/+5, fixed base stats from 1/1 to 5/5, added 4 simulation tests
+2026-05-09 | 5a75934 | FIXED: Spawn of N'Zoth base stats 1/1→2/2, deathrattle +1/+1→+2/+2 to all friendly minions, 4 sim tests

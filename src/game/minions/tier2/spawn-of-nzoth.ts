@@ -5,8 +5,8 @@ export default defineMinion({
   name: "Spawn of N'Zoth",
   tier: 2,
   tribes: ["Mech"],
-  baseAtk: 1,
-  baseHp: 1,
+  baseAtk: 2,
+  baseHp: 2,
   baseKeywords: [],
   spellDamage: 0,
   hooks: {
@@ -15,8 +15,8 @@ export default defineMinion({
       const allies = side === "left" ? ctx.left : ctx.right;
       for (const minion of allies) {
         if (minion.instanceId === ctx.self.instanceId) continue;
-        minion.atk += 1;
-        minion.hp += 1;
+        minion.atk += 2;
+        minion.hp += 2;
         ctx.emit({
           kind: "Stat",
           target: minion.instanceId,
