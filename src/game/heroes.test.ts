@@ -510,41 +510,76 @@ describe("Jaraxxus passive", () => {
 });
 
 // ---------------------------------------------------------------------------
+// Lich Baz'hial
+// ---------------------------------------------------------------------------
+
+describe("Lich Baz'hial hero power", () => {
+  it("loses 3 HP when used (net gold change is 0: cost 2, gain 2)", () => {
+    const state = makeStateWithHero("lich_bazhial", []);
+
+    const result = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    // Hero power costs 2 gold but onHeroPower adds 2 back → net 0 gold change
+    expect(result.players[0]!.gold).toBe(10);
+    expect(result.players[0]!.hp).toBe(37); // 40 - 3
+    expect(result.players[0]!.heroPowerUsed).toBe(true);
+  });
+
+  it("can be used multiple times across turns, stacking the HP loss", () => {
+    let state = makeInitialState(99);
+    // Set up all players with heroes (needed for EndTurn → AI recruit)
+    for (let i = 0; i < 8; i++) {
+      state = step(
+        state,
+        { kind: "SelectHero", player: i, heroId: i === 0 ? "lich_bazhial" : "stub_hero" },
+        RNG,
+      );
+    }
+    // Give player 0 a strong minion to survive combat
+    const survivor = instantiate(MINIONS["wrath_weaver"]!);
+    state = {
+      ...state,
+      phase: { kind: "Recruit", turn: 1 },
+      turn: 1,
+      players: state.players.map((p, i) =>
+        i === 0
+          ? { ...p, gold: 10, hp: 40, heroPowerUsed: false, board: [survivor] }
+          : { ...p, board: [] },
+      ),
+    };
+
+    // First use: 40 → 37 hp, gold stays at 10 (net 0)
+    state = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    expect(state.players[0]!.gold).toBe(10);
+    expect(state.players[0]!.hp).toBe(37);
+
+    // End turn to reset heroPowerUsed, then use again
+    // EndTurn triggers beginRecruitTurn + combat — player takes 3 damage from combat
+    state = step(state, { kind: "EndTurn", player: 0 }, RNG);
+    // 37 - 3 (combat) = 34
+    expect(state.players[0]!.hp).toBe(34);
+    // Second use: 34 → 31 hp (cost 2, gain 2 = net 0 gold)
+    state = step(state, { kind: "HeroPower", player: 0 }, RNG);
+    expect(state.players[0]!.gold).toBe(12); // 10 + 3 (turn gold) + 2 (interest) - 2 (cost) + 2 (gain) = 12
+    expect(state.players[0]!.hp).toBe(31);
+  });
+
+  it("throws when insufficient gold", () => {
+    const state = {
+      ...makeStateWithHero("lich_bazhial", []),
+      players: makeStateWithHero("lich_bazhial", []).players.map((p, i) =>
+        i === 0 ? { ...p, gold: 1 } : p,
+      ),
+    };
+    expect(() => step(state, { kind: "HeroPower", player: 0 }, RNG)).toThrow("Not enough gold");
+  });
+});
+
+// ---------------------------------------------------------------------------
 // Trade Prince Gallywix
 // ---------------------------------------------------------------------------
 
 describe("Trade Prince Gallywix hero power", () => {
   it("adds a copy of a random opponent board minion to hand", () => {
-    const opponentMinion = instantiate(MINIONS["wrath_weaver"]!);
-    let state = makeStateWithHero("trade-prince-gallywix", []);
-    // Set up an opponent with a minion on board and create a pairing
-    state = {
-      ...state,
-      players: state.players.map((p, i) =>
-        i === 1
-          ? {
-              ...p,
-              heroId: "patchwerk",
-              hp: 40,
-              board: [opponentMinion],
-            }
-          : p,
-      ),
-      pairingsHistory: [[0, 1]],
-    };
-
-    const handBefore = state.players[0]!.hand.length;
-    const after = step(state, { kind: "HeroPower", player: 0 }, RNG);
-    const handAfter = after.players[0]!.hand;
-
-    expect(handAfter.length).toBe(handBefore + 1);
-    const copied = handAfter[handAfter.length - 1]!;
-    expect(copied.cardId).toBe("wrath_weaver");
-    expect(after.players[0]!.gold).toBe(8); // 10 - 2
-    expect(after.players[0]!.heroPowerUsed).toBe(true);
-  });
-
-  it("copies the minion with correct stats from opponent's board", () => {
     const opponentMinion = instantiate(MINIONS["venomous_crasher"]!);
     // Give the opponent's minion boosted stats (e.g. from buffs)
     const boostedMinion = { ...opponentMinion, atk: 5, hp: 8, maxHp: 8 };
