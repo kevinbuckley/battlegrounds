@@ -1,3 +1,4 @@
+2026-05-09 | cf93b2e | FIXED: Junkbot simulation tests — verify onAllyDeath gains +2/+2 each time a friendly Mech dies in combat, does not fire for non-Mechs or enemy Mechs, and golden version also works; 5 tests via transcript Stat event verification
 2026-05-09 | 308ea60 | FIXED: Hero power description text — add description field to HeroPower type's active variant, populate for all 12 active heroes, display below hero power button in HUD
 2026-05-09 | 85eec00 | FIXED: Space bar to end turn — add a useEffect in app/game/page.tsx listening for keydown ' ' that calls handleEndTurn when phase is Recruit and no overlays active
 2026-05-09 | 8c16031 | FIXED: Add George the Fallen hero power test — verify onHeroPower gives divine shield to target minion, skips minions that already have it, does nothing on empty board, and targets correct board index
