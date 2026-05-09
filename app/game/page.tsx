@@ -808,6 +808,21 @@ export default function GamePage() {
     }
   }, [gameState]);
 
+  // Space bar to end turn
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key !== " ") return;
+      if (!gameState) return;
+      if (gameState.phase.kind !== "Recruit") return;
+      if (displayingCombat) return;
+      if (gameState.players[0]?.discoverOffer) return;
+      e.preventDefault();
+      handleEndTurn();
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [gameState, displayingCombat, handleEndTurn]);
+
   // Combat animation tick progression
   useEffect(() => {
     if (!displayingCombat || !combatResult) return;
