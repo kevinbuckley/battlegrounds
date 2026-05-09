@@ -127,24 +127,26 @@ describe("khadgar simulation", () => {
     // guaranteeing Khadgar survives. Imprisoner + enemy trade (3/4 dmg each = both die).
     // Imprisoner deathrattle summons a 3/3 Imp. Khadgar onSummon fires and copies the Imp.
     const khadgar = minion("khadgar");
-    const imprisoner = minion("imprisoner");
-    imprisoner.keywords.add("taunt" as "taunt");
+    const imprisoner = minion("imprisoner"); // 3/4 with built-in taunt
     const enemy = makeMinion(4, 3);
 
-    const r = simulateCombat([khadgar, imprisoner], [enemy], makeRng(0));
+    // [imprisoner, khadgar]: Imprisoner is index 0, so it attacks first if left goes first.
+    // Its built-in taunt forces the enemy to target it if right goes first.
+    // Either way Khadgar takes no damage and survives to fire onSummon.
+    const r = simulateCombat([imprisoner, khadgar], [enemy], makeRng(0));
 
     // Left wins — enemy is dead
     expect(r.survivorsRight.length).toBe(0);
 
-    // Khadgar must survive (Imprisoner had taunt, absorbing the attack)
+    // Khadgar must survive
     const khadgarSurvivor = r.survivorsLeft.find((m) => m.instanceId === khadgar.instanceId);
     expect(khadgarSurvivor).toBeDefined();
 
     // Khadgar must NOT have copied itself
     const khadgarCopies = r.survivorsLeft.filter((m) => m.cardId === "khadgar");
-    expect(khadgarCopies.length).toBe(1); // only the original
+    expect(khadgarCopies.length).toBe(1);
 
-    // Khadgar should have fired onSummon: at least khadgar+imprisoner initial + imp deathrattle + copy
+    // Summon events: imprisoner placed + khadgar placed + imp deathrattle + khadgar copies
     const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
     expect(summonEvents.length).toBeGreaterThanOrEqual(4);
   });

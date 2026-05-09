@@ -905,3 +905,44 @@ describe("Edwin Van Cleef passive", () => {
     expect(state.players[0]!.board[1]!.atk).toBe(m2.atk);
   });
 });
+
+// ---------------------------------------------------------------------------
+// Lich Baz'hial
+// ---------------------------------------------------------------------------
+
+describe("Lich Baz'hial hero power", () => {
+  it("loses 3 HP and gains 2 gold when used", () => {
+    const state = makeStateWithHero("lich_bazhial");
+    const player = state.players[0]!;
+    expect(player.hp).toBe(40);
+    expect(player.gold).toBe(10);
+
+    const after = step(state, { kind: "HeroPower", player: 0 }, makeRng(42));
+    // Cost 2 is deducted by useHeroPower, then +2 from onHeroPower = net 0 gold change
+    expect(after.players[0]!.hp).toBe(37);
+    expect(after.players[0]!.gold).toBe(10);
+  });
+
+  it("can be used multiple times, stacking the effect", () => {
+    const state = makeStateWithHero("lich_bazhial");
+    let s = step(state, { kind: "HeroPower", player: 0 }, makeRng(42));
+    // Need to reset heroPowerUsed to use again (end turn resets it)
+    s = updatePlayer(s, 0, (p) => ({ ...p, heroPowerUsed: false }));
+    s = step(s, { kind: "HeroPower", player: 0 }, makeRng(42));
+    expect(s.players[0]!.hp).toBe(34);
+    expect(s.players[0]!.gold).toBe(10);
+  });
+
+  it("sets heroPowerUsed to true", () => {
+    const state = makeStateWithHero("lich_bazhial");
+    const after = step(state, { kind: "HeroPower", player: 0 }, makeRng(42));
+    expect(after.players[0]!.heroPowerUsed).toBe(true);
+  });
+
+  it("does not work for non-Lich Baz'hial heroes", () => {
+    const state = makeStateWithHero("patchwerk");
+    const after = step(state, { kind: "HeroPower", player: 0 }, makeRng(42));
+    expect(after.players[0]!.hp).toBe(60);
+    expect(after.players[0]!.gold).toBe(10);
+  });
+});
