@@ -38,7 +38,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Simulation tests for implemented effects
 
-- [ ] [S] Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 2/5) battlecry gives a random friendly Mech divineShield; board: [Mech 2/2, non-Mech 1/1]; play Clunker → Mech has divineShield in keywords; non-Mech unchanged; no other Mechs → no buff; 4 tests pass — tests/shop/screwjank-clunker.test.ts
+- [x] [S] Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 3/3) battlecry gives a friendly Mech +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Screwjank → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/screwjank-clunker.test.ts
 
 - [ ] [S] Add tests/shop/buccaneer.test.ts — verify Buccaneer (tier 3 pirate, 5/3) battlecry gives +1 ATK to a random friendly Pirate; board: [Pirate 2/2, non-Pirate 3/3]; play Buccaneer → Pirate becomes 3/2; non-Pirate unchanged; no other Pirates → no buff; 3 tests — tests/shop/buccaneer.test.ts
 
