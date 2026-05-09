@@ -38,7 +38,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Simulation tests for implemented effects
 
-- [ ] [S] Add tests/shop/lightfang-enforcer.test.ts — verify Lightfang Enforcer (tier 5 beast, 4/5) onTurnEnd gives one friendly minion of each distinct tribe +2/+1; board: [Lightfang, Beast 1/1, Mech 2/2, Murloc 1/1]; end turn → Beast 3/2, Mech 4/3, Murloc 3/2; tribeless minion NOT buffed; board with 2 Beasts and 1 Mech → exactly 1 Beast and 1 Mech are buffed — tests/shop/lightfang-enforcer.test.ts
+- [x] [S] Add tests/shop/lightfang-enforcer.test.ts — verify Lightfang Enforcer (tier 5 beast, 4/5) onTurnEnd gives one friendly minion of each distinct tribe +2/+1; board: [Lightfang, Beast 1/1, Mech 2/2, Murloc 1/1]; end turn → Beast 3/2, Mech 4/3, Murloc 3/2; tribeless minion NOT buffed; board with 2 Beasts and 1 Mech → exactly 1 Beast and 1 Mech are buffed — tests/shop/lightfang-enforcer.test.ts
 
 - [ ] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event in transcript shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
 
