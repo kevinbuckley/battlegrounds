@@ -121,259 +121,32 @@ describe("khadgar simulation", () => {
     expect(totalSurvivors).toBeLessThanOrEqual(2);
   });
 
-  it("summons a copy of a random friendly minion (not self) when deathrattle fires", () => {
-    // Board: Strong minion (5/5) + Khadgar (4/4 golden) + Harvest Golem (3/2) + vanilla(1/1) vs enemy(3/5)
-    // Combat order (turn 1, left goes first):
-    //   Strong(5/5) attacks enemy(3/5): enemy 5→0 (dies), Strong takes 3 → 5-3=2hp (survives).
-    //   Enemy dead, no counterattack.
-    //   Khadgar(4/4) attacks: no enemies left.
-    //   Harvest Golem(3/2) attacks: no enemies left.
-    //   Game ends with left winning.
-    // But we need Harvest Golem to die for deathrattle.
-    // Use enemy(5/5): Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Then Khadgar(4/4) attacks: no enemies left.
-    // Still no deathrattle from Harvest Golem.
-    // Use enemy(5/6): Strong(5/5) attacks enemy(5/6): enemy 6→1hp, Strong 5→0 (dies).
-    // Then Khadgar(4/4) attacks enemy(1hp): enemy 1→-3 (dies), Khadgar 4→1-4=-3 (dies).
-    // Then Harvest Golem(3/2) attacks: no enemies left.
-    // Still no deathrattle.
-    // Use enemy(5/4): Strong(5/5) attacks enemy(5/4): enemy 4→-1 (dies), Strong 5→5-5=0 (dies).
-    // Both die. No deathrattle from Harvest Golem.
-    //
-    // The key insight: we need the enemy to survive Khadgar's attack but die to Harvest Golem's.
-    // Use enemy(5/5): Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Then Khadgar(4/4) attacks: no enemies left.
-    //
-    // Actually, let's use a 2-enemy right board:
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2) + vanilla(1/1)
-    // Right: enemy1(3/5) + enemy2(1/1)
-    // Strong(5/5) attacks enemy1(3/5): enemy1 5→0 (dies), Strong 5→5-3=2hp (survives).
-    // enemy2(1/1) attacks Strong(2hp): Strong 2→2-1=1hp (survives), enemy2 1→1-5=-4 (dies).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Still no deathrattle.
-    //
-    // Let's try: Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2) + vanilla(1/1)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // No deathrattle from Harvest Golem since no enemies to attack.
-    //
-    // The real solution: make the enemy strong enough to survive Khadgar but die to Harvest Golem.
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2) + vanilla(1/1)
-    // Right: enemy(5/4)
-    // Strong(5/5) attacks enemy(5/4): enemy 4→-1 (dies), Strong 5→5-5=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // OK, let's just use a board where Khadgar is NOT the first attacker and survives:
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/4)
-    // Strong(5/5) attacks enemy(5/4): enemy 4→-1 (dies), Strong 5→5-5=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // Final approach: Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Harvest Golem(3/2) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // The ONLY way to get Harvest Golem to die is if the enemy survives Khadgar's attack.
-    // But Khadgar is the second attacker (after Strong). If Strong kills the enemy, no deathrattle.
-    // If Strong doesn't kill the enemy, Khadgar attacks next.
-    //
-    // Let's try: Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/6)
-    // Strong(5/5) attacks enemy(5/6): enemy 6→1hp, Strong 5→5-5=0 (dies).
-    // enemy(1hp) attacks Khadgar(4/4): Khadgar 4→4-1=3hp (survives), enemy 1→1-4=-3 (dies).
-    // Khadgar survives! Now Harvest Golem(3/2) attacks: no enemies left.
-    // Still no deathrattle from Harvest Golem.
-    //
-    // We need the enemy to survive Khadgar's attack but die to Harvest Golem's.
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // OK final final: Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // But make Strong have divine shield: Strong(5/5, divineShield) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Strong(5/5, divineShield) attacks enemy(5/5): divine shield pops, enemy 5→0 (dies).
-    // Strong survives with 5hp (divine shield popped).
-    // Khadgar(4/4) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // I think the simplest approach is to just test that the onSummon hook exists and works
-    // by checking the code path, not by simulating a full combat.
-    // Or use a different deathrattle minion that dies to a weak enemy.
-    //
-    // Simplest: Left: Khadgar(4/4 golden) + Harvest Golem(3/2)
-    // Right: enemy(3/3)
-    // Khadgar(4/4) attacks enemy(3/3): enemy 3→-1 (dies), Khadgar 4→4-3=1hp (survives).
-    // No more enemies. Left wins.
-    // Harvest Golem never gets to attack, never dies, no deathrattle.
-    //
-    // The ONLY way: make enemy strong enough to survive Khadgar but die to Harvest Golem.
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/4)
-    // Khadgar(4/4) attacks enemy(5/4): enemy 4→0 (dies), Khadgar 4→4-4=0 (dies).
-    // Both die. No deathrattle from Harvest Golem (no enemies left).
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Khadgar(4/4) attacks enemy(5/5): enemy 5→1hp, Khadgar 4→4-5=-1 (dies).
-    // Khadgar dead, can't fire onSummon.
-    // enemy(1hp) attacks Harvest Golem(3/2): Harvest Golem 2→2-1=1hp (survives), enemy 1→1-3=-2 (dies).
-    // Harvest Golem survives, no deathrattle.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/3)
-    // Khadgar(4/4) attacks enemy(5/3): enemy 3→-1 (dies), Khadgar 4→4-5=-1 (dies).
-    // Both die. No deathrattle.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(4/5)
-    // Khadgar(4/4) attacks enemy(4/5): enemy 5→1hp, Khadgar 4→4-4=0 (dies).
-    // Khadgar dead.
-    // enemy(1hp) attacks Harvest Golem(3/2): Harvest Golem 2→2-1=1hp (survives), enemy 1→1-3=-2 (dies).
-    // Harvest Golem survives, no deathrattle.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(4/4)
-    // Khadgar(4/4) attacks enemy(4/4): enemy 4→0 (dies), Khadgar 4→4-4=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(3/4)
-    // Khadgar(4/4) attacks enemy(3/4): enemy 4→0 (dies), Khadgar 4→4-3=1hp (survives).
-    // No more enemies. Left wins.
-    // Harvest Golem never attacks, never dies.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(4/3)
-    // Khadgar(4/4) attacks enemy(4/3): enemy 3→-1 (dies), Khadgar 4→4-4=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // Left: Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(3/3)
-    // Khadgar(4/4) attacks enemy(3/3): enemy 3→-1 (dies), Khadgar 4→4-3=1hp (survives).
-    // No more enemies. Left wins.
-    // Harvest Golem never attacks, never dies.
-    //
-    // The problem: with only 2 minions on left and 1 on right, either:
-    // 1. Khadgar kills the enemy (Harvest Golem never dies, no deathrattle)
-    // 2. Khadgar dies (can't fire onSummon)
-    // 3. Both die (no deathrattle, no enemies left)
-    //
-    // We need 3+ minions on left so Khadgar isn't the first attacker.
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Harvest Golem(3/2) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/6)
-    // Strong(5/5) attacks enemy(5/6): enemy 6→1hp, Strong 5→5-5=0 (dies).
-    // enemy(1hp) attacks Khadgar(4/4): Khadgar 4→4-1=3hp (survives), enemy 1→1-4=-3 (dies).
-    // Khadgar survives! No more enemies.
-    // Harvest Golem never attacks, never dies.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/4)
-    // Strong(5/5) attacks enemy(5/4): enemy 4→-1 (dies), Strong 5→5-5=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Harvest Golem(3/2) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5) + enemy2(1/1)
-    // Strong(5/5) attacks enemy1(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks enemy2(1/1): enemy2 1→-3 (dies), Khadgar 4→4-1=3hp (survives).
-    // No more enemies. Left wins.
-    // Harvest Golem never attacks, never dies.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5) + enemy2(1/1)
-    // But make Strong have divine shield:
-    // Strong(5/5, divineShield) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5) + enemy2(1/1)
-    // Strong(5/5, divineShield) attacks enemy1(5/5): divine shield pops, enemy 5→0 (dies).
-    // Strong survives with 5hp (divine shield popped).
-    // enemy2(1/1) attacks Strong(5hp): Strong 5→5-1=4hp (survives), enemy2 1→1-5=-4 (dies).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Harvest Golem(3/2) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // OK, I think the issue is that Harvest Golem needs to die to an enemy that survives Khadgar.
-    // But if the enemy survives Khadgar, Khadgar must be the one dying, and dead Khadgar can't fire onSummon.
-    //
-    // The solution: put Khadgar as the SECOND minion on the left board, and have a strong minion
-    // as the first that kills the enemy but takes damage, then Khadgar survives but Harvest Golem dies.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/5) attacks enemy(5/5): both die (5-5=0).
-    // Khadgar(4/4) attacks: no enemies left.
-    // Harvest Golem(3/2) attacks: no enemies left.
-    // No deathrattle.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/6)
-    // Strong(5/5) attacks enemy(5/6): enemy 6→1hp, Strong 5→5-5=0 (dies).
-    // enemy(1hp) attacks Khadgar(4/4): Khadgar 4→4-1=3hp (survives), enemy 1→1-4=-3 (dies).
-    // Khadgar survives! No more enemies.
-    // Harvest Golem never attacks, never dies.
-    //
-    // Left: Strong(5/5) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // But make Strong have 6hp: Strong(5/6) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/5)
-    // Strong(5/6) attacks enemy(5/5): enemy 5→0 (dies), Strong 5→5-5=0 (dies).
-    // Both die. No deathrattle.
-    //
-    // Strong(5/6) + Khadgar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/6)
-    // Strong(5/6) attacks enemy(5/6): enemy 6→1hp, Strong 6→6-5=1hp (survives).
-    // enemy(1hp) attacks Khadgar(4/4): Khadgar 4→4-1=3hp (survives), enemy 1→1-4=-3 (dies).
-    // Khadgar survives! No more enemies.
-    // Harvest Golem never attacks, never dies.
-    //
-    // Strong(5/6) + Khadhar(4/4) + Harvest Golem(3/2)
-    // Right: enemy(5/6) + enemy2(3/3)
-    // Strong(5/6) attacks enemy1(5/6): enemy 6→1hp, Strong 6→6-5=1hp (survives).
-    // enemy1(1hp) attacks Khadgar(4/4): Khadgar 4→4-1=3hp (survives), enemy1 1→1-4=-3 (dies).
-    // Khadgar survives!
-    // Harvest Golem(3/2) attacks enemy2(3/3): enemy2 3→0 (dies), Harvest Golem 2→2-3=-1 (dies).
-    // Harvest Golem's deathrattle fires → summons 1/1 → Khadgar(3hp) fires onSummon → copies a friendly minion!
-    const strong = makeMinion(5, 6);
-    const khadgar = instantiate(getMinion("khadgar")!, true); // 4/4 golden
-    const harvestGolem = minion("harvest_golem"); // 3/2, deathrattle: 1/1
-    const enemy1 = makeMinion(5, 6);
-    const enemy2 = makeMinion(3, 3);
+  it("summons a copy when a friendly deathrattle fires and does not copy itself", () => {
+    // Left: [Imprisoner(3/3 +taunt), Khadgar(2/2)] vs [enemy(4/3)]
+    // Taunt forces the enemy to always attack Imprisoner regardless of attack order,
+    // guaranteeing Khadgar survives. Imprisoner + enemy trade (3/4 dmg each = both die).
+    // Imprisoner deathrattle summons a 3/3 Imp. Khadgar onSummon fires and copies the Imp.
+    const khadgar = minion("khadgar");
+    const imprisoner = minion("imprisoner");
+    imprisoner.keywords.add("taunt" as "taunt");
+    const enemy = makeMinion(4, 3);
 
-    const r = simulateCombat([strong, khadgar, harvestGolem], [enemy1, enemy2], makeRng(0));
+    const r = simulateCombat([khadgar, imprisoner], [enemy], makeRng(0));
 
-    // Count Death events for harvestGolem
-    const hgDeaths = r.transcript.filter(
-      (e) => e.kind === "Death" && e.source === harvestGolem.instanceId,
-    );
-    expect(hgDeaths.length).toBeGreaterThanOrEqual(1);
+    // Left wins — enemy is dead
+    expect(r.survivorsRight.length).toBe(0);
 
-    // Verify khadgar's copy is NOT khadgar himself (copies other friendly minions, not self)
-    // Count all khadgar cards in ALL survivors (left and right).
-    const allKhadgar = [...r.survivorsLeft, ...r.survivorsRight].filter(
-      (m) => m.cardId === "khadgar",
-    );
-    // There should be exactly 1 khadgar (the original), no copies of khadgar
-    // because khadgar's onSummon excludes self from candidates.
-    expect(allKhadgar.length).toBe(1);
+    // Khadgar must survive (Imprisoner had taunt, absorbing the attack)
+    const khadgarSurvivor = r.survivorsLeft.find((m) => m.instanceId === khadgar.instanceId);
+    expect(khadgarSurvivor).toBeDefined();
+
+    // Khadgar must NOT have copied itself
+    const khadgarCopies = r.survivorsLeft.filter((m) => m.cardId === "khadgar");
+    expect(khadgarCopies.length).toBe(1); // only the original
+
+    // Khadgar should have fired onSummon: at least khadgar+imprisoner initial + imp deathrattle + copy
+    const summonEvents = r.transcript.filter((e) => e.kind === "Summon");
+    expect(summonEvents.length).toBeGreaterThanOrEqual(4);
   });
 
   it("summons a copy of a friendly deathrattle minion when it dies", () => {
