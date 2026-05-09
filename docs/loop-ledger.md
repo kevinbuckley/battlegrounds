@@ -1,3 +1,4 @@
+2026-05-09 | 8c16031 | FIXED: Add George the Fallen hero power test — verify onHeroPower gives divine shield to target minion, skips minions that already have it, does nothing on empty board, and targets correct board index
 2026-05-09 | 87f4203 | FIXED: Add Rat Pack simulation tests — verify deathrattle summons 1/1 Rats equal to current ATK (2/2→2 rats, 4/2→4 rats, golden 4/4→4 rats with board cap of 7)
 2026-05-09 | 86c55f1 | FIXED: Add Soul Juggler simulation tests — verify onAllyDeath deals 3 damage to random enemy when friendly Demons die in combat
 2026-05-07 | a1ab2e1 | FIXED: Add Southsea Captain (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura in onStartOfCombat
