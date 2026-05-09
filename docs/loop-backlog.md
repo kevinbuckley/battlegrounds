@@ -22,7 +22,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/arm-of-the-empire.sim.test.ts — verify Arm of the Empire (tier 3 dragon, 4/5) onAllyAttacked buffs ALL friendly taunt minions +3/+2 when a friendly taunt is attacked; board: [Arm, Righteous Protector 1/1 taunt+divineShield] vs [3/3]; enemy targets Protector (taunt) → Arm fires → Protector gains +3/+2; verify non-taunt allies NOT buffed — tests/simulation/arm-of-the-empire.sim.test.ts
 
-- [ ] [S] Add tests/simulation/imp-gang-boss.sim.test.ts — verify Imp Gang Boss (tier 3 demon, 2/4) onDamageTaken summons a 1/1 Imp Demon each time it takes damage; board: [Imp Gang Boss 2/4] vs [2/1, 2/1]; first 2/1 attacks Boss → 1/1 Imp appears; second 2/1 attacks → another Imp; verify survivorsLeft grows; Imps are Demons; board cap of 7 respected — tests/simulation/imp-gang-boss.sim.test.ts
+- [x] [S] Add tests/simulation/imp-gang-boss.sim.test.ts — verify Imp Gang Boss (tier 3 demon, 2/4) onDamageTaken summons a 1/1 Imp Demon each time it takes damage; board: [Imp Gang Boss 2/4] vs [2/1, 2/1]; first 2/1 attacks Boss → 1/1 Imp appears; second 2/1 attacks → another Imp; verify survivorsLeft grows; Imps are Demons; board cap of 7 respected — tests/simulation/imp-gang-boss.sim.test.ts
 
 - [ ] [S] Add tests/simulation/yo-ho-ogre.sim.test.ts — verify Yo-Ho-Ogre (tier 4 pirate, 2/8) attacks twice in a single turn via the yoHoOgre keyword (wired in combat.ts line 220); board: [Yo-Ho-Ogre] vs [1/1, 1/1]; Ogre's attack turn: kills first 1/1, then immediately attacks again and kills second 1/1; both enemies dead; verify Ogre does NOT double-attack if only 1 enemy remains — tests/simulation/yo-ho-ogre.sim.test.ts
 
