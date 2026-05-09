@@ -476,3 +476,4 @@
 2026-05-09 | d808b77 | FIXED: Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board cap respected; golden fires twice
 2026-05-09 | 3a80abe | FIXED: Add tests/simulation/glyph-guardian.sim.test.ts — verify Glyph Guardian (tier 2 dragon, 2/4) doubles its own ATK each time it attacks; 2→4→8→16 exponential growth; 4 tests pass
 2026-05-09 | eedce83 | FIXED: Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK and +1 HP per other friendly minion, works on both sides, golden version doubles base stats
+2026-05-09 | 3a9678d | FIXED: Add tests/heroes/reno-jackson.test.ts — verify Reno Jackson hero power (5g): call onHeroPower targeting board index 0; board[0] becomes golden (m.golden === true); m.atk and m.hp unchanged; use heroPower helper with state having ≥5 gold and ≥1 board minion
