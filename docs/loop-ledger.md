@@ -1,3 +1,4 @@
+2026-05-09 | 3c74296 | FIXED: Add description field to MinionCard interface, populate for 8 key cards (Baron Rivendare, Murloc Warleader, Knife Juggler, Scavenging Hyena, Rat Pack, Imp Gang Boss, Zapp Slywick, Cave Hydra), add title={card.description} to MinionCard component for browser-native tooltips
 2026-05-09 | cf93b2e | FIXED: Junkbot simulation tests — verify onAllyDeath gains +2/+2 each time a friendly Mech dies in combat, does not fire for non-Mechs or enemy Mechs, and golden version also works; 5 tests via transcript Stat event verification
 2026-05-09 | 308ea60 | FIXED: Hero power description text — add description field to HeroPower type's active variant, populate for all 12 active heroes, display below hero power button in HUD
 2026-05-09 | 85eec00 | FIXED: Space bar to end turn — add a useEffect in app/game/page.tsx listening for keydown ' ' that calls handleEndTurn when phase is Recruit and no overlays active

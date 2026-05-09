@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 1,
   baseKeywords: [],
+  description: "After a friendly Beast dies, gain +2/+1.",
   spellDamage: 0,
   hooks: {
     onAllyDeath: (ctx) => {

@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 2,
   baseKeywords: [],
+  description: "Deathrattle: Summon 1/1 Rats equal to this minion's ATK.",
   spellDamage: 0,
   hooks: {
     onDeath: (ctx) => {

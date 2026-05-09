@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 2,
   baseKeywords: [],
+  description: "After a friendly minion is summoned, deal 1 damage to a random enemy minion.",
   spellDamage: 0,
   hooks: {
     // After a friendly minion is summoned during combat, deal 1 damage to a

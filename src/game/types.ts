@@ -45,6 +45,8 @@ export interface MinionCard {
   baseAtk: number;
   baseHp: number;
   baseKeywords: Keyword[];
+  /** One-line description shown in the shop and on hover. */
+  description?: string;
   /** Bonus to spell damage provided by this minion. */
   spellDamage: number;
   /** When true, this minion can be played on top of a friendly minion of the same tribe. */

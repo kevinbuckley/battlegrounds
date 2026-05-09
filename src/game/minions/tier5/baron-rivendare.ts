@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 3,
   baseHp: 3,
   baseKeywords: [],
+  description: "Deathrattles trigger twice.",
   spellDamage: 0,
   baronRivendare: true,
   hooks: {},

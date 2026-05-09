@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 7,
   baseHp: 10,
   baseKeywords: ["rush"],
+  description: "Rush. Always attacks the lowest-ATK enemy minion.",
   spellDamage: 0,
   hooks: {
     getTarget: (ctx) => {

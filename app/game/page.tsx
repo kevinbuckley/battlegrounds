@@ -196,6 +196,7 @@ function MinionCard({
       onDrop={onDrop}
       onDragEnter={onDragEnter}
       onDragLeave={onDragLeave}
+      title={card.description}
       className={`flex w-[110px] flex-shrink-0 flex-col gap-1.5 rounded-lg border-2 bg-slate-800 px-3 py-2 transition select-none
         ${isDragging ? "opacity-40" : "opacity-100"}
         ${isHpTarget ? "border-sky-400 bg-sky-400/10 ring-2 ring-sky-400/30" : ""}

@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 4,
   baseHp: 5,
   baseKeywords: ["cleave"],
+  description: "Cleave",
   spellDamage: 0,
   hooks: {},
 });

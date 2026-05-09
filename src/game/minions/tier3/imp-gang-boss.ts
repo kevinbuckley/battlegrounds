@@ -8,6 +8,7 @@ export default defineMinion({
   baseAtk: 2,
   baseHp: 4,
   baseKeywords: [],
+  description: "Whenever this minion takes damage, summon a 1/1 Imp.",
   spellDamage: 0,
   hooks: {
     onDamageTaken: (ctx) => {
