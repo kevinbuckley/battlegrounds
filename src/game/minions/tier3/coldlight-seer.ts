@@ -10,13 +10,14 @@ export default defineMinion({
   baseKeywords: [],
   spellDamage: 0,
   hooks: {
-    onBattlecry: ({ state, playerId }) => {
+    onBattlecry: ({ state, playerId, self }) => {
       const player = state.players[playerId];
       if (!player) return state;
 
       const newPlayers = state.players.map((p, i) => {
         if (i !== playerId) return p;
         const newBoard = p.board.map((m) => {
+          if (m.instanceId === self.instanceId) return m;
           if (m.tribes.includes("Murloc")) {
             const newHp = m.hp + 2;
             return {

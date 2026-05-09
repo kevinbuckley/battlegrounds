@@ -1,3 +1,4 @@
+2026-05-09 | 4b01227 | FIXED: Add tests/shop/coldlight-seer.test.ts — verify Coldlight Seer (tier 3 murloc, 2/3) battlecry gives all friendly Murlocs +2 HP, does NOT buff non-Murlocs or itself, stacks across multiple seers, 4 tests pass + fix coldlight-seer.ts onBattlecry to skip self via instanceId
 2026-05-09 | 9cf0418 | FIXED: Add tests/shop/defender-of-argus.test.ts — verify Defender of Argus (tier 4, 1/3) battlecry gives adjacent friendly minions +1/+1 and taunt; board: [minion A, Defender, minion B] at indices 0,1,2; play Defender at index 1 → minion A and B both gain +1/+1 and taunt; test with Defender at board edge (index 0) → only right neighbor gets buff; 5 tests pass
 2026-05-09 | 513efa4 | FIXED: Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt, does NOT buff non-Beasts, does nothing when no Beasts on board, stacks across multiple Houndmasters, 4 tests pass
 
