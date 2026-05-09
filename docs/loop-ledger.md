@@ -499,3 +499,4 @@
 2026-05-09 | 4e0f87c | FIXED: Add tests/shop/gentle-megasaur.test.ts — verify Gentle Megasaur (tier 6 beast, 5/4) battlecry gives a random keyword to each friendly Murloc on board, does nothing when no Murlocs, gives keyword to each Murloc not just one, 4 tests pass, bun typecheck and bun test (1196/1196) pass
 2026-05-09 | c97be0a | FIXED: Mark Razorgore test as done — 5 passing sim tests verify onStartOfCombat dragon counting and stat buffs
 2026-05-09 | e48c75a | FIXED: Space bar to end turn — already implemented in app/game/page.tsx:859-872, no changes needed
+2026-05-09 | 594b959 | FIXED: Add tests/heroes/rakanishu.test.ts — verify Rakanishu passive hero: 40 HP, no active hero power
