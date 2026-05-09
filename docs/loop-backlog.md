@@ -16,6 +16,28 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Gameplay & UI (highest priority)
 
+- [ ] [S] Add tests/simulation/cave-hydra.sim.test.ts — verify Cave Hydra (tier 4 beast, 2/4, cleave) damages the attacked target AND its two adjacent enemies; board: [Cave Hydra] vs [3/3, 3/3, 3/3]; Cave Hydra attacks, all 3 enemies take damage; verify transcript has 3 Damage events; also verify a 2-minion board correctly damages just 1 adjacent — tests/simulation/cave-hydra.sim.test.ts
+
+- [ ] [S] Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board: [Voidlord] vs [4/1 attacker]; Voidlord dies → deathrattle fires → three 1/3 Demon taunts appear; verify survivorsLeft.length ≥ 1 and all new Demons have taunt — tests/simulation/voidlord.sim.test.ts
+
+- [ ] [S] Add tests/simulation/mechano-egg.sim.test.ts — verify Mechano-Egg (tier 5 mech, 0/5) deathrattle summons an 8/8 Robosaur; board: [Mechano-Egg] vs [6/1]; Egg takes a hit and dies → deathrattle fires → 8/8 Robosaur appears and wins; verify survivorsLeft includes the Robosaur — tests/simulation/mechano-egg.sim.test.ts
+
+- [ ] [S] Add tests/simulation/zapp-slywick.sim.test.ts — verify Zapp Slywick (tier 5 mech, 7/10) always attacks the lowest-ATK enemy minion regardless of position; board: [Zapp] vs [1/1 murloc, 5/5 beast]; verify the 1/1 dies first (Zapp targeted it) before the 5/5 is attacked; check transcript AttackStart events for target ordering — tests/simulation/zapp-slywick.sim.test.ts
+
+- [ ] [S] Add tests/simulation/bolvar-fireblood.sim.test.ts — verify Bolvar Fireblood (tier 4 mech, 1/4 divineShield) gains +2 ATK each time a friendly divine shield is lost; board: [Bolvar, Annoy-o-Tron 1/2 divineShield] vs [3/3]; after Bolvar's own shield pops (+2) and Annoy-o-Tron's shield pops (+2), Bolvar should have 5 ATK (1+2+2); verify Stat events in transcript — tests/simulation/bolvar-fireblood.sim.test.ts
+
+- [ ] [S] Add tests/simulation/southsea-captain.sim.test.ts — verify Southsea Captain (tier 3 pirate, 3/3) aura gives all other friendly Pirates +1/+1 at start of combat; board: [Southsea Captain, Bloodsail Pirate 2/3] vs [10/10]; verify Bloodsail Pirate has 3 ATK and 4 HP before first attack; also verify non-Pirates are NOT buffed — tests/simulation/southsea-captain.sim.test.ts
+
+- [ ] [S] Add tests/simulation/imp-mama.sim.test.ts — verify Imp Mama (tier 6 demon, 6/8) gains +1/+1 and spawns a 1/1 Imp each time it takes damage; board: [Imp Mama] vs [3/3, 3/3]; after the first attack hits Imp Mama, verify survivorsLeft grows (Imp appeared) and Imp Mama's stats increased; also verify multiple hits spawn multiple Imps — tests/simulation/imp-mama.sim.test.ts
+
+- [ ] [S] Add tests/shop/amalgadon.test.ts — verify Amalgadon (tier 6, 6/6) battlecry gains a random keyword for each distinct tribe among OTHER friendly minions; build a GameState with Amalgadon in hand and board [Murloc, Beast, Demon]; play Amalgadon → gains 3 keywords; board with [Murloc, Murloc] → gains 1 keyword (one tribe); no other minions → 0 keywords added — tests/shop/amalgadon.test.ts
+
+- [ ] [S] Add tests/shop/murozond.test.ts — verify Murozond (tier 5 dragon) battlecry copies a random enemy minion's card from an opponent's board into your own board; build a GameState with Murozond in hand and a known enemy minion on an opponent's board; play Murozond → a copy of the enemy minion appears on your board; verify it has the correct cardId and stats — tests/shop/murozond.test.ts
+
+- [ ] [S] Add tests/heroes/jandice-barov.test.ts — verify Jandice Barov passive: after selling a minion, a random minion of the same Tavern Tier is added to the shop; build a GameState with Jandice Barov and a tier-2 minion on board; sell the minion; verify shop size increased by 1 and the new shop minion has tier ≤ 2 — tests/heroes/jandice-barov.test.ts
+
+- [ ] [S] Add tests/heroes/ysera.test.ts — verify Ysera passive: at start of each turn, a random Dragon at your current Tavern Tier is added to the shop; build a GameState with Ysera at tier 3, advance a turn (beginRecruitTurn), verify shop contains at least one Dragon minion it didn't have before — tests/heroes/ysera.test.ts
+
 - [x] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
 
 - [x] [S] Ghost fight label — in the combat overlay pairing banner (~line 1693 of app/game/page.tsx), check if the opponent player object has `placement !== null`; if so change the label from "You're fighting:" to "👻 Ghost fight vs." so the player knows they're facing a dead player's board
