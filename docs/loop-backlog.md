@@ -16,7 +16,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Gameplay & UI (highest priority)
 
-- [ ] [S] Add tests/simulation/cave-hydra.sim.test.ts — verify Cave Hydra (tier 4 beast, 2/4, cleave) damages the attacked target AND its two adjacent enemies; board: [Cave Hydra] vs [3/3, 3/3, 3/3]; Cave Hydra attacks, all 3 enemies take damage; verify transcript has 3 Damage events; also verify a 2-minion board correctly damages just 1 adjacent — tests/simulation/cave-hydra.sim.test.ts
+- [x] [S] Add tests/simulation/cave-hydra.sim.test.ts — verify Cave Hydra (tier 4 beast, 2/4, cleave) damages the attacked target AND its two adjacent enemies; board: [Cave Hydra] vs [3/3, 3/3, 3/3]; Cave Hydra attacks, all 3 enemies take damage; verify transcript has 3 Damage events; also verify a 2-minion board correctly damages just 1 adjacent — tests/simulation/cave-hydra.sim.test.ts
 
 - [ ] [S] Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board: [Voidlord] vs [4/1 attacker]; Voidlord dies → deathrattle fires → three 1/3 Demon taunts appear; verify survivorsLeft.length ≥ 1 and all new Demons have taunt — tests/simulation/voidlord.sim.test.ts
 
