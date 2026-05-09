@@ -1,4 +1,4 @@
-import type { MinionHooks, MinionInstance, RecruitCtx } from "../../types";
+import type { MinionHooks, RecruitCtx } from "../../types";
 import { updatePlayer } from "../../utils";
 import { defineMinion } from "../define";
 
@@ -10,17 +10,25 @@ const hooks: MinionHooks = {
 
     const player = ctx.state.players[ctx.playerId];
     if (!player) return ctx.state;
-    if (player.board.length >= 7) return ctx.state;
 
-    // Give the summoned Dragon +2/+2
+    // Find all friendly Dragons on the board (excluding the summoned one)
+    const dragons = player.board.filter(
+      (m) => m.tribes.includes("Dragon") && m.instanceId !== summoned.instanceId,
+    );
+
+    if (dragons.length === 0) return ctx.state;
+
+    // Pick a random friendly Dragon and give it +2 HP
+    const target = ctx.rng.pick(dragons);
+
     return updatePlayer(ctx.state, ctx.playerId, (p) => {
       const newBoard = p.board.map((m) => {
-        if (m.instanceId === summoned.instanceId) {
+        if (m.instanceId === target.instanceId) {
+          const newHp = m.hp + 2;
           return {
             ...m,
-            atk: m.atk + 2,
-            hp: m.hp + 2,
-            maxHp: m.maxHp + 2,
+            hp: newHp,
+            maxHp: Math.max(m.maxHp, newHp),
           };
         }
         return m;
@@ -35,8 +43,8 @@ export default defineMinion({
   name: "Whelp Smuggler",
   tier: 3,
   tribes: ["Dragon"],
-  baseAtk: 3,
-  baseHp: 6,
+  baseAtk: 2,
+  baseHp: 3,
   baseKeywords: [],
   spellDamage: 0,
   hooks,
