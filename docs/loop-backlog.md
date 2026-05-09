@@ -93,6 +93,8 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Combat animation speed toggle — add a "⚡ 2×" speed button to the combat overlay header in app/game/page.tsx; track `combatSpeed: 1 | 2` state; use it to halve the tick interval from ~350ms to ~175ms at 2×; verify with bun typecheck
 
+- [ ] [S] Add serializeReplay + deserializeReplay functions in src/game/state.ts — serializeReplay takes a GameState and returns a JSON string containing {seed, turn, players: [{id, heroId, hp, armor, tier, board: [{cardId, atk, hp, keywords, golden}], gold}], phase}; deserializeReplay takes the string and returns a GameState with the same state; verify with 3 tests: round-trip through makeInitialState, preserves board state, preserves gold/tier
+
 ---
 
 ## Soon

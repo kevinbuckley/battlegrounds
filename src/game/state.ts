@@ -31,13 +31,18 @@ import { checkAndProcessTriples } from "./triples";
 import type {
   Action,
   AnomalyCard,
+  BuddyInstance,
   GameState,
   HeroId,
+  Keyword,
   MinionCard,
   MinionInstance,
   ModifierId,
+  Phase,
+  PlayerId,
   PlayerState,
   QuestInstance,
+  SpellInstance,
   Tier,
   Tribe,
   TrinketCard,
@@ -1303,4 +1308,232 @@ export function makeInitialState(seed: number): GameState {
 
 export function rngForTurn(state: GameState, label: string): Rng {
   return makeRng(state.seed).fork(`turn:${state.turn}:${label}`);
+}
+
+// ---------------------------------------------------------------------------
+// Replay serialization
+// ---------------------------------------------------------------------------
+
+/** Serialize a GameState to a JSON string suitable for sharing via URL. */
+export function serializeReplay(state: GameState): string {
+  const serializablePlayers = state.players.map((p) => ({
+    id: p.id,
+    name: p.name,
+    heroId: p.heroId,
+    hp: p.hp,
+    armor: p.armor,
+    gold: p.gold,
+    tier: p.tier,
+    upgradeCost: p.upgradeCost,
+    board: p.board.map((m) => ({
+      cardId: m.cardId,
+      atk: m.atk,
+      hp: m.hp,
+      maxHp: m.maxHp,
+      keywords: [...m.keywords] as string[],
+      tribes: m.tribes,
+      golden: m.golden,
+      spellDamage: m.spellDamage,
+      magnetic: m.magnetic,
+      baronRivendare: m.baronRivendare,
+      discount: m.discount,
+    })),
+    hand: p.hand.map((m) => ({
+      cardId: m.cardId,
+      atk: m.atk,
+      hp: m.hp,
+      maxHp: m.maxHp,
+      keywords: [...m.keywords] as string[],
+      tribes: m.tribes,
+      golden: m.golden,
+      spellDamage: m.spellDamage,
+      magnetic: m.magnetic,
+      baronRivendare: m.baronRivendare,
+      discount: m.discount,
+    })),
+    shop: p.shop.map((m) => ({
+      cardId: m.cardId,
+      atk: m.atk,
+      hp: m.hp,
+      maxHp: m.maxHp,
+      keywords: [...m.keywords] as string[],
+      tribes: m.tribes,
+      golden: m.golden,
+      spellDamage: m.spellDamage,
+      magnetic: m.magnetic,
+      baronRivendare: m.baronRivendare,
+      discount: m.discount,
+    })),
+    shopFrozen: p.shopFrozen,
+    upgradedThisTurn: p.upgradedThisTurn,
+    heroPowerUsed: p.heroPowerUsed,
+    actionsThisTurn: p.actionsThisTurn,
+    eliminated: p.eliminated,
+    extraLifeUsed: p.extraLifeUsed,
+    renoJacksonUsed: p.renoJacksonUsed,
+    placement: p.placement,
+    spells: p.spells.map((s) => ({
+      instanceId: s.instanceId,
+      cardId: s.cardId,
+    })),
+    pogoHoppersPlayed: p.pogoHoppersPlayed,
+    piratesBoughtThisTurn: p.piratesBoughtThisTurn,
+  }));
+
+  const payload = {
+    seed: state.seed,
+    turn: state.turn,
+    phase: state.phase,
+    players: serializablePlayers,
+    tribesInLobby: state.tribesInLobby,
+    pool: state.pool,
+    pairingsHistory: state.pairingsHistory,
+    modifiers: state.modifiers,
+    modifierState: state.modifierState,
+  };
+
+  return JSON.stringify(payload);
+}
+
+/** Deserialize a replay string back into a GameState. */
+export function deserializeReplay(json: string): GameState {
+  const payload: {
+    seed: number;
+    turn: number;
+    phase: Phase;
+    players: Array<{
+      id: PlayerId;
+      name: string;
+      heroId: HeroId;
+      hp: number;
+      armor: number;
+      gold: number;
+      tier: Tier;
+      upgradeCost: number;
+      board: Array<{
+        cardId: string;
+        atk: number;
+        hp: number;
+        maxHp: number;
+        keywords: string[];
+        tribes: Tribe[];
+        golden: boolean;
+        spellDamage: number;
+        magnetic?: boolean;
+        baronRivendare?: boolean;
+        discount?: number;
+      }>;
+      hand: Array<{
+        cardId: string;
+        atk: number;
+        hp: number;
+        maxHp: number;
+        keywords: string[];
+        tribes: Tribe[];
+        golden: boolean;
+        spellDamage: number;
+        magnetic?: boolean;
+        baronRivendare?: boolean;
+      }>;
+      shop: Array<{
+        cardId: string;
+        atk: number;
+        hp: number;
+        maxHp: number;
+        keywords: string[];
+        tribes: Tribe[];
+        golden: boolean;
+        spellDamage: number;
+        magnetic?: boolean;
+        baronRivendare?: boolean;
+        discount?: number;
+      }>;
+      shopFrozen: boolean;
+      upgradedThisTurn: boolean;
+      heroPowerUsed: boolean;
+      actionsThisTurn: number;
+      eliminated: boolean;
+      extraLifeUsed: boolean;
+      renoJacksonUsed: boolean;
+      placement: number | null;
+      spells: Array<{
+        cardId: string;
+        atk: number;
+        hp: number;
+        maxHp: number;
+        keywords: string[];
+        tribes: Tribe[];
+        golden: boolean;
+        spellDamage: number;
+        magnetic?: boolean;
+        baronRivendare?: boolean;
+      }>;
+      pogoHoppersPlayed: number;
+      piratesBoughtThisTurn: number;
+    }>;
+    tribesInLobby: Tribe[];
+    pool: Record<string, number>;
+    pairingsHistory: Array<[PlayerId, PlayerId]>;
+    modifiers: ModifierId[];
+    modifierState: {
+      anomaly?: string;
+      trinkets?: TrinketInstance[];
+      quests?: Record<PlayerId, QuestInstance>;
+      buddies?: Record<PlayerId, BuddyInstance[]>;
+    };
+  } = JSON.parse(json);
+
+  const players: PlayerState[] = payload.players.map((p) => ({
+    ...p,
+    board: p.board.map((m) => ({
+      ...m,
+      baseAtk: m.atk,
+      baseHp: m.hp,
+      attachments: {},
+      keywords: new Set(m.keywords) as Set<Keyword>,
+      hooks: {},
+      instanceId: `m_${p.id}_${m.cardId}`,
+    })),
+    hand: p.hand.map((m) => ({
+      ...m,
+      baseAtk: m.atk,
+      baseHp: m.hp,
+      attachments: {},
+      keywords: new Set(m.keywords) as Set<Keyword>,
+      hooks: {},
+      instanceId: `m_${p.id}_h_${m.cardId}`,
+    })),
+    shop: p.shop.map((m) => ({
+      ...m,
+      baseAtk: m.atk,
+      baseHp: m.hp,
+      attachments: {},
+      keywords: new Set(m.keywords) as Set<Keyword>,
+      hooks: {},
+      instanceId: `m_${p.id}_s_${m.cardId}`,
+    })),
+    spells: p.spells.map((s) => ({
+      ...s,
+      keywords: new Set(s.keywords) as Set<Keyword>,
+      hooks: {},
+      instanceId: `s_${p.id}_${s.cardId}`,
+    })),
+    aiMemo: {},
+    discoverOffer: null,
+    trinkets: [],
+    quests: [],
+    buddies: [],
+  }));
+
+  return {
+    seed: payload.seed,
+    turn: payload.turn,
+    phase: payload.phase,
+    players,
+    tribesInLobby: payload.tribesInLobby,
+    pool: payload.pool,
+    pairingsHistory: payload.pairingsHistory,
+    modifiers: payload.modifiers,
+    modifierState: payload.modifierState,
+  };
 }
