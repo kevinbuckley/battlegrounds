@@ -56,7 +56,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/dreadscale.sim.test.ts — verify Dreadscale (tier 8 dragon, 6/6) onDeath deals 2 damage to ALL other minions on both boards; board: [Dreadscale, 1/5 ally] vs [1/5 enemy]; Dreadscale dies → ally takes 2 (1/3), enemy takes 2 (1/3); also verify 1/1 enemies die from 2 dmg; Damage events in transcript — tests/simulation/dreadscale.sim.test.ts
 
-- [ ] [S] Add tests/shop/tide-razor.test.ts — verify Tide Razor (tier 3 murloc, 4/4) battlecry gives +1/+1 to a random friendly Murloc on board; board: [Murloc Scout 1/1]; play Tide Razor → Scout becomes 2/2; no Murlocs → no buff; two Murlocs → exactly one gets buffed — tests/shop/tide-razor.test.ts
+- [x] [S] Add tests/shop/tide-razor.test.ts — verify Tide Razor (tier 3 murloc, 4/4) battlecry gives +1/+1 to a random friendly Murloc on board; board: [Murloc Scout 1/1]; play Tide Razor → Scout becomes 2/2; no Murlocs → no buff; two Murlocs → exactly one gets buffed — tests/shop/tide-razor.test.ts
 
 - [ ] [S] Add tests/shop/whelp-smuggler.test.ts — verify Whelp Smuggler (tier 3 dragon, 2/3) onShopSummon gives +2 HP to a random friendly Dragon when a Dragon is played to board; build: [Whelp Smuggler, Dragon 1/3] on board; play another Dragon → first Dragon becomes 1/5; playing a non-Dragon → no buff — tests/shop/whelp-smuggler.test.ts
 
