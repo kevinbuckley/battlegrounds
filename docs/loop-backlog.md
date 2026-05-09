@@ -16,10 +16,16 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Gameplay & UI (highest priority)
 
+- [x] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
 
-- [ ] [S] Victory banner after combat win — currently only losses show a damage recap banner; add a symmetric "You won! ⚔️" green banner using a new `combatOutcome: { won: boolean; opponentName: string } | null` state; show for 3s after the combat overlay closes; mirror the existing `damageRecap` pattern in app/game/page.tsx
+- [x] [S] Ghost fight label — in the combat overlay pairing banner (~line 1693 of app/game/page.tsx), check if the opponent player object has `placement !== null`; if so change the label from "You're fighting:" to "👻 Ghost fight vs." so the player knows they're facing a dead player's board
 
-- [ ] [S] Ghost fight label — in the combat overlay pairing banner (~line 1693 of app/game/page.tsx), check if the opponent player object has `placement !== null`; if so change the label from "You're fighting:" to "👻 Ghost fight vs." so the player knows they're facing a dead player's board
+- [ ] [S] Add tests/simulation/soul-juggler.sim.test.ts — verify Soul Juggler (tier 3 demon) deals exactly 3 damage to a random enemy minion each time a friendly Demon dies in combat; board: [Soul Juggler, Imp token] vs [two 3/3 vanillas]; Imp dies, Soul Juggler zaps 3 damage to a random enemy, then finishes fight — tests/simulation/soul-juggler.sim.test.ts
+- [ ] [S] Add tests/simulation/lightfang-enforcer.sim.test.ts — verify Lightfang Enforcer (tier 5) gives all friendly minions of each tribe +2/+1 at end of turn; board: [Lightfang, 1/1 Murloc, 1/1 Beast, 1/1 Mech] vs [10/10]; after onStartOfCombat fires all three receive +2/+1 and the fight resolves — tests/simulation/lightfang-enforcer.sim.test.ts
+- [ ] [S] Add tests/simulation/rat-pack.sim.test.ts — verify Rat Pack (tier 2 beast, 2/2) deathrattle summons a number of 1/1 Rats equal to Rat Pack's current ATK; use a 4/2 Rat Pack (buffed) to verify it summons 4 rats; also verify a golden Rat Pack (4/4) summons 4 rats — tests/simulation/rat-pack.sim.test.ts
+- [ ] [S] Add tests/heroes/george-the-fallen.test.ts — verify George the Fallen hero power (2g) gives a friendly minion divine shield; verify using it on a minion that already has divine shield has no effect; use the heroPower function directly on a test GameState — tests/heroes/george-the-fallen.test.ts
+- [ ] [S] Add tests/heroes/ragnaros.test.ts — verify Ragnaros hero power fires at end of turn (passive) dealing 3 damage to a random enemy minion in combat when Ragnaros's side hasn't attacked yet this combat; set up a fixture board, run simulateCombat, confirm a Fireball event appears in the transcript — tests/heroes/ragnaros.test.ts
+- [ ] [S] Add tests/heroes/edwin-van-cleef.test.ts — verify Edwin Van Cleef hero power (passive): Van Cleef gains +1/+1 for each card in the opponent's hand at the start of each recruit turn; build a GameState with opponent hand size 3, call the onTurnStart hook, verify Van Cleef is 4/4 (base 1/1 + 3 stacks) — tests/heroes/edwin-van-cleef.test.ts
 
 - [ ] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
@@ -38,7 +44,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 ### Engine correctness
 
 - [ ] [S] Add tests/simulation/junkbot.sim.test.ts — verify Junkbot gains +2/+2 each time a Mech dies in combat; board: [Junkbot, Annoy-o-Tron] vs [3/3 vanilla]; Annoy-o-Tron's divine shield pops then it dies, Junkbot gains +2/+2 then finishes the fight
-- [ ] [S] Add tests/simulation/deflect-o-bot.sim.test.ts — verify Deflect-o-Bot regains divine shield when an odd-cost Mech is played to the board; verify it does NOT regain on even-cost Mech play
+- [x] [S] Add tests/simulation/deflect-o-bot.sim.test.ts — verify Deflect-o-Bot regains divine shield when an odd-cost Mech is played to the board; verify it does NOT regain on even-cost Mech play
 - [ ] [S] Add tests/simulation/cobalt-scalebane.sim.test.ts — verify at start of combat Cobalt Scalebane gives a random friendly non-Dragon +3 ATK; board: [Cobalt Scalebane, 1/1 murloc] vs [10/10]; murloc gets +3 ATK and wins
 - [ ] [S] Add King Mukla hero test — verify hero power gives opponent 2 Bananas in their hand and playing a Banana on a minion gives +1/+1 — tests/heroes/king-mukla.test.ts
 
