@@ -28,7 +28,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/wrath-weaver.test.ts — verify Wrath Weaver (tier 1, 1/3) onTurnEnd deals 1 damage to hero and gives all friendly Demons +2/+2; build state with [Wrath Weaver, Vulgar Homunculus 2/4 Demon] on board; end turn → hero loses 1 HP, Demon becomes 4/6; non-Demons NOT buffed; no Demons on board → only hero takes 1 dmg — tests/shop/wrath-weaver.test.ts
 
-- [ ] [S] Add tests/shop/alley-cat.test.ts — verify Alley Cat (tier 1 beast, 1/1) battlecry summons a 1/1 Tabbycat Beast token to board; play Alley Cat → board has 2 minions; Tabbycat tribe includes Beast; golden Alley Cat summons 2 Tabbycats; board at 6 minions before play → Tabbycat still added (hits cap 7) — tests/shop/alley-cat.test.ts
+- [ ] [S] Add tests/shop/alley-cat.test.ts — verify Alley Cat (tier 1 beast, 1/1) battlecry summons a random minion from your hand to board; play Alley Cat with hand containing minions → random one moves to board; empty hand → no summon; board at 6 minions before play → respects cap 7 — tests/shop/alley-cat.test.ts
 
 - [ ] [S] Add tests/shop/hangry-dragon.test.ts — verify Hangry Dragon (tier 2 dragon, 4/4) onTurnStart gives itself +2/+2 if the player won last combat; read hangry-dragon.ts to find exactly which state field tracks win/loss; set that field to indicate win, start next turn → Dragon becomes 6/6; indicate loss → no buff — tests/shop/hangry-dragon.test.ts
 

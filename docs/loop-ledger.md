@@ -1,3 +1,4 @@
+2026-05-09 | e823aeb | FIXED: Add tests/shop/alley-cat.test.ts — verify Alley Cat (tier 1 beast, 1/1) battlecry summons a random minion from your hand to board, handles empty hand, board cap, and self-referential cases, 4 tests pass, bun typecheck and bun test (1121/1121) pass
 2026-05-09 | c182b47 | FIXED: Add tests/simulation/yo-ho-ogre.sim.test.ts — verify Yo-Ho-Ogre (tier 4 pirate, 2/8) yoHoOgre keyword causes extra attack after normal attack targeting random enemy, 4 tests pass, bun typecheck and bun test (1117/1117) pass
 2026-05-09 | ba7613d | FIXED: Add tests/simulation/imp-gang-boss.sim.test.ts — verify Imp Gang Boss (tier 3 demon, 2/4) onDamageTaken summons 1/1 Imp Demons each time it takes damage, with 5 tests passing, bun typecheck and bun test (1109/1109) pass
  2026-05-09 | 7c29a1a | FIXED: Verify Goldrinn (tier 5 beast, 4/4) deathrattle gives friendly Beasts +5/+5 — 5 simulation tests pass, bun typecheck and bun test (1088/1088) pass
