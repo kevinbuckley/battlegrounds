@@ -35,7 +35,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add tests/shop/murozond.test.ts — done
 - [x] [S] Add tests/heroes/jandice-barov.test.ts — done
 
-- [ ] [S] Add tests/simulation/ghastcoiler.sim.test.ts — verify Ghastcoiler (tier 6 beast, 7/7) deathrattle summons 2 minions from its hardcoded pool (friggent_northvalley, terestian_manferris); board: [Ghastcoiler] vs [8/1]; Ghastcoiler dies → 2 new minions appear on left board; verify survivorsLeft.length ≥ 2 after deathrattle resolves; verify golden version summons 4; verify board cap is respected — tests/simulation/ghastcoiler.sim.test.ts
+- [x] [S] Add tests/simulation/ghastcoiler.sim.test.ts — DONE (file exists)
 
 - [x] [S] Add tests/simulation/malganis.sim.test.ts — verify Mal'Ganis (tier 5 demon, 9/7) onStartOfCombat gives all OTHER friendly Demons +2/+2; board: [Malganis, 1/1 Imp Demon] vs [10/10]; verify Imp has 3/3 before first attack; Malganis itself NOT buffed; non-Demon allies also NOT buffed — tests/simulation/malganis.sim.test.ts
 
@@ -45,7 +45,25 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/drakonid-enforcer.sim.test.ts — verify Drakonid Enforcer (tier 4 dragon, 3/6) gains +2/+2 when a FRIENDLY divine shield pops; board: [Drakonid, Annoy-o-Tron (has taunt+divineShield)] vs [3/10 enemy]; enemy targets Annoy-o-Tron (taunt), shield pops → Drakonid gains +2/+2 → 5/8; also verify a second test: [Drakonid] vs [Annoy-o-Tron] where the enemy's shield pops but Drakonid does NOT gain stats — tests/simulation/drakonid-enforcer.sim.test.ts
 
-- [ ] [S] Add tests/simulation/nadina.sim.test.ts — verify Nadina the Red (tier 6 demon, 7/4) deathrattle gives divine shield to allies that have an onDeath hook; board: [Nadina, Harvest Golem (has deathrattle), 2/2 vanilla] vs [10/10]; Nadina dies → Harvest Golem gains divine shield; vanilla minion does NOT get a shield (no onDeath hook) — tests/simulation/nadina.sim.test.ts
+- [x] [S] Add tests/simulation/nadina.sim.test.ts — DONE (file exists)
+
+- [ ] [S] Add tests/simulation/ripsnarl-captain.sim.test.ts — verify Ripsnarl Captain (tier 4 pirate, 3/5) onAllyAttack gains +2/+2 when a friendly Pirate attacks; board: [Ripsnarl Captain, Bloodsail Pirate 2/3] vs [1/1, 1/1, 1/1]; each time Bloodsail Pirate attacks, Ripsnarl gains +2/+2; verify Stat events show ATK/HP growing — tests/simulation/ripsnarl-captain.sim.test.ts
+
+- [ ] [S] Add tests/simulation/security-rover.sim.test.ts — verify Security Rover (tier 4 mech, 1/4) spawns a 2/3 Mech with divine shield each time IT takes damage; board: [Security Rover] vs [3/3, 3/3]; first hit on Rover spawns a divine-shield bot; verify survivorsLeft grows after each hit on Rover — tests/simulation/security-rover.sim.test.ts
+
+- [ ] [S] Add tests/shop/defender-of-argus.test.ts — verify Defender of Argus (tier 4, 1/3) battlecry gives adjacent friendly minions +1/+1 and taunt; board: [minion A, Defender, minion B] at indices 0,1,2; play Defender at index 1 → minion A and B both gain +1/+1 and taunt; test with Defender at board edge (index 0) → only right neighbor gets buff — tests/shop/defender-of-argus.test.ts
+
+- [ ] [S] Add tests/shop/coldlight-seer.test.ts — verify Coldlight Seer (tier 3 murloc, 2/3) battlecry gives all friendly Murlocs +2 HP; board: [Murloc 1/1, Murloc 2/2, non-Murloc 3/3]; play Coldlight Seer → both Murlocs gain +2 HP (1/3 and 2/4); non-Murloc unchanged; Coldlight itself unchanged — tests/shop/coldlight-seer.test.ts
+
+- [ ] [S] Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt; board with [Beast 1/1, non-Beast 2/2]; play Houndmaster → Beast becomes 3/3 with taunt; non-Beast unchanged; board with no Beasts → no buff applied — tests/shop/houndmaster.test.ts
+
+- [ ] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2; board: [Taunt-minion 1/1, non-Taunt 2/2, Taunt-minion2 3/3]; play Strongshell → only taunt minions gain +2/+2 (3/3 and 5/5); non-taunt unchanged — tests/shop/strongshell-scavenger.test.ts
+
+- [ ] [S] Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2; board: [Dragon 1/1, non-Dragon 2/2]; play Virmen Sensei → Dragon gains +2/+2 (3/3); non-Dragon unchanged; board with no Dragons → no buff — tests/shop/virmen-sensei.test.ts
+
+- [ ] [S] Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous; board: [Murloc1, Murloc2, non-Murloc]; play Toxfin → both Murlocs gain poisonous keyword; non-Murloc is unchanged; Toxfin itself does not get poisonous — tests/shop/toxfin.test.ts
+
+- [ ] [S] Add tests/shop/sellemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand; build GameState with Sellemental on board; dispatch("sell") → hand grows by 1; new card is an Elemental with tribe=["Elemental"] and atk=1/hp=1; selling a non-Sellemental does NOT add a token — tests/shop/sellemental.test.ts
 
 - [ ] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when Lil' Rag itself is played to board; board: [Elemental 1/1, non-Elemental 2/2]; play Lil' Rag → Elemental becomes 2/2, non-Elemental unchanged, Lil' Rag not buffed — tests/shop/lil-rag.test.ts
 
