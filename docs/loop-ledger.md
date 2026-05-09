@@ -1,4 +1,5 @@
-2026-05-09 | 7c29a1a | FIXED: Verify Goldrinn (tier 5 beast, 4/4) deathrattle gives friendly Beasts +5/+5 — 5 simulation tests pass, bun typecheck and bun test (1088/1088) pass
+ 2026-05-09 | 7c29a1a | FIXED: Verify Goldrinn (tier 5 beast, 4/4) deathrattle gives friendly Beasts +5/+5 — 5 simulation tests pass, bun typecheck and bun test (1088/1088) pass
+2026-05-09 | 3ef3412 | FIXED: Fix Arm of the Empire (tier 3 dragon, 4/5) onAllyAttacked wiring in combat.ts — change friendlyBoard from target side to attacker side, remove taunt filter so all friendly minions fire onAllyAttacked hook, plus 4 simulation tests verifying buff on taunts, no buff on non-taunts, multiple taunts, and no-trigger with no taunts — bun typecheck and bun test (1104/1104) pass
 2026-05-09 | 4ac5e4d | FIXED: Add Crystalweaver (tier 4 dragon, 4/4, cleave) onBattlecry hook that buffs all friendly Demons +2/+2, plus 4 shop tests verifying buff on Demons, no buff on non-Demons, empty board, and multiple Demons — bun typecheck and bun test (1100/1100) pass
 2026-05-09 | 26ade87 | FIXED: Fix Crystalweaver (tier 4, 5/4) — change base stats from 4/4 to 5/4, remove Dragon tribe (it's tribeless), plus 4 passing shop tests — bun typecheck and bun test (1100/1100) pass
 

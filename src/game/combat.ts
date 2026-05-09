@@ -167,21 +167,19 @@ export function simulateCombat(
         });
       }
 
-      // Fire onAllyAttacked on friendly Taunt minions when a Taunt is being attacked
-      const friendlyBoard = isLeft ? right : left;
+      // Fire onAllyAttacked on friendly minions when a friendly Taunt is being attacked
+      const friendlyBoard = isLeft ? left : right;
       for (const friendly of friendlyBoard) {
-        if (friendly.keywords.has("taunt")) {
-          const attackCtx: AttackCombatCtx = {
-            self: friendly,
-            selfSide: targetSide,
-            left,
-            right,
-            emit,
-            rng,
-            target: attacker,
-          };
-          friendly.hooks?.onAllyAttacked?.(attackCtx);
-        }
+        const attackCtx: AttackCombatCtx = {
+          self: friendly,
+          selfSide: side,
+          left,
+          right,
+          emit,
+          rng,
+          target: attacker,
+        };
+        friendly.hooks?.onAllyAttacked?.(attackCtx);
       }
 
       // Apply damage from attacker to all hit targets
