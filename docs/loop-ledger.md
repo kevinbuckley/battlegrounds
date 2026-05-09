@@ -402,3 +402,4 @@
 2026-05-09 | 5a75934 | FIXED: Spawn of N'Zoth base stats 1/1→2/2, deathrattle +1/+1→+2/+2 to all friendly minions, 4 sim tests
 2026-05-09 | 6532e04 | FIXED: Add Blingtron 4000 (tier 4 mech, 3/3) — battlecry summons a 1/1 Robot Pup for each friendly Mech on your board (including itself), with 4 simulation tests verifying pup count, board cap, and single-mech scenarios
 2026-05-09 | dd4db85 | FIXED: Add tests/simulation/soul-devourer.sim.test.ts — verify Soul Devourer (tier 3 demon, 3/3) battlecry consumes a friendly Demon's stats when played to board, removes the target from board, does nothing when no friendly Demons exist, does not consume non-Demons, and golden version (6/6) consumes 2/4 → 8/10
+2026-05-09 | d6fcbed | FIXED: Add tests/simulation/mechano-egg.sim.test.ts — verify Mechano-Egg (tier 5 mech, 0/5) deathrattle summons an 8/8 Robosaur, respects board cap, and golden version fires deathrattle twice for 2 Robosaurs
