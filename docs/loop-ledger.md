@@ -1,3 +1,4 @@
+2026-05-09 | 5d01362 | FIXED: Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when played to board, does NOT buff non-Elementals, does NOT buff itself, 4 tests pass
 2026-05-09 | 1ff7553 | FIXED: Add tests/simulation/nadina.sim.test.ts — verify Nadina the Red (tier 6 demon, 7/4) deathrattle gives divine shield to allies that have an onDeath hook; Harvest Golem gets shield, vanilla minions without onDeath do not; golden version also works, 4 tests pass
 
 2026-05-09 | 196a8fd | FIXED: Add serializeReplay + deserializeReplay functions in src/game/state.ts — serializeReplay serializes GameState to JSON string (seed, turn, phase, players with board/hand/shop stats, gold, tier, HP, armor, spells, modifiers); deserializeReplay reconstructs GameState from JSON; 3 tests verify round-trip, board state preservation, and gold/tier preservation
