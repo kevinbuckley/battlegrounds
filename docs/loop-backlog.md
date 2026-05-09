@@ -61,9 +61,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2; board: [Dragon 1/1, non-Dragon 2/2]; play Virmen Sensei → Dragon gains +2/+2 (3/3); non-Dragon unchanged; board with no Dragons → no buff — tests/shop/virmen-sensei.test.ts
 
-- [ ] [S] Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous; board: [Murloc1, Murloc2, non-Murloc]; play Toxfin → both Murlocs gain poisonous keyword; non-Murloc is unchanged; Toxfin itself does not get poisonous — tests/shop/toxfin.test.ts
+- [x] [S] Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous; board: [Murloc1, Murloc2, non-Murloc]; play Toxfin → both Murlocs gain poisonous keyword; non-Murloc is unchanged; Toxfin itself does not get poisonous — tests/shop/toxfin.test.ts
 
-- [ ] [S] Add tests/shop/sellemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand; build GameState with Sellemental on board; dispatch("sell") → hand grows by 1; new card is an Elemental with tribe=["Elemental"] and atk=1/hp=1; selling a non-Sellemental does NOT add a token — tests/shop/sellemental.test.ts
+- [x] [S] Add tests/shop/sellemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand; build GameState with Sellemental on board; dispatch("sell") → hand grows by 1; new card is an Elemental with tribe=["Elemental"] and atk=1/hp=1; selling a non-Sellemental does NOT add a token — tests/shop/sellemental.test.ts
 
 - [x] [S] Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK; board: [Siegebreaker, Imp 2/2 Demon] vs [10/10]; after onStartOfCombat the Imp should have 3 ATK (2+1 from Siegebreaker); Siegebreaker itself is NOT buffed; also verify non-Demons are NOT buffed — tests/simulation/siegebreaker.sim.test.ts  <!-- DONE: 4 tests pass -->
 
@@ -71,7 +71,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1; board: [Murloc Scout 1/1]; play Rockpool Hunter → Murloc Scout becomes 2/2; board with no Murlocs → no buff; board with two Murlocs → one of them gains +1/+1 — tests/shop/rockpool-hunter.test.ts
 
-- [ ] [S] Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently — tests/simulation/micro-machine.sim.test.ts
+- [x] [S] Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently — tests/simulation/micro-machine.sim.test.ts
 
 - [x] [S] Add tests/simulation/old-murk-eye.sim.test.ts — verify Old Murk-Eye (tier 4 murloc, 2/4) gains +1 ATK at start of combat for each other Murloc on the battlefield (both sides); board: [Old Murk-Eye, Murloc Scout 1/1] vs [Murloc Tidehunter 2/1, vanilla 3/3]; Murk-Eye should gain +3 ATK (3 other Murlocs) → 5 ATK total; verify via Stat events; also verify with no other Murlocs → no buff — tests/simulation/old-murk-eye.sim.test.ts  <!-- DONE: 5 tests pass -->
 
@@ -80,6 +80,18 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos (tier 6 dragon) onCast gives ALL friendly board minions +1/+1 each time a spell is cast; build GameState with Kalecgos and 2 board minions; cast one spell → both gain +1/+1; cast second spell → both gain another +1/+1 — tests/shop/kalecgos.test.ts
 
 - [ ] [S] Add tests/shop/metaltooth-leaper.test.ts — verify Metaltooth Leaper (tier 2 mech, 3/3) battlecry gives ALL friendly Mechs +2 ATK; board: [Mech 1/1, Mech 2/2, non-Mech 1/1]; play Metaltooth → only Mechs gain +2 ATK; golden version gives +4 ATK — tests/shop/metaltooth-leaper.test.ts
+
+- [ ] [S] Add tests/simulation/houndmaster-shaw.sim.test.ts — verify Houndmaster Shaw (tier 4 beast, 3/6) onStartOfCombat gives ALL other friendly minions the Rush keyword; board: [Shaw, vanilla 1/1, vanilla 2/2] vs [taunt 5/5]; verify both vanillas gain Rush (can attack any target), Shaw itself does NOT gain Rush; also verify a solo Shaw board gives no Rush to anyone — tests/simulation/houndmaster-shaw.sim.test.ts
+
+- [ ] [S] Add tests/simulation/fiendish-servant.sim.test.ts — verify Fiendish Servant (tier 1 demon, 2/1) onDeath gives its current ATK to a random friendly minion; board: [Fiendish Servant 2/1, vanilla 1/4] vs [3/3]; Fiendish Servant attacks and dies → friendly vanilla gains +2 ATK (3/4); also verify a buffed Servant (4 ATK) gives +4; also verify with no other friendly minions → no crash — tests/simulation/fiendish-servant.sim.test.ts
+
+- [ ] [S] Add tests/simulation/lil-exorcist.sim.test.ts — verify Lil' Exorcist (tier 3, 2/2, taunt) battlecry gives itself +1/+1 for each Deathrattle minion on both boards; build shop state with [Lil Exorcist in hand] and [Infested Wolf (deathrattle), plain 2/2] on board, enemy board has [Kaboom Bot (deathrattle)]; play Lil' Exorcist → it should gain +2/+2 (2 deathrattle minions); also verify 0 deathrattles → no buff — tests/simulation/lil-exorcist.sim.test.ts
+
+- [ ] [S] Add tests/simulation/righteous-protector.sim.test.ts — verify Righteous Protector (tier 1, 1/1, taunt+divineShield) forces enemies to target it first (taunt) and absorbs the first hit with its divine shield; board: [Righteous Protector, 3/3] vs [2/4]; enemy must attack the Protector (taunt), divine shield pops (Protector stays alive at 1/1), then next enemy attack kills Protector; the 3/3 ally survives — tests/simulation/righteous-protector.sim.test.ts
+
+- [ ] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — verify Scabbs Cutterbutter hero power (passive): at the start of the first recruit phase, give the player a random Mech; verify that makeInitialState with scabbs_cutterbutter heroId results in 1 Mech minion in the shop or hand on turn 1; check the hero definition has the correct id and power kind — tests/heroes/scabbs-cutterbutter.test.ts
+
+- [ ] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (active, 1g): make a shop minion dormant (gains the dormant keyword, stats doubled, removed from shop until next turn); verify heroPower() on a GameState with a shop minion makes it dormant; verify a dormant minion returns with doubled stats next turn via onTurnStart — tests/heroes/maiev-shadowsong.test.ts
 
 - [x] [S] Add tests/heroes/ysera.test.ts — verify Ysera passive: at start of each turn, a random Dragon at your current Tavern Tier is added to the shop; build a GameState with Ysera at tier 3, advance a turn (beginRecruitTurn), verify shop contains at least one Dragon minion it didn't have before — tests/heroes/ysera.test.ts
 
