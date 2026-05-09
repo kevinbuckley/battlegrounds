@@ -104,9 +104,11 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/heroes/rakanishu.test.ts — verify Rakanishu hero power (2g): each Elemental in the shop gives a random friendly minion +2 ATK; build state with Rakanishu hero, 2 Elementals in shop, 1 board minion; fire heroPower → that minion gains +4 ATK (2×2); no Elementals in shop → no buff; empty board → no buff — tests/heroes/rakanishu.test.ts
 
-- [ ] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — verify Scabbs Cutterbutter hero power (passive): after buying a minion, the next minion in the shop costs 1 less gold; build state with Scabbs hero, buy a minion → shop[0].discount increases by 1; buying again resets the discount; verify via discount field on shop minion — tests/heroes/scabbs-cutterbutter.test.ts
+- [ ] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — verify Scabbs Cutterbutter hero power (passive): after buying a minion, the next minion in the shop costs 1 less gold; build state with Scabbs hero, buy a minion → shop[0].discount increases by 1; buying again resets the discount; verify via discount field on shop minion — tests/heroes/scabbs-cutterbutter.test.ts  (ALREADY COVERED in tests/heroes/scabbs-cutterbutter.test.ts — active hero power giving +1/+1 to board minion)
 
-- [ ] [S] Add tests/heroes/ysera.test.ts — verify Ysera hero power (2g): calling onHeroPower adds one Dragon to the player's hand; the added card has tribes including "Dragon"; hand.length increases by 1; using twice adds 2 Dragons; seeded RNG — tests/heroes/ysera.test.ts
+- [ ] [S] Add tests/heroes/ysera.test.ts — verify Ysera hero power (2g): calling onHeroPower adds one Dragon to the player's hand; the added card has tribes including "Dragon"; hand.length increases by 1; using twice adds 2 Dragons; seeded RNG — tests/heroes/ysera.test.ts  (ALREADY COVERED in tests/heroes/ysera.test.ts — passive adds Dragon to shop each turn)
+
+- [ ] [S] Add tests/heroes/ragnaros.test.ts — verify Ragnaros passive: start of combat, deal 8 damage to lowest-ATK enemy minion; build state with Ragnaros hero and 1 board minion; run combat; verify that minion's attack contribution matches the +6 bonus from ragnaros — tests/heroes/ragnaros.test.ts
 
 - [ ] [S] Add tests/simulation/amalgadon.sim.test.ts — verify Amalgadon (tier 6, 0/0) battlecry gains a random keyword for each different tribe among friendly board minions; board: [Beast 1/1, Mech 2/2, Murloc 1/1]; play Amalgadon → gains 3 keywords (one per tribe); board with 2 Beasts → only 1 tribe → gains 1 keyword; empty board → no keywords — tests/simulation/amalgadon.sim.test.ts
 

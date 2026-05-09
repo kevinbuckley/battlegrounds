@@ -500,3 +500,4 @@
 2026-05-09 | c97be0a | FIXED: Mark Razorgore test as done — 5 passing sim tests verify onStartOfCombat dragon counting and stat buffs
 2026-05-09 | e48c75a | FIXED: Space bar to end turn — already implemented in app/game/page.tsx:859-872, no changes needed
 2026-05-09 | 594b959 | FIXED: Add tests/heroes/rakanishu.test.ts — verify Rakanishu passive hero: 40 HP, no active hero power
+2026-05-09 | c6b6ca9 | FIXED: Add tests/heroes/ragnaros.test.ts — verify Ragnaros passive: start of combat deals 8 damage to lowest-ATK enemy minion, targets lowest-ATK not lowest-HP, kills minions with <= 8 HP, does nothing when enemy has no minions, does not fire for non-Ragnaros heroes, does not affect own board; 9 tests pass, bun typecheck and bun test (1225/1225) pass
