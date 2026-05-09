@@ -396,3 +396,4 @@
 2026-05-09 | 8361729 | FIXED: Goldrinn deathrattle — fix goldrinn.ts from onShopSummon to onDeath giving friendly Beasts +5/+5, add 5 simulation tests
 2026-05-09 | 8361729 | FIXED: Fix Mama Bear (tier 6 beast) — changed from broken onShopSummon self-buff to correct onSummon hook that gives newly summoned friendly Beasts +5/+5, fixed base stats from 1/1 to 5/5, added 4 simulation tests
 2026-05-09 | 5a75934 | FIXED: Spawn of N'Zoth base stats 1/1→2/2, deathrattle +1/+1→+2/+2 to all friendly minions, 4 sim tests
+2026-05-09 | 6532e04 | FIXED: Add Blingtron 4000 (tier 4 mech, 3/3) — battlecry summons a 1/1 Robot Pup for each friendly Mech on your board (including itself), with 4 simulation tests verifying pup count, board cap, and single-mech scenarios

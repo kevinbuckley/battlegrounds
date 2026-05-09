@@ -81,6 +81,7 @@ import tideRazorT3 from "./tier3/tide-razor";
 import tortollanShellraiser from "./tier3/tortollan-shellraiser";
 import whelpSmuggler from "./tier3/whelp-smuggler";
 import annihilanBattlemaster from "./tier4/annihilan-battlemaster";
+import blingtron4000 from "./tier4/blingtron-4000";
 import bloodsailCorsair from "./tier4/bloodsail-corsair";
 import bolvarFireblood from "./tier4/bolvar-fireblood";
 import boulderfogOgre from "./tier4/boulderfog-ogre";
@@ -229,6 +230,7 @@ export const MINIONS: Record<MinionCardId, MinionCard> = {
   [bloodsailCannoneer.id]: bloodsailCannoneer,
   [bloodsailCorsair.id]: bloodsailCorsair,
   [annihilanBattlemaster.id]: annihilanBattlemaster,
+  [blingtron4000.id]: blingtron4000,
   [bolvarFireblood.id]: bolvarFireblood,
   [broodkinZealot.id]: broodkinZealot,
   [drakonidEnforcer.id]: drakonidEnforcer,
