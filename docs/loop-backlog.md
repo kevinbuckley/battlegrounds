@@ -60,7 +60,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ### Later — Cards (deprioritized)
 
-- [x] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
+- [x] [S] Add tests/simulation/baelgun.sim.test.ts — verify Baelgun (tier 5, 4/5) battlecry gives a friendly Mech +2/+2 and Magnetic, does nothing when no friendly Mechs exist, stacks Magnetic across multiple Baelguns, and does not buff non-Mech minions
 - [x] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
 - [x] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
 
