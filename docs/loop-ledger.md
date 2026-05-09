@@ -385,3 +385,4 @@
 2026-05-09 | 8b920b8 | FIXED: Add Edwin Van Cleef hero power test — verify onHeroPower gives all hand minions +1/+1, stacks across uses, does nothing on empty hand, and does not affect board minions
 2026-05-09 | 5488850 | FIXED: Cobalt Scalebane onTurnEnd now uses seeded rng.pick() instead of Math.random for deterministic random minion selection, plus unit tests verifying buff behavior
 2026-05-09 | fc771cf | FIXED: Description field already implemented — MinionCard interface has description?: string, 8 key cards populated, title={card.description} wired in MinionCard component, bun typecheck and bun test (835/835) pass
+2026-05-09 | 463790a | FIXED: Add tests/heroes/king-mukla.test.ts — verify King Mukla hero power (1g active): opponent receives 2 Banana cards in their hand; verify using it on a minion that already has divine shield has no effect; use the heroPower function directly on a test GameState
