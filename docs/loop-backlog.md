@@ -81,7 +81,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/queen-of-pain-lifesteal.sim.test.ts — DONE (already covered by tests/simulation/lifesteal.sim.test.ts with 8 tests covering lifesteal healing, divine shield interaction, and Queen of Pain)
 
-- [ ] [S] Add `Deathwing` (tier 8 dragon, 10/10): deathrattle destroys ALL other minions on both boards — onDeath hook in src/game/minions/tier8/deathwing.ts, requires modifying combat.ts reapDeaths to clear both boards, with 4 simulation tests — tests/simulation/deathwing.sim.test.ts
+- [x] [S] Add `Deathwing` (tier 8 dragon, 10/10): deathrattle destroys ALL other minions on both boards — onDeath hook in src/game/minions/tier8/deathwing.ts, requires modifying combat.ts reapDeaths to clear both boards, with 4 simulation tests — tests/simulation/deathwing.sim.test.ts
 
 - [ ] [S] Add tests/shop/metaltooth-leaper.test.ts — verify Metaltooth Leaper (tier 2 mech, 3/3) battlecry gives ALL friendly Mechs +2 ATK; board: [Mech 1/1, Mech 2/2, non-Mech 1/1]; play Metaltooth → only Mechs gain +2 ATK; golden version gives +4 ATK — tests/shop/metaltooth-leaper.test.ts
 
