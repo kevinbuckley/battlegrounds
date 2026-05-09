@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { DiscoverOverlay } from "@/components/DiscoverOverlay";
 import { GameOverOverlay } from "@/components/GameOverOverlay";
 import { simulateCombat } from "@/game/combat";
@@ -472,6 +472,24 @@ export default function GamePage() {
   const [placingMinionIdx, setPlacingMinionIdx] = useState<number | null>(null);
   const [heroPowerTargetIdx, setHeroPowerTargetIdx] = useState<number | null>(null);
   const [selectedSpellIdx, setSelectedSpellIdx] = useState<number | null>(null);
+
+  // Derive opponent from the most recent pairing involving player 0
+  const opponent = useMemo(() => {
+    if (!gameState) return undefined;
+    let opponentId: number | null = null;
+    for (let i = gameState.pairingsHistory.length - 1; i >= 0; i--) {
+      const pairing = gameState.pairingsHistory[i]!;
+      if (pairing[0] === 0) {
+        opponentId = pairing[1];
+        break;
+      }
+      if (pairing[1] === 0) {
+        opponentId = pairing[0];
+        break;
+      }
+    }
+    return opponentId !== null ? gameState.players.find((p) => p.id === opponentId) : undefined;
+  }, [gameState]);
 
   // Combat animation state
   const [combatResult, setCombatResult] = useState<CombatResult | null>(null);
@@ -1703,10 +1721,11 @@ export default function GamePage() {
               (() => {
                 const hero = HEROES[opponentHeroId];
                 if (!hero) return null;
+                const isGhostFight = opponent?.placement !== null;
                 return (
                   <div className="mb-3 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-2 text-center">
                     <span className="text-sm text-amber-300">
-                      You&apos;re fighting:{" "}
+                      {isGhostFight ? "Ghost fight vs. " : "You&apos;re fighting: "}
                       <span className="font-bold text-amber-400">{hero.name}</span>
                     </span>
                   </div>
