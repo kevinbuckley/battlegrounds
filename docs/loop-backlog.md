@@ -18,13 +18,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Fix Jaraxxus passive — wire onTurnStart in src/game/shop.ts: when player.heroId === "jaraxxus", buff all Demons in player.shop by +1/+1 (just like Sindragosa buffs frozen); add tests/heroes/jaraxxus.test.ts: state with Demon in shop + Jaraxxus hero; trigger TurnStart step → Demon becomes 2/2; non-Demon shop minion unchanged — src/game/shop.ts + tests/heroes/jaraxxus.test.ts
 
-- [ ] [S] Add tests/heroes/yogg-saron.test.ts — verify Yogg-Saron hero power (2g): with seeded RNG, board minions all gain the same randomly chosen keyword after onHeroPower; board with 2 minions → both have identical new keyword; empty board → state unchanged; use heroPower helper and makeRng(42) — tests/heroes/yogg-saron.test.ts
+- [x] [S] Add tests/heroes/yogg-saron.test.ts — verify Yogg-Saron hero power (2g): with seeded RNG, board minions all gain the same randomly chosen keyword after onHeroPower; board with 2 minions → both have identical new keyword; empty board → state unchanged; use heroPower helper and makeRng(42) — tests/heroes/yogg-saron.test.ts
 
 - [x] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (1g): targeting shop index 0 adds "dormant" to shop[0].keywords and sets shop[0].attachments.dormantTurnsLeft = 2; targeting out-of-range index is a no-op; other shop slots unaffected — tests/heroes/maiev-shadowsong.test.ts  (ALREADY COVERED in src/game/heroes.test.ts lines 770-835)
 
-- [ ] [S] Add tests/shop/gentle-megasaur.test.ts — verify Gentle Megasaur (tier 6 beast, 5/4) battlecry gives all friendly Murlocs a random keyword (seeded RNG); board: [Murloc Scout 1/1, Beast 2/2]; play Megasaur → Scout.keywords has 1 new keyword, Beast unchanged; empty board (no Murlocs) → no keyword added — tests/shop/gentle-megasaur.test.ts
+- [x] [S] Add tests/shop/gentle-megasaur.test.ts — verify Gentle Megasaur (tier 6 beast, 5/4) battlecry gives all friendly Murlocs a random keyword (seeded RNG); board: [Murloc Scout 1/1, Beast 2/2]; play Megasaur → Scout.keywords has 1 new keyword, Beast unchanged; empty board (no Murlocs) → no keyword added — tests/shop/gentle-megasaur.test.ts
 
-- [ ] [S] Add tests/shop/mogor-the-curse-golem.test.ts — verify Mogor the Curse-Golem (tier 5 mech, 4/5) battlecry gives all friendly Mechs +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Mogor → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/mogor-the-curse-golem.test.ts
+- [x] [S] Add tests/shop/mogor-the-curse-golem.test.ts — verify Mogor the Curse-Golem (tier 5 mech, 4/5) battlecry gives all friendly Mechs +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Mogor → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/mogor-the-curse-golem.test.ts
 
 ---
 
@@ -82,9 +82,23 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add 3 new anomalies — `big_stats` (all shop minions +2/+2 on setup), `pirate_cove` (all Pirates in shop +2 ATK on setup), `undead_plague` (all minions gain reborn on setup); export and register in ANOMALIES; create src/game/anomalies/anomalies.test.ts with 3 tests verifying each onSetup — src/game/anomalies/index.ts + tests
 
-- [ ] [S] Add `Dragon Diplomacy` quest — trigger: win 3 combats while having 3+ Dragons on board; reward: all friendly Dragons +3/+3; onProgress checks dragon count and combat win; isComplete when progress >= 3; add to QUESTS; 2 tests — src/game/quests/index.ts + src/game/quests.test.ts
+- [x] [S] Add `Dragon Diplomacy` quest — trigger: win 3 combats while having 3+ Dragons on board; reward: all friendly Dragons +3/+3; onProgress checks dragon count and combat win; isComplete when progress >= 3; add to QUESTS; 2 tests — src/game/quests/index.ts + src/game/quests.test.ts
 
-- [ ] [S] Add `Beast Mastery` quest — trigger: sell 4 Beasts from board (onSell hook); reward: all friendly Beasts +2/+2; onProgress increments when a Beast is sold; add to QUESTS; 2 tests verifying progress and reward — src/game/quests/index.ts + src/game/quests.test.ts
+- [x] [S] Add `Beast Mastery` quest — trigger: sell 4 Beasts from board (onSell hook); reward: all friendly Beasts +2/+2; onProgress increments when a Beast is sold; add to QUESTS; 2 tests verifying progress and reward — src/game/quests/index.ts + src/game/quests.test.ts
+
+- [ ] [S] Add tests/simulation/cave-hydra.sim.test.ts — verify Cave Hydra (tier 4 beast, 2/4, cleave) deals its attack damage to ALL adjacent enemies when it attacks; board: [Cave Hydra 2/4] vs [1/3, 1/3, 1/3]; Hydra attacks center enemy → center takes 2, both flanking enemies each take 2 too; all 3 enemies die; verify Damage events in transcript for all 3 — tests/simulation/cave-hydra.sim.test.ts
+
+- [ ] [S] Add tests/simulation/virmen-sensei.sim.test.ts — verify Virmen Sensei (tier 4 murloc, 4/5) onBattlecry gives a random friendly Murloc +2/+2; board: [Murloc Scout 1/1]; play Virmen → Scout becomes 3/3; board with no Murloc → no buff; golden Virmen gives +4/+4 — tests/simulation/virmen-sensei.sim.test.ts
+
+- [ ] [S] Add tests/simulation/toxfin.sim.test.ts — verify Toxfin (tier 4 murloc, 1/2) onBattlecry gives a random friendly Murloc poisonous; board: [Murloc Scout 1/1]; play Toxfin → Scout.keywords includes "poisonous"; board with no Murloc → no keyword added; Toxfin does not gain poisonous itself — tests/simulation/toxfin.sim.test.ts
+
+- [ ] [S] Add tests/simulation/defender-of-argus.sim.test.ts — verify Defender of Argus (tier 4, 2/3) battlecry gives adjacent board minions +1/+1 and taunt; play to position 1 with [2/2] at pos 0 and [3/3] at pos 2; both adjacents become 3/3 and gain "taunt"; verify no buff when no adjacents exist — tests/simulation/defender-of-argus.sim.test.ts
+
+- [ ] [S] Add tests/heroes/george-the-fallen.test.ts — verify George the Fallen hero power (2g active): targeting board index 0 adds "divineShield" to board[0].keywords; targeting an invalid index throws or is a no-op; using twice gives divineShield to two different minions — tests/heroes/george-the-fallen.test.ts
+
+- [ ] [S] Add tests/heroes/millificent-manastorm.test.ts — verify Millificent Manastorm hero power: when refresh or start-of-turn populates shop, all Mechs in shop gain +1/+1; build state with Manastorm hero, rollShopForPlayer → all Mechs in shop have atk+1, hp+1; non-Mechs unchanged — tests/heroes/millificent-manastorm.test.ts
+
+- [ ] [S] Add tests/heroes/pyramad.test.ts — verify Pyramad hero power (2g): calling onHeroPower gives a random friendly board minion +4 HP; board with 1 minion → that minion gains +4 HP; board with 3 minions → exactly 1 gains +4 HP (seeded RNG); empty board → state unchanged — tests/heroes/pyramad.test.ts
 
 - [ ] [M] Fix quest win-detection in processQuests — onProgress in murlocMania/mechMayhem/demonDiplomacy uses flawed board-HP heuristics instead of actual combat result; rewrite processQuests in state.ts to pass the CombatResult winner field into quest progress calls; update all 4 quest cards' onProgress signatures to accept `winner: Side | "draw"`; add 2 regression tests — src/game/state.ts + src/game/quests/index.ts + src/game/quests.test.ts
 
@@ -92,11 +106,11 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Soon — UI improvements
 
-- [ ] [S] Show active tribes in HUD — add an "Active Tribes" row in app/game/page.tsx HUD showing the 5 tribe names from `gameState.tribesInLobby` as small slate-700 pills with text-xs; position it below the tier indicator row; bun typecheck must pass — app/game/page.tsx
+- [x] [S] Show active tribes in HUD — add an "Active Tribes" row in app/game/page.tsx HUD showing the 5 tribe names from `gameState.tribesInLobby` as small slate-700 pills with text-xs; position it below the tier indicator row; bun typecheck must pass — app/game/page.tsx
 
-- [ ] [S] Show active anomaly in HUD — if `gameState.modifierState.anomaly` is set, show the anomaly name as an amber badge in the HUD with a `title` tooltip showing its description; add a `getAnomaly(id)` export to anomalies/index.ts; bun typecheck — app/game/page.tsx + src/game/anomalies/index.ts
+- [x] [S] Show active anomaly in HUD — if `gameState.modifierState.anomaly` is set, show the anomaly name as an amber badge in the HUD with a `title` tooltip showing its description; add a `getAnomaly(id)` export to anomalies/index.ts; bun typecheck — app/game/page.tsx + src/game/anomalies/index.ts
 
-- [ ] [S] Show quest progress in HUD — if `player.quests[0]` exists, show "Quest: <name> N/M" below the hero power button; a thin amber div with width proportional to progress/target; completed shows "✓ Done" in green; look up name via QUESTS[quest.cardId]; bun typecheck — app/game/page.tsx
+- [x] [S] Show quest progress in HUD — if `player.quests[0]` exists, show "Quest: <name> N/M" below the hero power button; a thin amber div with width proportional to progress/target; completed shows "✓ Done" in green; look up name via QUESTS[quest.cardId]; bun typecheck — app/game/page.tsx
 
 ---
 
