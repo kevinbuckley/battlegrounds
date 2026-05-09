@@ -24,7 +24,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/zapp-slywick.sim.test.ts — verify Zapp Slywick (tier 5 mech, 7/10) always attacks the lowest-ATK enemy minion regardless of position; board: [Zapp] vs [1/1 murloc (position 1), 5/5 beast (position 0)]; verify the 1/1 dies first (Zapp targeted it) despite being at index 1; check transcript Attack events (kind: "Attack") for target ordering — tests/simulation/zapp-slywick.sim.test.ts
 
-- [x] [S] Add tests/simulation/petrified-imp-quest.test.ts — verify Petrified Imps Quest gives 3x 1/1 Demons with Rush on first completion, stacks to 6x at progress=2, 9x at progress=3 (capped at board 7), all with Demon tribe and Rush keyword — tests/simulation/petrified-imp-quest.test.ts
+- [x] [S] Add tests/simulation/petrified-imp-quest.test.ts — verify Petrified Imps Quest gives 3x 1/1 Demons with Rush on first completion, stacks to 6x at progress=2, 9x at progress=3 (capped at board 7), all with Demon tribe and Rush keyword — tests/simulation/petrified-imp-quest.test.ts (verified 10/10 pass, bun typecheck clean, bun test 963/963 pass)
 
 - [x] [S] Add tests/simulation/bolvar-fireblood.sim.test.ts — verify Bolvar Fireblood (tier 4 mech, 1/4 divineShield) gains +2 ATK each time a friendly divine shield is lost; board: [Bolvar] vs [3/3 enemy]; Bolvar attacks, enemy counterattacks popping Bolvar's shield, Bolvar gains +2 ATK → now 3 ATK; verify the Stat event in transcript shows atk=3; then verify Bolvar eventually wins (3 ATK vs remaining enemy HP); also add a test with [Bolvar, Annoy-o-Tron] vs [3/20] where the enemy lives long enough for both shields to pop — tests/simulation/bolvar-fireblood.sim.test.ts
 
