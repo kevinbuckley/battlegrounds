@@ -42,17 +42,17 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event in transcript shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
 
-- [ ] [S] Add tests/heroes/reno-jackson.test.ts — verify Reno Jackson hero power (5g): call onHeroPower targeting board index 0; board[0] becomes golden (m.golden === true); m.atk and m.hp unchanged; use heroPower helper with state having ≥5 gold and ≥1 board minion — tests/heroes/reno-jackson.test.ts
+- [x] [S] Add tests/heroes/reno-jackson.test.ts — verify Reno Jackson hero power (5g): call onHeroPower targeting board index 0; board[0] becomes golden (m.golden === true); m.atk and m.hp unchanged; use heroPower helper with state having ≥5 gold and ≥1 board minion — tests/heroes/reno-jackson.test.ts
 
-- [ ] [S] Tribe rotation pool test — add describe block in tests/state-machine.test.ts: for seeds 1, 42, 999, call makeInitialState, then verify every minion in every player's initial shop has tribes that are either empty OR have at least one tribe in gameState.tribesInLobby (import MINIONS to look up card tribes from cardId) — tests/state-machine.test.ts
+- [x] [S] Tribe rotation pool test — add describe block in tests/state-machine.test.ts: for seeds 1, 42, 999, call makeInitialState, then verify every minion in every player's initial shop has tribes that are either empty OR have at least one tribe in gameState.tribesInLobby (import MINIONS to look up card tribes from cardId) — tests/state-machine.test.ts
 
-- [ ] [S] AI sell-weakest test — add test in tests/ai/greedy-upgrade.test.ts: build a state where AI player has 7 minions (atk+hp ranging 2–10) and gold to buy a new minion; run one AI turn; verify the sold minion is the one with lowest (atk+hp) score, ties broken by highest board index — tests/ai/greedy-upgrade.test.ts
+- [x] [S] AI sell-weakest test — add test in tests/ai/greedy-upgrade.test.ts: build a state where AI player has 7 minions (atk+hp ranging 2–10) and gold to buy a new minion; run one AI turn; verify the sold minion is the one with lowest (atk+hp) score, ties broken by highest board index — tests/ai/greedy-upgrade.test.ts
 
 - [x] [S] Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 3/3) battlecry gives a friendly Mech +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Screwjank → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/screwjank-clunker.test.ts
 
 - [x] [S] Add tests/shop/buccaneer.test.ts — verify Buccaneer (tier 3 pirate, 5/3) battlecry gives +1 ATK to a random friendly Pirate; board: [Pirate 2/2, non-Pirate 3/3]; play Buccaneer → Pirate becomes 3/2; non-Pirate unchanged; no other Pirates → no buff; 3 tests — tests/shop/buccaneer.test.ts
 
-- [ ] [S] Add tests/shop/coldlight-oracle.test.ts — verify Coldlight Oracle (tier 3 murloc, 2/3) battlecry draws 2 random minions from pool into hand; build state with Oracle in hand and pool seeded at player tier; play Oracle → hand.length increases by 2; each drawn item is a MinionInstance; pool count decreases by 2 — tests/shop/coldlight-oracle.test.ts
+- [x] [S] Add tests/shop/coldlight-oracle.test.ts — verify Coldlight Oracle (tier 3 murloc, 2/3) battlecry draws 2 random minions from pool into hand; build state with Oracle in hand and pool seeded at player tier; play Oracle → hand.length increases by 2; each drawn item is a MinionInstance; pool count decreases by 2 — tests/shop/coldlight-oracle.test.ts
 
 - [x] [S] Add tests/simulation/dreadscale.sim.test.ts — verify Dreadscale (tier 8 dragon, 6/6) onDeath deals 2 damage to ALL other minions on both boards; board: [Dreadscale, 1/5 ally] vs [1/5 enemy]; Dreadscale dies → ally takes 2 (1/3), enemy takes 2 (1/3); also verify 1/1 enemies die from 2 dmg; Damage events in transcript — tests/simulation/dreadscale.sim.test.ts
 
@@ -88,19 +88,19 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Soon — AI improvements
 
-- [ ] [M] AI tribe synergy scoring — replace `matchingTribeIndex` in basic.ts with `scoreBuy(minion, board)`: +3 for completing a triple, +2 for matching primary board tribe, +1 for any board tribe, 0 otherwise; rank all affordable shop minions by score and buy the highest-scored one; add a test: AI with Murloc board prefers a Murloc over same-cost non-Murloc — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
+- [x] [M] AI tribe synergy scoring — replace `matchingTribeIndex` in basic.ts with `scoreBuy(minion, board)`: +3 for completing a triple, +2 for matching primary board tribe, +1 for any board tribe, 0 otherwise; rank all affordable shop minions by score and buy the highest-scored one; add a test: AI with Murloc board prefers a Murloc over same-cost non-Murloc — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
 
-- [ ] [S] AI sells weakest minion when board full — read sell-to-make-room logic in basic.ts; if it doesn't score before selling, update it to sell the board minion with lowest (atk+hp) score; ties broken by highest board index; add a test: AI with 7 minions buys a high-stat minion → weakest is sold — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
+- [x] [S] AI sells weakest minion when board full — read sell-to-make-room logic in basic.ts; if it doesn't score before selling, update it to sell the board minion with lowest (atk+hp) score; ties broken by highest board index; add a test: AI with 7 minions buys a high-stat minion → weakest is sold — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
 
 ---
 
 ## Soon — Engine correctness
 
-- [ ] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
+- [x] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
 
 - [x] [S] Add tests/simulation/deathwing.sim.test.ts — verify Deathwing (tier 8 dragon, 10/10) onDeath destroys ALL other minions on both boards; board: [Deathwing, 5/5] vs [3/3, 3/3]; Deathwing dies → all 4 other minions die; transcript has Deaths for all; final board empty — tests/simulation/deathwing.sim.test.ts
 
-- [ ] [S] Tribe rotation pool test — in tests/state-machine.test.ts add a describe block: for 3 different seeds, call makeInitialState, read tribesInLobby, then verify every minion in every player's shop has tribes that are either empty (tribeless) OR intersect tribesInLobby — tests/state-machine.test.ts
+- [x] [S] Tribe rotation pool test — in tests/state-machine.test.ts add a describe block: for 3 different seeds, call makeInitialState, read tribesInLobby, then verify every minion in every player's shop has tribes that are either empty (tribeless) OR intersect tribesInLobby — tests/state-machine.test.ts
 
 ---
 
