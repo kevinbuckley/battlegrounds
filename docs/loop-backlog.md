@@ -100,6 +100,20 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/heroes/pyramad.test.ts — verify Pyramad hero power (2g): calling onHeroPower gives a random friendly board minion +4 HP; board with 1 minion → that minion gains +4 HP; board with 3 minions → exactly 1 gains +4 HP (seeded RNG); empty board → state unchanged — tests/heroes/pyramad.test.ts
 
+- [ ] [S] Add tests/simulation/razorgore.sim.test.ts — verify Razorgore the Untamed (tier 6 dragon, 2/4) onStartOfCombat gains +1/+1 for each Dragon on board (including itself); board: [Razorgore, Dragon 2/2, Dragon 3/3] vs [10/10]; Razorgore gains +3/+3 → 5/7; solo Razorgore gains +1/+1 → 3/5; non-Dragon allies NOT counted — tests/simulation/razorgore.sim.test.ts
+
+- [ ] [S] Add tests/heroes/rakanishu.test.ts — verify Rakanishu hero power (2g): each Elemental in the shop gives a random friendly minion +2 ATK; build state with Rakanishu hero, 2 Elementals in shop, 1 board minion; fire heroPower → that minion gains +4 ATK (2×2); no Elementals in shop → no buff; empty board → no buff — tests/heroes/rakanishu.test.ts
+
+- [ ] [S] Add tests/heroes/scabbs-cutterbutter.test.ts — verify Scabbs Cutterbutter hero power (passive): after buying a minion, the next minion in the shop costs 1 less gold; build state with Scabbs hero, buy a minion → shop[0].discount increases by 1; buying again resets the discount; verify via discount field on shop minion — tests/heroes/scabbs-cutterbutter.test.ts
+
+- [ ] [S] Add tests/heroes/ysera.test.ts — verify Ysera hero power (2g): calling onHeroPower adds one Dragon to the player's hand; the added card has tribes including "Dragon"; hand.length increases by 1; using twice adds 2 Dragons; seeded RNG — tests/heroes/ysera.test.ts
+
+- [ ] [S] Add tests/simulation/amalgadon.sim.test.ts — verify Amalgadon (tier 6, 0/0) battlecry gains a random keyword for each different tribe among friendly board minions; board: [Beast 1/1, Mech 2/2, Murloc 1/1]; play Amalgadon → gains 3 keywords (one per tribe); board with 2 Beasts → only 1 tribe → gains 1 keyword; empty board → no keywords — tests/simulation/amalgadon.sim.test.ts
+
+- [ ] [S] Add tests/simulation/elistra.sim.test.ts — verify Elistra the Immortal (tier 6 dragon) deathrattle: when Elistra dies, a copy is added to the board; board: [Elistra 7/5] vs [10/10]; Elistra dies → new 7/5 Elistra appears (without deathrattle keyword to prevent infinite loop); survivorsLeft contains a Dragon after combat — tests/simulation/elistra.sim.test.ts
+
+- [ ] [S] Add tests/heroes/ragnaros.test.ts — verify Ragnaros passive: look up how ragnaros hero is implemented in src/game/heroes/; if passive gives board minion +6 ATK at end of combat, build state with Ragnaros hero and 1 board minion; run simulateCombat; verify that minion's attack contribution matches the +6 bonus from ragnaros — tests/heroes/ragnaros.test.ts
+
 - [ ] [M] Fix quest win-detection in processQuests — onProgress in murlocMania/mechMayhem/demonDiplomacy uses flawed board-HP heuristics instead of actual combat result; rewrite processQuests in state.ts to pass the CombatResult winner field into quest progress calls; update all 4 quest cards' onProgress signatures to accept `winner: Side | "draw"`; add 2 regression tests — src/game/state.ts + src/game/quests/index.ts + src/game/quests.test.ts
 
 ---
