@@ -114,6 +114,58 @@ export const extraLife: AnomalyCard = {
   },
 };
 
+export const bigStats: AnomalyCard = {
+  id: "big_stats",
+  name: "Big Stats",
+  description: "All shop minions spawn with +2/+2.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const newShop = player.shop.map((minion) => ({
+        ...minion,
+        atk: minion.atk + 2,
+        hp: minion.hp + 2,
+        maxHp: minion.maxHp + 2,
+      }));
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, shop: newShop };
+    }
+  },
+};
+
+export const pirateCove: AnomalyCard = {
+  id: "pirate_cove",
+  name: "Pirate Cove",
+  description: "All Pirates in the shop spawn with +2 ATK.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const newShop = player.shop.map((minion) =>
+        minion.tribes.includes("Pirate") ? { ...minion, atk: minion.atk + 2 } : minion,
+      );
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, shop: newShop };
+    }
+  },
+};
+
+export const undeadPlague: AnomalyCard = {
+  id: "undead_plague",
+  name: "Undead Plague",
+  description: "All shop minions spawn with Reborn.",
+  onSetup: (state: GameState, _rng: Rng): void => {
+    for (const player of state.players) {
+      if (player.eliminated) continue;
+      const newShop = player.shop.map((minion) => ({
+        ...minion,
+        keywords: new Set([...minion.keywords, "reborn" as const]),
+      }));
+      const idx = state.players.indexOf(player);
+      state.players[idx] = { ...player, shop: newShop };
+    }
+  },
+};
+
 const ALL_ANOMALIES: AnomalyCard[] = [
   goldenTouch,
   heavyHitters,
@@ -123,6 +175,9 @@ const ALL_ANOMALIES: AnomalyCard[] = [
   tavernDiscount,
   bigLeague,
   extraLife,
+  bigStats,
+  pirateCove,
+  undeadPlague,
 ];
 
 export function getAnomaly(id: string): AnomalyCard {
