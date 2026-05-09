@@ -475,3 +475,4 @@
 2026-05-09 | aabe987 | FIXED: Add tests/simulation/zapp-slywick.sim.test.ts — verify Zapp Slywick (tier 5 mech, 7/10, rush) always attacks the lowest-ATK enemy minion regardless of board position, respects taunt priority, and wins fights against weak enemies
 2026-05-09 | d808b77 | FIXED: Add tests/simulation/voidlord.sim.test.ts — verify Voidlord (tier 5 demon, 3/9, taunt) deathrattle summons three 1/3 Demons with taunt; board cap respected; golden fires twice
 2026-05-09 | 3a80abe | FIXED: Add tests/simulation/glyph-guardian.sim.test.ts — verify Glyph Guardian (tier 2 dragon, 2/4) doubles its own ATK each time it attacks; 2→4→8→16 exponential growth; 4 tests pass
+2026-05-09 | eedce83 | FIXED: Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK and +1 HP per other friendly minion, works on both sides, golden version doubles base stats
