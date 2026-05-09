@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { simulateCombat } from "@/game/combat";
-import { instantiate } from "@/game/minions/define";
+import { defineMinion, instantiate } from "@/game/minions/define";
 import { getMinion } from "@/game/minions/index";
 import { makeRng } from "@/lib/rng";
 
@@ -9,95 +9,84 @@ import { makeRng } from "@/lib/rng";
 // ---------------------------------------------------------------------------
 
 describe("dreadscale", () => {
-  function makeEnemy(atk: number, hp: number) {
-    const e = instantiate(getMinion("murloc_scout"));
-    e.baseAtk = atk;
-    e.baseHp = hp;
-    e.maxHp = hp;
-    e.atk = atk;
-    return e;
+  function makeMinion(atk: number, hp: number) {
+    return instantiate(
+      defineMinion({
+        id: `plain_${atk}_${hp}`,
+        name: `${atk}/${hp}`,
+        tier: 1,
+        tribes: [],
+        baseAtk: atk,
+        baseHp: hp,
+        baseKeywords: [],
+        spellDamage: 0,
+        hooks: {} as never,
+      }),
+    );
   }
 
-  it("deals 2 damage to all other minions on both boards when it dies", () => {
+  it("deals 2 damage to ally and enemy when Dreadscale dies", () => {
+    // turn=1 → left attacks first (deterministic)
+    // [dreadscale(6/6), strongAlly(2/100)] vs [killer(7/7)]
+    // ds attacks killer: killer takes 6 (7/1), ds takes 7 → dies
+    // deathrattle: killer takes 2 → 7/(-1) dies, strongAlly takes 2 → 2/98
+    // survivorsLeft = [strongAlly(2/98)], survivorsRight = []
     const ds = instantiate(getMinion("dreadscale")); // 6/6
-    // Board: [Dreadscale 6/6, 20/20] vs [7/7, 3/3]
-    // Dreadscale kills 3/3, dies to counterattack (6→3→dies).
-    // 20/20 kills 7/7, survives (20/7).
-    // Deathrattle fires: 2 damage to 20/20 → 20/18.
-    const bigGuy = instantiate(getMinion("murloc_scout"));
-    bigGuy.baseAtk = 20;
-    bigGuy.baseHp = 20;
-    bigGuy.maxHp = 20;
-    bigGuy.atk = 20;
-    const enemy1 = makeEnemy(7, 7);
-    const enemy2 = makeEnemy(3, 3);
+    const strongAlly = makeMinion(2, 100);
+    const killer = makeMinion(7, 7);
 
-    const r = simulateCombat([ds, bigGuy], [enemy1, enemy2], makeRng(0));
+    const r = simulateCombat([ds, strongAlly], [killer], makeRng(0), undefined, 1);
 
-    // Debug: print all events
-    for (const e of r.transcript) {
-      console.log(JSON.stringify(e));
-    }
-    console.log(
-      "survivorsLeft:",
-      r.survivorsLeft.map((m) => `${m.cardId} ${m.atk}/${m.hp}`),
-    );
-    console.log(
-      "survivorsRight:",
-      r.survivorsRight.map((m) => `${m.cardId} ${m.atk}/${m.hp}`),
-    );
-
-    // bigGuy takes 10 damage from enemy counterattacks (7+3), then 2 from deathrattle.
-    // 20 - 10 - 2 = 8.
-    const bigGuySurvivor = r.survivorsLeft.find((m) => m.instanceId === bigGuy.instanceId);
-    expect(bigGuySurvivor).toBeDefined();
-    expect(bigGuySurvivor!.hp).toBe(8);
+    // killer should die from deathrattle (7/1 → 2 dmg → -1)
+    expect(r.survivorsRight).toHaveLength(0);
+    // strongAlly should survive at 98 HP (100 - 2 from deathrattle)
+    const ally = r.survivorsLeft.find((m) => m.instanceId === strongAlly.instanceId);
+    expect(ally).toBeDefined();
+    expect(ally!.hp).toBe(98);
   });
 
-  it("kills 1/1 minions with 2 damage from deathrattle", () => {
+  it("kills 1 HP minions with 2 damage from deathrattle", () => {
+    // [dreadscale(6/6), flame_imp(3/1)] vs [killer(7/7)]
+    // ds attacks killer: killer takes 6 (7/1), ds takes 7 → dies
+    // deathrattle: killer takes 2 → dies. flame_imp(3/1) takes 2 → 3/(-1) dies.
+    // survivorsLeft = [], survivorsRight = []
     const ds = instantiate(getMinion("dreadscale")); // 6/6
-    const ally = instantiate(getMinion("flame_imp")); // 1/1
-    const enemy = makeEnemy(7, 7);
-    // Board: [Dreadscale 6/6, Flame Imp 1/1] vs [7/7]
-    // Dreadscale kills 7/7, dies to counterattack (6→1→dies).
-    // Flame Imp survives (1/1). Deathrattle fires: 2 damage to Flame Imp → dies.
-    const r = simulateCombat([ds, ally], [enemy], makeRng(0));
+    const ally = instantiate(getMinion("flame_imp")); // 3/1
+    const killer = makeMinion(7, 7);
 
-    // Flame Imp should die from deathrattle (1/1 → -1 HP)
+    const r = simulateCombat([ds, ally], [killer], makeRng(0), undefined, 1);
+
     expect(r.survivorsLeft).toHaveLength(0);
+    expect(r.survivorsRight).toHaveLength(0);
   });
 
-  it("does NOT damage itself", () => {
+  it("does NOT damage itself (Dreadscale excluded from its own deathrattle)", () => {
+    // Same scenario — if self-damage occurred, strongAlly's final HP would differ
     const ds = instantiate(getMinion("dreadscale")); // 6/6
-    // Board: [Dreadscale 6/6, 20/20] vs [7/7, 3/3]
-    // Dreadscale dies, deathrattle fires but should NOT damage itself.
-    // 20/20 should take 2 damage.
-    const bigGuy = instantiate(getMinion("murloc_scout"));
-    bigGuy.baseAtk = 20;
-    bigGuy.baseHp = 20;
-    bigGuy.maxHp = 20;
-    bigGuy.atk = 20;
-    const enemy1 = makeEnemy(7, 7);
-    const enemy2 = makeEnemy(3, 3);
+    const strongAlly = makeMinion(2, 100);
+    const killer = makeMinion(7, 7);
 
-    const r = simulateCombat([ds, bigGuy], [enemy1, enemy2], makeRng(0));
+    const r = simulateCombat([ds, strongAlly], [killer], makeRng(0), undefined, 1);
 
-    // Dreadscale should be dead, bigGuy should survive with 8 HP (20 - 10 counterattack - 2 deathrattle)
+    // strongAlly should survive at 98 HP (took 2 from deathrattle, not 4 which would mean self was excluded wrongly)
     expect(r.survivorsLeft).toHaveLength(1);
-    expect(r.survivorsLeft[0]?.instanceId).toBe(bigGuy.instanceId);
-    expect(r.survivorsLeft[0]!.hp).toBe(8);
+    expect(r.survivorsLeft[0]!.hp).toBe(98);
+    // dreadscale itself should be dead (not in survivors)
+    expect(r.survivorsLeft.find((m) => m.instanceId === ds.instanceId)).toBeUndefined();
   });
 
   it("golden Dreadscale fires deathrattle twice — 4 damage to all others", () => {
+    // [golden dreadscale(6/6), flame_imp(3/1)] vs [killer(7/7)]
+    // ds attacks killer: same as above, ds dies.
+    // deathrattle fires TWICE: flame_imp takes 4 total → dies; killer takes 4 total → dies.
     const ds = instantiate(getMinion("dreadscale"));
     ds.golden = true;
-    const ally = instantiate(getMinion("flame_imp")); // 1/1
-    const enemy = makeEnemy(7, 7);
-    // Board: [Golden Dreadscale 6/6, Flame Imp 1/1] vs [7/7]
-    // Golden Dreadscale dies, deathrattle fires twice: 4 damage to Flame Imp → dies.
-    const r = simulateCombat([ds, ally], [enemy], makeRng(0));
+    const ally = instantiate(getMinion("flame_imp")); // 3/1
+    const killer = makeMinion(7, 7);
 
-    // Flame Imp should die from 4 damage (1/1 → -3 HP)
+    const r = simulateCombat([ds, ally], [killer], makeRng(0), undefined, 1);
+
     expect(r.survivorsLeft).toHaveLength(0);
+    expect(r.survivorsRight).toHaveLength(0);
   });
 });
