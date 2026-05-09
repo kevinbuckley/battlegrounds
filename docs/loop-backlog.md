@@ -18,7 +18,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Fix `Annihilan Battlemaster` (tier 4 demon, 3/3) — currently empty hooks but should gain +2 ATK each time a friendly Demon attacks; add `onAllyAttack` hook that checks `attacker.tribes.includes("Demon")` and bumps self.atk += 2 and emits a Stat event; verify: [Annihilan, Imp 1/1] vs [5/20] — Imp attacks → Annihilan gains +2 ATK; Annihilan attacking self doesn't trigger; non-Demon ally attack does NOT trigger — src/game/minions/tier4/annihilan-battlemaster.ts + tests/simulation/annihilan-battlemaster.sim.test.ts
 
-- [ ] [S] Fix `Crystalweaver` (tier 4, 5/4) — currently empty hooks but should give all friendly Demons +2/+2 on battlecry; add `onBattlecry` hook that finds all board Demons (excluding self) and buffs each +2/+2; emit Stat events; verify: [Demon 1/1] on board → Crystalweaver played → Demon becomes 3/3; non-Demon unchanged; empty board → no buff — src/game/minions/tier4/crystalweaver.ts + tests/shop/crystalweaver.test.ts
+- [x] [S] Fix `Crystalweaver` (tier 4, 5/4) — currently empty hooks but should give all friendly Demons +2/+2 on battlecry; add `onBattlecry` hook that finds all board Demons (excluding self) and buffs each +2/+2; emit Stat events; verify: [Demon 1/1] on board → Crystalweaver played → Demon becomes 3/3; non-Demon unchanged; empty board → no buff — src/game/minions/tier4/crystalweaver.ts + tests/shop/crystalweaver.test.ts
 
 - [ ] [S] Add tests/simulation/arm-of-the-empire.sim.test.ts — verify Arm of the Empire (tier 3 dragon, 4/5) onAllyAttacked buffs ALL friendly taunt minions +3/+2 when a friendly taunt is attacked; board: [Arm, Righteous Protector 1/1 taunt+divineShield] vs [3/3]; enemy targets Protector (taunt) → Arm fires → Protector gains +3/+2; verify non-taunt allies NOT buffed — tests/simulation/arm-of-the-empire.sim.test.ts
 
@@ -88,7 +88,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/simulation/lich-king.sim.test.ts — verify The Lich King (tier 7 undead, 10/10 taunt) onStartOfCombat gains +1 ATK per other friendly minion; board: [Lich King, 2/2, 3/3] vs [20/20]; Lich King has 12 ATK after startOfCombat; verify Stat event shows atk=12; solo Lich King → no gain — tests/simulation/lich-king.sim.test.ts
 
-- [ ] [S] Add tests/simulation/deathwing.sim.test.ts — verify Deathwing (tier 8 dragon, 10/10) onDeath destroys ALL other minions on both boards; board: [Deathwing, 5/5] vs [3/3, 3/3]; Deathwing dies → all 4 other minions die; transcript has Deaths for all; final board empty — tests/simulation/deathwing.sim.test.ts
+- [x] [S] Add tests/simulation/deathwing.sim.test.ts — verify Deathwing (tier 8 dragon, 10/10) onDeath destroys ALL other minions on both boards; board: [Deathwing, 5/5] vs [3/3, 3/3]; Deathwing dies → all 4 other minions die; transcript has Deaths for all; final board empty — tests/simulation/deathwing.sim.test.ts
 
 - [ ] [S] Tribe rotation pool test — in tests/state-machine.test.ts add a describe block: for 3 different seeds, call makeInitialState, read tribesInLobby, then verify every minion in every player's shop has tribes that are either empty (tribeless) OR intersect tribesInLobby — tests/state-machine.test.ts
 
