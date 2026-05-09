@@ -55,7 +55,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/coldlight-seer.test.ts — verify Coldlight Seer (tier 3 murloc, 2/3) battlecry gives all friendly Murlocs +2 HP; board: [Murloc 1/1, Murloc 2/2, non-Murloc 3/3]; play Coldlight Seer → both Murlocs gain +2 HP (1/3 and 2/4); non-Murloc unchanged; Coldlight itself unchanged — tests/shop/coldlight-seer.test.ts
 
-- [ ] [S] Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt; board with [Beast 1/1, non-Beast 2/2]; play Houndmaster → Beast becomes 3/3 with taunt; non-Beast unchanged; board with no Beasts → no buff applied — tests/shop/houndmaster.test.ts
+- [x] [S] Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt; board with [Beast 1/1, non-Beast 2/2]; play Houndmaster → Beast becomes 3/3 with taunt; non-Beast unchanged; board with no Beasts → no buff applied — tests/shop/houndmaster.test.ts
 
 - [ ] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2; board: [Taunt-minion 1/1, non-Taunt 2/2, Taunt-minion2 3/3]; play Strongshell → only taunt minions gain +2/+2 (3/3 and 5/5); non-taunt unchanged — tests/shop/strongshell-scavenger.test.ts
 

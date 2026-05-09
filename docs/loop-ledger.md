@@ -1,3 +1,5 @@
+2026-05-09 | 513efa4 | FIXED: Add tests/shop/houndmaster.test.ts — verify Houndmaster (tier 3, 4/3) battlecry gives a friendly Beast +2/+2 and taunt, does NOT buff non-Beasts, does nothing when no Beasts on board, stacks across multiple Houndmasters, 4 tests pass
+
 2026-05-09 | 5d01362 | FIXED: Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5 elemental, 1/1) onPlay gives all OTHER friendly Elementals +1/+1 when played to board, does NOT buff non-Elementals, does NOT buff itself, 4 tests pass
 2026-05-09 | cf6efeb | FIXED: Add tests/simulation/security-rover.sim.test.ts — verify Security Rover (tier 4 mech, 1/4) onDamageTaken spawns a 2/3 Mech with divine shield each time it takes damage during combat, 4 tests pass
 2026-05-09 | b9dc138 | FIXED: Fix Ripsnarl Captain (tier 4 pirate) onAllyAttack hook — was buffing the attacking minion instead of self; changed to buff ctx.self when a friendly Pirate attacks, with 4 simulation tests verifying buff on ally pirate attack, no buff on self-attack, no buff on non-Pirate attack, and no buff from non-Pirate allies
