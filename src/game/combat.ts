@@ -93,14 +93,22 @@ export function simulateCombat(
 
     const attacker = (isLeft ? left : right)[ptr]!;
 
-    // Skip frozen minions — they cannot attack
+    // Skip frozen or dormant minions — they cannot attack
     if (attacker.keywords.has("freeze")) {
+      side = isLeft ? "right" : "left";
+      continue;
+    }
+    if (attacker.keywords.has("dormant" as import("./types").Keyword)) {
       side = isLeft ? "right" : "left";
       continue;
     }
 
     // Pick primary target (taunt-aware)
     const target = pickTarget(isLeft ? right : left, rng, attacker, left, right);
+    if (!target) {
+      side = isLeft ? "right" : "left";
+      continue;
+    }
 
     // How many times does this attacker attack this turn?
     // Windfury allows 2 attacks, megaWindfury allows 4.
@@ -525,9 +533,12 @@ function fireRushAttacks(
   for (const m of [...(isLeft ? left : right)]) {
     if (!m.keywords.has("rush")) continue;
     if (m.hp <= 0) continue;
-    const aliveDefenders = (isLeft ? right : left).filter((d) => d.hp > 0);
+    const aliveDefenders = (isLeft ? right : left).filter(
+      (d) => d.hp > 0 && !d.keywords.has("dormant" as import("./types").Keyword),
+    );
     if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
+    if (m.keywords.has("dormant" as import("./types").Keyword)) continue;
     const target = pickTarget(aliveDefenders, rng, m, left, right);
     if (!target) continue;
 
@@ -543,9 +554,12 @@ function fireRushAttacks(
   for (const m of [...(isLeft ? right : left)]) {
     if (!m.keywords.has("rush")) continue;
     if (m.hp <= 0) continue;
-    const aliveDefenders = (isLeft ? left : right).filter((d) => d.hp > 0);
+    const aliveDefenders = (isLeft ? left : right).filter(
+      (d) => d.hp > 0 && !d.keywords.has("dormant" as import("./types").Keyword),
+    );
     if (aliveDefenders.length === 0) continue;
     if (m.keywords.has("freeze")) continue;
+    if (m.keywords.has("dormant" as import("./types").Keyword)) continue;
     const target = pickTarget(aliveDefenders, rng, m, left, right);
     if (!target) continue;
 
@@ -603,7 +617,12 @@ function pickTarget(
   attacker: MinionInstance,
   left: MinionInstance[],
   right: MinionInstance[],
-): MinionInstance {
+): MinionInstance | undefined {
+  // Dormant minions cannot be targeted
+  const activeDefenders = defenders.filter(
+    (d) => !d.keywords.has("dormant" as import("./types").Keyword),
+  );
+  if (activeDefenders.length === 0) return undefined;
   // Check for custom target selector (e.g. Zapp Slywick).
   const customTarget = attacker.hooks.getTarget?.({
     self: attacker,
@@ -613,12 +632,12 @@ function pickTarget(
     emit: () => {},
     rng,
   });
-  if (customTarget && defenders.includes(customTarget)) {
+  if (customTarget && activeDefenders.includes(customTarget)) {
     return customTarget;
   }
 
-  const tauntTargets = defenders.filter((m) => m.keywords.has("taunt"));
-  const pool = tauntTargets.length > 0 ? tauntTargets : defenders;
+  const tauntTargets = activeDefenders.filter((m) => m.keywords.has("taunt"));
+  const pool = tauntTargets.length > 0 ? tauntTargets : activeDefenders;
   return rng.pick(pool);
 }
 

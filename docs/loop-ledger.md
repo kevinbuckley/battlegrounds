@@ -1,3 +1,4 @@
+2026-05-09 | 6a07242 | FIXED: Fix dormant keyword in combat.ts — skip dormant minions from attack order (both rush and normal loops), exclude them from being targeted as defenders via pickTarget filter, add tests/combat/dormant.test.ts verifying dormant minions don't attack, don't get targeted, and are skipped in rush order; bun typecheck and bun test (1211/1211) pass
 2026-05-09 | 2e247e4 | FIXED: Show quest progress in HUD — if player.quests[0] exists, show "Quest: <name> N/M" below the hero power button; a thin amber div with width proportional to progress/target; completed shows "✓ Done" in green; look up name via QUESTS[quest.cardId]; bun typecheck and bun test (1206/1206) pass
 
 2026-05-09 | c931ca0 | FIXED: Show active anomaly in HUD — if gameState.modifierState.anomaly is set, show the anomaly name as an amber badge with a title tooltip showing its description; import getAnomaly from anomalies/index.ts; bun typecheck and bun test (1206/1206) pass
