@@ -18,7 +18,7 @@ describe("crystalweaver — onBattlecry", () => {
     const demon = instantiate(
       MINIONS["vulgar_homunculus"]!, // 3/4 Demon
     );
-    const crystalweaver = instantiate(MINIONS["crystalweaver"]!); // 4/4 Dragon
+    const crystalweaver = instantiate(MINIONS["crystalweaver"]!); // 5/4
 
     const state = {
       ...base,
