@@ -7,7 +7,12 @@ export const georgeTheFallen: Hero = {
   description: "Hero Power (2): Give a friendly minion Divine Shield.",
   startHp: 35,
   startArmor: 5,
-  power: { kind: "active", cost: 2, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 2,
+    usesPerTurn: 1,
+    description: "Give a friendly minion Divine Shield.",
+  },
 
   onHeroPower: (state, playerId, target) => {
     const boardIndex = typeof target === "number" ? target : 0;

@@ -11,7 +11,12 @@ export const tradePrinceGallywix: Hero = {
     "Hero Power (2): Discover a minion from your opponent's board and add it to your hand.",
   startHp: 40,
   startArmor: 0,
-  power: { kind: "active", cost: 2, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 2,
+    usesPerTurn: 1,
+    description: "Discover a minion from your opponent's board and add it to your hand.",
+  },
 
   onHeroPower: (state, playerId, _target, rng: Rng) => {
     const player = getPlayer(state, playerId);

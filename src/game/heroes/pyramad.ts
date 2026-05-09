@@ -12,7 +12,12 @@ export const pyramad: Hero = {
   description: "Hero Power (1): Give a random friendly minion +4 HP.",
   startHp: 30,
   startArmor: 0,
-  power: { kind: "active", cost: 1, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 1,
+    usesPerTurn: 1,
+    description: "Give a random friendly minion +4 HP.",
+  },
 
   onHeroPower: (state, playerId, _target, rng) => {
     const player = getPlayer(state, playerId);

@@ -231,7 +231,7 @@ export interface Hero {
 
 export type HeroPower =
   | { kind: "passive" }
-  | { kind: "active"; cost: number; usesPerTurn: number }
+  | { kind: "active"; cost: number; usesPerTurn: number; description: string }
   | { kind: "start_of_game" }
   | { kind: "quest"; progress: number; target: number };
 

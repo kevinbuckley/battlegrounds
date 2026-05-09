@@ -1587,6 +1587,9 @@ export default function GamePage() {
                       >
                         {hero?.name.split(" ")[0]} Power ({powerCost}g)
                       </button>
+                      <p className="text-[10px] text-slate-400 text-center max-w-[120px]">
+                        {hero?.power.kind === "active" ? hero.power.description : ""}
+                      </p>
                       {needsTarget && (
                         <span className="text-xs text-slate-400">
                           {isTargeted

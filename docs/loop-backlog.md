@@ -29,13 +29,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
-- [ ] [S] Space bar to end turn — add a useEffect that listens for keydown event with key === ' '; call handleEndTurn when `gameState?.phase.kind === 'Recruit'` and no overlays are active (no discoverOffer, not displayingCombat, phase not GameOver); cleanup the listener on unmount
+- [x] [S] Space bar to end turn — add a useEffect that listens for keydown event with key === ' '; call handleEndTurn when `gameState?.phase.kind === 'Recruit'` and no overlays are active (no discoverOffer, not displayingCombat, phase not GameOver); cleanup the listener on unmount
 
-- [ ] [S] Hero power description text — in the HUD section of app/game/page.tsx, below the hero power button, add a `<p className="text-[10px] text-slate-400 text-center max-w-[120px]">{hero.heroPower.description}</p>` so players can see what the power does without guessing; verify with bun typecheck
+- [x] [S] Hero power description text — in the HUD section of app/game/page.tsx, below the hero power button, add a `<p className="text-[10px] text-slate-400 text-center max-w-[120px]">{hero.heroPower.description}</p>` so players can see what the power does without guessing; verify with bun typecheck
 
 - [ ] [S] Add `description` field to MinCard and show it in MinionCard — add `description?: string` to MinCard in src/game/types.ts; populate it for at least 8 key cards (Baron Rivendare, Murloc Warleader, Knife Juggler, Scavenging Hyena, Rat Pack, Imp Gang Boss, Zapp Slywick, Cave Hydra); in MinionCard component add a `title={card.description}` HTML attribute for browser-native tooltip on hover; bun typecheck verifies
 
-- [ ] [S] Combat animation speed toggle — add a "⚡ 2×" speed button to the combat overlay header in app/game/page.tsx; track `combatSpeed: 1 | 2` state; use it to halve the tick interval from ~350ms to ~175ms at 2×; verify with bun typecheck
+- [x] [S] Combat animation speed toggle — add a "⚡ 2×" speed button to the combat overlay header in app/game/page.tsx; track `combatSpeed: 1 | 2` state; use it to halve the tick interval from ~350ms to ~175ms at 2×; verify with bun typecheck
 
 ---
 
@@ -52,7 +52,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add `Southsea Captain` (tier 3 pirate, 3/3): your other Pirates have +1/+1 — aura applied in onStartOfCombat — src/game/minions/tier3/southsea-captain.ts
 - [ ] [S] Add `Khadgar` (tier 5 mech, 2/2): whenever you summon a minion in combat, summon an additional copy — onSummon hook in src/game/minions/tier5/khadgar.ts
-- [ ] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
+- [x] [S] Add `Amalgadon` (tier 6, 6/6): battlecry gain a random keyword for each different tribe among your other minions — src/game/minions/tier6/amalgadon.ts
 
 ---
 

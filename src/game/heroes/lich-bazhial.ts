@@ -7,7 +7,7 @@ export const lichBazHial: Hero = {
   description: "Hero Power (2): Lose 3 HP, gain 2 gold.",
   startHp: 40,
   startArmor: 0,
-  power: { kind: "active", cost: 2, usesPerTurn: 1 },
+  power: { kind: "active", cost: 2, usesPerTurn: 1, description: "Lose 3 HP, gain 2 gold." },
 
   onHeroPower: (state, playerId) => {
     const player = getPlayer(state, playerId);

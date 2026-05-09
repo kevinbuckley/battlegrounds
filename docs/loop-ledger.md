@@ -1,3 +1,4 @@
+2026-05-09 | 308ea60 | FIXED: Hero power description text — add description field to HeroPower type's active variant, populate for all 12 active heroes, display below hero power button in HUD
 2026-05-09 | 85eec00 | FIXED: Space bar to end turn — add a useEffect in app/game/page.tsx listening for keydown ' ' that calls handleEndTurn when phase is Recruit and no overlays active
 2026-05-09 | 8c16031 | FIXED: Add George the Fallen hero power test — verify onHeroPower gives divine shield to target minion, skips minions that already have it, does nothing on empty board, and targets correct board index
 2026-05-09 | 87f4203 | FIXED: Add Rat Pack simulation tests — verify deathrattle summons 1/1 Rats equal to current ATK (2/2→2 rats, 4/2→4 rats, golden 4/4→4 rats with board cap of 7)

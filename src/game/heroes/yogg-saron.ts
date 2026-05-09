@@ -23,7 +23,12 @@ export const yoggSaron: Hero = {
   description: "Hero Power (2): Give all friendly minions a random keyword.",
   startHp: 30,
   startArmor: 7,
-  power: { kind: "active", cost: 2, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 2,
+    usesPerTurn: 1,
+    description: "Give all friendly minions a random keyword.",
+  },
 
   onHeroPower: (state, playerId, _target, rng) => {
     const player = getPlayer(state, playerId);

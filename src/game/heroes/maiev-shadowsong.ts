@@ -13,7 +13,12 @@ export const maievShadowsong: Hero = {
     'Hero Power (1): Put a shop minion "Dormant" for 2 turns, then awaken it with +3/+3.',
   startHp: 40,
   startArmor: 0,
-  power: { kind: "active", cost: 1, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 1,
+    usesPerTurn: 1,
+    description: 'Put a shop minion "Dormant" for 2 turns, then awaken it with +3/+3.',
+  },
 
   onHeroPower: (state, playerId, target) => {
     const boardIndex = typeof target === "number" ? target : 0;

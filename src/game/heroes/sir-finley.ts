@@ -8,7 +8,12 @@ export const sirFinley: Hero = {
   description: "Hero Power (2): Swap your Hero Power with another available one.",
   startHp: 40,
   startArmor: 0,
-  power: { kind: "active", cost: 2, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 2,
+    usesPerTurn: 1,
+    description: "Swap your Hero Power with another available one.",
+  },
 
   onHeroPower: (state, playerId, target) => {
     const player = getPlayer(state, playerId);

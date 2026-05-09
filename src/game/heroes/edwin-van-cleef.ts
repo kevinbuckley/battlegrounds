@@ -7,7 +7,12 @@ export const edwinVanCleef: Hero = {
   description: "Hero Power (4): Give all minions in your hand +1/+1.",
   startHp: 40,
   startArmor: 0,
-  power: { kind: "active", cost: 4, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 4,
+    usesPerTurn: 1,
+    description: "Give all minions in your hand +1/+1.",
+  },
 
   onHeroPower: (state, playerId) => {
     return updatePlayer(state, playerId, (p) => ({

@@ -11,7 +11,12 @@ export const renoJackson: Hero = {
   description: "Hero Power (5): Make a friendly minion golden. (Once per game)",
   startHp: 30,
   startArmor: 7,
-  power: { kind: "active", cost: 5, usesPerTurn: 1 },
+  power: {
+    kind: "active",
+    cost: 5,
+    usesPerTurn: 1,
+    description: "Make a friendly minion golden. (Once per game)",
+  },
 
   onHeroPower: (state, playerId, target) => {
     const boardIndex = typeof target === "number" ? target : 0;

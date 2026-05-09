@@ -8,7 +8,7 @@ export const kingMukla: Hero = {
   description: "Start each turn with a Banana in your hand.",
   startHp: 30,
   startArmor: 3,
-  power: { kind: "active", cost: 1, usesPerTurn: 1 },
+  power: { kind: "active", cost: 1, usesPerTurn: 1, description: "Give opponent 2 Bananas." },
 
   onHeroPower: (state, playerId, _target) => {
     const player = state.players[playerId];
