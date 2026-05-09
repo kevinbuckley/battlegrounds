@@ -44,7 +44,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/shop/coldlight-oracle.test.ts — verify Coldlight Oracle (tier 3 murloc, 2/3) battlecry draws 2 random minions from pool into hand; build state with Oracle in hand and pool seeded at player tier; play Oracle → hand.length increases by 2; each drawn item is a MinionInstance; pool count decreases by 2 — tests/shop/coldlight-oracle.test.ts
 
-- [ ] [S] Add tests/simulation/dreadscale.sim.test.ts — verify Dreadscale (tier 8 dragon, 6/6) onDeath deals 2 damage to ALL other minions on both boards; board: [Dreadscale, 1/5 ally] vs [1/5 enemy]; Dreadscale dies → ally takes 2 (1/3), enemy takes 2 (1/3); also verify 1/1 enemies die from 2 dmg; Damage events in transcript — tests/simulation/dreadscale.sim.test.ts
+- [x] [S] Add tests/simulation/dreadscale.sim.test.ts — verify Dreadscale (tier 8 dragon, 6/6) onDeath deals 2 damage to ALL other minions on both boards; board: [Dreadscale, 1/5 ally] vs [1/5 enemy]; Dreadscale dies → ally takes 2 (1/3), enemy takes 2 (1/3); also verify 1/1 enemies die from 2 dmg; Damage events in transcript — tests/simulation/dreadscale.sim.test.ts
 
 - [ ] [S] Add tests/shop/tide-razor.test.ts — verify Tide Razor (tier 3 murloc, 4/4) battlecry gives +1/+1 to a random friendly Murloc on board; board: [Murloc Scout 1/1]; play Tide Razor → Scout becomes 2/2; no Murlocs → no buff; two Murlocs → exactly one gets buffed — tests/shop/tide-razor.test.ts
 
