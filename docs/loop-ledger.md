@@ -1,3 +1,4 @@
+2026-05-09 | 5073ba4 | FIXED: Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2, does NOT buff non-Dragons, does nothing when no Dragons on board, stacks across multiple Virmen Senseis, 4 tests pass
 2026-05-09 | 8b35a95 | FIXED: Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2, does NOT buff non-taunt minions, does nothing when no taunt minions on board, stacks across multiple Strongshells, buffs Righteous Protector (taunt+divineShield), 5 tests pass
 
 2026-05-09 | 2b8218e | FIXED: Wire A.F. Kay start_of_game power — add turnsSkipped field to PlayerState, set tier=3 and turnsSkipped=2 in selectHero, skip first 2 recruit turns in beginRecruitTurn (no gold, no shop, board cleared, armor reset), resume on turn 3 with full tier-3+ shop and gold, 6 tests pass

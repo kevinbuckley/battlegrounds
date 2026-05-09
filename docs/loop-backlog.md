@@ -59,7 +59,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) battlecry gives all friendly minions with taunt +2/+2; board: [Taunt-minion 1/1, non-Taunt 2/2, Taunt-minion2 3/3]; play Strongshell → only taunt minions gain +2/+2 (3/3 and 5/5); non-taunt unchanged — tests/shop/strongshell-scavenger.test.ts
 
-- [ ] [S] Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2; board: [Dragon 1/1, non-Dragon 2/2]; play Virmen Sensei → Dragon gains +2/+2 (3/3); non-Dragon unchanged; board with no Dragons → no buff — tests/shop/virmen-sensei.test.ts
+- [x] [S] Add tests/shop/virmen-sensei.test.ts — verify Virmen Sensei (tier 4 dragon, 3/4) battlecry gives a friendly Dragon +2/+2; board: [Dragon 1/1, non-Dragon 2/2]; play Virmen Sensei → Dragon gains +2/+2 (3/3); non-Dragon unchanged; board with no Dragons → no buff — tests/shop/virmen-sensei.test.ts
 
 - [ ] [S] Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous; board: [Murloc1, Murloc2, non-Murloc]; play Toxfin → both Murlocs gain poisonous keyword; non-Murloc is unchanged; Toxfin itself does not get poisonous — tests/shop/toxfin.test.ts
 
