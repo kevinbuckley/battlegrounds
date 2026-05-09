@@ -1,5 +1,7 @@
 2026-05-09 | ce08cbc | FIXED: Add tests/simulation/fiendish-servant.sim.test.ts — verify Fiendish Servant (tier 1 demon, 2/1) deathrattle gives its current ATK to a random friendly minion; works with buffed Servant (4 ATK → +4); does nothing with no other friendly minions; does not crash with 0 ATK — tests/simulation/fiendish-servant.sim.test.ts
 
+2026-05-09 | 08ee803 | FIXED: Add tests/simulation/lil-exorcist.sim.test.ts — verify Lil' Exorcist (tier 3, 2/2, taunt) battlecry gives itself +1/+1 for each Deathrattle minion on both boards; fix implementation from buffing all friendly Deathrattle minions to buffing only itself; 4 tests pass, bun typecheck and bun test (1088/1088) pass
+
 2026-05-09 | 78d5cc5 | FIXED: Add tests/simulation/houndmaster-shaw.sim.test.ts — verify Houndmaster Shaw (tier 4 beast, 3/6) onStartOfCombat gives ALL other friendly minions Rush keyword; Shaw itself does NOT gain Rush; enemy minions are NOT buffed; works on both sides of board — tests/simulation/houndmaster-shaw.sim.test.ts
 2026-05-09 | 4213547 | FIXED: Add tests/shop/metaltooth-leaper.test.ts — verify Metaltooth Leaper (tier 2 mech, 3/3) battlecry gives ALL friendly Mechs +2 ATK; board: [Mech 1/1, Mech 2/2, non-Mech 1/1]; play Metaltooth → only Mechs gain +2 ATK; golden version gives +4 ATK — tests/shop/metaltooth-leaper.test.ts
 2026-05-09 | 34027c3 | FIXED: Goldrinn (tier 5 beast, 4/4) deathrattle already implemented — gives all friendly Beasts +5/+5 on death, 5 simulation tests pass

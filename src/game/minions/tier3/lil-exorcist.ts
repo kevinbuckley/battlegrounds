@@ -29,15 +29,15 @@ export default defineMinion({
 
       if (deathrattleCount <= 0) return ctx.state;
 
-      // Give ALL Deathrattle minions on both boards +1/+1
+      // Give Lil' Exorcist itself +1/+1 per Deathrattle minion on both boards
       return updatePlayer(ctx.state, ctx.playerId, (p) => {
         const newBoard = p.board.map((m) => {
-          if (m.hooks.onDeath) {
+          if (m.instanceId === ctx.self.instanceId) {
             return {
               ...m,
-              atk: m.atk + 1,
-              hp: m.hp + 1,
-              maxHp: m.maxHp + 1,
+              atk: m.atk + deathrattleCount,
+              hp: m.hp + deathrattleCount,
+              maxHp: m.maxHp + deathrattleCount,
             };
           }
           return m;
