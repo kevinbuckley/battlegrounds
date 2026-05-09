@@ -10,7 +10,7 @@ import { COST_BUY, COST_FREEZE, COST_REFRESH } from "@/game/economy";
 import { getHero, HEROES } from "@/game/heroes/index";
 import { MINIONS } from "@/game/minions/index";
 import { SPELLS } from "@/game/spells/index";
-import { makeInitialState, rngForTurn, step } from "@/game/state";
+import { deserializeReplay, makeInitialState, rngForTurn, step } from "@/game/state";
 import type { CombatEvent, CombatResult, GameState, MinionInstance } from "@/game/types";
 import { makeRng } from "@/lib/rng";
 
@@ -644,6 +644,21 @@ export default function GamePage() {
   useEffect(() => {
     const seed = Number(searchParams.get("seed")) || 1;
     const heroId = searchParams.get("hero");
+
+    // Check for replay URL hash
+    const hash = typeof window !== "undefined" ? window.location.hash : "";
+    const replayMatch = hash.match(/^#replay\/(.+)$/);
+    if (replayMatch && replayMatch[1]) {
+      try {
+        const decoded = atob(replayMatch[1]);
+        const restored = deserializeReplay(decoded);
+        setGameState(restored);
+        return;
+      } catch {
+        // Invalid replay hash, fall through to normal init
+      }
+    }
+
     if (!heroId) {
       router.push("/hero-select" as never);
       return;

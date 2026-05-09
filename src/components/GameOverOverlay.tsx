@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { HEROES } from "@/game/heroes/index";
+import { serializeReplay } from "@/game/state";
 import type { GameState } from "@/game/types";
 
 export function GameOverOverlay({ state }: { state: GameState }) {
@@ -12,6 +13,13 @@ export function GameOverOverlay({ state }: { state: GameState }) {
 
   const winnerName = winnerHero?.name ?? "Unknown";
   const isPlayerWinner = winnerId === 0;
+
+  const handleShareReplay = () => {
+    const serialized = serializeReplay(state);
+    const encoded = btoa(serialized);
+    const url = `${window.location.origin}${window.location.pathname}#replay/${encoded}`;
+    navigator.clipboard.writeText(url).catch(() => {});
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90">
@@ -58,6 +66,13 @@ export function GameOverOverlay({ state }: { state: GameState }) {
             className="rounded-lg bg-amber-500 px-8 py-3 font-semibold text-slate-950 transition hover:bg-amber-400"
           >
             Play Again
+          </button>
+          <button
+            type="button"
+            onClick={handleShareReplay}
+            className="rounded-lg border border-slate-600 bg-slate-800 px-6 py-3 text-sm text-slate-300 transition hover:bg-slate-700"
+          >
+            Share Replay
           </button>
         </div>
       </div>
