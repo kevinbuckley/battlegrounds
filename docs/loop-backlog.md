@@ -14,6 +14,20 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ---
 
+## Now — Hero tests & content (pick these first)
+
+- [ ] [S] Fix Jaraxxus passive — wire onTurnStart in src/game/shop.ts: when player.heroId === "jaraxxus", buff all Demons in player.shop by +1/+1 (just like Sindragosa buffs frozen); add tests/heroes/jaraxxus.test.ts: state with Demon in shop + Jaraxxus hero; trigger TurnStart step → Demon becomes 2/2; non-Demon shop minion unchanged — src/game/shop.ts + tests/heroes/jaraxxus.test.ts
+
+- [ ] [S] Add tests/heroes/yogg-saron.test.ts — verify Yogg-Saron hero power (2g): with seeded RNG, board minions all gain the same randomly chosen keyword after onHeroPower; board with 2 minions → both have identical new keyword; empty board → state unchanged; use heroPower helper and makeRng(42) — tests/heroes/yogg-saron.test.ts
+
+- [ ] [S] Add tests/heroes/maiev-shadowsong.test.ts — verify Maiev Shadowsong hero power (1g): targeting shop index 0 adds "dormant" to shop[0].keywords and sets shop[0].attachments.dormantTurnsLeft = 2; targeting out-of-range index is a no-op; other shop slots unaffected — tests/heroes/maiev-shadowsong.test.ts
+
+- [ ] [S] Add tests/shop/gentle-megasaur.test.ts — verify Gentle Megasaur (tier 6 beast, 5/4) battlecry gives all friendly Murlocs a random keyword (seeded RNG); board: [Murloc Scout 1/1, Beast 2/2]; play Megasaur → Scout.keywords has 1 new keyword, Beast unchanged; empty board (no Murlocs) → no keyword added — tests/shop/gentle-megasaur.test.ts
+
+- [ ] [S] Add tests/shop/mogor-the-curse-golem.test.ts — verify Mogor the Curse-Golem (tier 5 mech, 4/5) battlecry gives all friendly Mechs +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Mogor → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff — tests/shop/mogor-the-curse-golem.test.ts
+
+---
+
 ## Now — Bugs & missing effects (highest priority)
 
 - [x] [S] Fix `Annihilan Battlemaster` (tier 4 demon, 3/3) — currently empty hooks but should gain +2 ATK each time a friendly Demon attacks; add `onAllyAttack` hook that checks `attacker.tribes.includes("Demon")` and bumps self.atk += 2 and emits a Stat event; verify: [Annihilan, Imp 1/1] vs [5/20] — Imp attacks → Annihilan gains +2 ATK; Annihilan attacking self doesn't trigger; non-Demon ally attack does NOT trigger — src/game/minions/tier4/annihilan-battlemaster.ts + tests/simulation/annihilan-battlemaster.sim.test.ts
@@ -64,9 +78,9 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Soon — Content depth
 
-- [ ] [S] Add 3 new trinkets — `golden_scales` (random friendly minion +3/+3 and divineShield), `demonic_pact` (all friendly Demons +1 ATK), `beastly_tooth` (all friendly Beasts +2 ATK); add to TRINKETS registry; write 3 describe blocks in src/game/trinkets.test.ts verifying each onApply mutates board correctly — src/game/trinkets/index.ts + src/game/trinkets.test.ts
+- [x] [S] Add 3 new trinkets — `golden_scales` (random friendly minion +3/+3 and divineShield), `demonic_pact` (all friendly Demons +1 ATK), `beastly_tooth` (all friendly Beasts +2 ATK); add to TRINKETS registry; write 3 describe blocks in src/game/trinkets.test.ts verifying each onApply mutates board correctly — src/game/trinkets/index.ts + src/game/trinkets.test.ts
 
-- [ ] [S] Add 3 new anomalies — `big_stats` (all shop minions +2/+2 on setup), `pirate_cove` (all Pirates in shop +2 ATK on setup), `undead_plague` (all minions gain reborn on setup); export and register in ANOMALIES; create src/game/anomalies/anomalies.test.ts with 3 tests verifying each onSetup — src/game/anomalies/index.ts + tests
+- [x] [S] Add 3 new anomalies — `big_stats` (all shop minions +2/+2 on setup), `pirate_cove` (all Pirates in shop +2 ATK on setup), `undead_plague` (all minions gain reborn on setup); export and register in ANOMALIES; create src/game/anomalies/anomalies.test.ts with 3 tests verifying each onSetup — src/game/anomalies/index.ts + tests
 
 - [ ] [S] Add `Dragon Diplomacy` quest — trigger: win 3 combats while having 3+ Dragons on board; reward: all friendly Dragons +3/+3; onProgress checks dragon count and combat win; isComplete when progress >= 3; add to QUESTS; 2 tests — src/game/quests/index.ts + src/game/quests.test.ts
 
