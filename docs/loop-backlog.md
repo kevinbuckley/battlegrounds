@@ -16,7 +16,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 ## Now — Bugs & missing effects (highest priority)
 
-- [ ] [S] Fix `Annihilan Battlemaster` (tier 4 demon, 3/3) — currently empty hooks but should gain +2 ATK each time a friendly Demon attacks; add `onAllyAttack` hook that checks `attacker.tribes.includes("Demon")` and bumps self.atk += 2 and emits a Stat event; verify: [Annihilan, Imp 1/1] vs [5/20] — Imp attacks → Annihilan gains +2 ATK; Annihilan attacking self doesn't trigger; non-Demon ally attack does NOT trigger — src/game/minions/tier4/annihilan-battlemaster.ts + tests/simulation/annihilan-battlemaster.sim.test.ts
+- [x] [S] Fix `Annihilan Battlemaster` (tier 4 demon, 3/3) — currently empty hooks but should gain +2 ATK each time a friendly Demon attacks; add `onAllyAttack` hook that checks `attacker.tribes.includes("Demon")` and bumps self.atk += 2 and emits a Stat event; verify: [Annihilan, Imp 1/1] vs [5/20] — Imp attacks → Annihilan gains +2 ATK; Annihilan attacking self doesn't trigger; non-Demon ally attack does NOT trigger — src/game/minions/tier4/annihilan-battlemaster.ts + tests/simulation/annihilan-battlemaster.sim.test.ts
 
 - [ ] [S] Fix `Crystalweaver` (tier 4, 5/4) — currently empty hooks but should give all friendly Demons +2/+2 on battlecry; add `onBattlecry` hook that finds all board Demons (excluding self) and buffs each +2/+2; emit Stat events; verify: [Demon 1/1] on board → Crystalweaver played → Demon becomes 3/3; non-Demon unchanged; empty board → no buff — src/game/minions/tier4/crystalweaver.ts + tests/shop/crystalweaver.test.ts
 

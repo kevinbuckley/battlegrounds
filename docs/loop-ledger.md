@@ -1,4 +1,5 @@
 2026-05-09 | 7c29a1a | FIXED: Verify Goldrinn (tier 5 beast, 4/4) deathrattle gives friendly Beasts +5/+5 — 5 simulation tests pass, bun typecheck and bun test (1088/1088) pass
+2026-05-09 | 4ac5e4d | FIXED: Add Crystalweaver (tier 4 dragon, 4/4, cleave) onBattlecry hook that buffs all friendly Demons +2/+2, plus 4 shop tests verifying buff on Demons, no buff on non-Demons, empty board, and multiple Demons — bun typecheck and bun test (1100/1100) pass
 
 2026-05-09 | 5594ff8 | FIXED: Fix Annihilan Battlemaster (tier 4 demon, 1/4) — add onAllyAttack hook that checks attacker.tribes.includes("Demon") and buffs self.atk += 2, plus 4 simulation tests verifying buff on Demon attack, no buff on non-Demon, stacking across multiple Demon attacks, and no self-trigger
 
