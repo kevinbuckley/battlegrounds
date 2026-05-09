@@ -512,6 +512,17 @@ export default function GamePage() {
     opponentName: string;
   } | null>(null);
 
+  // Elimination toasts
+  const [toasts, setToasts] = useState<string[]>([]);
+  const toastTimersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  // Clear all active toasts
+  const clearToasts = useCallback(() => {
+    for (const t of toastTimersRef.current) clearTimeout(t);
+    toastTimersRef.current = [];
+    setToasts([]);
+  }, []);
+
   // Triple merge animation state
   const [tripleAnimMinions, setTripleAnimMinions] = useState<Set<string>>(new Set());
   const [showingGolden, setShowingGolden] = useState(false);
@@ -757,6 +768,19 @@ export default function GamePage() {
     // Advance state (resolves combat internally, clears boards, transitions to Recruit)
     const next = step(gameState, { kind: "EndTurn", player: 0 }, rngForTurn(gameState, "endTurn"));
     setGameState(next);
+
+    // Check for opponent eliminations (newly dead heroes)
+    for (const p of next.players) {
+      if (p.id === 0 || p.eliminated) continue;
+      const prevPlayer = gameState.players.find((pp) => pp.id === p.id);
+      if (prevPlayer && prevPlayer.hp > 0 && p.hp <= 0) {
+        const timer = setTimeout(() => {
+          setToasts((prev) => prev.filter((t) => t !== `💀 ${p.name} has been eliminated!`));
+        }, 3000);
+        toastTimersRef.current.push(timer);
+        setToasts((prev) => [...prev, `💀 ${p.name} has been eliminated!`]);
+      }
+    }
 
     // Compute combat result from the pre-combat snapshot for the animation
     if (
@@ -1839,6 +1863,20 @@ export default function GamePage() {
               <span className="font-bold text-emerald-400">{combatOutcome.opponentName}</span>
             </span>
           </div>
+        </div>
+      )}
+
+      {/* Elimination toasts */}
+      {toasts.length > 0 && (
+        <div className="fixed inset-x-0 top-36 z-40 flex flex-col items-center gap-2 pointer-events-none">
+          {toasts.map((toast, i) => (
+            <div
+              key={i}
+              className="rounded-xl border border-red-500/60 bg-red-950/90 px-5 py-2 shadow-lg shadow-red-900/40 animate-pulse"
+            >
+              <span className="text-sm text-red-300 font-semibold">{toast}</span>
+            </div>
+          ))}
         </div>
       )}
 
