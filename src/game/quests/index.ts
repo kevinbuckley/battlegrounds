@@ -204,10 +204,78 @@ export const demonDiplomacy: QuestCard = {
   },
 };
 
+/** Summon 3x 1/1 Demons with Rush each turn, stacking. Completes after 3 turns. */
+export const petrifiedImps: QuestCard = {
+  id: "petrified_imps",
+  name: "Petrified Imps Quest",
+  description: "Summon 3x 1/1 Demons with Rush each turn, stacking. Completes after 3 turns.",
+  onProgress: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = getPlayer(state, playerId);
+    if (player.eliminated) return state;
+
+    const quest = player.quests[0];
+    if (!quest || quest.completed) return state;
+
+    // Increment progress each turn
+    const updatedQuest: QuestInstance = {
+      ...quest,
+      progress: quest.progress + 1,
+    };
+    return updatePlayer(state, playerId, (p) => ({
+      ...p,
+      quests: [updatedQuest],
+    }));
+  },
+  isComplete: (state: GameState, playerId: PlayerId): boolean => {
+    const player = getPlayer(state, playerId);
+    const quest = player.quests[0];
+    if (!quest) return false;
+    return quest.progress >= quest.target;
+  },
+  onReward: (state: GameState, playerId: PlayerId, _rng: Rng): GameState => {
+    const player = getPlayer(state, playerId);
+    const progress = player.quests[0]?.progress ?? 3;
+    // Summon 3x 1/1 Demons with Rush for each progress point (3 per turn × 3 turns = 9)
+    const totalImps = 3 * progress;
+    const currentBoard = player.board.filter((m) => m.hp > 0);
+    const space = Math.max(0, 7 - currentBoard.length);
+    const actualImps = Math.min(totalImps, space);
+
+    let result = state;
+    for (let i = 0; i < actualImps; i++) {
+      result = updatePlayer(result, playerId, (p) => ({
+        ...p,
+        board: [
+          ...p.board,
+          {
+            instanceId: `petrified_imp_${playerId}_${i}`,
+            cardId: "petrified_imp",
+            baseAtk: 1,
+            baseHp: 1,
+            atk: 1,
+            hp: 1,
+            maxHp: 1,
+            keywords: new Set(["rush"]),
+            tribes: ["Demon"],
+            golden: false,
+            spellDamage: 0,
+            magnetic: false,
+            baronRivendare: false,
+            attachments: {},
+            hooks: {},
+          },
+        ],
+      }));
+    }
+    return result;
+  },
+};
+
 export const QUESTS: Record<string, QuestCard> = {
   [murlocMania.id]: murlocMania,
   [mechMayhem.id]: mechMayhem,
   [demonDiplomacy.id]: demonDiplomacy,
+  [petrifiedImps.id]: petrifiedImps,
 };
 
 export function getQuest(id: string): QuestCard {
