@@ -1,3 +1,4 @@
+2026-05-09 | 57d813a | FIXED: Add tests/shop/selmetlemental.test.ts — verify Sellemental (tier 1 elemental, 1/1) onSell hook adds a 1/1 Elemental token to the player's hand when sold from board or hand, does NOT add a token when selling a non-Sellemental, stacks across multiple Sellementals, 4 tests pass
 2026-05-09 | 289113f | FIXED: Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK, does not buff itself, does not buff non-Demons, stacks across multiple Demons, 4 tests pass
 
 2026-05-09 | 0cf2cd5 | FIXED: Add tests/shop/toxfin.test.ts — verify Toxfin (tier 4 murloc, 1/3) battlecry gives ALL friendly Murlocs poisonous, does NOT give itself poisonous, does nothing when no friendly Murlocs on board, stacks across multiple Toxfins (first Toxfin gets poisonous from second's battlecry), 4 tests pass
