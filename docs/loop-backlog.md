@@ -62,6 +62,10 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [S] Add tests/shop/pack-leader.test.ts — verify Pack Leader (tier 2 beast) onShopSummon gives a random friendly Beast +3 ATK when a Beast is played to board; build a GameState with Pack Leader on board and a Murloc Scout in hand; buy/play the Murloc Scout (non-Beast) → no buff; then with a Alley Cat in hand, play it → Pack Leader should buff it +3 ATK; test via state.ts reducer dispatch("play") — tests/shop/pack-leader.test.ts
 - [x] [S] Add tests/simulation/infested-wolf.sim.test.ts — verify Infested Wolf (tier 3 beast, 3/3) deathrattle summons two 1/1 Spiders when it dies; board: [Infested Wolf] vs [5/1]; Wolf dies, two 1/1 tokens appear, they finish the fight — tests/simulation/infested-wolf.sim.test.ts
 
+- [x] [S] Add tests/heroes/af-kay.test.ts — verify A.F. Kay hero definition: id=af_kay, startHp=40, startArmor=3, power kind=start_of_game, exists in HEROES registry — tests/heroes/af-kay.test.ts
+
+- [ ] [M] Wire A.F. Kay start_of_game power in makeInitialState — when player's heroId is 'af_kay', set player.tier=3, set player.shopRefreshesLeft=0 (shop already full), skip turns 1-2 (do not give gold, do not roll shop), apply on turn 3: roll full tier-3+ shop, set shopRefreshesLeft=2 — src/game/state.ts + tests/heroes/af-kay.test.ts
+
 - [x] [S] Opponent elimination toasts — in handleEndTurn (app/game/page.tsx), after step() resolves, compare pre/post player HP; for any opponent who newly has hp ≤ 0, push a 3s toast message "💀 HeroName has been eliminated!"; use a `toasts: string[]` state and auto-clear with setTimeout
 
 - [x] [S] Space bar to end turn — add a useEffect that listens for keydown event with key === ' '; call handleEndTurn when `gameState?.phase.kind === 'Recruit'` and no overlays are active (no discoverOffer, not displayingCombat, phase not GameOver); cleanup the listener on unmount
