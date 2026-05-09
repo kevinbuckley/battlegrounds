@@ -39,7 +39,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [ ] [S] Add tests/simulation/malganis.sim.test.ts — verify Mal'Ganis (tier 5 demon, 9/7) onStartOfCombat gives all OTHER friendly Demons +2/+2; board: [Malganis, 1/1 Imp Demon] vs [10/10]; verify Imp has 3/3 before first attack; Malganis itself NOT buffed; non-Demon allies also NOT buffed — tests/simulation/malganis.sim.test.ts
 
-- [ ] [S] Add tests/simulation/kaboom-bot.sim.test.ts — verify Kaboom Bot (tier 2 mech, 3/2) deathrattle deals 4 damage to a random enemy; board: [Kaboom Bot] vs [1/6 enemy]; Kaboom Bot dies → 4 damage to the enemy → 1/2 remains; also verify 4 damage kills a 1/4 enemy (right board empty) — tests/simulation/kaboom-bot.sim.test.ts
+- [x] [S] Add tests/simulation/kaboom-bot.sim.test.ts — verify Kaboom Bot (tier 2 mech, 3/2) deathrattle deals 4 damage to a random enemy; board: [Kaboom Bot] vs [3/6 enemy]; Kaboom Bot dies → 4 damage to the enemy → 1/2 remains; also verify 4 damage kills a 1/4 enemy (right board empty) — tests/simulation/kaboom-bot.sim.test.ts
 
 - [ ] [S] Add tests/simulation/glyph-guardian.sim.test.ts — verify Glyph Guardian (tier 2 dragon, 2/4) doubles its own ATK each time IT attacks; board: [Glyph Guardian] vs [1/1, 1/1, 1/1]; after first attack ATK becomes 4, after second 8; verify Stat events in transcript show the ATK doubling — tests/simulation/glyph-guardian.sim.test.ts
 
