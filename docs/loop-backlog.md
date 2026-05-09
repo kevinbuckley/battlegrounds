@@ -47,7 +47,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/nadina.sim.test.ts — DONE (file exists)
 
-- [ ] [S] Add tests/simulation/ripsnarl-captain.sim.test.ts — verify Ripsnarl Captain (tier 4 pirate, 3/5) onAllyAttack gains +2/+2 when a friendly Pirate attacks; board: [Ripsnarl Captain, Bloodsail Pirate 2/3] vs [1/1, 1/1, 1/1]; each time Bloodsail Pirate attacks, Ripsnarl gains +2/+2; verify Stat events show ATK/HP growing — tests/simulation/ripsnarl-captain.sim.test.ts
+- [x] [S] Add tests/simulation/ripsnarl-captain.sim.test.ts — verify Ripsnarl Captain (tier 4 pirate, 3/5) onAllyAttack gains +2/+2 when a friendly Pirate attacks; board: [Ripsnarl Captain, Bloodsail Pirate 2/3] vs [1/1, 1/1, 1/1]; each time Bloodsail Pirate attacks, Ripsnarl gains +2/+2; verify Stat events show ATK/HP growing — tests/simulation/ripsnarl-captain.sim.test.ts
 
 - [ ] [S] Add tests/simulation/security-rover.sim.test.ts — verify Security Rover (tier 4 mech, 1/4) spawns a 2/3 Mech with divine shield each time IT takes damage; board: [Security Rover] vs [3/3, 3/3]; first hit on Rover spawns a divine-shield bot; verify survivorsLeft grows after each hit on Rover — tests/simulation/security-rover.sim.test.ts
 

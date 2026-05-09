@@ -14,14 +14,14 @@ export default defineMinion({
       const attacker = ctx.attacker;
       if (!attacker) return;
       if (attacker.tribes.includes("Pirate")) {
-        attacker.atk += 2;
-        attacker.hp += 2;
-        attacker.maxHp += 2;
+        ctx.self.atk += 2;
+        ctx.self.hp += 2;
+        ctx.self.maxHp += 2;
         ctx.emit({
           kind: "Stat",
-          target: attacker.instanceId,
-          atk: attacker.atk,
-          hp: attacker.hp,
+          target: ctx.self.instanceId,
+          atk: ctx.self.atk,
+          hp: ctx.self.hp,
         });
       }
     },
