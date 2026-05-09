@@ -36,13 +36,13 @@ function bestShopIndex(shop: MinionInstance[]): number {
   return best;
 }
 
-/** Index of the weakest board minion. */
+/** Index of the weakest board minion. Ties broken by highest index. */
 function weakestBoardIndex(board: MinionInstance[]): number {
   let worst = 0;
   let worstScore = Infinity;
   for (let i = 0; i < board.length; i++) {
     const score = minionScore(board[i]!);
-    if (score < worstScore) {
+    if (score <= worstScore) {
       worst = i;
       worstScore = score;
     }
@@ -100,16 +100,20 @@ export const greedy: Strategy = {
       }
     }
 
-    // --- Sell weakest board minion if board is full and we have hand cards ---
+    // --- Sell weakest board minion if a hand minion scores higher ---
     {
       const player = sim.players[me]!;
-      if (player.board.length >= 7 && player.hand.length > 0) {
+      if (player.board.length > 0 && player.hand.length > 0) {
         const weakIdx = weakestBoardIndex(player.board);
-        try {
-          sim = sellMinion(sim, me, weakIdx);
-          actions.push({ kind: "SellMinion", player: me, boardIndex: weakIdx });
-        } catch {
-          // ignore
+        const weakScore = minionScore(player.board[weakIdx]!);
+        const bestHandScore = Math.max(...player.hand.map(minionScore));
+        if (bestHandScore > weakScore) {
+          try {
+            sim = sellMinion(sim, me, weakIdx);
+            actions.push({ kind: "SellMinion", player: me, boardIndex: weakIdx });
+          } catch {
+            // ignore
+          }
         }
       }
     }

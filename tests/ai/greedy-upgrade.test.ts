@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 import { greedy } from "../../src/ai/heuristics/greedy";
 import { makePlayerView } from "../../src/ai/strategy";
 import { defineMinion, instantiate } from "../../src/game/minions/define";
@@ -168,5 +168,130 @@ describe("greedy AI — tier upgrade", () => {
 
     const upgradeAction = actions.find((a) => a.kind === "UpgradeTier");
     expect(upgradeAction).toBeUndefined();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Greedy AI — sell weakest minion when board is full
+// ---------------------------------------------------------------------------
+
+describe("greedy AI — sell weakest when board full", () => {
+  it("sells the board minion with lowest (atk+hp) score", () => {
+    const card1 = defineMinion({
+      id: "test_sell_weakest_1",
+      name: "Test Minion 1",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 1,
+      baseHp: 1,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[card1.id] = card1;
+
+    const card2 = defineMinion({
+      id: "test_sell_weakest_2",
+      name: "Test Minion 2",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 3,
+      baseHp: 3,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[card2.id] = card2;
+
+    const card3 = defineMinion({
+      id: "test_sell_weakest_3",
+      name: "Test Minion 3",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 2,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[card3.id] = card3;
+
+    // Board: [3/3 (score 6), 1/1 (score 2), 2/2 (score 4)]
+    // Weakest is 1/1 at index 1
+    const boardMinions = [instantiate(card2), instantiate(card1), instantiate(card3)];
+    const handCard = defineMinion({
+      id: "test_sell_weakest_hand",
+      name: "Hand Minion",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 4,
+      baseHp: 4,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[handCard.id] = handCard;
+    const handMinion = instantiate(handCard);
+
+    const state = makeTestState({
+      board: boardMinions,
+      hand: [handMinion],
+      gold: 5,
+      tier: 1,
+    });
+
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+
+    // Should sell the weakest minion (1/1 at index 1)
+    const sellAction = actions.find((a) => a.kind === "SellMinion" && "boardIndex" in a);
+    expect(sellAction).toBeDefined();
+    expect((sellAction as { boardIndex: number }).boardIndex).toBe(1);
+  });
+
+  it("sells the minion with the highest board index when scores tie", () => {
+    const card = defineMinion({
+      id: "test_sell_tie",
+      name: "Tie Minion",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 2,
+      baseHp: 2,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[card.id] = card;
+
+    // All minions have score 4 (2+2), highest index (3) should be sold
+    const boardMinions = [0, 1, 2, 3].map(() => instantiate(card));
+    const handCard = defineMinion({
+      id: "test_sell_tie_hand",
+      name: "Hand Minion",
+      tier: 1,
+      tribes: ["Pirate"],
+      baseAtk: 4,
+      baseHp: 4,
+      baseKeywords: [],
+      spellDamage: 0,
+      hooks: {},
+    });
+    MINIONS[handCard.id] = handCard;
+    const handMinion = instantiate(handCard);
+
+    const state = makeTestState({
+      board: boardMinions,
+      hand: [handMinion],
+      gold: 5,
+      tier: 1,
+    });
+
+    const view = makePlayerView(state, 0);
+    const actions = greedy.decideRecruitActions(view, RNG);
+
+    const sellAction = actions.find((a) => a.kind === "SellMinion" && "boardIndex" in a);
+    expect(sellAction).toBeDefined();
+    // Highest index (3) should be sold when all scores tie
+    expect((sellAction as { boardIndex: number }).boardIndex).toBe(3);
   });
 });
