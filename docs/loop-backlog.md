@@ -67,7 +67,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/siegebreaker.sim.test.ts — verify Siegebreaker (tier 4 demon, 5/8, taunt) onStartOfCombat gives all OTHER friendly Demons +1 ATK; board: [Siegebreaker, Imp 2/2 Demon] vs [10/10]; after onStartOfCombat the Imp should have 3 ATK (2+1 from Siegebreaker); Siegebreaker itself is NOT buffed; also verify non-Demons are NOT buffed — tests/simulation/siegebreaker.sim.test.ts  <!-- DONE: 4 tests pass -->
 
-- [ ] [S] Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total — tests/shop/murloc-tidecaller.test.ts
+- [x] [S] Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total — tests/shop/murloc-tidecaller.test.ts
 
 - [ ] [S] Add tests/shop/rockpool-hunter.test.ts — verify Rockpool Hunter (tier 1 murloc, 1/2) battlecry gives a random friendly Murloc +1/+1; board: [Murloc Scout 1/1]; play Rockpool Hunter → Murloc Scout becomes 2/2; board with no Murlocs → no buff; board with two Murlocs → one of them gains +1/+1 — tests/shop/rockpool-hunter.test.ts
 

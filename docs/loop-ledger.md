@@ -1,3 +1,5 @@
+2026-05-09 | 29eaf51 | FIXED: Add tests/shop/murloc-tidecaller.test.ts — verify Murloc Tidecaller (tier 1 murloc, 1/1) gains +1 ATK via onRecruitSummon when a Murloc is summoned to the board during recruit phase; board: [Tidecaller 1/1]; play Murloc Scout (a Murloc) → Tidecaller becomes 2/1; play a non-Murloc → Tidecaller does NOT gain ATK; two Murlocs played → Tidecaller gains +2 ATK total, 3 tests pass
+
 2026-05-09 | addfe77 | FIXED: Add tests/simulation/micro-machine.sim.test.ts — verify Micro Machine (tier 2 mech, 1/2) gains +1 ATK at start of combat via onStartOfCombat; board: [Micro Machine 1/2] vs [2/10]; after onStartOfCombat Micro Machine should have 2 ATK; verify transcript Stat event shows atk=2; also verify two Micro Machines each gain +1 independently, 2 tests pass
 
 2026-05-09 | 284a730 | FIXED: Add tests/shop/markku.test.ts — verify Markku, the Murloc (tier 3, 3/3) battlecry copies a random friendly Murloc from board when played, copies itself when it is the only Murloc, copies full stats and keywords of target, does NOT copy non-Murloc minions, 5 tests pass
