@@ -86,6 +86,8 @@ export interface CombatCtx {
 
 export interface AttackCombatCtx extends CombatCtx {
   target: MinionInstance;
+  /** The minion that is performing the attack (only set when firing onAllyAttack). */
+  attacker?: MinionInstance;
 }
 
 export interface AllyDeathCombatCtx extends CombatCtx {

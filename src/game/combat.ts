@@ -141,6 +141,7 @@ export function simulateCombat(
             emit,
             rng,
             target: currentTarget,
+            attacker,
           });
         }
       }

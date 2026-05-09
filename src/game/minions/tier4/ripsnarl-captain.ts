@@ -11,16 +11,17 @@ export default defineMinion({
   spellDamage: 0,
   hooks: {
     onAllyAttack: (ctx) => {
-      const tribe = ctx.target.tribes;
-      if (tribe.includes("Pirate")) {
-        ctx.target.atk += 2;
-        ctx.target.hp += 2;
-        ctx.target.maxHp += 2;
+      const attacker = ctx.attacker;
+      if (!attacker) return;
+      if (attacker.tribes.includes("Pirate")) {
+        attacker.atk += 2;
+        attacker.hp += 2;
+        attacker.maxHp += 2;
         ctx.emit({
           kind: "Stat",
-          target: ctx.target.instanceId,
-          atk: ctx.target.atk,
-          hp: ctx.target.hp,
+          target: attacker.instanceId,
+          atk: attacker.atk,
+          hp: attacker.hp,
         });
       }
     },

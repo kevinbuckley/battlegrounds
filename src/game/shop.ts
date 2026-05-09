@@ -435,11 +435,35 @@ export function playMinionToBoard(
     }
   }
 
-  // Fire onPlay: fires when a minion is played from hand to board
+  // Fire onPlay: fires when a minion is played from hand to board.
+  // The played minion's own onPlay fires first.
   const onPlay = minion.hooks?.onPlay;
   if (onPlay) {
     const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
     afterPlay = onPlay({ self: minion, playerId, state: afterPlay, rng, spellDamage });
+  }
+
+  // Deflect-o-Bot style: when a Mech is played, fire onPlay hooks on all
+  // other board minions that have an onPlay hook (e.g. Deflect-o-Bot
+  // restores its divine shield and buffs other Mechs).
+  if (card && card.tribes.includes("Mech")) {
+    const spellDamage = player.board.reduce((sum, m) => sum + (m.spellDamage ?? 0), 0);
+    afterPlay = updatePlayer(afterPlay, playerId, (p) => {
+      let board = p.board;
+      for (const bm of board) {
+        const bmOnPlay = MINIONS[bm.cardId]?.hooks?.onPlay;
+        if (!bmOnPlay || bm.cardId === minion.cardId) continue;
+        const resultState = bmOnPlay({
+          self: bm,
+          playerId,
+          state: afterPlay,
+          rng,
+          spellDamage,
+        });
+        board = resultState.players[playerId]!.board;
+      }
+      return { ...p, board };
+    });
   }
 
   // Apply combo: all friendly minions with combo gain +2/+2 when a card is played
