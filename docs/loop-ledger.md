@@ -381,3 +381,4 @@
 2026-05-09 | b878f7b | FIXED: Ghost fight label — show "Ghost fight vs." in combat overlay pairing banner when opponent has placement !== null
 2026-05-09 | 1fdee9b | FIXED: Combat animation speed toggle — add "⚡ 2×" button to combat overlay header; track combatSpeed: 1 | 2 state; halve tick interval from 180ms to 90ms at 2×
 2026-05-09 | 8b920b8 | FIXED: Add Edwin Van Cleef hero power test — verify onHeroPower gives all hand minions +1/+1, stacks across uses, does nothing on empty hand, and does not affect board minions
+2026-05-09 | 5488850 | FIXED: Cobalt Scalebane onTurnEnd now uses seeded rng.pick() instead of Math.random for deterministic random minion selection, plus unit tests verifying buff behavior

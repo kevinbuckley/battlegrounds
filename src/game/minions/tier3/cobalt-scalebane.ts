@@ -11,14 +11,14 @@ export default defineMinion({
   spellDamage: 0,
   hooks: {
     // End of turn: Give a random friendly minion +3 ATK
-    onTurnEnd: ({ state, playerId, self }) => {
+    onTurnEnd: ({ state, playerId, self, rng }) => {
       const player = state.players.find((p) => p.id === playerId);
       if (!player) return state;
 
       const friendlyMinions = player.board.filter((m) => m.instanceId !== self.instanceId);
       if (friendlyMinions.length === 0) return state;
 
-      const target = friendlyMinions[Math.floor(Math.random() * friendlyMinions.length)];
+      const target = rng.pick(friendlyMinions);
       if (!target) return state;
 
       const newBoard = player.board.map((m) =>
