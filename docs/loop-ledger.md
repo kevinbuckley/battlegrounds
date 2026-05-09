@@ -1,3 +1,5 @@
+2026-05-09 | 7c29a1a | FIXED: Verify Goldrinn (tier 5 beast, 4/4) deathrattle gives friendly Beasts +5/+5 — 5 simulation tests pass, bun typecheck and bun test (1088/1088) pass
+
 2026-05-09 | c624b1a | FIXED: Add tests/shop/screwjank-clunker.test.ts — verify Screwjank Clunker (tier 3 mech, 3/3) battlecry gives a friendly Mech +2/+2; board: [Mech 1/1, non-Mech 2/2]; play Screwjank → Mech becomes 3/3; non-Mech unchanged; no Mechs → no buff; 4 tests pass, bun typecheck and bun test (1088/1088) pass
 2026-05-09 | ce08cbc | FIXED: Add tests/simulation/fiendish-servant.sim.test.ts — verify Fiendish Servant (tier 1 demon, 2/1) deathrattle gives its current ATK to a random friendly minion; works with buffed Servant (4 ATK → +4); does nothing with no other friendly minions; does not crash with 0 ATK — tests/simulation/fiendish-servant.sim.test.ts
 
