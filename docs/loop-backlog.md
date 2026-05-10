@@ -165,6 +165,12 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/grombi-the-rotunda.sim.test.ts — verify Grombi the Rotunda (tier 2, 2/3 Murloc) onAllyKill gives +2 ATK per kill; 5 tests: ally kills, self kills, stacks, right-side, no-kills-grombi-dies — tests/simulation/grombi-the-rotunda.sim.test.ts
 
+- [ ] [S] Add tests/shop/bloodsail-corsair.test.ts — verify Bloodsail Corsair (tier 4, 4/3 Pirate) onBattlecry deals 2 damage to a random enemy minion (opponent's board); read src/game/minions/tier4/bloodsail-corsair.ts — it picks a random enemy player's board minion and sets hp -= 2; build state: Corsair in shop, opponent board has [Murloc Scout 1/2]; play Corsair → Scout hp becomes 0 (dies) or test with 1/10 → 1/8; no enemies in any opponent board → no effect, Corsair plays fine — tests/shop/bloodsail-corsair.test.ts
+
+- [ ] [S] Add tests/shop/bloodsail-cannoneer.test.ts — verify Bloodsail Cannoneer (tier 3, 2/3 Pirate) onBattlecry gives the FIRST friendly Pirate on board +3 ATK (only the first, not all); read src/game/minions/tier3/bloodsail-cannoneer.ts — it returns early after buffing the first Pirate; board: [Pirate1 2/2, Pirate2 3/3, Beast 1/1]; play Cannoneer → Pirate1 becomes 5/2 (first Pirate gets +3 ATK); Pirate2 unchanged; Beast unchanged; board with no Pirates → no buff — tests/shop/bloodsail-cannoneer.test.ts
+
+- [ ] [S] Add tests/simulation/harvest-golem.sim.test.ts — verify Harvest Golem (tier 2, 2/2 Mech) deathrattle summons a 2/1 Mech to the ally side; read src/game/minions/tier2/harvest-golem.ts; test 1: [Harvest Golem 2/2] vs [3/3]; Golem dies, spawns 2/1 Mech; 2/1 attacks 3/2 → 2/1 takes 3 → dies; survivorsRight=[3/2]; test 2: [Harvest Golem, ally 1/100] vs [3/3]; Golem dies, spawns 2/1, both small mech and ally survive; survivorsLeft has 2 minions; test 3: board at 7 before death → Mech NOT spawned (board check: ctx.left.length >= 7) — IMPORTANT: check harvest-golem.ts implementation — if it doesn't check board cap, don't add that test — tests/simulation/harvest-golem.sim.test.ts
+
 ---
 
 ## Soon — Engine correctness
