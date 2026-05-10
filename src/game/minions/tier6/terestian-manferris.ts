@@ -12,7 +12,7 @@ export default defineMinion({
   hooks: {
     onDeath: (ctx) => {
       const allies = ctx.selfSide === "left" ? ctx.left : ctx.right;
-      const mechs = allies.filter((m) => m.tribes.includes("Mech"));
+      const mechs = allies.filter((m) => m.tribes.includes("Mech") && m.instanceId !== ctx.self.instanceId);
       if (mechs.length === 0) return;
       const target = ctx.rng.pick(mechs);
       target.atk += 3;
