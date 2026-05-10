@@ -112,7 +112,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/amalgadon.sim.test.ts — verify Amalgadon (tier 6, 0/0) battlecry gains a random keyword for each different tribe among friendly board minions; board: [Beast 1/1, Mech 2/2, Murloc 1/1]; play Amalgadon → gains 3 keywords (one per tribe); board with 2 Beasts → only 1 tribe → gains 1 keyword; empty board → no keywords — tests/simulation/amalgadon.sim.test.ts  (ALREADY COVERED by tests/shop/amalgadon.test.ts — 6 passing tests, battlecry fires during shop play)
 
-- [ ] [S] Add tests/simulation/elistra.sim.test.ts — verify Elistra the Immortal (tier 6 dragon) deathrattle: when Elistra dies, a copy is added to the board; board: [Elistra 7/5] vs [10/10]; Elistra dies → new 7/5 Elistra appears (without deathrattle keyword to prevent infinite loop); survivorsLeft contains a Dragon after combat — tests/simulation/elistra.sim.test.ts
+- [x] [S] Add tests/simulation/elistra.sim.test.ts — verify Elistra the Immortal (tier 6 dragon) deathrattle: when Elistra dies, a copy is added to the board; board: [Elistra 7/5] vs [10/10]; Elistra dies → new 7/5 Elistra appears (without deathrattle keyword to prevent infinite loop); survivorsLeft contains a Dragon after combat — tests/simulation/elistra.sim.test.ts  (ALREADY COVERED by existing tests/simulation/elistra.sim.test.ts — reborn behavior tested: returns at 1/1 with reborn removed, golden fires twice)
 
 
 - [ ] [M] Fix quest win-detection in processQuests — onProgress in murlocMania/mechMayhem/demonDiplomacy uses flawed board-HP heuristics instead of actual combat result; rewrite processQuests in state.ts to pass the CombatResult winner field into quest progress calls; update all 4 quest cards' onProgress signatures to accept `winner: Side | "draw"`; add 2 regression tests — src/game/state.ts + src/game/quests/index.ts + src/game/quests.test.ts
@@ -134,6 +134,18 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 - [x] [M] AI tribe synergy scoring — replace `matchingTribeIndex` in basic.ts with `scoreBuy(minion, board)`: +3 for completing a triple, +2 for matching primary board tribe, +1 for any board tribe, 0 otherwise; rank all affordable shop minions by score and buy the highest-scored one; add a test: AI with Murloc board prefers a Murloc over same-cost non-Murloc — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
 
 - [x] [S] AI sells weakest minion when board full — read sell-to-make-room logic in basic.ts; if it doesn't score before selling, update it to sell the board minion with lowest (atk+hp) score; ties broken by highest board index; add a test: AI with 7 minions buys a high-stat minion → weakest is sold — src/ai/heuristics/basic.ts + tests/ai/greedy-upgrade.test.ts
+
+---
+
+## Now — New tasks (pick these next)
+
+- [ ] [S] Add tests/shop/lil-rag.test.ts — verify Lil' Rag (tier 5, 1/1 Elemental) onPlay buffs all OTHER friendly Elementals +1/+1; board: [Elemental 2/2, non-Elemental 3/3]; play Lil' Rag → Elemental becomes 3/3; non-Elemental unchanged; Lil' Rag does NOT buff itself; second Elemental on board also buffed — src/game/minions/tier5/lil-rag.ts is already implemented (onPlay hook) — tests/shop/lil-rag.test.ts
+
+- [ ] [S] Add tests/shop/murozond.test.ts — verify Murozond (tier 5 dragon, 4/5) onBattlecry: adds a copy of a random enemy minion to hand; build state with Murozond in shop, opponent board has [Murloc Scout 1/1]; play Murozond → hand contains 1 new MinionInstance whose cardId matches the chosen enemy; empty enemy boards → hand unchanged — src/game/minions/tier5/murozond.ts is already implemented — tests/shop/murozond.test.ts
+
+- [ ] [S] Wire collateralDamage in combat.ts — when attacker.keywords has "collateralDamageN" (N=1,2,3), after the main attack resolves, deal N damage to every OTHER enemy (not the main defender); the defender still counterattacks normally; NOTE: bloodsail_pirate has collateralDamage1 — update the ripsnarl-captain.sim.test.ts hp assertion from 5 to the correct value based on actual collateral damage (pirate attacks e1: e1 takes 1+counterattacks, e2+e3 each take 1 collateral from pirate — captain hp changes accordingly); add tests/simulation/collateral-damage.sim.test.ts with 3 tests: [bloodsail_pirate 1/2] vs [5/5, 5/5] — both enemies take 1 collateral; [deathwing_raze_to_bone 8/8] vs [4/4, 4/4, 4/4] — 2 non-targets each take 3; no collateral when attacking solo target — src/game/combat.ts + tests/simulation/collateral-damage.sim.test.ts
+
+- [ ] [S] Add tests/simulation/murozond.sim.test.ts — verify Murozond (tier 5 dragon, 4/5) in combat simply attacks like a 4/5; it has no combat hooks; board: [Murozond] vs [3/3]; Murozond attacks (left turn=1): 3/3 takes 4 → dead, Murozond takes 3 → 4/2; left wins — tests/simulation/murozond.sim.test.ts
 
 ---
 
