@@ -509,3 +509,4 @@
 2026-05-10 | 80f6bc0 | FIXED: Add tests/shop/flame-imp.test.ts — verify Flame Imp (tier 1 demon, 3/1) battlecry deals 2 damage to hero when played to board; hero HP clamped to 0; does not affect enemy hero; bun typecheck and bun test (1240/1240) pass
 2026-05-10 | c21631a | FIXED: Mark deathwing-raze-to-bone and kalecgos backlog items as done — both test files already exist and pass (8/8 tests total); no code changes needed
 2026-05-10 | c7348c8 | FIXED: Add tests/simulation/friggent-northvalley.sim.test.ts — verify Friggent Northvalley (tier 6, 5/7 Beast) deathrattle summons a 2/3 Stalker to ally side
+2026-05-10 | aa3a386 | FIXED: Mark tests/simulation/terestian-manferris.sim.test.ts as done — 3 passing tests verify deathrattle buffs random friendly Mech +3/+3, excludes non-Mechs, and excludes self
