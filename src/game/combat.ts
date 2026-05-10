@@ -198,6 +198,22 @@ export function simulateCombat(
       // Counterattack: primary target hits back (only once, regardless of cleave)
       applyDamage(currentTarget, attacker, emit, left, right, rng, lifestealAccum);
 
+      // Collateral damage: after the main attack resolves, deal N damage to
+      // every OTHER enemy (not the main defender). The defender still
+      // counterattacks normally.
+      for (const k of attacker.keywords) {
+        if (typeof k === "string" && k.startsWith("collateralDamage")) {
+          const amount = parseInt(k.slice("collateralDamage".length), 10);
+          const otherEnemies = currentDefenders.filter(
+            (e) => e.instanceId !== currentTarget.instanceId && e.hp > 0,
+          );
+          for (const other of otherEnemies) {
+            applyDamage(attacker, other, emit, left, right, rng, lifestealAccum);
+          }
+          break;
+        }
+      }
+
       // Process deaths (including deathrattle chains)
       const result = reapDeaths(
         left,
