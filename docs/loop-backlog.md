@@ -163,7 +163,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/maexxna.sim.test.ts — verify Maexxna (tier 5, 2/12 Beast, poisonous) kills any minion in one hit regardless of HP; test 1: [Maexxna 2/12] vs [1/1000] → enemy dies from poisonous, Maexxna survives at 2/11; test 2: [Maexxna 2/12] vs [1000/1] → both die in exchange; test 3: [Maexxna 2/12] vs [taunt 3/5, 2/2] → Maexxna must attack taunt first, kills instantly from poisonous, then attacks 2/2, survives at 2/7 — tests/simulation/maexxna.sim.test.ts
 
-- [ ] [S] Add tests/simulation/grombi-the-rotunda.sim.test.ts — verify Grombi the Rotunda (tier 2, 2/3 Murloc, magnetic) onAllyKill gives itself +2/+2 each time ANY ally kills a minion (including Grombi itself); read src/game/minions/tier2/grombi-the-rotunda.ts — hook has no emit, directly mutates self.atk/hp; IMPORTANT: onAllyKill fires on ALL friendly minions when a kill happens (including the attacker), so Grombi gains +2/+2 even when Grombi itself kills; test 1: [Grombi 2/3, 10/10 ally] vs [1/1, 1/1]; 10/10 kills first 1/1 → Grombi gains +2/+2 → 4/5; 10/10 kills second → Grombi 6/7; survivor Grombi has atk=6; test 2: [Grombi 2/3] vs [1/1]; Grombi attacks and kills 1/1 → Grombi's own onAllyKill fires (self is in the allies list) → Grombi gains +2/+2 → 4/5; left wins with Grombi atk=4 — tests/simulation/grombi-the-rotunda.sim.test.ts
+- [x] [S] Add tests/simulation/grombi-the-rotunda.sim.test.ts — verify Grombi the Rotunda (tier 2, 2/3 Murloc) onAllyKill gives +2 ATK per kill; 5 tests: ally kills, self kills, stacks, right-side, no-kills-grombi-dies — tests/simulation/grombi-the-rotunda.sim.test.ts
 
 ---
 
