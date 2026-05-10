@@ -145,7 +145,13 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Wire collateralDamage in combat.ts — when attacker.keywords has "collateralDamageN" (N=1,2,3), after the main attack resolves, deal N damage to every OTHER enemy (not the main defender); the defender still counterattacks normally; NOTE: bloodsail_pirate has collateralDamage1 — update the ripsnarl-captain.sim.test.ts hp assertion from 5 to the correct value based on actual collateral damage (pirate attacks e1: e1 takes 1+counterattacks, e2+e3 each take 1 collateral from pirate — captain hp changes accordingly); add tests/simulation/collateral-damage.sim.test.ts with 3 tests: [bloodsail_pirate 1/2] vs [5/5, 5/5] — both enemies take 1 collateral; [deathwing_raze_to_bone 8/8] vs [4/4, 4/4, 4/4] — 2 non-targets each take 3; no collateral when attacking solo target — src/game/combat.ts + tests/simulation/collateral-damage.sim.test.ts
 
-- [ ] [S] Add tests/simulation/murozond.sim.test.ts — verify Murozond (tier 5 dragon, 4/5) in combat simply attacks like a 4/5; it has no combat hooks; board: [Murozond] vs [3/3]; Murozond attacks (left turn=1): 3/3 takes 4 → dead, Murozond takes 3 → 4/2; left wins — tests/simulation/murozond.sim.test.ts
+- [x] [S] Add tests/simulation/murozond.sim.test.ts — verify Murozond (tier 5 dragon, 4/5) in combat simply attacks like a 4/5; it has no combat hooks; board: [Murozond] vs [3/3]; Murozond attacks (left turn=1): 3/3 takes 4 → dead, Murozond takes 3 → 4/2; left wins — tests/simulation/murozond.sim.test.ts
+
+- [ ] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) onBattlecry gives all friendly Taunt minions +2/+2; board: [Taunt 1/1, non-Taunt 2/2]; play Strongshell → Taunt becomes 3/3; non-Taunt unchanged; board with 2 Taunt minions → both get +2/+2; no Taunts on board → no buff — src/game/minions/tier5/strongshell-scavenger.ts is already implemented — tests/shop/strongshell-scavenger.test.ts
+
+- [ ] [S] Add tests/simulation/deathwing-raze-to-bone.sim.test.ts — verify Deathwing, Raze to Bone (tier 8 dragon, 8/8, collateralDamage3) deals 3 bonus damage to all OTHER enemies when it attacks; board: [DRtB 8/8] vs [4/5, 4/5, 4/5]; DRtB attacks first enemy (4/5 → dead, DRtB takes 4 → 8/4); 2 other enemies each take 3 collateral (4/2, 4/2); verify both survive with 2 HP; also test: [DRtB] vs [4/4] — only one enemy, no collateral — tests/simulation/deathwing-raze-to-bone.sim.test.ts
+
+- [ ] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos, Arcane Aspect (tier 6 dragon, 4/8) onCast: when a spell is played, all friendly minions gain +1/+1; read kalecgos-arcane-aspect.ts to find the exact hook (onCast); find how to trigger a spell cast on a minion (look at src/game/shop.ts castSpell or similar); board: [minion 2/2]; cast a spell → minion becomes 3/3; board with 2 minions → both buffed — tests/shop/kalecgos.test.ts
 
 ---
 
