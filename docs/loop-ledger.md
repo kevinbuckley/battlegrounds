@@ -505,3 +505,4 @@
 2026-05-10 | 953f52e | FIXED: Add tests/simulation/elistra.sim.test.ts — verify Elistra the Immortal reborn returns as 1/1 with keyword removed; golden does not double reborn (guarded by rebornUsed); 4 passing tests
 2026-05-10 | 0b195de | FIXED: Wire collateralDamage keyword in combat.ts — after main attack resolves, deal N damage to every OTHER enemy minion; add tests/simulation/collateral-damage.sim.test.ts with 3 tests; mark lil-rag and murozond backlog items as done
 2026-05-10 | 151da88 | FIXED: Add tests/simulation/murozond.sim.test.ts — verify Murozond (tier 5 dragon, 4/5) in combat simply attacks like a 4/5; no combat hooks fire; board: [Murozond] vs [3/3] → Murozond wins
+2026-05-10 | 80f6bc0 | FIXED: Add tests/shop/flame-imp.test.ts — verify Flame Imp (tier 1 demon, 3/1) battlecry deals 2 damage to hero when played to board; hero HP clamped to 0; does not affect enemy hero; bun typecheck and bun test (1240/1240) pass
