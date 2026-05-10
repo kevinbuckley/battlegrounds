@@ -157,7 +157,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/terestian-manferris.sim.test.ts — verify Terestian Manferris (tier 6, 5/5 Mech) deathrattle gives a random friendly Mech +3/+3; NOTE: implementation bug fixed — must exclude ctx.self from filter (was picking itself); 3 tests: ally mech buffed, self NOT buffed, non-Mech unchanged — tests/simulation/terestian-manferris.sim.test.ts
 
-- [ ] [S] Add tests/shop/zixor-project-hope.test.ts — verify Zixor, Project Hope (tier 6, 3/6 Elemental) onBattlecry summons a random tier-5 minion directly to the player's board (NOT hand); read src/game/minions/tier6/zixor-project-hope.ts; build state: Zixor in shop, board has 1 minion, gold=10, tier=6; buy + play Zixor → board.length increases by 1 (Zixor + original + summoned tier-5); the summoned minion must have tier===5 (check MINIONS[summoned.cardId].tier); test 2: board full (6 minions + Zixor about to play = 7 full) → summon blocked (board.length stays at 7 after play) — tests/shop/zixor-project-hope.test.ts
+- [x] [S] Add tests/shop/zixor-project-hope.test.ts — verify Zixor, Project Hope (tier 6, 3/6 Elemental) onBattlecry summons a random tier-5 minion directly to the player's board (NOT hand); read src/game/minions/tier6/zixor-project-hope.ts; build state: Zixor in shop, board has 1 minion, gold=10, tier=6; buy + play Zixor → board.length increases by 1 (Zixor + original + summoned tier-5); the summoned minion must have tier===5 (check MINIONS[summoned.cardId].tier); test 2: board full (6 minions + Zixor about to play = 7 full) → summon blocked (board.length stays at 7 after play) — tests/shop/zixor-project-hope.test.ts
 
 ---
 
