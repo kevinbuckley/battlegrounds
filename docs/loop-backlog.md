@@ -147,7 +147,7 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/simulation/murozond.sim.test.ts — verify Murozond (tier 5 dragon, 4/5) in combat simply attacks like a 4/5; it has no combat hooks; board: [Murozond] vs [3/3]; Murozond attacks (left turn=1): 3/3 takes 4 → dead, Murozond takes 3 → 4/2; left wins — tests/simulation/murozond.sim.test.ts
 
-- [ ] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) onBattlecry gives all friendly Taunt minions +2/+2; board: [Taunt 1/1, non-Taunt 2/2]; play Strongshell → Taunt becomes 3/3; non-Taunt unchanged; board with 2 Taunt minions → both get +2/+2; no Taunts on board → no buff — src/game/minions/tier5/strongshell-scavenger.ts is already implemented — tests/shop/strongshell-scavenger.test.ts
+- [x] [S] Add tests/shop/strongshell-scavenger.test.ts — verify Strongshell Scavenger (tier 5, 2/3) onBattlecry gives all friendly Taunt minions +2/+2; board: [Taunt 1/1, non-Taunt 2/2]; play Strongshell → Taunt becomes 3/3; non-Taunt unchanged; board with 2 Taunt minions → both get +2/+2; no Taunts on board → no buff — src/game/minions/tier5/strongshell-scavenger.ts is already implemented — tests/shop/strongshell-scavenger.test.ts
 
 - [ ] [S] Add tests/simulation/deathwing-raze-to-bone.sim.test.ts — verify Deathwing, Raze to Bone (tier 8 dragon, 8/8, collateralDamage3) deals 3 bonus damage to all OTHER enemies when it attacks; board: [DRtB 8/8] vs [4/5, 4/5, 4/5]; DRtB attacks first enemy (4/5 → dead, DRtB takes 4 → 8/4); 2 other enemies each take 3 collateral (4/2, 4/2); verify both survive with 2 HP; also test: [DRtB] vs [4/4] — only one enemy, no collateral — tests/simulation/deathwing-raze-to-bone.sim.test.ts
 
