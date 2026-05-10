@@ -153,6 +153,12 @@ Format: `- [ ] [TIER] <task>` — `[TIER]` is `S` (small, <30 min) or `M` (mediu
 
 - [x] [S] Add tests/shop/kalecgos.test.ts — verify Kalecgos, Arcane Aspect (tier 6 dragon, 4/8) onCast: when a spell is played, all friendly minions gain +1/+1; read kalecgos-arcane-aspect.ts to find the exact hook (onCast); find how to trigger a spell cast on a minion (look at src/game/shop.ts castSpell or similar); board: [minion 2/2]; cast a spell → minion becomes 3/3; board with 2 minions → both buffed — tests/shop/kalecgos.test.ts
 
+- [ ] [S] Add tests/simulation/friggent-northvalley.sim.test.ts — verify Friggent Northvalley (tier 6, 5/7 Beast) deathrattle summons a 2/3 Stalker to the ally side; read src/game/minions/tier6/friggent-northvalley.ts — it defines a local STALKER_CARD and on onDeath pushes it to the side array; test 1: [Friggent 5/7, ally 2/100] vs [6/6]; Friggent attacks 6/6 and both die; deathrattle fires — Stalker appears on ally side; survivorsLeft has 2 minions (ally + Stalker); test 2: board already at 7 minions when Friggent dies → Stalker NOT summoned (board full check) — tests/simulation/friggent-northvalley.sim.test.ts
+
+- [ ] [S] Add tests/simulation/terestian-manferris.sim.test.ts — verify Terestian Manferris (tier 6, 5/5 Mech) deathrattle gives a random friendly Mech +3/+3; read src/game/minions/tier6/terestian-manferris.ts; test 1: [Terestian 5/5, Mech 2/2] vs [6/6]; Terestian attacks 6/6: Terestian takes 6 → dies, 6/6 takes 5 → 6/1 survives; deathrattle fires: Mech becomes 5/5; Mech then attacks 6/1 → kills it; right side empty, left wins with Mech at 5/5 (or whatever hp after combat); test 2: [Terestian 5/5, non-Mech 2/2] vs [6/6]; deathrattle finds no Mechs → stat event NOT emitted — tests/simulation/terestian-manferris.sim.test.ts
+
+- [ ] [S] Add tests/shop/zixor-project-hope.test.ts — verify Zixor, Project Hope (tier 6, 3/6 Elemental) onBattlecry summons a random tier-5 minion directly to the player's board (NOT hand); read src/game/minions/tier6/zixor-project-hope.ts; build state: Zixor in shop, board has 1 minion, gold=10, tier=6; buy + play Zixor → board.length increases by 1 (Zixor + original + summoned tier-5); the summoned minion must have tier===5 (check MINIONS[summoned.cardId].tier); test 2: board full (6 minions + Zixor about to play = 7 full) → summon blocked (board.length stays at 7 after play) — tests/shop/zixor-project-hope.test.ts
+
 ---
 
 ## Soon — Engine correctness
