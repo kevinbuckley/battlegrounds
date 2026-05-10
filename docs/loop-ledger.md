@@ -514,3 +514,4 @@
 2026-05-10 | c7348c8 | FIXED: Add tests/simulation/friggent-northvalley.sim.test.ts — verify Friggent Northvalley (tier 6, 5/7 Beast) deathrattle summons a 2/3 Stalker to ally side
 2026-05-10 | aa3a386 | FIXED: Mark tests/simulation/terestian-manferris.sim.test.ts as done — 3 passing tests verify deathrattle buffs random friendly Mech +3/+3, excludes non-Mechs, and excludes self
 2026-05-10 | d1d2b10 | FIXED: Add tests/shop/zixor-project-hope.test.ts — verify Zixor, Project Hope (tier 6, 3/6 Elemental) onBattlecry summons a random tier-5 minion directly to the player board; board cap respected; 4 passing tests, bun typecheck and bun test (1253/1253) pass
+2026-05-10 | 0f18957 | FIXED: Add tests/shop/bloodsail-corsair.test.ts — verify Bloodsail Corsair (tier 4, 4/3 Pirate) onBattlecry deals 2 damage to a random enemy minion on opponent board; dead minions filtered by hp > 0 elsewhere; 4 passing tests, bun typecheck and bun test (1270/1270) pass
